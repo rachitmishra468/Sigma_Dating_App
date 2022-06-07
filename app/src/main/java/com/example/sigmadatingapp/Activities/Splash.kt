@@ -22,7 +22,8 @@ class Splash : AppCompatActivity() {
     fun check_login_flag() {
         Handler().postDelayed(
             {
-               startActivity(Intent(this,Login_SignUpActivity::class.java))
+               startActivity(Intent(this,Login_Activity::class.java))
+                finish()
 
             },
             500
