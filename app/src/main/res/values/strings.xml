@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Sigma Dating App</string>
-    <string name="login_header">Hey There!Login Now</string>
+    <string name="login_header">Hey There! Login Now</string>
     <string name="email_text">Email</string>
     <string name="phone_text">Phone Number</string>
     <string name="password_text">Password</string>
@@ -13,4 +13,9 @@
     <string name="woman_text">Women</string>
     <string name="man_text">Man</string>
     <string name="more">Man</string>
+    <string name="forgot_password_text">Forgot Password? </string>
+    <string name="dont_have_acc">Don\'t have an account </string>
+    <string name="signup_text">SIGN UP</string>
+    <string name="sign_in_text">OR SIGN IN WITH</string>
+    <string name="continue_text">CONTINUE</string>
 </resources>
