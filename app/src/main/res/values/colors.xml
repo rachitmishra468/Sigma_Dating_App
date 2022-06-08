@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="colorPrimary">#1b82d2</color>       <!--toolbar-->
+    <color name="colorPrimaryDark">#1b82d2</color>   <!--status bar-->
+    <color name="colorAccent">#1b82d2</color>
+    <color name="av_bg_call_black">#281f1d</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +13,33 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="brown">#452E2E</color>
+    <color name="text_hint_color">#2D2F38</color>
+    <color name="menu_color">#19130F</color>
+    <color name="face_color">#70CEF6</color>
+    <color name="video_color">#FFB0B0</color>
+    <color name="audio_color">#88E579</color>
+    <color name="chat_color">#FAC069</color>
+    <color name="tab_selcted_colr">#B15718</color>
+    <color name="color_gray_line">#DEE1E6</color>
+
+    <color name="app_secondary_color">#715037</color>
+    <color name="app_foreground_color">#D14F2406</color>
+    <color name="off_white">#9F9F9F</color>
+    <color name="hint_white">#90A4AE</color>
+    <color name="call_color_extra">#70CEF6</color>
+    <color name="face_color_extra">#41B0DC</color>
+    <color name="video_color_extra">#D87272</color>
+    <color name="audio_color_extra">#2A9219</color>
+    <color name="chat_color_extra">#D79F4B</color>
+    <color name="profile_ic_selection">#0C5A39</color>
+    <color name="profile_bg_selection">#1EBA79</color>
+    <color name="login_text_bg">#4A3232</color>
+    <color name="stroke_color">#F0F0F0</color>
+    <color name="background_color">#F9F7F8</color>
+    <color name="transparent">#00000000</color>
+    <color name="uvv_gray">#969696</color>
+    <color name="uvv_black">#ff000000</color>
+    <color name="uvv_light_gray">#ffF0F0F0</color>
+    <color name="uvv_titlebar_bg">#7f000000</color>
 </resources>

@@ -17,9 +17,6 @@
     </style>
 
 
-
-
-
     <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
@@ -43,5 +40,14 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="cornerSizeTopRight">48dp</item>
     </style>
+
+    <style name="Theme.SigmaDatingApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.SigmaDatingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SigmaDatingApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
