@@ -3,6 +3,7 @@
     <string name="login_header">Hey There! Login Now</string>
     <string name="email_text">Email</string>
     <string name="phone_text">Phone Number</string>
+    <string name="phone_xx">xxx-xxx-xxxx</string>
     <string name="password_text">Password</string>
     <string name="send_otp_text">SEND OTP</string>
     <string name="stepone_header">Tell us a little\n about yourself.</string>

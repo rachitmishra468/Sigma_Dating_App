@@ -8,10 +8,13 @@
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/gray_circle_radius_bg.xml" value="0.2115" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/login_field_border_bg.xml" value="0.2115" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/signup_circle_bg.xml" value="0.198" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/top_right_left_circle_bg.xml" value="0.198" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/white_radius_bg.xml" value="0.2115" />
-        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/about_yourself_layout.xml" value="0.22" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/main_activity.xml" value="0.20416666666666666" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/phone_number_login.xml" value="0.25" />
       </map>
     </option>
   </component>

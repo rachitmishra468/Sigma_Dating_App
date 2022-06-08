@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:fillViewport="true">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -103,35 +102,45 @@
         </Button>
     </LinearLayout>
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="0dp"
+    android:id="@+id/c2"
+    android:visibility="visible"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/linearr"
+    android:layout_marginTop="12dp"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_height="wrap_content">
+
+
     <EditText
         android:id="@+id/editText_email"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginRight="36dp"
-        android:layout_marginTop="24dp"
-        android:drawablePadding="10dp"
-        android:hint="@string/email_text"
-
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:background="@drawable/login_field_border_bg"
+        android:drawablePadding="10dp"
+
+        android:hint="@string/email_text"
         android:inputType="textEmailAddress|textCapSentences"
         android:letterSpacing="0.10"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textSize="18sp"
         android:textColorHint="@color/hint_text_color"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearr"
+
         app:layout_constraintStart_toStartOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="36dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
-        android:layout_marginRight="36dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editText_email">
@@ -163,11 +172,11 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:text="@string/forgot_password_text"
         android:textColor="@color/light_black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
@@ -236,11 +245,13 @@
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="60dp"
-           android:background="@drawable/iphone_icon"
+           android:src="@drawable/iphone_icon"
+            android:scaleType="fitCenter"
             android:layout_height="60dp"/>
         <ImageView
             android:layout_width="60dp"
-            android:src="@drawable/iphone_icon"
+            android:src="@drawable/fb_icon"
+            android:scaleType="fitCenter"
             android:layout_marginLeft="18dp"
             android:layout_height="60dp"/>
 
@@ -248,9 +259,10 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:gravity="center_horizontal"
         android:text="@string/dont_have_acc"
         android:textColor="@color/light_black"
         android:alpha=".7"
@@ -275,6 +287,7 @@
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
