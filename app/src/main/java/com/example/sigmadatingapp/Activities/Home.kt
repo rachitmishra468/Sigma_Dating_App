@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.sigmadatingapp.R
 import com.example.sigmadatingapp.databinding.ActivityHomeBinding
 
+
 class Home : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -21,16 +22,13 @@ class Home : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+       setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_home)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

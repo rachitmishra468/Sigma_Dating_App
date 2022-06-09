@@ -37,7 +37,7 @@ class AppUtils {
         val groupcreate: LottieAnimationView = view.findViewById<View>(R.id.email) as LottieAnimationView
         groupcreate.setAnimation("loader.json")
         groupcreate.playAnimation()
-        (dialog as AlertDialog?)?.getWindow()!!.setBackgroundDrawableResource(R.color.transparent)
+        (dialog as AlertDialog?)?.getWindow()!!.setBackgroundDrawableResource(R.color.hint_text_color)
         (dialog as AlertDialog?)?.show()
     }
 
@@ -94,7 +94,7 @@ class AppUtils {
     fun showErrorSnackBar(context: Context?, view: View?, message: String?) {
         val snackbar = Snackbar.make(view!!, message!!, Snackbar.LENGTH_LONG)
         val snackbarView = snackbar.view
-        snackbarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.brown))
+        snackbarView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.hint_text_color))
         val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView
         textView.setTextColor(ContextCompat.getColor(context, R.color.white))
         snackbar.show()
@@ -106,7 +106,7 @@ class AppUtils {
         snackbarView.setBackgroundColor(
             ContextCompat.getColor(
                 context!!,
-                R.color.app_secondary_color
+                R.color.hint_text_color
             )
         )
         val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView
