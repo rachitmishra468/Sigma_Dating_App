@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+   >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/credentials_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/image_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="20dp"
+            tools:ignore="MissingConstraints"
+            app:cardCornerRadius="8dp">
+
+
+            <ImageView
+                android:id="@+id/idIVCourse"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:src="@drawable/dummy_imf"
+                android:scaleType="centerCrop" />
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="-40dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:weightSum="5"
+            app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_location_elevation"
+                android:backgroundTint="@color/white" />
+
+
+
+            <ImageView
+
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_search_elevation"
+                android:backgroundTint="@color/white" />
+
+
+            <ImageView
+
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/instagram"
+                android:backgroundTint="@color/white" />
+
+
+            <ImageView
+
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/location"
+                android:scaleType="centerCrop"
+                android:backgroundTint="@color/white" />
+
+
+            <ImageView
+
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                android:src="@drawable/list"
+                android:backgroundTint="@color/white" />
+
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+
+     >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            android:weightSum="10"
+                android:orientation="horizontal">
+
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:gravity="center|left"
+                    android:text="Joe"
+                    android:textSize="18sp"
+                    android:layout_weight="9"
+                    android:textColor="@color/black"
+                    android:textStyle="bold">
+
+                </TextView>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginLeft="25dp"
+                    android:text="A T O"
+                    android:textColor="@color/white"
+                    android:layout_gravity="right"
+                    android:textSize="15sp"
+                    android:background="@drawable/signup_circle_bg"
+                    android:textStyle="bold">
+
+                </TextView>
+            </LinearLayout>
+
+
+
+
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+           >
+
+
+        <LinearLayout
+            android:id="@+id/linear_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_baseline_location_on_24">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:gravity="center|left"
+                android:text="Boca Raton"
+                android:textColor="@color/black"
+                android:textStyle="normal">
+
+            </TextView>
+        </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:gravity="center|left"
+                android:layout_marginLeft="25dp"
+                android:text="University of Florida"
+                android:textColor="@color/black"
+                android:textStyle="normal">
+
+            </TextView>
+
+
+</LinearLayout>
+
+
+
+        <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="lorem ipsum"
+                android:layout_margin="5dp"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                 />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="lorem ipsum"
+                android:layout_margin="5dp"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="lorem ipsum"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                />
+
+        </LinearLayout>
+
+
+
+
+    <TextView
+        android:id="@+id/idTVCourseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:maxLines="5"
+        android:text="@string/dummy_text"
+        android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
