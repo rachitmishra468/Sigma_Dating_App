@@ -17,6 +17,18 @@
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".Activities.OnBoardingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_on_boarding"
+            android:theme="@style/Theme.SigmaDatingApp.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Activities.Home"
             android:exported="false"
             android:label="@string/title_activity_home"

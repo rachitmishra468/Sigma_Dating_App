@@ -7,14 +7,23 @@
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/circle_radius_bg.xml" value="0.2115" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/gray_circle_radius_bg.xml" value="0.2115" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/login_field_border_bg.xml" value="0.2115" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/onboarding_selected_dot_orange.xml" value="0.1335" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/onboarding_unselected_dot_orange.xml" value="0.1335" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/onboarding_viewpager_selector_orange.xml" value="0.1335" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/signup_circle_bg.xml" value="0.198" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/top_right_left_circle_bg.xml" value="0.198" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/drawable/white_radius_bg.xml" value="0.2115" />
-        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/about_yourself_layout.xml" value="0.22" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/about_yourself_layout.xml" value="0.1" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_on_boarding.xml" value="0.18297101449275363" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_onboarding.xml" value="0.1693840579710145" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/content_onboarding.xml" value="0.1" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_first2.xml" value="0.1" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_second2.xml" value="0.1" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/main_activity.xml" value="0.20416666666666666" />
-        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/phone_number_login.xml" value="0.25" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/onboarding_activity.xml" value="0.18297101449275363" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/phone_number_login.xml" value="0.2" />
       </map>
     </option>
   </component>
