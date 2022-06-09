@@ -55,4 +55,3 @@ class OnBoardingActivity : AppCompatActivity() {
         return mViewPager.currentItem
     }
     }
-}
