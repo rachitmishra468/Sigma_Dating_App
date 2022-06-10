@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.sigmadatingapp.databinding.FragmentFirstBinding
 import com.daprlabs.cardstack.SwipeDeck
 import com.example.sigmadatingapp.module.Profile
 import android.widget.Toast
@@ -15,6 +14,13 @@ import android.R
 import android.util.Log
 import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
 import com.example.sigmadatingapp.Adapters.ProfileMatch
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.content.Intent
+import android.os.Handler
+import com.airbnb.lottie.LottieAnimationView
+import com.example.sigmadatingapp.databinding.FragmentFirstBinding
+import com.example.sigmadatingapp.storage.AppConstants
 
 
 /**
@@ -26,6 +32,10 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var courseModalArrayList: ArrayList<Profile>? = null
+
+
+    var broken_heart: LottieAnimationView? = null
+    var heart_loading: LottieAnimationView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,14 +55,14 @@ class FirstFragment : Fragment() {
 
 
 
-       for(i in 1..30){
-           courseModalArrayList!!.add(
-               Profile(
-                   "C++",
-                   com.example.sigmadatingapp.R.drawable.dummy_imf
-               )
-           )
-       }
+        for (i in 1..10) {
+            courseModalArrayList!!.add(
+                Profile(
+                    "C++",
+                    com.example.sigmadatingapp.R.drawable.dummy_imf
+                )
+            )
+        }
 
 
         // on below line we are creating a variable for our adapter class and passing array list to it.
@@ -70,17 +80,27 @@ class FirstFragment : Fragment() {
         // on below line we are setting event callback to our card stack.
         binding.swipeDeck!!.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
-                // on card swipe left we are displaying a toast message.
+                binding.brokenHeart.visibility=View.VISIBLE
+                binding.brokenHeart.playAnimation()
+                check_login_flag()
                 Toast.makeText(context, "Card Swiped Left", Toast.LENGTH_SHORT).show()
             }
 
             override fun cardSwipedRight(position: Int) {
                 // on card swiped to right we are displaying a toast message.
+
+// Custom animation speed or duration.
+                // Custom animation speed or duration.
+                binding.heartLoading.visibility=View.VISIBLE
+                binding.heartLoading.playAnimation()
+                check_login_flag()
                 Toast.makeText(context, "Card Swiped Right", Toast.LENGTH_SHORT).show()
             }
 
             override fun cardsDepleted() {
                 // this method is called when no card is present
+                binding.brokenHeart.playAnimation()
+                check_login_flag()
                 Toast.makeText(context, "No more courses present", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -97,10 +117,25 @@ class FirstFragment : Fragment() {
         })
 
 
-      /*  binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }*/
+        /*  binding.buttonFirst.setOnClickListener {
+              findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+          }*/
     }
+
+
+
+    fun check_login_flag() {
+        Handler().postDelayed(
+            {
+
+                binding.heartLoading.visibility = View.GONE
+                binding.brokenHeart.visibility = View.GONE
+
+            },
+            1500
+        )
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
