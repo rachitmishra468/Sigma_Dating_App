@@ -1,10 +1,12 @@
 package com.example.sigmadatingapp.Activities
 
 import android.content.Context
+import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.sigmadatingapp.R
+
 
 class OnBoardingViewPagerAdapter(
     fragmentActivity: FragmentActivity,
@@ -18,7 +20,7 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            1 -> Second2Fragment.newInstance(
+            1 -> BlankFragment2.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
@@ -31,5 +33,14 @@ class OnBoardingViewPagerAdapter(
 
     override fun getItemCount(): Int {
         return 3
+    }
+    fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
+        // Never allow swiping to switch between pages
+        return false
+    }
+
+    fun onTouchEvent(event: MotionEvent?): Boolean {
+        // Never allow swiping to switch between pages
+        return false
     }
 }

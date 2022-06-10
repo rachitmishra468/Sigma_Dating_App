@@ -15,8 +15,8 @@ class OnBoardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity)
 
-        mViewPager = ViewPager2(this)
-        pageIndicator= TabLayout(this)
+        mViewPager = findViewById(R.id.viewPager)
+        pageIndicator= findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
         mViewPager.offscreenPageLimit = 1
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
