@@ -7,6 +7,6 @@ import com.example.sigmadatingapp.R
 class Login_Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.login_scroll)
     }
 }
