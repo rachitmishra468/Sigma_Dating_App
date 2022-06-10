@@ -63,7 +63,7 @@ class Login_Activity : AppCompatActivity() {
         Handler().postDelayed(
             {
                 AppUtils.hideLoader()
-                startActivity(Intent(this, Home::class.java))
+                startActivity(Intent(this, OnBoardingActivity::class.java))
 
 
             },
