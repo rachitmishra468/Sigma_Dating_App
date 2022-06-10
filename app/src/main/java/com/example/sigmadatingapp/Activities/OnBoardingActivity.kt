@@ -18,6 +18,7 @@ class OnBoardingActivity : AppCompatActivity() {
         mViewPager = findViewById(R.id.viewPager)
         pageIndicator= findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
+        mViewPager.setUserInputEnabled(false);
         mViewPager.offscreenPageLimit = 1
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
