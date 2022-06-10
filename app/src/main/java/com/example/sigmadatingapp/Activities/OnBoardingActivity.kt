@@ -1,8 +1,7 @@
 package com.example.sigmadatingapp.Activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.sigmadatingapp.R
 import com.google.android.material.tabs.TabLayout
@@ -17,12 +16,12 @@ class OnBoardingActivity : AppCompatActivity() {
         setContentView(R.layout.onboarding_activity)
 
         mViewPager = ViewPager2(this)
-        pageIndicator=TabLayout(this)
+        pageIndicator= TabLayout(this)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
         mViewPager.offscreenPageLimit = 1
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == 2) {
+                if (position == 1) {
                    // btnNext.text = getText(R.string.finish)
                 } else {
                    // btnNext.text = getText(R.string.next)
@@ -53,5 +52,9 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun getItem(): Int {
         return mViewPager.currentItem
+    }
+
+    fun setCurrentItem(item: Int, smoothScroll: Boolean) {
+        mViewPager.setCurrentItem(item, smoothScroll)
     }
     }

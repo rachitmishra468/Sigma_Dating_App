@@ -18,7 +18,7 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            1 -> BlankFragment.newInstance(
+            1 -> Second2Fragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
