@@ -4,40 +4,45 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProvider
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.example.sigmadatingapp.R
-import com.example.sigmadatingapp.api.ApiInterface
-import com.example.sigmadatingapp.databinding.ActivityLoginBinding
 import com.example.sigmadatingapp.module.Loginmodel
 import com.example.sigmadatingapp.repository.MainRepository
 import com.example.sigmadatingapp.storage.AppConstants
 import com.example.sigmadatingapp.storage.AppConstants.PHONE_LOGIN
 import com.example.sigmadatingapp.storage.SharedPreferencesStorage
 import com.example.sigmadatingapp.utilities.AppUtils
+import com.example.sigmadatingapp.views.OnBoardingActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
 import com.hbb20.CountryCodePicker
 import com.hbb20.CountryCodePicker.OnCountryChangeListener
-import dagger.hilt.android.migration.CustomInjection.inject
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class Login_Activity : AppCompatActivity() {
+
+
+    private val mainViewModel: LoginViewModel by viewModels()
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
 
-    @Inject
-    lateinit var apiHelper: MainRepository
     private lateinit var phone_number_layout: LinearLayout
     private lateinit var emailLayoutLayout: LinearLayout
     lateinit var email_button: Button
@@ -107,6 +112,19 @@ class Login_Activity : AppCompatActivity() {
         PHONE_LOGIN=true
     }
 
+    fun sign_up(view: View) {
+        AppUtils.showLoader(this)
+        Handler().postDelayed(
+            {
+                AppUtils.hideLoader()
+
+                startActivity(Intent(this, OnBoardingActivity::class.java))
+            },
+            1500
+        )
+    }
+
+
     fun login_call(view: View) {
 
         if (AppUtils.isNetworkInterfaceAvailable(this)) {
@@ -147,33 +165,29 @@ class Login_Activity : AppCompatActivity() {
 
 
     fun login() {
+        mainViewModel.res?.observe(this, Observer {
+            when(it.status){
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let {res->
+                        if (res?.status == true){
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
+                        }else{
 
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("email", "phoneNumber")
-        jsonObject.addProperty("password", "phoneNumber")
-        jsonObject.addProperty("device_token", "phoneNumber")
-        jsonObject.addProperty("device_type", "phoneNumber")
-        AppUtils.showLoader(this)
-        disposableObserver = object : SingleObserver<Loginmodel> {
-            override fun onSubscribe(d: Disposable) {
+                            Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(this)
+                }
+                Status.ERROR -> {
 
+                }
             }
-            override fun onSuccess(value: Loginmodel) {
-                AppUtils.hideLoader()
-                Toast.makeText(this@Login_Activity, value.message, Toast.LENGTH_LONG).show()
-
-            }
-            override fun onError(e: Throwable) {
-                AppUtils.hideLoader()
-                Toast.makeText(this@Login_Activity, e.message.toString(), Toast.LENGTH_LONG).show()
-            }
-        }
+        })
 
 
-        apiHelper.login(jsonObject)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(disposableObserver as SingleObserver<Loginmodel>)
 
     }
 

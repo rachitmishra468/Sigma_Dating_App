@@ -49,28 +49,21 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
             android:orientation="horizontal"
             android:layout_marginTop="-40dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:weightSum="5"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-
-
-
-
             <ImageView
-                android:layout_width="35dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_weight="1"
-                android:padding="3dp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:src="@drawable/start_mark_group"
                 android:backgroundTint="@color/white" />
 
@@ -78,43 +71,39 @@
 
             <ImageView
 
-                android:layout_width="35dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_weight="1"
-                android:padding="3dp"
-                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
                 android:src="@drawable/blue_profile"
                 android:backgroundTint="@color/white" />
 
 
             <ImageView
 
-                android:layout_width="40dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
                 android:src="@drawable/red_heart_big"
                 android:backgroundTint="@color/white" />
 
 
             <ImageView
 
-                android:layout_width="35dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_weight="1"
-                android:padding="3dp"
+                android:layout_gravity="center"
                 android:src="@drawable/change_grid"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:backgroundTint="@color/white" />
 
 
             <ImageView
-
-                android:layout_width="35dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_weight="1"
-                android:padding="3dp"
-                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
                 android:src="@drawable/cancle"
                 android:backgroundTint="@color/white" />
 
@@ -144,17 +133,37 @@
                     android:padding="2dp"
                     android:gravity="center|left"
                     android:text="Joe"
-                    android:textSize="18sp"
-                    android:layout_weight="9"
+                    android:textSize="22sp"
+                    android:layout_weight="1.5"
                     android:textColor="@color/black"
                     android:textStyle="bold">
 
                 </TextView>
 
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/hint_text_color"
+               />
 
-                <TextView
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:gravity="center|left"
+                android:text="20"
+                android:textSize="22sp"
+                android:layout_weight="6"
+                android:textColor="@color/black"
+                android:textStyle="normal">
+
+            </TextView>
+
+            <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="2dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -259,6 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="5dp"
             android:weightSum="5">
 
             <TextView
@@ -267,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:text="lorem ipsum"
+                android:text="HIKING"
                 android:layout_margin="5dp"
                 android:background="@drawable/border_line_radius"
                 android:textColor="@color/blue"
@@ -279,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:gravity="start"
-                android:text="lorem ipsum"
+                android:text="FITNESS"
                 android:layout_margin="5dp"
                 android:background="@drawable/border_line_radius"
                 android:textColor="@color/blue"
@@ -291,7 +301,7 @@
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:gravity="start"
-                android:text="lorem ipsum"
+                android:text="FOOTBALL"
                 android:background="@drawable/border_line_radius"
                 android:textColor="@color/blue"
                 />
@@ -308,7 +318,7 @@
         android:padding="3dp"
         android:maxLines="5"
         android:text="@string/dummy_text"
-        android:textColor="@color/black" />
+        android:textColor="@color/hint_text_color" />
 
     </LinearLayout>
 
