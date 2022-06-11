@@ -56,7 +56,8 @@ class FirstFragment : Fragment() {
                 )
             )
         }
-
+        binding.closeHome.setOnClickListener {
+        }
 
         // on below line we are creating a variable for our adapter class and passing array list to it.
 
@@ -73,9 +74,9 @@ class FirstFragment : Fragment() {
         // on below line we are setting event callback to our card stack.
         binding.swipeDeck!!.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
-                binding.brokenHeart.visibility=View.VISIBLE
-                binding.brokenHeart.playAnimation()
-                check_login_flag()
+                // binding.brokenHeart.visibility=View.VISIBLE
+                //  binding.brokenHeart.playAnimation()
+                //  check_login_flag()
                 Toast.makeText(context, "Card Swiped Left", Toast.LENGTH_SHORT).show()
             }
 
@@ -84,9 +85,9 @@ class FirstFragment : Fragment() {
 
 // Custom animation speed or duration.
                 // Custom animation speed or duration.
-                binding.heartLoading.visibility=View.VISIBLE
-                binding.heartLoading.playAnimation()
-                check_login_flag()
+                // binding.heartLoading.visibility=View.VISIBLE
+                //  binding.heartLoading.playAnimation()
+                //  check_login_flag()
                 Toast.makeText(context, "Card Swiped Right", Toast.LENGTH_SHORT).show()
             }
 
@@ -114,7 +115,6 @@ class FirstFragment : Fragment() {
               findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
           }*/
     }
-
 
 
     fun check_login_flag() {
