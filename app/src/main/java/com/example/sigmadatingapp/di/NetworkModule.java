@@ -6,7 +6,8 @@ import static com.example.sigmadatingapp.storage.AppConstants.SHARED_PREF_NAME;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.sigmadatingapp.API.ApiInterface;
+import com.example.sigmadatingapp.api.ApiInterface;
+import com.example.sigmadatingapp.api.AuthenticationInterceptor;
 import com.example.sigmadatingapp.storage.SharedPreferencesStorage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,18 +53,7 @@ public class NetworkModule {
     OkHttpClient provideOkHttpClient(SharedPreferences preferences) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder client = new OkHttpClient.Builder().addInterceptor(interceptor);
-        /*if (!preferences.getString(AUTH_TOKEN, "").equalsIgnoreCase(""))
-            client.addInterceptor(
-                    chain -> {
-                        Request original = chain.request();
-                        Request.Builder requestBuilder = original.newBuilder()
-                                .addHeader("Content-Type", "application/json")
-                                .addHeader("Authorization", "Bearer " + preferences.getString(AUTH_TOKEN, ""));
-                        Request request = requestBuilder.build();
-                        return chain.proceed(request);
-                    }); // return to the OkHttpClient.Builder instance
-*/
+        OkHttpClient.Builder client = new OkHttpClient.Builder().addInterceptor(interceptor).authenticator(new AuthenticationInterceptor());
         return client.build();
     }
 

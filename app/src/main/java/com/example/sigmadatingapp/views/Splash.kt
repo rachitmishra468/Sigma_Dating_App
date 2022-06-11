@@ -1,14 +1,13 @@
-package com.example.sigmadatingapp
+package com.example.sigmadatingapp.views
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.sigmadatingapp.Activities.Home
-import com.example.sigmadatingapp.Activities.Login_Activity
-import com.example.sigmadatingapp.Activities.OnBoardingActivity
+import com.example.sigmadatingapp.R
 import com.example.sigmadatingapp.storage.AppConstants
 import com.example.sigmadatingapp.storage.SharedPreferencesStorage
+import com.example.sigmadatingapp.views.login.Login_Activity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

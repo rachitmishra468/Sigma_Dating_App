@@ -17,24 +17,20 @@
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Activities.OnBoardingActivity"
+            android:name=".views.OnBoardingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:theme="@style/Theme.SigmaDatingApp.Fullscreen">
-
         </activity>
         <activity
-            android:name=".Activities.Home"
+            android:name=".views.Home"
             android:exported="false"
             android:theme="@style/Theme.SigmaDatingApp.NoActionBar" />
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".views.login.Login_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activities.Login_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".Splash"
+            android:name=".views.Splash"
             android:exported="true"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>

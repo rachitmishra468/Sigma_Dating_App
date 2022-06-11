@@ -1,26 +1,19 @@
-package com.example.sigmadatingapp.Activities
+package com.example.sigmadatingapp.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.daprlabs.cardstack.SwipeDeck
 import com.example.sigmadatingapp.module.Profile
 import android.widget.Toast
 
-import android.R
 import android.util.Log
 import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
-import com.example.sigmadatingapp.Adapters.ProfileMatch
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.content.Intent
+import com.example.sigmadatingapp.adapters.ProfileMatch
 import android.os.Handler
 import com.airbnb.lottie.LottieAnimationView
 import com.example.sigmadatingapp.databinding.FragmentFirstBinding
-import com.example.sigmadatingapp.storage.AppConstants
 
 
 /**

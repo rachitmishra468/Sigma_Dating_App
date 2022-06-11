@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -53,6 +54,40 @@ object AppUtils {
             val pat = Pattern.compile(emailRegex)
             return !(email == null || email.isEmpty() || !pat.matcher(email).matches())
         }
+
+
+    fun isValid_password(password: String?): Boolean {
+
+        if (password != null) {
+            return (password.length>5)
+        }
+
+        return false
+    }
+
+
+    fun isValid_phone_number(number: String?): Boolean{
+        if(number?.matches(".*[0-9].*".toRegex()) == false){
+            return false
+        }
+        if(number?.length != 10){
+            return false
+        }
+        return true
+    }
+
+    fun checkIfEmailIsValid(emailInputText:String): String? {
+            if(!Patterns.EMAIL_ADDRESS.matcher(emailInputText).matches()){
+              return "Invalid Email Address"
+            }
+            else{
+              return  null
+            }
+    }
+
+
+
+
 
         fun registerBroadCastReceiver(context: Context, receiver: BroadcastReceiver?) {
             val intentFilter = IntentFilter()

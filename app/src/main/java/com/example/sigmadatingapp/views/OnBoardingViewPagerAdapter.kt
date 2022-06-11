@@ -1,4 +1,4 @@
-package com.example.sigmadatingapp.Activities
+package com.example.sigmadatingapp.views
 
 import android.content.Context
 import android.view.MotionEvent

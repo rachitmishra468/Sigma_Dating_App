@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -74,10 +72,11 @@
                             android:id="@+id/email_button"
                             android:layout_width="0dp"
                             android:layout_height="40dp"
-                            android:layout_weight=".4"
+                            android:layout_weight=".5"
                             android:background="@drawable/white_radius_bg"
                             android:onClick="email_button_click"
                             android:text="@string/email_text"
+                            android:textStyle="bold"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
@@ -88,10 +87,11 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_marginLeft="12dp"
-                            android:layout_weight=".6"
+                            android:layout_weight=".5"
                             android:background="@drawable/gray_circle_radius_bg"
                             android:onClick="phonenumber_button_click"
                             android:text="@string/phone_text"
+                            android:textStyle="bold"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
@@ -211,10 +211,14 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/emailLayoutLayout">
 
-                            <EditText
+                            <com.hbb20.CountryCodePicker
+                                android:id="@+id/ccp"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".20" />
+                                android:layout_weight=".20"
+                                android:onClick="onCountryPickerClick"
+                                android:background="@android:color/transparent"
+                                android:padding="5dp" />
 
                             <View
                                 android:layout_width="1dp"
@@ -223,6 +227,7 @@
                                 android:background="@color/light_black" />
 
                             <EditText
+                                android:id="@+id/edittext_phone_no"
                                 android:layout_width="0dp"
                                 android:layout_height="54dp"
                                 android:layout_marginLeft="6dp"

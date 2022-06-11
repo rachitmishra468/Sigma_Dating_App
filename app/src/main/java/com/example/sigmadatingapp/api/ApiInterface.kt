@@ -1,12 +1,17 @@
-package com.example.sigmadatingapp.API
+package com.example.sigmadatingapp.api
 
+import com.example.sigmadatingapp.module.Loginmodel
 import com.google.gson.JsonObject
 import io.reactivex.Single
-import okhttp3.MultipartBody
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 
 interface ApiInterface {
+
+
+    @POST("api/login")
+    fun login(@Body jsonObject: JsonObject): Single<Loginmodel>
 
   /*  @POST("api/login")
     fun login(@Body jsonObject: JsonObject): Single<LoginResponse>
