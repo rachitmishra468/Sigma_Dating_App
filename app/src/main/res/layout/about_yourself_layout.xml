@@ -37,9 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:paddingLeft="8dp"
+            style="@style/QText"
             android:text="@string/name_ask_text"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:alpha=".8"
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintEnd_toEndOf="@+id/guideline5"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
@@ -47,6 +49,7 @@
 
         <EditText
             android:id="@+id/editText_name"
+            style="@style/NormalText"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginLeft="1dp"
@@ -67,6 +70,7 @@
 
         <EditText
             android:id="@+id/et_lastname"
+            style="@style/NormalText"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginLeft="1dp"
@@ -87,24 +91,23 @@
             app:layout_constraintTop_toBottomOf="@+id/editText_name" />
 
 
-        <Button
-            android:id="@+id/continue_first"
-            android:layout_width="0dp"
-            android:layout_height="46dp"
-            android:layout_marginLeft="56dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginRight="56dp"
-            android:background="@drawable/signup_circle_bg"
-            android:text="@string/continue_text"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.512"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_lastname" />
-
-
+    <Button
+        android:id="@+id/continue_first"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="56dp"
+        android:background="@drawable/signup_circle_bg"
+        android:fontFamily="@font/varela_regular"
+        android:text="@string/continue_text"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_lastname" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"

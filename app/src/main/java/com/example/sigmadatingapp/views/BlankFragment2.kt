@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioGroup
 import com.example.sigmadatingapp.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,7 +24,7 @@ class BlankFragment2 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+lateinit var radioGroup: RadioGroup
     lateinit var continue_second: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +40,11 @@ class BlankFragment2 : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var root= inflater.inflate(R.layout.about_yourself_layout2, container, false)
-
+        radioGroup=root.findViewById(R.id.rg)
         continue_second = root.findViewById(R.id.continue_second)
         continue_second.setOnClickListener {
-            startActivity(Intent(context, Home::class.java))
+            (activity as OnBoardingActivity?)?.setCurrentItem(2, true)
+           // startActivity(Intent(context, Home::class.java))
         }
 
         return root

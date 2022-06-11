@@ -18,7 +18,7 @@ class OnBoardingActivity : AppCompatActivity() {
         mViewPager = findViewById(R.id.viewPager)
         pageIndicator= findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
-        mViewPager.setUserInputEnabled(false);
+        mViewPager.setUserInputEnabled(true);
         mViewPager.offscreenPageLimit = 1
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -56,6 +56,7 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
+        //var itemm=item+1
         mViewPager.setCurrentItem(item, smoothScroll)
     }
     }

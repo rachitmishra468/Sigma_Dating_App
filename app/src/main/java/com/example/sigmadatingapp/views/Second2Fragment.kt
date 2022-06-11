@@ -32,7 +32,7 @@ class Second2Fragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_second2, container, false)
         button_second = root.findViewById(R.id.button_signup)
         button_second.setOnClickListener {
-            (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
+           // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
         }
         return root
 

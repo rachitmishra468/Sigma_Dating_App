@@ -1,15 +1,13 @@
 package com.example.sigmadatingapp.views
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import com.example.sigmadatingapp.R
-import com.example.sigmadatingapp.databinding.AboutYourselfLayoutBinding
-import com.example.sigmadatingapp.databinding.FragmentBlankBinding
-
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,15 +16,14 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [BlankFragment.newInstance] factory method to
+ * Use the [BlankFragment3.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BlankFragment : Fragment() {
+class BlankFragment3 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var continue_first: Button
-    private var binding: AboutYourselfLayoutBinding? = null
+lateinit var button_birthday:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,16 +32,20 @@ class BlankFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        // return inflater.inflate(R.layout.about_yourself_layout, container, false)
-        //val root = inflater.inflate(R.layout.about_yourself_layout, container, false)
-        binding= AboutYourselfLayoutBinding.inflate(inflater, container, false)
-        continue_first = binding!!.root.findViewById(R.id.continue_first)
-        continue_first.setOnClickListener {
-            (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
+        var root= inflater.inflate(R.layout.about_birthday, container, false)
+
+        button_birthday = root.findViewById(R.id.button_birthday)
+        button_birthday.setOnClickListener {
+           // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
+             startActivity(Intent(context, Home::class.java))
         }
-return binding!!.root
+
+        return root
     }
 
     companion object {
@@ -54,12 +55,12 @@ return binding!!.root
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment BlankFragment.
+         * @return A new instance of fragment BlankFragment3.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            BlankFragment().apply {
+            BlankFragment3().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

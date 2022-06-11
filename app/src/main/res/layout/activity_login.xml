@@ -71,6 +71,7 @@
                         <Button
                             android:id="@+id/email_button"
                             android:layout_width="0dp"
+                            style="@style/QText"
                             android:layout_height="40dp"
                             android:layout_weight=".5"
                             android:background="@drawable/white_radius_bg"
@@ -85,6 +86,7 @@
                         <Button
                             android:id="@+id/phone_number_button"
                             android:layout_width="0dp"
+                            style="@style/QText"
                             android:layout_height="40dp"
                             android:layout_marginLeft="12dp"
                             android:layout_weight=".5"
@@ -181,6 +183,7 @@
 
 
                             <TextView
+                                style="@style/QText"
                                 android:id="@+id/textView2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

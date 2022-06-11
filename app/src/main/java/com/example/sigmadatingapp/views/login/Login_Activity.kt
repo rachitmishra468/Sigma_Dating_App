@@ -38,7 +38,6 @@ class Login_Activity : AppCompatActivity() {
 
     @Inject
     lateinit var apiHelper: MainRepository
-
     private lateinit var phone_number_layout: LinearLayout
     private lateinit var emailLayoutLayout: LinearLayout
     lateinit var email_button: Button

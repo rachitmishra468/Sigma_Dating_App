@@ -24,6 +24,10 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
+            2 -> BlankFragment3.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
             else -> BlankFragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
@@ -34,13 +38,5 @@ class OnBoardingViewPagerAdapter(
     override fun getItemCount(): Int {
         return 3
     }
-    fun onInterceptTouchEvent(event: MotionEvent?): Boolean {
-        // Never allow swiping to switch between pages
-        return false
-    }
 
-    fun onTouchEvent(event: MotionEvent?): Boolean {
-        // Never allow swiping to switch between pages
-        return false
-    }
 }
