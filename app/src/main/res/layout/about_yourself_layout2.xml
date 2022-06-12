@@ -64,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
       <!--  <Button
-            android:id="@+id/text_woman"
+            android:id="@+id/rb_women"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginLeft="0dp"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
 
        <!-- <Button
-            android:id="@+id/text_man"
+            android:id="@+id/rb_men"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginLeft="0dp"
@@ -105,7 +105,7 @@
             app:layout_constraintEnd_toEndOf="@+id/guideline3"
 
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_woman" />
+            app:layout_constraintTop_toBottomOf="@+id/rb_women" />
         <Button
             android:id="@+id/more_btn"
             android:layout_width="0dp"
@@ -126,7 +126,7 @@
             app:layout_constraintEnd_toEndOf="@+id/guideline3"
 
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/text_man" />-->
+            app:layout_constraintTop_toBottomOf="@+id/rb_men" />-->
 <RadioGroup
     android:id="@+id/rg"
     android:layout_width="0dp"
@@ -140,7 +140,7 @@
     app:layout_constraintTop_toBottomOf="@+id/textView5"
     android:layout_height="wrap_content">
     <RadioButton
-        android:id="@+id/text_woman"
+        android:id="@+id/rb_women"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="54dp"
@@ -149,7 +149,8 @@
         android:button="@android:color/transparent"
         android:checked="false"
         android:paddingTop="15dp"
-
+        android:layout_marginBottom="2dp"
+        android:elevation="4dp"
         android:paddingBottom="15dp"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -159,7 +160,7 @@
         android:textColor="@drawable/radio_flat_text_selector" />
 
     <RadioButton
-        android:id="@+id/text_man"
+        android:id="@+id/rb_men"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_marginTop="16dp"
@@ -167,6 +168,8 @@
         android:button="@android:color/transparent"
         android:checked="false"
         android:paddingLeft="16dp"
+        android:layout_marginBottom="2dp"
+        android:elevation="4dp"
         android:layout_height="54dp"
         android:paddingTop="3dp"
         android:paddingRight="16dp"
@@ -177,15 +180,17 @@
         android:textColor="@drawable/radio_flat_text_selector" />
 
     <RadioButton
-        android:id="@+id/text_more"
+        android:id="@+id/rb_more"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_marginTop="16dp"
         android:background="@drawable/gender_selector_drawable"
         android:button="@android:color/transparent"
         android:checked="false"
+        android:elevation="4dp"
         android:paddingLeft="16dp"
         android:layout_height="54dp"
+        android:layout_marginBottom="2dp"
         android:paddingTop="3dp"
         android:textSize="18sp"
         android:textStyle="bold"

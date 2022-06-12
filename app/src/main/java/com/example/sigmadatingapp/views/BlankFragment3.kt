@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.sigmadatingapp.R
+import com.example.sigmadatingapp.databinding.AboutBirthdayBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +25,7 @@ class BlankFragment3 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 lateinit var button_birthday:Button
+private var binding:AboutBirthdayBinding?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,15 +39,16 @@ lateinit var button_birthday:Button
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var root= inflater.inflate(R.layout.about_birthday, container, false)
-
-        button_birthday = root.findViewById(R.id.button_birthday)
+       // var root= inflater.inflate(R.layout.about_birthday, container, false)
+binding= AboutBirthdayBinding.inflate(inflater, container, false)
+        button_birthday = binding!!.root.findViewById(R.id.button_birthday)
         button_birthday.setOnClickListener {
+
            // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
              startActivity(Intent(context, Home::class.java))
         }
 
-        return root
+        return binding!!.root
     }
 
     companion object {

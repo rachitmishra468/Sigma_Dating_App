@@ -1,13 +1,14 @@
 package com.example.sigmadatingapp.views
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.sigmadatingapp.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -24,7 +25,8 @@ class BlankFragment2 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-lateinit var radioGroup: RadioGroup
+ var radioGroup: RadioGroup?=null
+    lateinit var radioButtonSelect: RadioButton
     lateinit var continue_second: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +44,31 @@ lateinit var radioGroup: RadioGroup
         var root= inflater.inflate(R.layout.about_yourself_layout2, container, false)
         radioGroup=root.findViewById(R.id.rg)
         continue_second = root.findViewById(R.id.continue_second)
+        radioGroup?.setOnCheckedChangeListener { group, checkedId ->
+if (checkedId!=-1){
+    continue_second.setBackgroundResource(R.drawable.signup_circle_bg)
+    continue_second.setTextColor(resources.getColor(R.color.white))
+}
+        }
         continue_second.setOnClickListener {
+            val selectedId = radioGroup?.getCheckedRadioButtonId()
+            if (selectedId==-1){
+                Toast.makeText(activity, "Select one field", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+          //  val intSelectButton: Int = radioGroup!!.checkedRadioButtonId
+
+            radioButtonSelect = root.findViewById(selectedId!!)
+            Toast.makeText(activity, radioButtonSelect.text, Toast.LENGTH_SHORT).show()
             (activity as OnBoardingActivity?)?.setCurrentItem(2, true)
+           /* if (radioButtonSelect.text==null){
+
+            }
+            else{
+
+            }*/
+
            // startActivity(Intent(context, Home::class.java))
         }
 
