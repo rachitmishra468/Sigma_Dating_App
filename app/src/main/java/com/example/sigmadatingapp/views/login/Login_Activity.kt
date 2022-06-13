@@ -119,6 +119,7 @@ class Login_Activity : AppCompatActivity() {
                 AppUtils.hideLoader()
 
                 startActivity(Intent(this, OnBoardingActivity::class.java))
+                finish()
             },
             1500
         )
@@ -146,17 +147,6 @@ class Login_Activity : AppCompatActivity() {
             }}
 
             login()
-
-          /*  AppUtils.showLoader(this)
-            Handler().postDelayed(
-                {
-                    AppUtils.hideLoader()
-
-                    startActivity(Intent(this, OnBoardingActivity::class.java))
-                },
-                1500
-            )*/
-
 
         }
     }

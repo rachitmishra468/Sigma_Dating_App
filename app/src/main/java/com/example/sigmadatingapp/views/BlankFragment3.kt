@@ -46,6 +46,7 @@ binding= AboutBirthdayBinding.inflate(inflater, container, false)
 
            // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
              startActivity(Intent(context, Home::class.java))
+            (activity as OnBoardingActivity?)?.finish()
         }
 
         return binding!!.root

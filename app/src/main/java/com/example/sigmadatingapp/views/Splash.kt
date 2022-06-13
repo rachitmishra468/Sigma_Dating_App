@@ -38,15 +38,15 @@ class Splash : AppCompatActivity() {
 
 
                 if (sharedPreferencesStorage!!.getBoolean(AppConstants.IS_AUTHENTICATED)) {
-                    startActivity(Intent(this, OnBoardingActivity::class.java))
+                    startActivity(Intent(this, Login_Activity::class.java))
                     finish()
                 } else {
-                    startActivity(Intent(this, OnBoardingActivity::class.java))
+                    startActivity(Intent(this, Login_Activity::class.java))
                     finish()
                 }
 
             },
-            1500
+            1000
         )
     }
 

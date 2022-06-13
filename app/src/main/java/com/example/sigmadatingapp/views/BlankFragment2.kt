@@ -57,19 +57,9 @@ if (checkedId!=-1){
                 return@setOnClickListener
             }
 
-          //  val intSelectButton: Int = radioGroup!!.checkedRadioButtonId
-
             radioButtonSelect = root.findViewById(selectedId!!)
             Toast.makeText(activity, radioButtonSelect.text, Toast.LENGTH_SHORT).show()
             (activity as OnBoardingActivity?)?.setCurrentItem(2, true)
-           /* if (radioButtonSelect.text==null){
-
-            }
-            else{
-
-            }*/
-
-           // startActivity(Intent(context, Home::class.java))
         }
 
         return root

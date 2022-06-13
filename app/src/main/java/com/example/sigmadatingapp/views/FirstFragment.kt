@@ -12,7 +12,9 @@ import android.util.Log
 import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
 import com.example.sigmadatingapp.adapters.ProfileMatch
 import android.os.Handler
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
+import com.example.sigmadatingapp.R
 import com.example.sigmadatingapp.databinding.FragmentFirstBinding
 
 
@@ -57,44 +59,29 @@ class FirstFragment : Fragment() {
             )
         }
         binding.closeHome.setOnClickListener {
+            (activity as Home?)?.finish()
         }
 
-        // on below line we are creating a variable for our adapter class and passing array list to it.
 
-        // on below line we are creating a variable for our adapter class and passing array list to it.
+        binding.openProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
         val adapter = ProfileMatch(courseModalArrayList, context)
-
-        // on below line we are setting adapter to our card stack.
-
-        // on below line we are setting adapter to our card stack.
         binding.swipeDeck!!.setAdapter(adapter)
-
-        // on below line we are setting event callback to our card stack.
-
-        // on below line we are setting event callback to our card stack.
         binding.swipeDeck!!.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
-                // binding.brokenHeart.visibility=View.VISIBLE
-                //  binding.brokenHeart.playAnimation()
-                //  check_login_flag()
                 Toast.makeText(context, "Card Swiped Left", Toast.LENGTH_SHORT).show()
             }
 
             override fun cardSwipedRight(position: Int) {
-                // on card swiped to right we are displaying a toast message.
-
-// Custom animation speed or duration.
-                // Custom animation speed or duration.
-                // binding.heartLoading.visibility=View.VISIBLE
-                //  binding.heartLoading.playAnimation()
-                //  check_login_flag()
                 Toast.makeText(context, "Card Swiped Right", Toast.LENGTH_SHORT).show()
             }
 
             override fun cardsDepleted() {
                 // this method is called when no card is present
                 binding.brokenHeart.playAnimation()
-                check_login_flag()
+                play_animation()
                 Toast.makeText(context, "No more courses present", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -111,13 +98,13 @@ class FirstFragment : Fragment() {
         })
 
 
-        /*  binding.buttonFirst.setOnClickListener {
-              findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-          }*/
+
     }
 
 
-    fun check_login_flag() {
+
+
+    fun play_animation() {
         Handler().postDelayed(
             {
 
