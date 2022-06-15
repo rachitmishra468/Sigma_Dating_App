@@ -2,6 +2,8 @@
     <string name="app_name">Sigma Dating App</string>
     <string name="login_header">Hey There! Login Now</string>
     <string name="email_text">Email</string>
+    <string name="fraternity_text">Fraternity</string>
+    <string name="sorority_text">Sorority</string>
     <string name="sign_in">SIGN IN</string>
     <string name="email_error">Invalid email address</string>
     <string name="phone_text">Phone Number</string>
@@ -10,7 +12,9 @@
     <string name="send_otp_text">SEND OTP</string>
     <string name="stepone_header">Tell us a little\n about yourself.</string>
     <string name="name_ask_text">What is your name?</string>
+    <string name="what_school">What School do you attend?</string>
     <string name="first_name_text">First Name</string>
+    <string name="hint_school_name">School Name</string>
     <string name="last_name_text">Last Name</string>
     <string name="iam_text">I am a</string>
     <string name="woman_text">Women</string>
@@ -21,7 +25,8 @@
     <string name="signup_text">SIGN UP</string>
     <string name="sign_in_text">OR SIGN IN WITH</string>
     <string name="continue_text">CONTINUE</string>
-    <string name="tell_us">Tell us a little\nabout yourself.</string>
+    <string name="tell_us">Tell us a little\nabout yourself</string>
+    <string name="tell_us_school">Tell us about\n your school</string>
     <string name="title_activity_on_boarding">OnBoardingActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
