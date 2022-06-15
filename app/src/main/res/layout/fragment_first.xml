@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="com.example.sigmadatingapp.views.FirstFragment">
+    tools:context="com.sigmadatingapp.views.FirstFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
