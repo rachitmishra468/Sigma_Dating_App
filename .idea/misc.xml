@@ -11,7 +11,11 @@
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/about_yourself_layout.xml" value="0.22" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/about_yourself_layout2.xml" value="0.16" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/activity_login.xml" value="0.10326086956521739" />
-        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_school_input.xml" value="0.25" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/content_home.xml" value="0.1" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_first2.xml" value="0.1" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_school_input.xml" value="0.18" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_school_inputs.xml" value="0.18840579710144928" />
+        <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/fragment_second2.xml" value="0.1213768115942029" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/login_scroll.xml" value="0.10869565217391304" />
         <entry key="..\:/Sigma_Dating_App_Dev/app/src/main/res/layout/onboarding_activity.xml" value="0.10326086956521739" />
       </map>
