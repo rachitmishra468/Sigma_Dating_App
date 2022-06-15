@@ -1,14 +1,19 @@
 package com.example.sigmadatingapp.views
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.sigmadatingapp.R
 import com.example.sigmadatingapp.databinding.AboutBirthdayBinding
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,8 +29,9 @@ class BlankFragment3 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-lateinit var button_birthday:Button
-private var binding:AboutBirthdayBinding?=null
+    lateinit var button_birthday: Button
+    private var ss:String?=null
+    private var binding: AboutBirthdayBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -39,14 +45,17 @@ private var binding:AboutBirthdayBinding?=null
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       // var root= inflater.inflate(R.layout.about_birthday, container, false)
-binding= AboutBirthdayBinding.inflate(inflater, container, false)
+        // var root= inflater.inflate(R.layout.about_birthday, container, false)
+        binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
         button_birthday.setOnClickListener {
 
-           // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
-             startActivity(Intent(context, Home::class.java))
+            // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
+            startActivity(Intent(context, Home::class.java))
         }
+
+       // binding!!.editTextBirthday.addTextChangedListener()
+
 
         return binding!!.root
     }
