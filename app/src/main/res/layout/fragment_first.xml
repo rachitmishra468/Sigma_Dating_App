@@ -169,7 +169,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/edit_profile"></ImageView>
+                    android:src="@drawable/ic_baseline_perm_identity_24"></ImageView>
             </LinearLayout>
 
 

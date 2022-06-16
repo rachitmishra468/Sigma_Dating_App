@@ -15,23 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SigmaDatingApp"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
+        android:screenOrientation="portrait"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".views.OnBoardingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.SigmaDatingApp.Fullscreen">
         </activity>
         <activity
             android:name=".views.Home"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.SigmaDatingApp.NoActionBar" />
         <activity
             android:name=".views.login.Login_Activity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".views.Splash"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

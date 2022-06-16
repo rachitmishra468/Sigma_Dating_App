@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.application'
 
 android {
     compileSdk 31
@@ -98,6 +99,9 @@ dependencies {
     //Facebook
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
     implementation 'com.facebook.android:facebook-login:12.3.0'
+
+    //Google Login
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
 
 }

@@ -15,7 +15,6 @@ import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.demoapp.other.Status
-import com.sigmadatingapp.R
 import com.sigmadatingapp.module.Loginmodel
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.AppConstants.PHONE_LOGIN
@@ -31,10 +30,21 @@ import com.facebook.CallbackManager
 import com.facebook.login.widget.LoginButton
 import java.util.*
 import com.facebook.FacebookException
-
+import com.sigmadatingapp.R
 import com.facebook.login.LoginResult
 
 import com.facebook.FacebookCallback
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+
+import android.R.attr
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import android.R.attr.data
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.common.api.ApiException
 
 
 
@@ -64,6 +74,8 @@ class Login_Activity : AppCompatActivity() {
     lateinit var editText_password: EditText
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
+    lateinit var signInButton: SignInButton
+    lateinit var gso:GoogleSignInOptions
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
@@ -75,6 +87,16 @@ class Login_Activity : AppCompatActivity() {
         setContentView(R.layout.login_scroll)
         mCallbackManager= CallbackManager.Factory.create();
         initialize_view()
+         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+         signInButton = findViewById(R.id.sign_in_button)
+        signInButton.setSize(SignInButton.SIZE_STANDARD)
+        signInButton.setOnClickListener {
+            signIn()
+        }
+
+
         // Set the initial permissions to request from the user while logging in
         mLoginButton.setPermissions(Arrays.asList(EMAIL, USER_POSTS));
 
@@ -96,6 +118,12 @@ class Login_Activity : AppCompatActivity() {
                     finish();
                 }
             })
+    }
+
+
+    private fun signIn() {
+        val signInIntent: Intent = GoogleSignIn.getClient(this, gso).getSignInIntent()
+        startActivityForResult(signInIntent, 111)
     }
 
     fun initialize_view() {
@@ -215,8 +243,30 @@ class Login_Activity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        mCallbackManager?.onActivityResult(requestCode, resultCode, data);
+        if (requestCode === 111) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+        else{
+            mCallbackManager?.onActivityResult(requestCode, resultCode, data);
+        }
+
+
     }
 
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
 
+            // Signed in successfully, show authenticated UI.
+           // updateUI(account)
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+           // Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+           // updateUI(null)
+        }
+    }
 }
