@@ -1,4 +1,4 @@
-package com.sigmadatingapp.views
+package com.sigmadatingapp.views.intro_registration
 
 import android.os.Bundle
 import android.widget.ImageView
@@ -7,11 +7,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.sigmadatingapp.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-
+import com.sigmadatingapp.storage.SharedPreferencesStorage
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+@AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
     private lateinit var mViewPager: ViewPager2
     private lateinit var pageIndicator: TabLayout
 private var  img_back:ImageView?=null
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity)
@@ -36,21 +41,7 @@ private var  img_back:ImageView?=null
         })
         TabLayoutMediator(pageIndicator, mViewPager) { _, _ -> }.attach()
 
-       /* btnNext.setOnClickListener {
-            if (getItem() > mViewPager.childCount) {
-                finish()
-            } else {
-                mViewPager.setCurrentItem(getItem() + 1, true)
-            }
-        }
 
-        img_back.setOnClickListener {
-            if (getItem() == 0) {
-                finish()
-            } else {
-                mViewPager.setCurrentItem(getItem() - 1, true)
-            }
-        }*/
         img_back?.setOnClickListener {
             if (getItem() == 0) {
                 finish()

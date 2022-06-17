@@ -1,4 +1,4 @@
-package com.sigmadatingapp.views
+package com.sigmadatingapp.views.intro_registration
 
 import android.content.Context
 import androidx.fragment.app.Fragment
@@ -27,6 +27,11 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
+
+            3 -> BlankFragment4.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
             else -> BlankFragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
@@ -35,7 +40,7 @@ class OnBoardingViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return 4
     }
 
 }

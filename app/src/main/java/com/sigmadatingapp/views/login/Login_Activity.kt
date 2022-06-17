@@ -1,6 +1,5 @@
 package com.sigmadatingapp.views.login
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +19,7 @@ import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.AppConstants.PHONE_LOGIN
 import com.sigmadatingapp.storage.SharedPreferencesStorage
 import com.sigmadatingapp.utilities.AppUtils
-import com.sigmadatingapp.views.OnBoardingActivity
+import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 import com.hbb20.CountryCodePicker
 import com.hbb20.CountryCodePicker.OnCountryChangeListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,21 +32,14 @@ import com.facebook.FacebookException
 import com.sigmadatingapp.R
 import com.facebook.login.LoginResult
 
+
 import com.facebook.FacebookCallback
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
-
-import android.R.attr
-import androidx.core.app.ActivityCompat.startActivityForResult
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import android.R.attr.data
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
-
-
-
+import com.google.android.gms.tasks.Task
 
 
 @AndroidEntryPoint
@@ -75,7 +67,7 @@ class Login_Activity : AppCompatActivity() {
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: SignInButton
-    lateinit var gso:GoogleSignInOptions
+    lateinit var gso: GoogleSignInOptions
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null

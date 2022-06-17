@@ -1,5 +1,7 @@
 package com.sigmadatingapp.storage;
 
+import org.jetbrains.annotations.NotNull;
+
 public class AppConstants {
 
     public static final int STORAGE_PERMISSION_REQUEST_CODE = 101;
@@ -24,4 +26,11 @@ public class AppConstants {
     public static String WALLET_BALANCE = "wallet_balance";
     public static String AUTH_TOKEN = "auth_token";
     public static String DEFAULT_STORAGE_PATH = "default_storage_path";
+    @NotNull
+    public static final String fisrtname="Fisrtname";
+    public static final String Lastname="Lastname";
+
+    public static final String Gender="Gender";
+    public static final String Dob="DOB";
+    public static final String userSchoolName="school_name";
 }

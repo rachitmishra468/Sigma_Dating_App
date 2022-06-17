@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/YourselfFragment"
-        android:name="com.sigmadatingapp.views.BlankFragment"
+        android:name="com.sigmadatingapp.views.intro_registration.BlankFragment"
         android:label="first_blankfragment_label"
         tools:layout="@layout/about_yourself_layout">
 
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/GenderFragment"
-        android:name="com.sigmadatingapp.views.BlankFragment2"
+        android:name="com.sigmadatingapp.views.intro_registration.BlankFragment2"
         android:label="first_blankfragment2_label"
         tools:layout="@layout/about_yourself_layout2">
 
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/BirthdayFragment"
-        android:name="com.sigmadatingapp.views.BlankFragment3"
+        android:name="com.sigmadatingapp.views.intro_registration.BlankFragment3"
         android:label="first_blankfragment3_label"
         tools:layout="@layout/about_birthday">
 
@@ -66,7 +66,7 @@
 
     <fragment
         android:id="@+id/SchoolFragment"
-        android:name="com.sigmadatingapp.views.BlankFragment4"
+        android:name="com.sigmadatingapp.views.intro_registration.BlankFragment4"
         android:label="first_blankfragment4_label"
         tools:layout="@layout/fragment_school_input">
 

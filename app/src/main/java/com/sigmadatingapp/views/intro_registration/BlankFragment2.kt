@@ -1,4 +1,4 @@
-package com.sigmadatingapp.views
+package com.sigmadatingapp.views.intro_registration
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.sigmadatingapp.R
+import com.sigmadatingapp.storage.AppConstants
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +27,7 @@ class BlankFragment2 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
  var radioGroup: RadioGroup?=null
+
     lateinit var radioButtonSelect: RadioButton
     lateinit var continue_second: Button
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +61,7 @@ if (checkedId!=-1){
 
             radioButtonSelect = root.findViewById(selectedId!!)
             Toast.makeText(activity, radioButtonSelect.text, Toast.LENGTH_SHORT).show()
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Gender, radioButtonSelect.text)
             (activity as OnBoardingActivity?)?.setCurrentItem(2, true)
         }
 

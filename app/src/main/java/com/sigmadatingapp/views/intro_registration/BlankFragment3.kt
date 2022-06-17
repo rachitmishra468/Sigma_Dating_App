@@ -1,6 +1,4 @@
-package com.sigmadatingapp.views
-
-import android.content.Intent
+package com.sigmadatingapp.views.intro_registration
 
 import android.os.Bundle
 
@@ -8,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.AboutBirthdayBinding
 
 import androidx.fragment.app.Fragment
-
+import com.sigmadatingapp.storage.AppConstants
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,7 +30,9 @@ class BlankFragment3 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var button_birthday: Button
+    lateinit var editbirthday:EditText
     private var ss:String?=null
+
     private var binding: AboutBirthdayBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +50,17 @@ class BlankFragment3 : Fragment() {
         // var root= inflater.inflate(R.layout.about_birthday, container, false)
         binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
+        editbirthday=binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
         button_birthday.setOnClickListener {
+            
+            if (!editbirthday.text.toString().isEmpty()) {
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
+                (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
 
-           // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
-             startActivity(Intent(context, Home::class.java))
-            (activity as OnBoardingActivity?)?.finish()
-            // (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
-            startActivity(Intent(context, Home::class.java))
+            }
+            else{
+                Toast.makeText(requireActivity(),"enter valid Date of Birth",Toast.LENGTH_LONG).show()
+            }
         }
 
        // binding!!.editTextBirthday.addTextChangedListener()

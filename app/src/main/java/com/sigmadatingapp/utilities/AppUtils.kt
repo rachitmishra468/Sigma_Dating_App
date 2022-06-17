@@ -154,9 +154,7 @@ object AppUtils {
             snackbarView.setBackgroundColor(
                 ContextCompat.getColor(
                     context!!,
-                    R.color.hint_text_color
-                )
-            )
+                    R.color.hint_text_color))
             val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView
             textView.maxLines = 5
             textView.setTextColor(ContextCompat.getColor(context, R.color.white))
@@ -169,9 +167,7 @@ object AppUtils {
         }
 
         fun showSoftKeyBoard(context: Context, view: View) {
-            if (view.requestFocus()) {
-                val inputMethodManager =
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (view.requestFocus()) { val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
             }
         }
@@ -191,4 +187,18 @@ object AppUtils {
             return newformateddate
         }
 
+
+    fun   checkValidationOnFisrtStep(context: Context,view: View?, fname:String, lastname:String): Boolean {
+        val pattern = Regex("^[A-Za-z]+$")
+        if (fname.isEmpty()|| fname == "null"){
+            showErrorSnackBar(context,view,"Enter valid First Name")
+    return false
+}
+        else if(lastname.isEmpty()||lastname.isBlank()||fname == "null"){
+            showErrorSnackBar(context,view,"Enter valid  Last Name")
+            return false
+        }
+
+return true
+    }
 }

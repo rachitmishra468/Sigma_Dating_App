@@ -129,7 +129,7 @@
         app:layout_constraintGuide_end="30dp" />
 
     <AutoCompleteTextView
-        android:id="@+id/et_lastname"
+        android:id="@+id/et_type"
         style="@style/NormalText"
         android:layout_width="0dp"
         android:layout_height="54dp"
@@ -156,11 +156,11 @@
         android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginBottom="80dp"
-        android:background="@drawable/signup_circle_bg"
+        android:background="@drawable/white_circle_bg"
         android:fontFamily="@font/varela_regular"
         android:text="@string/continue_text"
         android:textAllCaps="true"
-        android:textColor="@color/white"
+        android:textColor="@color/hint_text_color"
         android:textSize="16sp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"

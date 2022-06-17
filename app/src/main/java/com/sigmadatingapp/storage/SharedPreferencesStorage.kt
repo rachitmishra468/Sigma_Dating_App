@@ -1,6 +1,8 @@
 package com.sigmadatingapp.storage
 
 import android.content.SharedPreferences
+import com.example.bridegroomed.model.User
+import com.sigmadatingapp.module.UserRegistration
 import javax.inject.Inject
 
 // @Inject tells Dagger how to provide instances of this type
@@ -34,4 +36,7 @@ class SharedPreferencesStorage @Inject constructor(val sharedPreferences : Share
     fun clear(){
         sharedPreferences.edit().clear().apply()
     }
+
+
+
 }

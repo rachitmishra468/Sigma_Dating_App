@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentSecond2Binding
+import com.sigmadatingapp.views.intro_registration.BlankFragment
 
 
 /**
