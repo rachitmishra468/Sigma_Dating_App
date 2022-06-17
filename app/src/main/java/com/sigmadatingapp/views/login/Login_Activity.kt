@@ -1,5 +1,6 @@
 package com.sigmadatingapp.views.login
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,7 +20,6 @@ import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.AppConstants.PHONE_LOGIN
 import com.sigmadatingapp.storage.SharedPreferencesStorage
 import com.sigmadatingapp.utilities.AppUtils
-import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 import com.hbb20.CountryCodePicker
 import com.hbb20.CountryCodePicker.OnCountryChangeListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,12 +34,23 @@ import com.facebook.login.LoginResult
 
 
 import com.facebook.FacebookCallback
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.TaskExecutors
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
 import com.google.android.gms.tasks.Task
+import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 
 
 @AndroidEntryPoint
@@ -67,16 +78,21 @@ class Login_Activity : AppCompatActivity() {
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: SignInButton
-    lateinit var gso: GoogleSignInOptions
+    lateinit var gso:GoogleSignInOptions
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
+
+    //variable for FirebaseAuth class
+    private var mAuth: FirebaseAuth? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_scroll)
+        //below line is for getting instance of our FirebaseAuth.
+        mAuth = FirebaseAuth.getInstance()
         mCallbackManager= CallbackManager.Factory.create();
         initialize_view()
          gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -188,6 +204,8 @@ class Login_Activity : AppCompatActivity() {
                 if (!AppUtils.isValid_phone_number(edittext_phone_no.text.toString())) {
                     edittext_phone_no.error = "Invalid Phone Number"
                     return
+                }else{
+
                 }
             }
             else{
@@ -261,4 +279,16 @@ class Login_Activity : AppCompatActivity() {
            // updateUI(null)
         }
     }
+
+
+    private fun sendVerificationCode(number: String) {
+        //this method is used for getting OTP on user phone number.
+       /* PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            number, // Phone number to verify
+            60,             // Timeout duration
+            TimeUnit.SECONDS,   // Unit of timeout
+            this,           // Activity (for callback binding)
+            mCallbacks)*/
+    }
+
 }
