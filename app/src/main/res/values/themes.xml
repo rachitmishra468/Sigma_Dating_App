@@ -50,9 +50,18 @@
         <item name="fontFamily">@font/varela_regular</item>
     </style>
 
+
+
     <style name="NormalText" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:typeface">monospace</item>
+        <item name="fontFamily">@font/varela_regular</item>
+    </style>
+
+    <style name="grey_NormalText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#BE5E5A5A</item>
         <item name="android:typeface">monospace</item>
         <item name="fontFamily">@font/varela_regular</item>
     </style>

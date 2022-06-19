@@ -92,15 +92,15 @@
     <Button
         android:id="@+id/continue_first"
         android:layout_width="0dp"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:layout_marginTop="100dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
-        android:background="@drawable/white_circle_bg"
+        android:background="@drawable/continue_selector_drawable"
         android:fontFamily="@font/varela_regular"
         android:text="@string/continue_text"
         android:textAllCaps="true"
-
+        android:enabled="true"
         android:textColor="@color/hint_text_color"
         android:textSize="16sp"
         android:textStyle="bold"

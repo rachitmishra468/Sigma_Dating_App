@@ -14,10 +14,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
-import com.sigmadatingapp.R
 import com.google.android.material.snackbar.Snackbar
+import com.sigmadatingapp.R
+import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 object AppUtils {
@@ -86,7 +88,19 @@ object AppUtils {
     }
 
 
-
+    fun isValidDate(dateOfBirth: String): Boolean {
+        var valid = true
+        val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+        formatter.setLenient(false)
+        try {
+            val date: Date = formatter.parse(dateOfBirth)
+            return true
+        } catch (e: ParseException) {
+            return false
+            //If input date is in different format or invalid.
+        }
+        return valid
+    }
 
 
         fun registerBroadCastReceiver(context: Context, receiver: BroadcastReceiver?) {

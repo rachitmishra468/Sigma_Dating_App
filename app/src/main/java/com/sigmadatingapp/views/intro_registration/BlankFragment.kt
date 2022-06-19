@@ -1,6 +1,9 @@
 package com.sigmadatingapp.views.intro_registration
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +58,8 @@ class BlankFragment : Fragment() {
         constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
         editlastName=binding!!.root.findViewById(R.id.et_lastname)
         editName=binding!!.root.findViewById(R.id.editText_name)
+        editName?.addTextChangedListener(textWatcher)
+        editlastName?.addTextChangedListener(textWatcher)
         continue_first.setOnClickListener {
             val fnmame = editName?.text.toString()
             val lastname = editlastName?.text.toString()
@@ -62,7 +67,6 @@ class BlankFragment : Fragment() {
             if (AppUtils.isNetworkInterfaceAvailable(requireActivity())) {
                 if (AppUtils.checkValidationOnFisrtStep(requireActivity(), constraint_f1, fnmame, lastname)) {
                     AppUtils.hideSoftKeyboard(requireActivity(), constraint_f1)
-
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.fisrtname, fnmame)
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Lastname, lastname)
                     (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
@@ -71,13 +75,29 @@ class BlankFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()
             }
-
-
         }
         return binding!!.root
     }
 
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
 
+            val editName: String = editName?.getText().toString()
+            val editlastName: String = editlastName?.getText().toString()
+            // check whether both the fields are empty or not
+            if (!editName.isEmpty() && !editlastName.isEmpty()){
+                continue_first.setEnabled(!editName.isEmpty() && !editlastName.isEmpty())
+                Log.d("SIGMA_APP","valid condition")
+            }
+            else{ continue_first.setEnabled(false)}
+
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

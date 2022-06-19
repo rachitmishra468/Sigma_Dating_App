@@ -42,9 +42,10 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="28dp"
         android:layout_marginTop="28dp"
+
         android:background="@drawable/login_field_border_bg"
         android:ems="10"
-        android:hint="Date of Birth"
+        android:hint="DD/MM/YYYY"
         android:inputType="date"
         android:maxLength="10"
         android:textSize="14sp"

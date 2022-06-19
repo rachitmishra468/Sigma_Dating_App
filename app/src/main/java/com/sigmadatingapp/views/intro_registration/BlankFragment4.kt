@@ -18,9 +18,13 @@ class BlankFragment4 : Fragment() {
     private var param2: String? = null
     private var about_school_binding:FragmentSchoolInputBinding?=null
     private var continueSchool:Button?=null
+    private var Socority_button:Button?=null
+    private var fraternity_button:Button?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         about_school_binding= FragmentSchoolInputBinding.inflate(inflater, container, false)
         continueSchool=    about_school_binding?.root?.findViewById(R.id.continue_school)
+        Socority_button=about_school_binding?.root?.findViewById(R.id.Socority_button)
+        fraternity_button=about_school_binding?.root?.findViewById(R.id.fraternity_button)
         continueSchool?.setOnClickListener {
             startActivity(Intent(context, Home::class.java))
             (activity as OnBoardingActivity?)?.finish()
