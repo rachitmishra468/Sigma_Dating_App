@@ -41,14 +41,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.TaskExecutors
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
-import java.util.concurrent.TimeUnit
 import com.google.android.gms.tasks.Task
 import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 
@@ -84,7 +76,7 @@ class Login_Activity : AppCompatActivity() {
     private var disposableObserver: SingleObserver<Loginmodel>? = null
 
     //variable for FirebaseAuth class
-    private var mAuth: FirebaseAuth? = null
+    //private var mAuth: FirebaseAuth? = null
 
 
 
@@ -92,7 +84,7 @@ class Login_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_scroll)
         //below line is for getting instance of our FirebaseAuth.
-        mAuth = FirebaseAuth.getInstance()
+      //  mAuth = FirebaseAuth.getInstance()
         mCallbackManager= CallbackManager.Factory.create();
         initialize_view()
          gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -191,7 +183,7 @@ class Login_Activity : AppCompatActivity() {
                 startActivity(Intent(this, OnBoardingActivity::class.java))
                 finish()
             },
-            1500
+            500
         )
     }
 
@@ -205,7 +197,7 @@ class Login_Activity : AppCompatActivity() {
                     edittext_phone_no.error = "Invalid Phone Number"
                     return
                 }else{
-
+                    sign_up(view)
                 }
             }
             else{

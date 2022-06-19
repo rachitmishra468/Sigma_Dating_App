@@ -71,7 +71,19 @@
         tools:layout="@layout/fragment_school_input">
 
         <action
-            android:id="@+id/action_SchoolFragment_to_FirstFragment"
+            android:id="@+id/action_SchoolFragment_to_Password"
+            app:destination="@id/PasswordFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/PasswordFragment"
+        android:name="com.sigmadatingapp.views.intro_registration.Password"
+        android:label="Password"
+        tools:layout="@layout/fragment_password">
+
+        <action
+            android:id="@+id/action_Password_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 

@@ -32,6 +32,10 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
+            4 -> Password.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
             else -> BlankFragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
@@ -40,7 +44,7 @@ class OnBoardingViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 4
+        return 5
     }
 
 }
