@@ -26,8 +26,9 @@ class BlankFragment4 : Fragment() {
         Socority_button=about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button=about_school_binding?.root?.findViewById(R.id.fraternity_button)
         continueSchool?.setOnClickListener {
-            startActivity(Intent(context, Home::class.java))
-            (activity as OnBoardingActivity?)?.finish()
+
+            (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+
         }
         return  about_school_binding?.root
     }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "856275008761",
+    "project_id": "sigma-dating-app-1655315229262",
+    "storage_bucket": "sigma-dating-app-1655315229262.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856275008761:android:a633b0594c63dd4e06b628",
+        "android_client_info": {
+          "package_name": "com.sigmadatingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "856275008761-18ij50dj29rgg33qs6fhklqqpki4noha.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sigmadatingapp",
+            "certificate_hash": "c552614b56db5379a2d7a8cbd64e78494ff5c492"
+          }
+        },
+        {
+          "client_id": "856275008761-k3mo7qbabb3469le4o9937b1vpgcon3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiAX4q9CaZLJp9ye3QE0t-0e6z0Y9HK0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "856275008761-k3mo7qbabb3469le4o9937b1vpgcon3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
