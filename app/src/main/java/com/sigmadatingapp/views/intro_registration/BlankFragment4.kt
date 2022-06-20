@@ -26,8 +26,22 @@ class BlankFragment4 : Fragment() {
         Socority_button=about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button=about_school_binding?.root?.findViewById(R.id.fraternity_button)
         continueSchool?.setOnClickListener {
-
             (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+
+        }
+        fraternity_button?.setOnClickListener {
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
+            Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
+
+        }
+
+        Socority_button?.setOnClickListener {
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            Socority_button?.setTextColor(this.getResources().getColor(R.color.black))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
 
         }
         return  about_school_binding?.root

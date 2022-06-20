@@ -10,11 +10,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sigmadatingapp.storage.SharedPreferencesStorage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
     private lateinit var mViewPager: ViewPager2
     private lateinit var pageIndicator: TabLayout
-private var  img_back:ImageView?=null
+    private var img_back: ImageView? = null
+
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,17 +24,17 @@ private var  img_back:ImageView?=null
         setContentView(R.layout.onboarding_activity)
 
         mViewPager = findViewById(R.id.viewPager)
-        img_back=findViewById<ImageView>(R.id.img_back)
-        pageIndicator= findViewById(R.id.pageIndicator)
+        img_back = findViewById<ImageView>(R.id.img_back)
+        pageIndicator = findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
         mViewPager.setUserInputEnabled(true);
         mViewPager.offscreenPageLimit = 1
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == 1) {
-                   // btnNext.text = getText(R.string.finish)
+                    // btnNext.text = getText(R.string.finish)
                 } else {
-                   // btnNext.text = getText(R.string.next)
+                    // btnNext.text = getText(R.string.next)
                 }
             }
 
@@ -59,4 +61,4 @@ private var  img_back:ImageView?=null
         //var itemm=item+1
         mViewPager.setCurrentItem(item, smoothScroll)
     }
-    }
+}
