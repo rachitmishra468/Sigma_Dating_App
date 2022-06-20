@@ -69,7 +69,7 @@ class BlankFragment : Fragment() {
                     AppUtils.hideSoftKeyboard(requireActivity(), constraint_f1)
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.fisrtname, fnmame)
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Lastname, lastname)
-                    (activity as OnBoardingActivity?)?.setCurrentItem(1, true)
+                    (activity as OnBoardingActivity?)?.setCurrentItem(1, false)
                 }
 
             } else {

@@ -15,7 +15,9 @@
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
 
-
+        <action
+            android:id="@+id/action_FirstFragment_to_chat"
+            app:destination="@id/chatListFragment" />
 
     </fragment>
     <fragment
@@ -95,6 +97,15 @@
 
         <action
             android:id="@+id/action_Profile_Photo_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.sigmadatingapp.views.chat.ChatListFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_chatListFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 

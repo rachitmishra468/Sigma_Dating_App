@@ -58,7 +58,6 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
-        //var itemm=item+1
         mViewPager.setCurrentItem(item, smoothScroll)
     }
 }

@@ -58,6 +58,9 @@ class FirstFragment : Fragment() {
             (activity as Home?)?.finish()
         }
 
+        binding.chatIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
 
         binding.openProfile.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
