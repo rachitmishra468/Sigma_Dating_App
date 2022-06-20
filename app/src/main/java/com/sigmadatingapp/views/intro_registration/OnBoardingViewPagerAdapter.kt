@@ -36,6 +36,10 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
+            5 -> Profile_Photo.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
             else -> BlankFragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
@@ -44,7 +48,7 @@ class OnBoardingViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return 6
     }
 
 }

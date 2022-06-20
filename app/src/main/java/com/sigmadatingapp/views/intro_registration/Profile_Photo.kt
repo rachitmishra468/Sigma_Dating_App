@@ -13,11 +13,11 @@ import com.sigmadatingapp.views.Home
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Password : Fragment() {
+class Profile_Photo : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-
+    private var profile_continue: Button?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -26,18 +26,17 @@ class Password : Fragment() {
         }
     }
 
-    private var create_password: Button?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view= inflater.inflate(R.layout.fragment_password, container, false)
 
+        var view= inflater.inflate(R.layout.fragment_profile__photo, container, false)
 
-        create_password=    view.findViewById(R.id.create_password)
-        create_password?.setOnClickListener {
+        profile_continue=    view.findViewById(R.id.profile_continue)
+        profile_continue?.setOnClickListener {
 
-            (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
+            startActivity(Intent(context, Home::class.java))
+            (activity as OnBoardingActivity?)?.finish()
 
         }
-
 
 
         return view;
@@ -46,7 +45,7 @@ class Password : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Password().apply {
+            Profile_Photo().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

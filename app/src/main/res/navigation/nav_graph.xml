@@ -83,8 +83,20 @@
         tools:layout="@layout/fragment_password">
 
         <action
-            android:id="@+id/action_Password_to_FirstFragment"
+            android:id="@+id/action_Password_to_Profile_Photo"
+            app:destination="@id/Profile_Photo" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Profile_Photo"
+        android:name="com.sigmadatingapp.views.intro_registration.Profile_Photo"
+        android:label="Profile_Photo"
+        tools:layout="@layout/fragment_profile__photo">
+
+        <action
+            android:id="@+id/action_Profile_Photo_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+
 
 </navigation>
