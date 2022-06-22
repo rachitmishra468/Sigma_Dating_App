@@ -35,14 +35,34 @@
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
+
+    <EditText
+        android:id="@+id/edit_emal"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/login_field_border_bg"
+        android:ems="10"
+        android:hint="@string/email_text"
+        android:inputType="date"
+        android:maxLength="10"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+
+
+
     <EditText
         android:id="@+id/edit_text_birthday"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginRight="28dp"
         android:layout_marginTop="28dp"
-
         android:background="@drawable/login_field_border_bg"
         android:ems="10"
         android:hint="DD/MM/YYYY"
@@ -52,7 +72,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_emal" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -78,11 +98,11 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="84dp"
-        android:background="@drawable/white_circle_bg"
+        android:background="@drawable/signup_circle_bg"
         android:elevation="2dp"
         android:text="@string/continue_text"
         android:textAllCaps="true"
-        android:textColor="@color/hint_text_color"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         android:translationZ="7dp"

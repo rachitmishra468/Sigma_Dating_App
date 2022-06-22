@@ -17,7 +17,7 @@ class Profile_Photo : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-    private var profile_continue: Button?=null
+    private var profile_continue: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -26,11 +26,15 @@ class Profile_Photo : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        var view= inflater.inflate(R.layout.fragment_profile__photo, container, false)
+        var view = inflater.inflate(R.layout.fragment_profile__photo, container, false)
 
-        profile_continue=    view.findViewById(R.id.profile_continue)
+        profile_continue = view.findViewById(R.id.profile_continue)
         profile_continue?.setOnClickListener {
 
             startActivity(Intent(context, Home::class.java))
