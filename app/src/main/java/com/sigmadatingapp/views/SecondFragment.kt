@@ -31,9 +31,7 @@ private var setting_icon:ImageView?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        setting_icon?.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_settings)
-        }
+
         return binding.root
 
     }
@@ -59,9 +57,11 @@ private var setting_icon:ImageView?=null
 
         photoAdapter.setDataList(dataList)
 
-        /*binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }*/
+        setting_icon?.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_settings)
+
+        }
+
     }
 
     override fun onDestroyView() {

@@ -111,9 +111,9 @@
             android:id="@+id/action_chatListFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
-    <activity
+    <fragment
         android:id="@+id/settings_frag"
-        android:name="com.sigmadatingapp.views.Sec"
+        android:name="com.sigmadatingapp.views.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 

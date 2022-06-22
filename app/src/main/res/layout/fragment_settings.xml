@@ -258,6 +258,82 @@ android:layout_marginRight="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@+id/main_linear" />
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+app:layout_constraintStart_toStartOf="@+id/guideline_left"
+        app:layout_constraintStart_toEndOf="@id/guideline_right"
+        android:gravity="start"
+        app:layout_constraintHorizontal_bias="0.058"
+
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/rb_women"
+            android:layout_width="100dp"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/interested_in_main_drwable"
+            android:button="@android:color/transparent"
+            android:checked="false"
+            android:paddingLeft="16dp"
+            android:layout_marginBottom="2dp"
+            android:elevation="4dp"
+            android:layout_height="40dp"
+            android:paddingTop="3dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="3dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Women"
+            android:textColor="@drawable/text_selector_default" />
+
+        <RadioButton
+            android:id="@+id/rb_men"
+            android:layout_width="100dp"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/interested_in_main_drwable"
+            android:button="@android:color/transparent"
+            android:checked="false"
+            android:paddingLeft="16dp"
+            android:layout_marginBottom="2dp"
+            android:elevation="4dp"
+            android:layout_height="40dp"
+            android:paddingTop="3dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="3dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Men"
+            android:textColor="@drawable/text_selector_default" />
+
+        <RadioButton
+            android:id="@+id/rb_more"
+            android:layout_width="100dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/interested_in_main_drwable"
+            android:button="@android:color/transparent"
+            android:checked="false"
+            android:elevation="4dp"
+            android:paddingLeft="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="2dp"
+            android:paddingTop="3dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingRight="16dp"
+            android:paddingBottom="3dp"
+            android:text="Other"
+            android:textColor="@drawable/text_selector_default" />
+
+    </RadioGroup>
 
 <!--
     <com.google.android.material.chip.ChipGroup
@@ -316,7 +392,7 @@ android:layout_marginRight="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/textView7"
+        app:layout_constraintTop_toBottomOf="@id/rg"
         app:layout_constraintStart_toStartOf="@id/guideline_left" />
 
     <SeekBar
@@ -745,6 +821,27 @@ android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="@id/guideline_right"
         app:layout_constraintHorizontal_bias="0.616"
         app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="18-26"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        app:layout_constraintHorizontal_bias="0.896"
+        app:layout_constraintStart_toEndOf="@+id/textView_age"
+        app:layout_constraintTop_toBottomOf="@+id/rg" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25 miles"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView_distance"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        app:layout_constraintHorizontal_bias="0.906"
+        app:layout_constraintStart_toEndOf="@+id/textView_distance" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

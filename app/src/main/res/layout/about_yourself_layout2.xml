@@ -128,7 +128,7 @@
 
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/rb_men" />-->
-<RadioGroup
+ <RadioGroup
     android:id="@+id/rg"
     android:layout_width="0dp"
     app:layout_constraintEnd_toEndOf="@+id/guideline3"

@@ -187,7 +187,7 @@ object AppUtils {
             snackbarView.setBackgroundColor(
                 ContextCompat.getColor(
                     context!!,
-                    R.color.hint_text_color
+                    R.color.light_blue_900
                 )
             )
             val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView
