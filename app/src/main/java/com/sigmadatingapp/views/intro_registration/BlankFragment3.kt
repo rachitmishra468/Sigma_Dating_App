@@ -69,16 +69,27 @@ class BlankFragment3 : Fragment() {
 
             } else {
 
+                if (editbirthday.text.toString().isEmpty()||!AppUtils.isValidDate(editbirthday.text.toString().trim())) {
 
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                    AppConstants.email,
-                    email_id.text.toString()
-                )
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                    AppConstants.Dob,
-                    editbirthday.text.toString()
-                )
-                (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+                    Toast.makeText(requireActivity(),"Enter Valid Date of Birth",Toast.LENGTH_LONG).show()
+                }
+                else{
+
+                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                        AppConstants.email,
+                        email_id.text.toString()
+                    )
+                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                        AppConstants.Dob,
+                        editbirthday.text.toString()
+                    )
+                    (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+                   // (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
+                  //  (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+                }
+
+
+
             }
         }
 
@@ -90,9 +101,7 @@ class BlankFragment3 : Fragment() {
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            if (editbirthday.text.length == 2 || editbirthday.text.length == 5) {
-                editbirthday.append("/")
-            }
+
 
         }
 
