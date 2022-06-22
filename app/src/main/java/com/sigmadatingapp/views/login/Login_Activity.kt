@@ -42,6 +42,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.sigmadatingapp.views.Home
 import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 
 
@@ -70,7 +71,7 @@ class Login_Activity : AppCompatActivity() {
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: SignInButton
-    lateinit var gso:GoogleSignInOptions
+    lateinit var gso: GoogleSignInOptions
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
@@ -79,18 +80,17 @@ class Login_Activity : AppCompatActivity() {
     //private var mAuth: FirebaseAuth? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_scroll)
         //below line is for getting instance of our FirebaseAuth.
-      //  mAuth = FirebaseAuth.getInstance()
-        mCallbackManager= CallbackManager.Factory.create();
+        //  mAuth = FirebaseAuth.getInstance()
+        mCallbackManager = CallbackManager.Factory.create();
         initialize_view()
-         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
-         signInButton = findViewById(R.id.sign_in_button)
+        signInButton = findViewById(R.id.sign_in_button)
         signInButton.setSize(SignInButton.SIZE_STANDARD)
         signInButton.setOnClickListener {
             signIn()
@@ -159,7 +159,7 @@ class Login_Activity : AppCompatActivity() {
         phone_number_layout.visibility = View.GONE
         emailLayoutLayout.visibility = View.VISIBLE
         button_login_email_phone_both.setText(R.string.sign_in)
-        PHONE_LOGIN=false
+        PHONE_LOGIN = false
 
     }
 
@@ -171,7 +171,7 @@ class Login_Activity : AppCompatActivity() {
         phone_number_layout.visibility = View.VISIBLE
         emailLayoutLayout.visibility = View.GONE
         button_login_email_phone_both.setText(R.string.send_otp_text)
-        PHONE_LOGIN=true
+        PHONE_LOGIN = true
     }
 
     fun sign_up(view: View) {
@@ -192,43 +192,50 @@ class Login_Activity : AppCompatActivity() {
 
         if (AppUtils.isNetworkInterfaceAvailable(this)) {
 
-            if (PHONE_LOGIN){
+            if (PHONE_LOGIN) {
                 if (!AppUtils.isValid_phone_number(edittext_phone_no.text.toString())) {
                     edittext_phone_no.error = "Invalid Phone Number"
                     return
-                }else{
+                } else {
                     sign_up(view)
                 }
+            } else {
+                if (AppUtils.checkIfEmailIsValid(editText_email.text.toString()) != null) {
+                    editText_email.error = "Invalid Email Address"
+                    return
+                }
+                if (!AppUtils.isValid_password(editText_password.text.toString())) {
+                    editText_password.error = "Password Length Must be of 6-8"
+                    return
+                }
             }
-            else{
-            if (AppUtils.checkIfEmailIsValid(editText_email.text.toString())!=null) {
-                editText_email.error = "Invalid Email Address"
-                return
-            }
-            if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                editText_password.error = "Password Length Must be of 6-8"
-                return
-            }}
 
+
+            sharedPreferencesStorage.setValue(AppConstants.email, editText_email.text.toString())
+            sharedPreferencesStorage.setValue(
+                AppConstants.password,
+                editText_password.text.toString()
+            )
             login()
 
         }
     }
 
 
-
-
     fun login() {
         mainViewModel.res?.observe(this, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
-                    it.data.let {res->
-                        if (res?.status == true){
+                    it.data.let { res ->
+                        if (res?.status == true) {
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
-                        }else{
+                            startActivity(Intent(this, Home::class.java))
+                            finish()
+                        } else {
 
-                            Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
+                                .show()
                         }
                     }
                 }
@@ -250,8 +257,7 @@ class Login_Activity : AppCompatActivity() {
             // a listener.
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
-        }
-        else{
+        } else {
             mCallbackManager?.onActivityResult(requestCode, resultCode, data);
         }
 
@@ -263,24 +269,24 @@ class Login_Activity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
 
             // Signed in successfully, show authenticated UI.
-           // updateUI(account)
+            // updateUI(account)
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-           // Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-           // updateUI(null)
+            // Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+            // updateUI(null)
         }
     }
 
 
     private fun sendVerificationCode(number: String) {
         //this method is used for getting OTP on user phone number.
-       /* PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            number, // Phone number to verify
-            60,             // Timeout duration
-            TimeUnit.SECONDS,   // Unit of timeout
-            this,           // Activity (for callback binding)
-            mCallbacks)*/
+        /* PhoneAuthProvider.getInstance().verifyPhoneNumber(
+             number, // Phone number to verify
+             60,             // Timeout duration
+             TimeUnit.SECONDS,   // Unit of timeout
+             this,           // Activity (for callback binding)
+             mCallbacks)*/
     }
 
 }

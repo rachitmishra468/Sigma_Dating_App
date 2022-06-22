@@ -11,12 +11,13 @@ class AuthenticationInterceptor : Authenticator {
         try {
             val credentials = "admin" + ":" + "1234"
             val auth = "Basic " + Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
-            requestAvailable = response?.request?.newBuilder()
-                ?.addHeader("Authorization", auth)
-                ?.addHeader("X_API_KEY", "anonymous")
-                ?.build()
+            requestAvailable = response.request.newBuilder()
+                .addHeader("Authorization", auth)
+                .addHeader("X_API_KEY", "anonymous")
+                .build()
             return requestAvailable
-        } catch (ex: Exception) { }
+        } catch (ex: Exception) {
+        }
         return requestAvailable
     }
 

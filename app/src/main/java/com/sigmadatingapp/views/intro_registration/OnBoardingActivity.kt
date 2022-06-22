@@ -2,7 +2,9 @@ package com.sigmadatingapp.views.intro_registration
 
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.sigmadatingapp.R
 import com.google.android.material.tabs.TabLayout
@@ -16,7 +18,7 @@ class OnBoardingActivity : AppCompatActivity() {
     private lateinit var mViewPager: ViewPager2
     private lateinit var pageIndicator: TabLayout
     private var img_back: ImageView? = null
-
+     val userRegister: User_Register by viewModels()
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,5 +9,5 @@ interface ApiHelper {
     suspend fun getEmployees():Response<Loginmodel>
 
     suspend fun user_login(jsonObject: JsonObject):Response<Loginmodel>
-
+    suspend fun user_register(jsonObject: JsonObject):Response<Loginmodel>
 }

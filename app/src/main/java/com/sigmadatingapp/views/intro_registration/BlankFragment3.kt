@@ -32,8 +32,9 @@ class BlankFragment3 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var button_birthday: Button
-    lateinit var editbirthday:EditText
-    private var ss:String?=null
+    lateinit var editbirthday: EditText
+    private var ss: String? = null
+    lateinit var email_id: EditText
 
     private var binding: AboutBirthdayBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,27 +53,46 @@ class BlankFragment3 : Fragment() {
         // var root= inflater.inflate(R.layout.about_birthday, container, false)
         binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
-        editbirthday=binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
+        email_id = binding!!.root.findViewById(R.id.edit_emal)
+        editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
         editbirthday.addTextChangedListener(textWatcher)
         button_birthday.setOnClickListener {
-            
-            if (editbirthday.text.toString().isEmpty()||!AppUtils.isValidDate(editbirthday.text.toString().trim())) {
 
-                Toast.makeText(requireActivity(),"Enter Valid Date of Birth",Toast.LENGTH_LONG).show()
-            }
-            else{
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
+            if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {
+                email_id.error = "Invalid Email Address"
+
+            } else if (editbirthday.text.toString().isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
+            ) {
+
+                Toast.makeText(requireActivity(), "Enter Valid Date of Birth", Toast.LENGTH_LONG)
+                    .show()
+
+            } else {
+
+
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                    AppConstants.email,
+                    email_id.text.toString()
+                )
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                    AppConstants.Dob,
+                    editbirthday.text.toString()
+                )
                 (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
             }
         }
 
-       // binding!!.editTextBirthday.addTextChangedListener()
+        // binding!!.editTextBirthday.addTextChangedListener()
 
 
         return binding!!.root
     }
+
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
+            if (editbirthday.text.length == 2 || editbirthday.text.length == 5) {
+                editbirthday.append("/")
+            }
 
         }
 

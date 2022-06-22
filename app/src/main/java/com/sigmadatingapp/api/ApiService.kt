@@ -15,5 +15,8 @@ interface ApiService{
     @POST("users/login")
     suspend fun login(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+    @POST("users/register")
+    suspend fun register(@Body jsonObject: JsonObject): Response<Loginmodel>
+
 
 }
