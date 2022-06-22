@@ -88,7 +88,7 @@ object AppUtils {
     }
 
 
- /*   fun isValidDate(dateOfBirth: String): Boolean {
+ fun isValidDate(dateOfBirth: String): Boolean {
         var valid = true
         val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
         formatter.setLenient(false)
@@ -100,7 +100,7 @@ object AppUtils {
             //If input date is in different format or invalid.
         }
         return valid
-    }*/
+    }
  fun validateDate(date: String): Boolean {
      val regex = "^(0[0-9]||1[0-2])/([0-2][0-9]||3[0-1])/([0-9][0-9])?[0-9][0-9]$"
      val matcher = Pattern.compile(regex).matcher(date)

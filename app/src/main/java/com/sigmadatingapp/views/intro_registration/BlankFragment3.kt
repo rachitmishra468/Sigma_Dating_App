@@ -56,13 +56,13 @@ class BlankFragment3 : Fragment() {
         editbirthday.addTextChangedListener(textWatcher)
         button_birthday.setOnClickListener {
             
-            if (!editbirthday.text.toString().isEmpty()||AppUtils.validateDate(editbirthday.text.toString().trim())) {
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
-                (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+            if (editbirthday.text.toString().isEmpty()||!AppUtils.isValidDate(editbirthday.text.toString().trim())) {
 
+                Toast.makeText(requireActivity(),"Enter Valid Date of Birth",Toast.LENGTH_LONG).show()
             }
             else{
-                Toast.makeText(requireActivity(),"Enter Valid Date of Birth",Toast.LENGTH_LONG).show()
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
+                (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
             }
         }
 
@@ -73,19 +73,14 @@ class BlankFragment3 : Fragment() {
     }
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            if(editbirthday.text.length==2 ||editbirthday.text.length==5){
-                editbirthday.append("/")
-            }
+
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-/*var data=editbirthday.text.toString()
-            val sb: StringBuilder = StringBuilder(string)
-            sb.deleteCharAt(3)*/
-           // Toast.makeText(requireContext(), "Maximum Limit Reached", Toast.LENGTH_SHORT).show()
+
         }
     }
     companion object {

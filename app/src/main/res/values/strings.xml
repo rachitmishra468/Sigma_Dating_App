@@ -54,4 +54,20 @@
     <string name="term_and_condition">I agree with the Terms and Conditions <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
     <!--856275008761-pr04ias0a1j3pqo9gataltbneq1savj9.apps.googleusercontent.com-->
 
+
+
+
+
+    <string-array name="Fraternity">
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+        <item>lorem ipsum</item>
+    </string-array>
+
+
 </resources>

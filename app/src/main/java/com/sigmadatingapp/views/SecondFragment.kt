@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.Profile_Adapter
 import com.sigmadatingapp.databinding.FragmentSecondBinding
 
@@ -18,7 +21,7 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
 
-
+private var setting_icon:ImageView?=null
     private lateinit var  photoAdapter: Profile_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
 
@@ -28,6 +31,9 @@ class SecondFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        setting_icon?.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_settings)
+        }
         return binding.root
 
     }

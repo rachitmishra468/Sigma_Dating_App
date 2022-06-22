@@ -67,6 +67,7 @@
                     android:src="@drawable/edit_profile"></ImageView>
 
                 <ImageView
+                    android:id="@+id/setting_icon"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
