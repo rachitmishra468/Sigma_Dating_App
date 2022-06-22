@@ -56,7 +56,7 @@ class BlankFragment3 : Fragment() {
         editbirthday.addTextChangedListener(textWatcher)
         button_birthday.setOnClickListener {
             
-            if (!editbirthday.text.toString().isEmpty()||AppUtils.isValidDate(editbirthday.text.toString().trim())) {
+            if (!editbirthday.text.toString().isEmpty()||AppUtils.validateDate(editbirthday.text.toString().trim())) {
                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
                 (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
 
