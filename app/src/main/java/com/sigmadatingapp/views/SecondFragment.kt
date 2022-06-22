@@ -20,18 +20,25 @@ import com.sigmadatingapp.module.EditProfiledata
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
-
-private var setting_icon:ImageView?=null
-    private lateinit var  photoAdapter: Profile_Adapter
+    private lateinit var photoAdapter: Profile_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-
+        _binding?.editProfile?.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
+        }
+        _binding?.settingIcon?.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_settings)
+        }
         return binding.root
 
     }
@@ -39,17 +46,16 @@ private var setting_icon:ImageView?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding?.recyclerView?.layoutManager = GridLayoutManager(requireContext(),3)
+        _binding?.recyclerView?.layoutManager = GridLayoutManager(requireContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
 
         //add data
-        for (i in 1..10){
+        for (i in 1..10) {
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/african-american-woman-talking-mobile-phone-black-people-50437769.jpg"))
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beautiful-young-woman-maine-usa-close-up-portrait-native-108644385.jpg"))
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beauty-black-skin-woman-african-ethnic-female-face-young-african-american-model-long-afro-hair-smiling-model-isolated-163819588.jpg"))
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/african-american-woman-praying-african-american-woman-praying-god-seeking-prayer-213590092.jpg"))
-
 
 
         }
@@ -57,11 +63,9 @@ private var setting_icon:ImageView?=null
 
         photoAdapter.setDataList(dataList)
 
-        setting_icon?.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_settings)
-
-        }
-
+        /*binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }*/
     }
 
     override fun onDestroyView() {

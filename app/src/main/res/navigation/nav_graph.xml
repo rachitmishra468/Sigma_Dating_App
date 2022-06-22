@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_SecondFragment_to_settings"
             app:destination="@id/settings_frag" />
+        <action
+            android:id="@+id/action_SecondFragment_to_editprofile"
+            app:destination="@id/editProfile" />
     </fragment>
 
 
@@ -115,7 +118,19 @@
         android:id="@+id/settings_frag"
         android:name="com.sigmadatingapp.views.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settings_frag_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfile"
+        android:name="com.sigmadatingapp.views.profile.EditProfile"
+        android:label="EditProfile" >
+        <action
+            android:id="@+id/action_editProfile_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
 
 
 </navigation>
