@@ -61,20 +61,24 @@ class BlankFragment3 : Fragment() {
             if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {
                 email_id.error = "Invalid Email Address"
 
-            }
-
-
-            if (!editbirthday.text.toString().isEmpty() || AppUtils.isValidDate(editbirthday.text.toString().trim())
+            } else if (editbirthday.text.toString().isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
             ) {
+
+                Toast.makeText(requireActivity(), "Enter Valid Date of Birth", Toast.LENGTH_LONG)
+                    .show()
+
+            } else {
+
+
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                    AppConstants.email,
+                    email_id.text.toString()
+                )
                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                     AppConstants.Dob,
                     editbirthday.text.toString()
                 )
                 (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
-
-            } else {
-                Toast.makeText(requireActivity(), "Enter Valid Date of Birth", Toast.LENGTH_LONG)
-                    .show()
             }
         }
 

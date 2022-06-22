@@ -12,5 +12,6 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun getEmployees(): Response<Loginmodel> = apiService.getEmployees()
     override suspend fun user_login(jsonObject: JsonObject): Response<Loginmodel> =apiService.login(jsonObject)
+    override suspend fun user_register(jsonObject: JsonObject): Response<Loginmodel> =apiService.register(jsonObject)
 
 }
