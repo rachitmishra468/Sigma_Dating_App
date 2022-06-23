@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-
         tools:context=".views.SettingsFragment">
 
 
@@ -180,6 +179,57 @@
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp"
             />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/interests_text"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            tools:layout_editor_absoluteX="137dp"
+            tools:layout_editor_absoluteY="196dp"
+            android:weightSum="5">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="HIKING"
+                android:layout_margin="5dp"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                 />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="FITNESS"
+                android:layout_margin="5dp"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="FOOTBALL"
+                android:background="@drawable/border_line_radius"
+                android:textColor="@color/blue"
+                />
+
+        </LinearLayout>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

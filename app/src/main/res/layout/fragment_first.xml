@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/splash_bg"
     android:orientation="vertical"
     android:weightSum="10"
     tools:context="com.sigmadatingapp.views.FirstFragment">
@@ -15,7 +15,8 @@
         android:layout_weight="1.1"
         android:background="@drawable/toolbar_bg_img"
         android:orientation="horizontal"
-        android:weightSum="3">            <LinearLayout
+        android:weightSum="3">
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.5"
@@ -54,8 +55,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7.8"
-        android:background="@color/white"
+        android:layout_weight="7.9"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -86,9 +86,9 @@
                 android:id="@+id/swipe_deck"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                swipedeck:card_spacing="10dp"
-                swipedeck:max_visible="3"
+                android:padding="2dp"
+                swipedeck:card_spacing="2dp"
+                swipedeck:max_visible="2"
                 swipedeck:render_above="true"
                 swipedeck:rotation_degrees="15" />
 
@@ -126,7 +126,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.1"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -135,43 +135,26 @@
             android:layout_height="match_parent"
             app:cardUseCompatPadding="false">
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:weightSum="4">
+                android:weightSum="3">
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/sigma_disable"></ImageView>
+                <include
+                    layout="@layout/footer_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardUseCompatPadding="false">
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/heart_solid"></ImageView>
 
-                <ImageView
-                    android:id="@+id/chat_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/comments"></ImageView>
-
-                <ImageView
-                    android:id="@+id/open_profile"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_perm_identity_24"></ImageView>
+                </include>
             </LinearLayout>
+
+
 
 
         </androidx.cardview.widget.CardView>

@@ -20,6 +20,7 @@
             android:weightSum="3">
 
             <ImageView
+                android:id="@+id/sigma_list"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -27,18 +28,20 @@
                 android:src="@drawable/sigma_disable"></ImageView>
 
             <ImageView
+                android:id="@+id/match_list"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/heart_solid"></ImageView>
+                android:src="@drawable/heart_disable"></ImageView>
 
             <ImageView
+                android:id="@+id/chat_Icon"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="26dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/comments"></ImageView>
+                android:src="@drawable/comments_disable"></ImageView>
 
         </LinearLayout>
 
