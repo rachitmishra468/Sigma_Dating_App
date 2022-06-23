@@ -12,10 +12,12 @@ import android.util.Log
 import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
 import com.sigmadatingapp.adapters.ProfileMatch
 import android.os.Handler
+import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentFirstBinding
+
 
 class FirstFragment : Fragment() {
 
@@ -27,48 +29,33 @@ class FirstFragment : Fragment() {
 
     var broken_heart: LottieAnimationView? = null
     var heart_loading: LottieAnimationView? = null
+    lateinit var chatIcon: ImageView
+    lateinit var match_list: ImageView
+    lateinit var sigma_list:ImageView
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        footer_transition()
+
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         courseModalArrayList = ArrayList()
-
-
-
         for (i in 1..10) {
-            courseModalArrayList!!.add(
-                Profile(
-                    "C++",
-                    com.sigmadatingapp.R.drawable.dummy_imf
-                )
-            )
+            courseModalArrayList!!.add(Profile("C++", com.sigmadatingapp.R.drawable.dummy_imf))
         }
         binding.closeHome.setOnClickListener {
             (activity as Home?)?.finish()
         }
 
-        binding.chatIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_chat)
-        }
-
-        binding.openProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
 
         val adapter = ProfileMatch(courseModalArrayList, context)
-        binding.swipeDeck!!.setAdapter(adapter)
-        binding.swipeDeck!!.setEventCallback(object : SwipeEventCallback {
+        binding.swipeDeck.setAdapter(adapter)
+        binding.swipeDeck.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
                 Toast.makeText(context, "Card Swiped Left", Toast.LENGTH_SHORT).show()
             }
@@ -97,10 +84,7 @@ class FirstFragment : Fragment() {
         })
 
 
-
     }
-
-
 
 
     fun play_animation() {
@@ -119,5 +103,30 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    fun footer_transition(){
+        chatIcon = binding.root.findViewById(R.id.chat_Icon)
+        match_list = binding.root.findViewById(R.id.match_list)
+        sigma_list= binding.root.findViewById(R.id.sigma_list)
+        //For Home sigma_list is Enable
+
+        sigma_list.setImageDrawable(resources.getDrawable(R.drawable.sigma_enable))
+        match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_disable))
+        chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))
+
+
+        chatIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
+
+        match_list.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+        sigma_list.setOnClickListener {
+            //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
     }
 }

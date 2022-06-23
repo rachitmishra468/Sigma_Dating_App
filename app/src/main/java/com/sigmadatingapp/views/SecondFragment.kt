@@ -26,6 +26,9 @@ class SecondFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var chatIcon: ImageView
+    lateinit var match_list: ImageView
+    lateinit var sigma_list: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +36,7 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        footer_transition()
         _binding?.editProfile?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
@@ -72,4 +76,29 @@ class SecondFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+    fun footer_transition() {
+        chatIcon = binding.root.findViewById(R.id.chat_Icon)
+        match_list = binding.root.findViewById(R.id.match_list)
+        sigma_list = binding.root.findViewById(R.id.sigma_list)
+        //For match match_list is Enable
+
+        match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_solid))
+        chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))
+        sigma_list.setImageDrawable(resources.getDrawable(R.drawable.sigma_disable))
+
+        chatIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
+
+        match_list.setOnClickListener {
+           // findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+        sigma_list.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+    }
+
 }

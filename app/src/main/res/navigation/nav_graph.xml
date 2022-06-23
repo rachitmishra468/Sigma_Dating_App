@@ -35,6 +35,10 @@
         <action
             android:id="@+id/action_SecondFragment_to_editprofile"
             app:destination="@id/editProfile" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_chat"
+            app:destination="@id/chatListFragment" />
     </fragment>
 
 
@@ -113,6 +117,13 @@
         <action
             android:id="@+id/action_chatListFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/settings_frag"

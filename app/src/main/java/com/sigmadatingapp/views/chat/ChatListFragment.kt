@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.ChatList_Adapter
-import com.sigmadatingapp.adapters.Profile_Adapter
+import com.sigmadatingapp.databinding.FragmentChatListBinding
+
 import com.sigmadatingapp.module.EditProfiledata
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,10 +31,17 @@ class ChatListFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var chatIcon: ImageView
+    lateinit var match_list: ImageView
+    lateinit var sigma_list: ImageView
+
+     var _binding: FragmentChatListBinding?=null
+
     private lateinit var  chatlistAdapter: ChatList_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
 
     private var chatlist: RecyclerView?=null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +53,11 @@ class ChatListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        var view= inflater.inflate(R.layout.fragment_chat_list, container, false)
-        chatlist=    view.findViewById(R.id.chatlist_recyclerView)
+        _binding = FragmentChatListBinding.inflate(inflater, container, false)
+        chatlist= binding.root.findViewById(R.id.chatlist_recyclerView)
         chatlist?.layoutManager = GridLayoutManager(requireContext(),1)
         chatlistAdapter = ChatList_Adapter(requireContext())
-
+        footer_transition()
 
         //add data
         for (i in 1..10){
@@ -64,7 +74,7 @@ class ChatListFragment : Fragment() {
         chatlistAdapter.setDataList(dataList)
         chatlistAdapter.notifyDataSetChanged()
 
-        return view;
+        return binding.root;
     }
 
     companion object {
@@ -86,4 +96,28 @@ class ChatListFragment : Fragment() {
                 }
             }
     }
+
+
+    fun footer_transition() {
+        chatIcon = binding.root.findViewById(R.id.chat_Icon)
+        match_list = binding.root.findViewById(R.id.match_list)
+        sigma_list = binding.root.findViewById(R.id.sigma_list)
+        //For chat chatIcon is Enable
+        match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_disable))
+        chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_enable))
+        sigma_list.setImageDrawable(resources.getDrawable(R.drawable.sigma_disable))
+
+        chatIcon.setOnClickListener {
+           // findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
+
+        match_list.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+        sigma_list.setOnClickListener {
+            findNavController().navigate(R.id.action_chatListFragment_to_FirstFragment)
+        }
+
+    }
+
 }
