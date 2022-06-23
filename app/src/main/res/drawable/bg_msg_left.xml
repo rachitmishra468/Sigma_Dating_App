@@ -4,7 +4,7 @@
 
     <!-- view background color -->
     <!--<solid android:color="@color/bg_msg_right" >-->
-    <solid android:color="@color/bel_lightgrey_text" >
+    <solid android:color="@color/cardview_light_background" >
     </solid>
 
     <corners

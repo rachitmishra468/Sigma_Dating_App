@@ -23,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ChatListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ChatListFragment : Fragment() {
+   class ChatListFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -31,7 +31,7 @@ class ChatListFragment : Fragment() {
     private lateinit var  chatlistAdapter: ChatList_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
 
-    private var chatlist: RecyclerView?=null
+    private var chat_list_recycler: RecyclerView?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +43,9 @@ class ChatListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        var view= inflater.inflate(R.layout.fragment_chat_list, container, false)
-        chatlist=    view.findViewById(R.id.chatlist_recyclerView)
-        chatlist?.layoutManager = GridLayoutManager(requireContext(),1)
+        val view= inflater.inflate(R.layout.fragment_chat_list, container, false)
+        chat_list_recycler=    view.findViewById(R.id.chatlist_recyclerView)
+        chat_list_recycler?.layoutManager = GridLayoutManager(requireContext(),1)
         chatlistAdapter = ChatList_Adapter(requireContext())
 
 
@@ -60,7 +60,7 @@ class ChatListFragment : Fragment() {
 
         }
 
-        chatlist?.adapter = chatlistAdapter
+        chat_list_recycler?.adapter = chatlistAdapter
         chatlistAdapter.setDataList(dataList)
         chatlistAdapter.notifyDataSetChanged()
 

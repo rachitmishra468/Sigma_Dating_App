@@ -90,7 +90,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7.5"
-        android:background="@color/white"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -98,18 +97,38 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/credentials_card"
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
+            <EditText
+                android:id="@+id/editTextText_search"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:background="@drawable/login_field_border_bg"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:inputType="textPersonName"
+                android:text="Name" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/chatlist_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextText_search"
+                tools:itemCount="4"
+                tools:listitem="@layout/chat_lists_item" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
