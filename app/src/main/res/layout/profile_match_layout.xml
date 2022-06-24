@@ -2,111 +2,135 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EEEFEF"
-    xmlns:tools="http://schemas.android.com/tools"
-   >
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
         android:layout_weight="10"
+        android:orientation="vertical"
         android:weightSum="10">
 
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
+            android:weightSum="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:weightSum="2"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:weightSum="10"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
                 android:gravity="center|left"
+                android:layout_gravity="center"
+                android:padding="2dp"
                 android:text="Joe"
-                android:textSize="24sp"
-                android:layout_weight="1.5"
                 android:textColor="@color/black"
-                android:textStyle="bold">
-            </TextView>
+                android:textSize="22sp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:textStyle="bold"></TextView>
 
             <View
                 android:layout_width="2dp"
-                android:layout_height="40dp"
-                android:background="@color/hint_text_color"
-                />
+                android:layout_height="22sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/hint_text_color" />
 
 
             <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:padding="2dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
                 android:gravity="center|left"
+                android:paddingLeft="10dp"
                 android:text="20"
-                android:textSize="22sp"
-                android:layout_weight="6"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:layout_gravity="center"
                 android:textColor="@color/black"
+                android:textSize="22sp"
                 android:textStyle="normal">
 
             </TextView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:padding="2dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginLeft="25dp"
-                android:text="A T O"
-                android:textColor="@color/white"
-                android:layout_gravity="right"
-                android:textSize="15sp"
-                android:background="@drawable/signup_circle_bg"
-                android:textStyle="bold">
-
-            </TextView>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            android:orientation="vertical"
-            >
-
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:weightSum="10"
+            android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/ic_baseline_location_on_24">
-
-                </ImageView>
 
                 <TextView
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
+                    android:layout_weight="8"
+                    android:layout_height="match_parent"
                     android:gravity="center|left"
-                    android:text="Boca Raton"
+                    android:padding="2dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:text="Florida Atlantic University"
                     android:textColor="@color/black"
                     android:textStyle="normal">
 
                 </TextView>
             </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:background="@drawable/signup_circle_bg"
+                android:gravity="center"
+                android:text="ATO"
+                android:clickable="true"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+        </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,105 +138,129 @@
             android:layout_weight="9"
             android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/credentials_card"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_logo"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
 
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:elevation="20dp"
-            tools:ignore="MissingConstraints"
-            app:cardCornerRadius="8dp">
-
-
-            <ImageView
-                android:id="@+id/idIVCourse"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/dummy_imf"
-                android:scaleType="centerCrop" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="40dp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
+                        android:padding="4dp"
+                        android:background="@drawable/match_image_bg">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/parent_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardCornerRadius="20dp">
+
+                            <ImageView
+                                android:id="@+id/idIVCourse"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/dummy_imf"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"/>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </FrameLayout>
+
+                </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom|center"
-                android:gravity="bottom|center"
-                app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="bottom|center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:weightSum="5"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/start_mark_group"
-                    android:backgroundTint="@color/white" />
-
-
-
-                <ImageView
-
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/blue_profile"
-                    android:backgroundTint="@color/white" />
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/white"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="-15dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/start_mark_group" />
 
 
-                <ImageView
+                    <ImageView
 
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/red_heart_big"
-                    android:backgroundTint="@color/white" />
-
-
-                <ImageView
-
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/change_grid"
-                    android:scaleType="centerInside"
-                    android:backgroundTint="@color/white" />
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/white"
+                        android:elevation="10dp"
+                        android:layout_marginRight="-5dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/blue_profile" />
 
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/cancle"
-                    android:backgroundTint="@color/white" />
+                    <ImageView
 
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/white"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/red_heart_big" />
 
 
+                    <ImageView
+
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginLeft="-5dp"
+                        android:scaleType="centerInside"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/change_grid" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="-15dp"
+                        android:backgroundTint="@color/white"
+                        android:scaleType="centerInside"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/cancle" />
+
+                </LinearLayout>
 
 
-
-
-</LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

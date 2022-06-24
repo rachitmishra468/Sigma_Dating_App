@@ -19,6 +19,16 @@
             android:id="@+id/action_FirstFragment_to_chat"
             app:destination="@id/chatListFragment" />
 
+        <action
+            android:id="@+id/action_FirstFragment_to_edit_profile"
+            app:destination="@id/editProfile" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_notification"
+            app:destination="@id/notificationSettingsFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -142,6 +152,11 @@
             android:id="@+id/action_editProfile_to_SecondFragment"
             app:destination="@id/SecondFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.sigmadatingapp.NotificationSettingsFragment"
+        android:label="NotificationSettingsFragment" />
 
 
 </navigation>
