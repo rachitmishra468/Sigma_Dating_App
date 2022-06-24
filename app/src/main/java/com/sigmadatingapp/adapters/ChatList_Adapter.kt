@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.sigmadatingapp.R
 import com.sigmadatingapp.module.EditProfiledata
 
-class ChatList_Adapter(var context: Context) : RecyclerView.Adapter<ChatList_Adapter.ViewHolder>() {
+class ChatList_Adapter(var context: Context,private var listener: OnCategoryClickListener) : RecyclerView.Adapter<ChatList_Adapter.ViewHolder>() {
 
     var dataList = emptyList<EditProfiledata>()
 
@@ -28,7 +28,9 @@ class ChatList_Adapter(var context: Context) : RecyclerView.Adapter<ChatList_Ada
         }
 
     }
-
+    interface OnCategoryClickListener {
+        fun onCategoryClick(position: EditProfiledata)
+    }
     // Usually involves inflating a layout from XML and returning the holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -46,6 +48,9 @@ class ChatList_Adapter(var context: Context) : RecyclerView.Adapter<ChatList_Ada
         // Set item views based on your views and data model
         Glide.with(context).load(data.icon).into(holder.image);
 
+        holder.image.setOnClickListener {
+            listener!!.onCategoryClick(data);
+        }
     }
 
     //  total count of items in the list

@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
-import com.sigmadatingapp.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.sigmadatingapp.R
 import com.sigmadatingapp.storage.SharedPreferencesStorage
+import com.sigmadatingapp.utilities.ZoomOutPageTransformer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class OnBoardingActivity : AppCompatActivity() {
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
         mViewPager.setUserInputEnabled(true);
         mViewPager.offscreenPageLimit = 1
+        mViewPager.setPageTransformer(ZoomOutPageTransformer(1))
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == 1) {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sigmadatingapp.R
@@ -23,7 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ChatListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-   class ChatListFragment : Fragment() {
+   class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -32,7 +33,7 @@ private const val ARG_PARAM2 = "param2"
     private var dataList = mutableListOf<EditProfiledata>()
 
     private var chat_list_recycler: RecyclerView?=null
-
+    lateinit var root:View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,10 +44,10 @@ private const val ARG_PARAM2 = "param2"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view= inflater.inflate(R.layout.fragment_chat_list, container, false)
-        chat_list_recycler=    view.findViewById(R.id.chatlist_recyclerView)
+        root= inflater.inflate(R.layout.fragment_chat_list, container, false)
+        chat_list_recycler=    root.findViewById(R.id.chatlist_recyclerView)
         chat_list_recycler?.layoutManager = GridLayoutManager(requireContext(),1)
-        chatlistAdapter = ChatList_Adapter(requireContext())
+        chatlistAdapter = ChatList_Adapter(requireContext(),this)
 
 
         //add data
@@ -64,18 +65,10 @@ private const val ARG_PARAM2 = "param2"
         chatlistAdapter.setDataList(dataList)
         chatlistAdapter.notifyDataSetChanged()
 
-        return view;
+        return root;
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ChatListFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -85,5 +78,9 @@ private const val ARG_PARAM2 = "param2"
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onCategoryClick(position: EditProfiledata) {
+        Navigation.findNavController(root).navigate(R.id.action_chatListFragment_to_userChatFragment);
     }
 }

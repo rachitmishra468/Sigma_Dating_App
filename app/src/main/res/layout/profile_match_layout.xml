@@ -129,7 +129,7 @@
             android:layout_margin="5dp"
             android:elevation="20dp"
             tools:ignore="MissingConstraints"
-            app:cardCornerRadius="8dp">
+            app:cardCornerRadius="58dp">
 
 
             <ImageView
