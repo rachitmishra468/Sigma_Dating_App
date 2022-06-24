@@ -44,6 +44,7 @@
             android:layout_marginTop="6dp"
             app:tabBackground="@drawable/onboarding_viewpager_selector_orange"
             app:tabGravity="center"
+            app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorHeight="0dp" />
     </RelativeLayout>
 
@@ -52,9 +53,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
+        android:paddingEnd="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_below="@id/bottom_navigation"
         android:background="@color/white"
-        android:clipToPadding="false"
         android:overScrollMode="never" />
 
 

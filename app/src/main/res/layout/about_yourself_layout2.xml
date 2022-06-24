@@ -36,32 +36,29 @@
         <TextView
             android:id="@+id/textView"
             style="@style/QText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:gravity="start"
-            android:paddingStart="8dp"
             android:text="@string/tell_us"
             android:textColor="@color/light_text_color"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.072"
-            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView5"
             style="@style/QText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:alpha=".8"
-            android:paddingLeft="8dp"
             android:text="I am a"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.058"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
       <!--  <Button
@@ -132,7 +129,8 @@
     android:id="@+id/rg"
     android:layout_width="0dp"
     app:layout_constraintEnd_toEndOf="@+id/guideline3"
-
+     android:layout_marginLeft="4dp"
+     android:layout_marginRight="4dp"
     app:layout_constraintStart_toEndOf="@id/guideline2"
     android:gravity="center_horizontal"
     app:layout_constraintHorizontal_bias="0.058"
@@ -140,27 +138,29 @@
     android:orientation="vertical"
     app:layout_constraintTop_toBottomOf="@+id/textView5"
     android:layout_height="wrap_content">
-    <RadioButton
-        android:id="@+id/rb_women"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="54dp"
-        android:layout_marginTop="22dp"
-        android:background="@drawable/gender_selector_drawable"
-        android:button="@android:color/transparent"
-        android:checked="false"
-        android:paddingTop="15dp"
-        android:layout_marginBottom="2dp"
-        android:elevation="4dp"
-        android:paddingBottom="15dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Women"
-        android:textColor="@drawable/radio_flat_text_selector" />
 
-    <RadioButton
+     <RadioButton
+         android:id="@+id/rb_women"
+         android:layout_width="match_parent"
+         android:layout_height="54dp"
+         android:layout_marginTop="22dp"
+         android:layout_marginBottom="2dp"
+         android:background="@drawable/gender_selector_drawable"
+         android:button="@android:color/transparent"
+         android:checked="false"
+         android:elevation="4dp"
+         android:gravity="center"
+         android:paddingLeft="16dp"
+         android:paddingTop="15dp"
+         android:paddingRight="16dp"
+         android:paddingBottom="15dp"
+         android:text="Women"
+
+         android:textColor="@drawable/radio_flat_text_selector"
+         android:textSize="18sp"
+         android:textStyle="bold" />
+
+     <RadioButton
         android:id="@+id/rb_men"
         android:layout_width="match_parent"
         android:gravity="center"
@@ -227,14 +227,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="44dp" />
+            app:layout_constraintGuide_begin="30dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="44dp" />
+            app:layout_constraintGuide_end="30dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

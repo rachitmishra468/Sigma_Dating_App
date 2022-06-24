@@ -24,17 +24,70 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="0dp" />
+
+
+    <LinearLayout
+        android:id="@+id/linear_head"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="@id/guideline9"
+        app:layout_constraintEnd_toEndOf="@id/guideline10"
+        app:layout_constraintTop_toBottomOf="@id/guideline11"
+        android:background="@drawable/toolbar_bg_img"
+        android:orientation="horizontal">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:layout_marginLeft="18dp"
+    android:layout_marginRight="18dp"
+        android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight=".08"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        android:layout_height="32dp"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="0dp"
+        android:layout_weight=".15"
+        android:layout_gravity="center"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        android:src="@drawable/app_logo"
+        android:layout_height="48dp"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight=".65"
+        android:layout_gravity="center"
+        android:paddingLeft="6dp"
+        style="@style/QText"
+        android:textSize="18sp"
+        android:text="lorem user"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/chat_settings"
+        android:layout_width="0dp"
+        android:layout_weight=".12"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_error_outline_24"
+        android:layout_height="38dp"/>
+</LinearLayout>
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         android:id="@+id/user_chatscreen_recycler"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/layout_chat_right"
+        tools:listitem="@layout/layout_chat_left"
         tools:itemCount="4"
         app:layout_constraintStart_toStartOf="@id/guideline9"
         app:layout_constraintEnd_toEndOf="@id/guideline10"
-        app:layout_constraintTop_toBottomOf="@id/guideline11" />
+        app:layout_constraintTop_toBottomOf="@id/linear_head" />
 
     <View
         android:id="@+id/view"
@@ -49,12 +102,13 @@
     app:layout_constraintRight_toRightOf="@id/guideline10"
     app:layout_constraintEnd_toEndOf="@id/guideline10"
     android:weightSum="1"
+    android:layout_marginBottom="16dp"
     app:layout_constraintStart_toStartOf="@id/guideline9"
     android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/layout_gchat_chatbox"
         android:layout_width="0dp"
-        android:layout_weight=".9"
+        android:layout_weight=".85"
         android:layout_height="50dp"
         android:background="@drawable/border_drwable"
         >
@@ -75,9 +129,11 @@
 
         <ImageView
             android:id="@+id/button_gchat_send"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:foregroundGravity="center"
             android:src="@drawable/ic_baseline_camera_alt_24"
             android:textColor="@color/colorPrimary" />
 
@@ -85,11 +141,13 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_weight=".15"
+        android:gravity="center"
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/send_img"
-            android:layout_width="44dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="4dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_baseline_send_24"

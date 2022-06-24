@@ -17,6 +17,7 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageInfo
 import android.util.Base64
 import android.util.Log
+import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 import java.lang.Exception
 import java.security.MessageDigest
 
