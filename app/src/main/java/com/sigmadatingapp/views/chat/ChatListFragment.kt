@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.Navigation
 import android.widget.ImageView
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ChatListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-   class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
+class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -41,7 +41,7 @@ private const val ARG_PARAM2 = "param2"
     private var dataList = mutableListOf<EditProfiledata>()
 
     private var chat_list_recycler: RecyclerView?=null
-    lateinit var root:View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,8 +56,6 @@ private const val ARG_PARAM2 = "param2"
 
         footer_transition()
         chat_list_recycler=binding.root.findViewById(R.id.chatlist_recyclerView)
-        root= inflater.inflate(R.layout.fragment_chat_list, container, false)
-        chat_list_recycler=    root.findViewById(R.id.chatlist_recyclerView)
         chat_list_recycler?.layoutManager = GridLayoutManager(requireContext(),1)
         chatlistAdapter = ChatList_Adapter(requireContext(),this)
 
@@ -76,7 +74,6 @@ private const val ARG_PARAM2 = "param2"
         chat_list_recycler?.adapter = chatlistAdapter
         chatlistAdapter.setDataList(dataList)
         chatlistAdapter.notifyDataSetChanged()
-
 
         return binding.root;
     }
@@ -101,10 +98,6 @@ private const val ARG_PARAM2 = "param2"
             }
     }
 
-    override fun onCategoryClick(position: EditProfiledata) {
-        Navigation.findNavController(root).navigate(R.id.action_chatListFragment_to_userChatFragment);
-    }
-
     fun footer_transition(){
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
@@ -117,7 +110,7 @@ private const val ARG_PARAM2 = "param2"
 
 
         chatIcon.setOnClickListener {
-           // findNavController().navigate(R.id.action_FirstFragment_to_chat)
+            // findNavController().navigate(R.id.action_FirstFragment_to_chat)
         }
 
         match_list.setOnClickListener {
@@ -127,6 +120,11 @@ private const val ARG_PARAM2 = "param2"
             findNavController().navigate(R.id.action_chatListFragment_to_FirstFragment)
         }
 
+    }
+
+
+    override fun onCategoryClick(position: EditProfiledata) {
+        Navigation.findNavController(binding.root).navigate(R.id.action_chatListFragment_to_userChatFragment);
     }
 
 }
