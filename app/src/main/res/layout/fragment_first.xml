@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_bg"
+    android:background="@color/white_with_opecity"
     android:orientation="vertical"
     android:weightSum="10"
     tools:context="com.sigmadatingapp.views.FirstFragment">
@@ -12,44 +12,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="bottom"
         android:layout_weight="1.1"
         android:background="@drawable/toolbar_bg_img"
         android:orientation="horizontal"
-        android:weightSum="3">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.5"
-        android:orientation="horizontal"
+
         android:weightSum="3">
 
-        <ImageView
-            android:id="@+id/close_home"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:layout_gravity="left|center"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:paddingRight="40dp"
-            android:layout_marginRight="30dp"
-            android:src="@drawable/ic_baseline_arrow_back_ios_24"></ImageView>
-
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/central_img"></ImageView>
-
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:paddingLeft="40dp"
-            android:layout_marginLeft="40dp"
-            android:src="@drawable/notification_icon"></ImageView>
-    </LinearLayout>
+        <include
+            layout="@layout/toolbar_hadder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="bottom"></include>
     </LinearLayout>
 
     <LinearLayout
@@ -63,61 +38,61 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/credentials_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="0dp"
             android:padding="5dp"
-            app:layout_constraintTop_toBottomOf="@+id/image_logo"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_logo">
 
-        <!--on below line we are creating a swipe
-            frame layout for providing a swipe action-->
-        <com.daprlabs.cardstack.SwipeFrameLayout xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!--below widget is used for creating a swipe deck-->
-            <!--in below widget card spacing is the spacing between cards
-                max visible is the max number of cards which are visible
-                render above is to render the cards
-                rotation degree is the angle of card rotation when card is swiped-->
-            <com.daprlabs.cardstack.SwipeDeck
-                android:id="@+id/swipe_deck"
+            <!--on below line we are creating a swipe
+                frame layout for providing a swipe action-->
+            <com.daprlabs.cardstack.SwipeFrameLayout xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="2dp"
-                swipedeck:card_spacing="2dp"
-                swipedeck:max_visible="2"
-                swipedeck:render_above="true"
-                swipedeck:rotation_degrees="15" />
+                android:orientation="vertical">
 
-        </com.daprlabs.cardstack.SwipeFrameLayout>
+                <!--below widget is used for creating a swipe deck-->
+                <!--in below widget card spacing is the spacing between cards
+                    max visible is the max number of cards which are visible
+                    render above is to render the cards
+                    rotation degree is the angle of card rotation when card is swiped-->
+                <com.daprlabs.cardstack.SwipeDeck
+                    android:id="@+id/swipe_deck"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="0dp"
+                    swipedeck:card_spacing="0dp"
+                    swipedeck:max_visible="2"
+                    swipedeck:render_above="true"
+                    swipedeck:rotation_degrees="0" />
+
+            </com.daprlabs.cardstack.SwipeFrameLayout>
 
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/broken_heart"
-            app:lottie_rawRes="@raw/broken_heart"
-            app:lottie_autoPlay="true"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:lottie_loop="true"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/broken_heart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/broken_heart" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/heart_loading"
-            app:lottie_rawRes="@raw/heart_loading"
-            app:lottie_autoPlay="true"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:lottie_loop="true"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/heart_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/heart_loading" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,8 +108,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/white"
             app:cardUseCompatPadding="false">
-
 
 
             <LinearLayout
@@ -153,8 +128,6 @@
 
                 </include>
             </LinearLayout>
-
-
 
 
         </androidx.cardview.widget.CardView>
