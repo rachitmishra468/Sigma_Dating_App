@@ -15,14 +15,16 @@ import android.os.Handler
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentFirstBinding
+import com.sigmadatingapp.module.EditProfiledata
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class FirstFragment : Fragment() {
+class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
@@ -69,7 +71,7 @@ class FirstFragment : Fragment() {
         }
 
 
-        val adapter = ProfileMatch(courseModalArrayList, context)
+        val adapter = ProfileMatch(courseModalArrayList!!, requireActivity(),this)
         binding.swipeDeck.setAdapter(adapter)
         binding.swipeDeck.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
@@ -146,4 +148,8 @@ class FirstFragment : Fragment() {
     }
 
 
+
+    override fun onCategoryClick(position: Profile?) {
+        findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+    }
 }

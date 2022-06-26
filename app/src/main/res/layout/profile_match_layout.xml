@@ -167,10 +167,10 @@
                                 android:id="@+id/idIVCourse"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/dummy_imf"
                                 android:background="?attr/selectableItemBackgroundBorderless"
-                                android:clickable="true"/>
+                                android:clickable="true"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/dummy_imf" />
 
                         </androidx.cardview.widget.CardView>
 
@@ -203,7 +203,7 @@
 
 
                     <ImageView
-
+android:id="@+id/bright_img"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
