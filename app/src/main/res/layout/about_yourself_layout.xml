@@ -96,7 +96,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
-        android:background="@drawable/signup_circle_bg"
+        android:background="@drawable/ripple_effect"
         android:fontFamily="@font/varela_regular"
         android:text="@string/continue_text"
         android:textAllCaps="true"

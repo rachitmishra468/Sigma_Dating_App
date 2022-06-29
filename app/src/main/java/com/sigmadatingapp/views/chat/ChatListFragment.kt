@@ -15,7 +15,7 @@ import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.ChatList_Adapter
 import com.sigmadatingapp.adapters.Profile_Adapter
 import com.sigmadatingapp.databinding.FragmentChatListBinding
-import com.sigmadatingapp.module.EditProfiledata
+import com.sigmadatingapp.model.EditProfiledata
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -35,7 +35,7 @@ class BlankFragment3 : Fragment() {
     lateinit var editbirthday: EditText
     private var ss: String? = null
     lateinit var email_id: EditText
-
+lateinit var edit_text_phone:EditText
     private var binding: AboutBirthdayBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,7 @@ class BlankFragment3 : Fragment() {
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
         email_id = binding!!.root.findViewById(R.id.edit_emal)
         editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
+        edit_text_phone=binding!!.root.findViewById(R.id.edit_text_phone)
         editbirthday.addTextChangedListener(textWatcher)
         button_birthday.setOnClickListener {
 

@@ -31,32 +31,77 @@
         app:layout_constraintTop_toTopOf="parent"
          />
 
-    <androidx.cardview.widget.CardView
+
+    <FrameLayout
         android:id="@+id/profile_card"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="90dp"
-        app:cardElevation="10sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile"
+            android:layout_width="230dp"
+            android:elevation="8dp"
+            android:layout_height="230dp"
+            android:layout_gravity="top|center_horizontal"
+
+            android:src="@drawable/dummy_imf">
+
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_choose_dummy"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:tint="@color/blue"
+
+            android:src="@drawable/ic_baseline_camera_alt_24" />
+    </FrameLayout>
+
+    <!--<FrameLayout
+        android:id="@+id/profile_card"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardUseCompatPadding="true">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/dummy_imf"></ImageView>
-    </androidx.cardview.widget.CardView>
+        android:layout_width="250dp"
+        android:layout_height="250dp">
+        <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="false"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="90dp"
+            app:cardElevation="10sp"
+            >
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        android:layout_marginRight="80dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_card"
-        android:src="@drawable/folder"></ImageView>
+            <ImageView
+                android:id="@+id/img_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:src="@drawable/dummy_imf">
+
+            </ImageView>
+
+            <ImageView
+                android:id="@+id/img_choose_dummy"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/folder"></ImageView>
+        </androidx.cardview.widget.CardView>
+
+
+    </FrameLayout>-->
+
 
     <CheckBox
         android:id="@+id/tc_check"

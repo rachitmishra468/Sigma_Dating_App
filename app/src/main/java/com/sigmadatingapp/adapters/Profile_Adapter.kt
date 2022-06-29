@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.AppItemBinding
-import com.sigmadatingapp.module.EditProfiledata
+import com.sigmadatingapp.model.EditProfiledata
 
 
 class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {

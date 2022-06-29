@@ -51,7 +51,7 @@
     <string name="fb_login_protocol_scheme">fb853084471971950</string>
     <string name="facebook_client_token">847d5aa39a487ad8a7a2d22f1d9188bd</string>
 
-    <string name="term_and_condition">I agree with the Terms and Conditions <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
+    <string name="term_and_condition">I agree with the <u>Terms and Conditions</u> <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
     <!--856275008761-pr04ias0a1j3pqo9gataltbneq1savj9.apps.googleusercontent.com-->
 
 

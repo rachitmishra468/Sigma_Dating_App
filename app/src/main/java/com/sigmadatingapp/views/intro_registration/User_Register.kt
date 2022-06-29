@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
-import com.sigmadatingapp.module.Loginmodel
+import com.sigmadatingapp.model.Loginmodel
 import com.sigmadatingapp.repository.MainRepository
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.SharedPreferencesStorage

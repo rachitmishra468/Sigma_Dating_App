@@ -69,6 +69,8 @@
     <style name="Theme.SigmaDatingApp.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="Theme.SigmaDatingApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -88,7 +90,13 @@
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
-
+    <style name="DialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <!-- <item name="android:windowExitAnimation">@anim/slide_down</item>-->
+    </style>
 
 
 

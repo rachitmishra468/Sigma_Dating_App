@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import com.sigmadatingapp.R
-import com.sigmadatingapp.module.Profile
+import com.sigmadatingapp.model.Profile
 import java.util.ArrayList
 
 class ProfileMatch(private val courseData: ArrayList<Profile>, private val context: Context, var listener: OnCategoryClickListener

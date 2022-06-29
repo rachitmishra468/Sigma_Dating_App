@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sigmadatingapp.R
-import com.sigmadatingapp.module.EditProfiledata
+import com.sigmadatingapp.model.EditProfiledata
 
 class ChatList_Adapter(var context: Context,private var listener: OnCategoryClickListener) : RecyclerView.Adapter<ChatList_Adapter.ViewHolder>() {
 

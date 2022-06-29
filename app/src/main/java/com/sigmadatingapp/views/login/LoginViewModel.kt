@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.demoapp.other.Resource
-import com.sigmadatingapp.module.Loginmodel
+import com.sigmadatingapp.model.Loginmodel
 import com.sigmadatingapp.repository.MainRepository
 import com.google.gson.JsonObject
+import com.sigmadatingapp.model.Forgotpassword
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.SharedPreferencesStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,12 +20,18 @@ import javax.inject.Inject
 class LoginViewModel   @Inject constructor(private val mainRepository: MainRepository,  private val sharedPreferencesStorage: SharedPreferencesStorage):ViewModel(){
 
     private val _res = MutableLiveData<Resource<Loginmodel>>()
+    private val _forgotResponse = MutableLiveData<Resource<Forgotpassword>>()
 
     var res : LiveData<Resource<Loginmodel>>? = null
         get() = _res
 
+    var responsForgot : LiveData<Resource<Forgotpassword>>? = null
+        get() = _forgotResponse
+
+
     init {
         User_1_login()
+        User_forgot()
     }
 
 
@@ -51,5 +58,25 @@ class LoginViewModel   @Inject constructor(private val mainRepository: MainRepos
             }
         }
     }
+    private fun User_forgot()  = viewModelScope.launch {
+        _forgotResponse.postValue(Resource.loading(null))
+
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
+
+        Log.d("TAG@123", jsonObject.toString())
+        mainRepository.user_forgotpass(jsonObject).let {
+            if (it.isSuccessful){
+                _forgotResponse.postValue(Resource.success(it.body()))
+            }else{
+                _forgotResponse.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+
+
+
 
 }

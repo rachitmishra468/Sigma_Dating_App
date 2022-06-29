@@ -69,6 +69,25 @@
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/edit_emal" />
 
+    <EditText
+        android:id="@+id/edit_text_phone"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/login_field_border_bg"
+        android:ems="10"
+        android:text="ajay@gmail.com"
+        android:hint="email id"
+        android:maxLength="10"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_birthday" />
+
+
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
@@ -94,13 +113,11 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="84dp"
         android:background="@drawable/signup_circle_bg"
-        android:elevation="2dp"
         android:text="@string/continue_text"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:translationZ="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.582"

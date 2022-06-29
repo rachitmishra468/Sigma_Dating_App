@@ -13,7 +13,7 @@ import com.sigmadatingapp.adapters.Profile_Adapter
 import com.sigmadatingapp.databinding.FragmentSecondBinding
 
 
-import com.sigmadatingapp.module.EditProfiledata
+import com.sigmadatingapp.model.EditProfiledata
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.

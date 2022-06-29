@@ -12,5 +12,6 @@ class MainRepository @Inject constructor(
     suspend fun user_login(jsonObject: JsonObject) = apiHelper.user_login(jsonObject)
 
     suspend fun user_register(jsonObject: JsonObject) = apiHelper.user_register(jsonObject)
+    suspend fun user_forgotpass(jsonObject: JsonObject) = apiHelper.user_forgot_password(jsonObject)
 
 }

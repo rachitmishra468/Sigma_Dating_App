@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.text.TextUtils
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+
 
 object AppUtils {
 
@@ -86,7 +88,9 @@ object AppUtils {
               return  null
             }
     }
-
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+    }
 
  fun isValidDate(dateOfBirth: String): Boolean {
         var valid = true

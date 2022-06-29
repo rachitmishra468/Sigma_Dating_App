@@ -1,4 +1,4 @@
-package com.sigmadatingapp.module
+package com.sigmadatingapp.model
 
 data class EditProfiledata(
     val icon: String

@@ -1,21 +1,18 @@
 package com.sigmadatingapp.views.login
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.demoapp.other.Status
-import com.sigmadatingapp.module.Loginmodel
+import com.sigmadatingapp.model.Loginmodel
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.AppConstants.PHONE_LOGIN
 import com.sigmadatingapp.storage.SharedPreferencesStorage
@@ -42,6 +39,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.sigmadatingapp.views.Home
 import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
 
@@ -72,6 +70,7 @@ class Login_Activity : AppCompatActivity() {
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: SignInButton
     lateinit var gso: GoogleSignInOptions
+    lateinit var textforgot:TextView
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
@@ -96,7 +95,9 @@ class Login_Activity : AppCompatActivity() {
             signIn()
         }
 
-
+textforgot.setOnClickListener {
+    openforgotPasswordDialog()
+}
         // Set the initial permissions to request from the user while logging in
         mLoginButton.setPermissions(Arrays.asList(EMAIL, USER_POSTS));
 
@@ -120,6 +121,38 @@ class Login_Activity : AppCompatActivity() {
             })
     }
 
+    private fun openforgotPasswordDialog() {
+        val dialog = BottomSheetDialog(this,R.style.DialogStyle)
+
+        // on below line we are inflating a layout file which we have created.
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_forgot, null)
+        val btnSubmit = view.findViewById<Button>(R.id.button_forgot_submit)
+        val editTextEmail=view.findViewById<EditText>(R.id.editText_forgot_email)
+        btnSubmit.setOnClickListener {
+            if (AppUtils.isValidEmail(editTextEmail.text.toString())) {
+                sharedPreferencesStorage.setValue(AppConstants.email, editTextEmail.text.toString())
+                forgotPasswordCall(dialog)
+            }
+            else {
+                editTextEmail.error = "Invalid Email Address"
+            }
+            //dialog.dismiss()
+        }
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.setOnDismissListener {
+           dialog.dismiss()
+            Log.d("TAG@123","DISMISSED")
+        }
+
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+
+
+
+        dialog.show()
+
+    }
+
 
     private fun signIn() {
         val signInIntent: Intent = GoogleSignIn.getClient(this, gso).getSignInIntent()
@@ -138,6 +171,7 @@ class Login_Activity : AppCompatActivity() {
         editText_password = findViewById(R.id.editText_password)
         edittext_phone_no = findViewById(R.id.edittext_phone_no)
         mLoginButton = findViewById(R.id.login_button);
+        textforgot=findViewById(R.id.textView2)
 
     }
 
@@ -249,6 +283,34 @@ class Login_Activity : AppCompatActivity() {
         })
     }
 
+
+    fun forgotPasswordCall(dialog: BottomSheetDialog) {
+        mainViewModel.responsForgot?.observe(this, Observer {
+
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            dialog.dismiss()
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
+
+                        } else {
+Log.d("TAG123","tags")
+                           // Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(this)
+                }
+                Status.ERROR -> {
+
+                }
+            }
+
+        })
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

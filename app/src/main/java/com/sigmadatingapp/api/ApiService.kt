@@ -1,8 +1,9 @@
 package com.sigmadatingapp.api
 
 
-import com.sigmadatingapp.module.Loginmodel
+import com.sigmadatingapp.model.Loginmodel
 import com.google.gson.JsonObject
+import com.sigmadatingapp.model.Forgotpassword
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -17,6 +18,9 @@ interface ApiService{
 
     @POST("users/register")
     suspend fun register(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/forgotpassword")
+    suspend fun forgotpass(@Body jsonObject: JsonObject): Response<Forgotpassword>
 
 
 }

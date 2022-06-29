@@ -32,7 +32,7 @@ class BlankFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var continue_first: Button
+    private var continue_first: Button?=null
     private var editName: EditText? = null
     var editlastName: EditText? = null
     lateinit var constraint_f1: ConstraintLayout
@@ -60,7 +60,7 @@ class BlankFragment : Fragment() {
         editName=binding!!.root.findViewById(R.id.editText_name)
         editName?.addTextChangedListener(textWatcher)
         editlastName?.addTextChangedListener(textWatcher)
-        continue_first.setOnClickListener {
+        continue_first!!.setOnClickListener {
             val fnmame = editName?.text.toString()
             val lastname = editlastName?.text.toString()
 
@@ -86,10 +86,10 @@ class BlankFragment : Fragment() {
             val editlastName: String = editlastName?.getText().toString()
             // check whether both the fields are empty or not
             if (!editName.isEmpty() && !editlastName.isEmpty()){
-                continue_first.setEnabled(!editName.isEmpty() && !editlastName.isEmpty())
+                continue_first!!.setEnabled(!editName.isEmpty() && !editlastName.isEmpty())
                 Log.d("SIGMA_APP","valid condition")
             }
-            else{ continue_first.setEnabled(false)}
+            else{ continue_first!!.setEnabled(false)}
 
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

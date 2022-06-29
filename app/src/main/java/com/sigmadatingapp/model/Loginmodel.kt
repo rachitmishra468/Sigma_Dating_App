@@ -1,4 +1,4 @@
-package com.sigmadatingapp.module
+package com.sigmadatingapp.model
 
 import com.example.bridegroomed.model.User
 
