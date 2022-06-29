@@ -43,14 +43,11 @@ class Splash : AppCompatActivity() {
 
     fun check_login_flag() {
         Handler().postDelayed(
-            {
-
-
-                if (sharedPreferencesStorage!!.getBoolean(AppConstants.IS_AUTHENTICATED)) {
+            { if (sharedPreferencesStorage.getBoolean(AppConstants.IS_AUTHENTICATED)) {
                     startActivity(Intent(this, Home::class.java))
                     finish()
                 } else {
-                    startActivity(Intent(this, Home::class.java))
+                    startActivity(Intent(this, Login_Activity::class.java))
                     finish()
                 }
 

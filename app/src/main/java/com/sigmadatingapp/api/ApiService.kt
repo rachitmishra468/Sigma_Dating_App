@@ -11,7 +11,6 @@ interface ApiService{
     @GET("employees")
     suspend fun getEmployees():Response<Loginmodel>
 
-
     @POST("users/login")
     suspend fun login(@Body jsonObject: JsonObject): Response<Loginmodel>
 
@@ -19,4 +18,10 @@ interface ApiService{
     suspend fun register(@Body jsonObject: JsonObject): Response<Loginmodel>
 
 
+    @POST("twilio/sendotp")
+    suspend fun user_login_phone(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
+    @POST("twilio/verifyotp")
+    suspend fun user_phone_verifly(@Body jsonObject: JsonObject): Response<Loginmodel>
 }

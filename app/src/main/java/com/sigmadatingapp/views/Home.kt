@@ -8,10 +8,15 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.ActivityHomeBinding
+import com.sigmadatingapp.storage.SharedPreferencesStorage
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class Home : AppCompatActivity() {
 
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
 

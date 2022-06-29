@@ -65,6 +65,8 @@
                     android:layout_height="30dp"
                     android:layout_gravity="right|center"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:src="@drawable/edit_profile"></ImageView>
 
                 <ImageView
@@ -72,6 +74,8 @@
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:layout_weight="1"
                     android:src="@drawable/settings_icon"></ImageView>
 
@@ -81,6 +85,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:scaleType="fitXY"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:src="@drawable/notification_icon"></ImageView>
 
 
@@ -230,6 +236,8 @@
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="30dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
                         android:layout_marginBottom="20dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -241,6 +249,8 @@
                         android:layout_height="40dp"
                         android:padding="5dp"
                         android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
                         app:layout_constraintTop_toTopOf="@+id/profile_img"
                         app:layout_constraintEnd_toStartOf="@+id/profile_img"
                         app:layout_constraintBottom_toBottomOf="@+id/profile_img"
@@ -254,6 +264,8 @@
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
                         app:layout_constraintTop_toTopOf="@+id/heart_solid"
                         app:layout_constraintEnd_toStartOf="@+id/heart_solid"
                         app:layout_constraintBottom_toBottomOf="@+id/profile_img"
@@ -269,6 +281,8 @@
                         android:padding="5dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
                         app:layout_constraintTop_toTopOf="@+id/star_img"
                         app:layout_constraintEnd_toStartOf="@+id/star_img"
                         app:layout_constraintBottom_toBottomOf="@+id/profile_img"

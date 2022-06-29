@@ -46,14 +46,14 @@ public class LinkedlistIS {
 
 
     public static void main(String args[]) {
-        LinkedlistIS linkedlistIS = new LinkedlistIS();
+      /*  LinkedlistIS linkedlistIS = new LinkedlistIS();
         linkedlistIS.Insert(linkedlistIS, 5);
         linkedlistIS.Insert(linkedlistIS, 25);
         linkedlistIS.Insert(linkedlistIS, 85);
         linkedlistIS.Insert(linkedlistIS, 15);
-        linkedlistIS.print(linkedlistIS);
-
-
+        linkedlistIS.print(linkedlistIS);*/
+        demo demo=new demo();
+        demo.main();
     }
 
 }
