@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.other.Status
 import com.sigmadatingapp.model.Loginmodel
 import com.sigmadatingapp.storage.AppConstants
@@ -52,7 +53,7 @@ class Login_Activity : AppCompatActivity() {
     private val AUTH_TYPE = "rerequest"
 
     private var mCallbackManager: CallbackManager? = null
-    private val mainViewModel: LoginViewModel by viewModels()
+    val mainViewModel: LoginViewModel by viewModels()
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -72,18 +73,16 @@ class Login_Activity : AppCompatActivity() {
     lateinit var gso: GoogleSignInOptions
     lateinit var textforgot:TextView
 
+    lateinit var editText_otp: EditText
+    lateinit var verfie_otp: Button
+
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
-
-    //variable for FirebaseAuth class
-    //private var mAuth: FirebaseAuth? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_scroll)
-        //below line is for getting instance of our FirebaseAuth.
-        //  mAuth = FirebaseAuth.getInstance()
         mCallbackManager = CallbackManager.Factory.create();
         initialize_view()
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -99,8 +98,9 @@ textforgot.setOnClickListener {
     openforgotPasswordDialog()
 }
         // Set the initial permissions to request from the user while logging in
-        mLoginButton.setPermissions(Arrays.asList(EMAIL, USER_POSTS));
 
+
+        mLoginButton.setPermissions(Arrays.asList(EMAIL, USER_POSTS));
         mLoginButton.setAuthType(AUTH_TYPE);
         mLoginButton.registerCallback(
             mCallbackManager,
@@ -192,6 +192,9 @@ textforgot.setOnClickListener {
         phone_number_button.setTextColor(this.getResources().getColor(R.color.white))
         phone_number_layout.visibility = View.GONE
         emailLayoutLayout.visibility = View.VISIBLE
+        editText_otp.visibility = View.GONE
+        verfie_otp.visibility = View.GONE
+        button_login_email_phone_both.visibility = View.VISIBLE
         button_login_email_phone_both.setText(R.string.sign_in)
         PHONE_LOGIN = false
 
@@ -222,6 +225,11 @@ textforgot.setOnClickListener {
     }
 
 
+    fun verifyotp(view: View) {
+        mainViewModel.phone_verifly_OTP(editText_otp.text.toString())
+    }
+
+
     fun login_call(view: View) {
 
         if (AppUtils.isNetworkInterfaceAvailable(this)) {
@@ -231,7 +239,22 @@ textforgot.setOnClickListener {
                     edittext_phone_no.error = "Invalid Phone Number"
                     return
                 } else {
-                    sign_up(view)
+                    sharedPreferencesStorage.setValue(
+                        AppConstants.phone,
+                        edittext_phone_no.text.toString()
+                    )
+
+                    sharedPreferencesStorage.setValue(
+                        AppConstants.USER_COUNTRY_CODE,
+                        country_spinner.selectedCountryCodeWithPlus
+                    )
+
+                    Log.d("TAG@123", sharedPreferencesStorage.setValue(
+                        AppConstants.USER_COUNTRY_CODE,
+                        country_spinner.selectedCountryCodeWithPlus
+                    ).toString()
+                    )
+                    mainViewModel.login_phone()
                 }
             } else {
                 if (AppUtils.checkIfEmailIsValid(editText_email.text.toString()) != null) {
@@ -242,32 +265,37 @@ textforgot.setOnClickListener {
                     editText_password.error = "Password Length Must be of 6-8"
                     return
                 }
+
+                sharedPreferencesStorage.setValue(
+                    AppConstants.email,
+                    editText_email.text.toString()
+                )
+                sharedPreferencesStorage.setValue(
+                    AppConstants.password,
+                    editText_password.text.toString()
+                )
+                mainViewModel.User_1_login()
             }
 
-
-            sharedPreferencesStorage.setValue(AppConstants.email, editText_email.text.toString())
-            sharedPreferencesStorage.setValue(
-                AppConstants.password,
-                editText_password.text.toString()
-            )
-            login()
 
         }
     }
 
 
     fun login() {
-        mainViewModel.res?.observe(this, Observer {
+        mainViewModel._res?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                .show()
                             startActivity(Intent(this, Home::class.java))
                             finish()
                         } else {
-
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
                             Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
                                 .show()
                         }
@@ -315,8 +343,6 @@ Log.d("TAG123","tags")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === 111) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         } else {
@@ -350,5 +376,69 @@ Log.d("TAG123","tags")
              this,           // Activity (for callback binding)
              mCallbacks)*/
     }
+
+
+
+    fun sent_otp() {
+        mainViewModel.sent_otp?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
+                            phone_number_layout.visibility=View.GONE
+                            button_login_email_phone_both.visibility=View.GONE
+                            verfie_otp.visibility=View.VISIBLE
+                            editText_otp.visibility=View.VISIBLE
+
+                        } else {
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
+                            Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(this)
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+    }
+
+
+   fun verifly_otp() {
+        mainViewModel.verifly_otp?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                .show()
+                            startActivity(Intent(this, Home::class.java))
+                            finish()
+                        } else {
+                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
+                            Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(this)
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+    }
+
 
 }

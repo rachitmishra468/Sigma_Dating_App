@@ -10,6 +10,7 @@
     <string name="phone_xx">xxx-xxx-xxxx</string>
     <string name="password_text">Password</string>
     <string name="send_otp_text">SEND OTP</string>
+    <string name="send_enter_text">Enter OTP</string>
     <string name="stepone_header">Tell us a little\n about yourself.</string>
     <string name="name_ask_text">What is your name?</string>
     <string name="what_school">What School do you attend?</string>

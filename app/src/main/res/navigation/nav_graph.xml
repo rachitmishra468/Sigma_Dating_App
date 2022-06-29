@@ -141,7 +141,7 @@
     </fragment>
     <fragment
         android:id="@+id/settings_frag"
-        android:name="com.sigmadatingapp.views.SettingsFragment"
+        android:name="com.sigmadatingapp.views.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
