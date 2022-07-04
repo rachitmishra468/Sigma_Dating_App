@@ -66,6 +66,15 @@
         <item name="fontFamily">@font/varela_regular</item>
     </style>
 
+    <style name="blue_NormalText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/light_blue_900</item>
+        <item name="android:typeface">monospace</item>
+        <item name="fontFamily">@font/varela_regular</item>
+    </style>
+
+
+
     <style name="Theme.SigmaDatingApp.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

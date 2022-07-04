@@ -70,6 +70,17 @@ object AppUtils {
     }
 
 
+
+    fun isValid_password_match(new_password: String?, confirm_password:String): Boolean {
+
+        if (new_password.equals(confirm_password)) {
+            return true
+        }
+
+        return false
+    }
+
+
     fun isValid_phone_number(number: String?): Boolean{
         if(number?.matches(".*[0-9].*".toRegex()) == false){
             return false

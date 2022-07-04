@@ -3,848 +3,868 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fillViewport="true"
-    android:background="@color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_with_opecity"
+    android:fillViewport="true">
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="32dp"
-
-    tools:context=".views.settings.SettingsFragment">
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="24dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="24dp" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_baseline_arrow_back_ios_24"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toTopOf="@+id/guideline_top" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        style="@style/QText"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:text="Settings"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.448"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
-   <LinearLayout
-    android:id="@+id/main_linear"
-    android:layout_width="0dp"
-    app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-    app:layout_constraintHorizontal_bias="0.448"
-    android:orientation="vertical"
-    app:layout_constraintStart_toStartOf="@+id/guideline_left"
-    app:layout_constraintTop_toBottomOf="@+id/textView6"
-    android:layout_height="wrap_content">
-
-
-    <LinearLayout
-        android:id="@+id/linear1_setting"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Email"
-            android:gravity="start|center"
-            android:layout_weight=".4"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Email@gmail.com"
-            android:gravity="end|center"
-            android:layout_weight=".5"
-            style="@style/grey_NormalText"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-    <View
-        android:id="@+id/v1"
-        android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintTop_toBottomOf="@id/linear1_setting"
-        android:layout_width="match_parent"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="@string/password_text"
-            android:gravity="start|center"
-            android:layout_weight=".4"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Update"
-            android:gravity="end|center"
-            android:layout_weight=".5"
-            style="@style/grey_NormalText"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-
-    <View
-        android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-
-        android:layout_width="match_parent"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Phone"
-            android:gravity="start|center"
-            android:layout_weight=".4"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="9090909900"
-            android:gravity="end|center"
-            android:layout_weight=".5"
-            style="@style/grey_NormalText"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-    <View
-        android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        android:layout_width="match_parent"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Location"
-            android:gravity="start|center"
-            android:layout_weight=".4"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="lorem ipsum"
-            android:gravity="end|center"
-            android:layout_weight=".5"
-            style="@style/grey_NormalText"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-</LinearLayout>
-
-    <View
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_linear"
-        android:layout_width="match_parent"/>
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="24dp"
-        android:text="Interested In"
-        style="@style/QText"
-        android:alpha=".8"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@+id/main_linear" />
-    <RadioGroup
-        android:id="@+id/rg"
-        android:layout_width="0dp"
-        app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintStart_toEndOf="@id/guideline_right"
-        android:gravity="start"
-        app:layout_constraintHorizontal_bias="0.058"
+        android:layout_marginBottom="32dp"
+        tools:context=".views.settings.SettingsFragment">
 
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        android:layout_height="wrap_content">
-        <RadioButton
-            android:id="@+id/rb_women"
-            android:layout_width="100dp"
-            android:gravity="center"
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="24dp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/interested_in_main_drwable"
-            android:button="@android:color/transparent"
-            android:checked="false"
-            android:paddingLeft="16dp"
-            android:layout_marginBottom="2dp"
-            android:elevation="4dp"
-            android:layout_height="40dp"
-            android:paddingTop="3dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="3dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Women"
-            android:textColor="@drawable/text_selector_default" />
-
-        <RadioButton
-            android:id="@+id/rb_men"
-            android:layout_width="100dp"
-            android:gravity="center"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/interested_in_main_drwable"
-            android:button="@android:color/transparent"
-            android:checked="false"
-            android:paddingLeft="16dp"
-            android:layout_marginBottom="2dp"
-            android:elevation="4dp"
-            android:layout_height="40dp"
-            android:paddingTop="3dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="3dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Men"
-            android:textColor="@drawable/text_selector_default" />
-
-        <RadioButton
-            android:id="@+id/rb_more"
-            android:layout_width="100dp"
-            android:layout_marginLeft="8dp"
-            android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/interested_in_main_drwable"
-            android:button="@android:color/transparent"
-            android:checked="false"
-            android:elevation="4dp"
-            android:paddingLeft="16dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="2dp"
-            android:paddingTop="3dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingRight="16dp"
-            android:paddingBottom="3dp"
-            android:text="Other"
-            android:textColor="@drawable/text_selector_default" />
-
-    </RadioGroup>
-
-<!--
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="start|center"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        app:chipSpacing="18dp"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/textView7"
-
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:background="@drawable/login_field_border_bg"
-            android:button="@android:color/transparent"
-            android:text="WOMEN"
-            app:chipCornerRadius="8dp" />
-
-
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:background="@drawable/login_field_border_bg"
-            android:button="@android:color/transparent"
-            android:text="MEN"
-            app:chipCornerRadius="8dp" />
-
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:background="@drawable/login_field_border_bg"
-
-            android:button="@android:color/transparent"
-            android:text="OTHER"
-            app:chipCornerRadius="8dp">
-
-        </com.google.android.material.chip.Chip>
-    </com.google.android.material.chip.ChipGroup>
--->
-
-    <TextView
-        android:id="@+id/textView_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Age Range"
-        style="@style/QText"
-        android:alpha=".8"
-        android:textSize="18sp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/rg"
-        app:layout_constraintStart_toStartOf="@id/guideline_left" />
-
-    <SeekBar
-        android:id="@+id/seekBar_age"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/textView_age" />
-
-    <TextView
-        android:id="@+id/textView_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Distance"
-        style="@style/QText"
-        android:alpha=".8"
-        android:textSize="18sp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_age"
-        app:layout_constraintStart_toStartOf="@id/guideline_left" />
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/textView_distance" />
-    <View
-        android:id="@+id/v2"
-        android:layout_height="2dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/hint_text_color"
-        android:alpha=".6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/seekBar"
-        android:layout_width="match_parent"/>
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="24dp"
-        android:text="Community"
-        android:textSize="18sp"
-        android:alpha=".8"
-        style="@style/QText"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
-
-    <LinearLayout
-        android:id="@+id/ll1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/textView9">
-
-
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toTopOf="@+id/guideline_top" />
 
         <TextView
-            android:layout_width="0dp"
-            android:text="Community Guidelines"
-            android:gravity="start|center"
-            android:layout_weight=".6"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Email@gmail.com"
-            android:gravity="end|center"
-            android:layout_weight=".3"
-            style="@style/grey_NormalText"
-            android:visibility="invisible"
-            android:layout_height="0dp"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/v3"
-        android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
-        android:alpha=".7"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintTop_toBottomOf="@id/ll1"
-        android:layout_width="0dp"/>
-
-
-
-    <LinearLayout
-        android:id="@+id/ll2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/v3">
-
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Safety Guides"
-            android:gravity="start|center"
-            android:layout_weight=".4"
-            style="@style/NormalText"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Email@gmail.com"
-            android:gravity="end|center"
-            android:layout_weight=".5"
-            android:visibility="invisible"
-            style="@style/grey_NormalText"
-            android:layout_height="0dp"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/v4"
-        android:layout_height="2dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/hint_text_color"
-        android:alpha=".6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll2"
-        android:layout_width="match_parent"/>
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="20dp"
-        android:textSize="18sp"
-        android:alpha=".8"
-        style="@style/QText"
-        android:text="Legal"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@+id/v4" />
-
-    <LinearLayout
-        android:id="@+id/main_linears"
-        android:layout_width="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.448"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        android:layout_height="wrap_content">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Licences"
-                android:gravity="start|center"
-                android:layout_weight=".4"
-                style="@style/NormalText"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Email@gmail.com"
-                android:gravity="end|center"
-                android:layout_weight=".5"
-                style="@style/grey_NormalText"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:layout_width="0dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-                android:gravity="start|center"
-                android:layout_weight=".1"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-        <View
-            android:layout_height="1dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/hint_text_color"
-            app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            android:layout_width="match_parent"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Privacy Prefernces"
-                android:gravity="start|center"
-                android:layout_weight=".4"
-                style="@style/NormalText"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Update"
-                android:gravity="end|center"
-                android:layout_weight=".5"
-                style="@style/grey_NormalText"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:layout_width="0dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-                android:gravity="start|center"
-                android:layout_weight=".1"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-
-        <View
-            android:layout_height="1dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/hint_text_color"
-            app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            android:layout_width="match_parent"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Privacy Policy"
-                android:gravity="start|center"
-                android:layout_weight=".4"
-                style="@style/NormalText"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="9090909900"
-                android:gravity="end|center"
-                android:layout_weight=".5"
-                style="@style/grey_NormalText"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:layout_width="0dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-                android:gravity="start|center"
-                android:layout_weight=".1"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-        <View
-            android:layout_height="1dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/hint_text_color"
-            app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            android:layout_width="match_parent"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:weightSum="1"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="Term of Service"
-                android:gravity="start|center"
-                android:layout_weight=".4"
-                style="@style/NormalText"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:text="lorem ipsum"
-                android:gravity="end|center"
-                android:layout_weight=".5"
-                style="@style/grey_NormalText"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:layout_width="0dp"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-                android:gravity="start|center"
-                android:layout_weight=".1"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/v5"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/hint_text_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_linears"
-        android:layout_width="match_parent"/>
-
-
-    <LinearLayout
-        android:id="@+id/ll3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:weightSum="1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/v5">
-
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Contact Us"
-            android:gravity="start|center"
-            android:layout_weight=".6"
+            android:id="@+id/textView6"
             style="@style/QText"
-            android:alpha=".8"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="Settings"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.448"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
+        <LinearLayout
+            android:id="@+id/main_linear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.448"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+
+            <LinearLayout
+                android:id="@+id/linear1_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".2"
+                    android:gravity="start|center"
+                    android:text="Email" />
+
+                <TextView
+                    android:id="@+id/text_email_id"
+                    style="@style/blue_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".7"
+                    android:gravity="end|center"
+                    android:text="" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/v1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/linear1_setting" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="@string/password_text" />
+
+                <TextView
+                    style="@style/blue_NormalText"
+                    android:id="@+id/password_update"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="Update" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+
+                app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Phone" />
+
+                <TextView
+                    android:id="@+id/phone_number_text"
+                    style="@style/blue_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Location" />
+
+                <TextView
+                    android:id="@+id/location_text"
+                    style="@style/blue_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_linear" />
 
         <TextView
+            android:id="@+id/textView7"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:alpha=".8"
+            android:text="Interested In"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/main_linear" />
+
+        <RadioGroup
+            android:id="@+id/rg"
             android:layout_width="0dp"
-            android:text="Email@gmail.com"
-            android:gravity="end|center"
-            android:layout_weight=".3"
-            style="@style/grey_NormalText"
-            android:visibility="invisible"
-            android:layout_height="0dp"/>
-        <ImageView
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+            <RadioButton
+                android:id="@+id/rb_women"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Women"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_men"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Men"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_more"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Other"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RadioGroup>
+
+        <!--
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="start|center"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                app:chipSpacing="18dp"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@id/textView7"
+
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/login_field_border_bg"
+                    android:button="@android:color/transparent"
+                    android:text="WOMEN"
+                    app:chipCornerRadius="8dp" />
+
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/login_field_border_bg"
+                    android:button="@android:color/transparent"
+                    android:text="MEN"
+                    app:chipCornerRadius="8dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/login_field_border_bg"
+
+                    android:button="@android:color/transparent"
+                    android:text="OTHER"
+                    app:chipCornerRadius="8dp">
+
+                </com.google.android.material.chip.Chip>
+            </com.google.android.material.chip.ChipGroup>
+        -->
+
+        <TextView
+            android:id="@+id/textView_age"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:alpha=".8"
+            android:text="Age Range"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/rg" />
+
+        <SeekBar
+            android:id="@+id/seekBar_age"
             android:layout_width="0dp"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:gravity="start|center"
-            android:layout_weight=".1"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-    <Button
-        android:id="@+id/continue_logout"
-        android:layout_width="134dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginRight="56dp"
-        android:background="@drawable/login_field_border_bg"
-        android:text="Logout"
-        android:textAllCaps="false"
-        android:layout_marginBottom="6dp"
-        android:textColor="@color/hint_text_color"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/ll3"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.616"
-        app:layout_constraintStart_toStartOf="@id/guideline_left" />
-    <Button
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:id="@+id/continue_delete_account"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textView_age" />
 
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="66dp"
-        android:layout_marginRight="66dp"
-        android:text="Delete Account"
-        android:textAllCaps="false"
-        android:layout_marginBottom="16dp"
-        android:textColor="@color/blue"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/continue_logout"
-        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.616"
-        app:layout_constraintStart_toStartOf="@id/guideline_left" />
+        <TextView
+            android:id="@+id/textView_distance"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:alpha=".8"
+            android:text="Distance"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/seekBar_age" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="18-26"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.896"
-        app:layout_constraintStart_toEndOf="@+id/textView_age"
-        app:layout_constraintTop_toBottomOf="@+id/rg" />
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textView_distance" />
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="25 miles"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView_distance"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
-        app:layout_constraintHorizontal_bias="0.906"
-        app:layout_constraintStart_toEndOf="@+id/textView_distance" />
+        <View
+            android:id="@+id/v2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekBar" />
+
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:alpha=".8"
+            android:text="Community"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+        <LinearLayout
+            android:id="@+id/ll1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:weightSum="1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textView9">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                style="@style/NormalText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".6"
+                android:gravity="start|center"
+                android:text="Community Guidelines" />
+
+            <TextView
+                style="@style/grey_NormalText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight=".3"
+                android:gravity="end|center"
+                android:text="Email@gmail.com"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".1"
+                android:gravity="start|center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:alpha=".7"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/ll1" />
+
+
+        <LinearLayout
+            android:id="@+id/ll2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:weightSum="1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v3">
+
+
+            <TextView
+                style="@style/NormalText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:gravity="start|center"
+                android:text="Safety Guides" />
+
+            <TextView
+                style="@style/grey_NormalText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight=".5"
+                android:gravity="end|center"
+                android:text="Email@gmail.com"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".1"
+                android:gravity="start|center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll2" />
+
+        <TextView
+            android:id="@+id/textView10"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="20dp"
+            android:alpha=".8"
+            android:text="Legal"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/v4" />
+
+        <LinearLayout
+            android:id="@+id/main_linears"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.448"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Licences" />
+
+                <TextView
+                    style="@style/grey_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="Email@gmail.com" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Privacy Prefernces" />
+
+                <TextView
+                    style="@style/grey_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="Update" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Privacy Policy" />
+
+                <TextView
+                    style="@style/grey_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="9090909900" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/hint_text_color"
+                app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:gravity="start|center"
+                    android:text="Term of Service" />
+
+                <TextView
+                    style="@style/grey_NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:gravity="end|center"
+                    android:text="lorem ipsum" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:gravity="start|center"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_linears" />
+
+
+        <LinearLayout
+            android:id="@+id/ll3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:weightSum="1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v5">
+
+
+            <TextView
+                style="@style/QText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".6"
+                android:alpha=".8"
+                android:gravity="start|center"
+                android:text="Contact Us"
+                android:textSize="18sp" />
+
+            <TextView
+                style="@style/grey_NormalText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight=".3"
+                android:gravity="end|center"
+                android:text="Email@gmail.com"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".1"
+                android:gravity="start|center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/continue_logout"
+            android:layout_width="134dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/login_field_border_bg"
+            android:text="Logout"
+            android:textAllCaps="false"
+            android:textColor="@color/hint_text_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.616"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/ll3" />
+
+        <Button
+            android:id="@+id/continue_delete_account"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+
+            android:layout_marginLeft="66dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginBottom="16dp"
+            android:text="Delete Account"
+            android:textAllCaps="false"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.616"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/continue_logout" />
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/blue_NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="18-26"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.896"
+            app:layout_constraintStart_toEndOf="@+id/textView_age"
+            app:layout_constraintTop_toBottomOf="@+id/rg" />
+
+        <TextView
+            android:id="@+id/textView11"
+            style="@style/blue_NormalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25 miles"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView_distance"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.906"
+            app:layout_constraintStart_toEndOf="@+id/textView_distance" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

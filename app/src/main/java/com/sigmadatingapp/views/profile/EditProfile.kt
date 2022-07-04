@@ -1,12 +1,18 @@
 package com.sigmadatingapp.views.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentEditProfileBinding
+import com.sigmadatingapp.storage.AppConstants
+import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.views.Home
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,19 +43,13 @@ class EditProfile : Fragment() {
             (activity as Home).onBackPressed()
         }
 
+        subscribe_Login_User_details()
+        (activity as Home).homeviewmodel.get_Login_User_details((activity as Home).sharedPreferencesStorage.getString(
+            AppConstants.USER_ID))
         return binding.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditProfile.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             EditProfile().apply {
@@ -65,4 +65,36 @@ class EditProfile : Fragment() {
         super.onDestroy()
         _binding=null
     }
+
+
+    fun subscribe_Login_User_details(){
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
+            when(it.status){
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            Log.d("TAG@123",res.toString())
+
+
+                        } else {
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+
+
+
+
+    }
+
 }

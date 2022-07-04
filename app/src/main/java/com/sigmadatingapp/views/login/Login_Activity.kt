@@ -212,16 +212,18 @@ textforgot.setOnClickListener {
     }
 
     fun sign_up(view: View) {
-        AppUtils.showLoader(this)
+
+        startActivity(Intent(this, OnBoardingActivity::class.java))
+        finish()
+       /* AppUtils.showLoader(this)
         Handler().postDelayed(
             {
                 AppUtils.hideLoader()
 
-                startActivity(Intent(this, OnBoardingActivity::class.java))
-                finish()
+
             },
             500
-        )
+        )*/
     }
 
 
@@ -290,6 +292,8 @@ textforgot.setOnClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                            sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
+                            Log.d("TAG@123",res.user.id)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
                             startActivity(Intent(this, Home::class.java))

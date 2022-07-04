@@ -29,9 +29,9 @@
         android:layout_marginLeft="2dp"
         android:layout_marginTop="28dp"
         android:alpha=".8"
-        android:textSize="20sp"
-        android:text="when is your birthday?"
+        android:text="What is your Email, Phone Number And birthday?"
         android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
@@ -44,13 +44,61 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/login_field_border_bg"
         android:hint="@string/email_text"
-        android:text="lorem@gmail.com"
         android:inputType="textEmailAddress"
+        android:text="lorem@gmail.com"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+    <LinearLayout
+        android:id="@+id/enter_number_layout"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/login_field_border_bg"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/edit_emal">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:onClick="onCountryPickerClick_fag"
+            android:background="@android:color/transparent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:alpha=".3"
+            android:background="@color/light_black" />
+
+        <EditText
+            android:id="@+id/edit_text_phone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".8"
+            android:background="@color/white"
+            android:ems="10"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:paddingLeft="5dp"
+            android:text="@string/phone_xx"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline6"
+            app:layout_constraintTop_toBottomOf="@+id/enter_number_layout" />
+
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/edit_text_birthday"
@@ -60,32 +108,32 @@
         android:layout_marginTop="28dp"
         android:background="@drawable/login_field_border_bg"
         android:ems="10"
-        android:text="11/12/1195"
         android:hint="DD/MM/YYYY"
         android:maxLength="10"
+        android:text="11/12/1195"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/edit_emal" />
+        app:layout_constraintTop_toBottomOf="@+id/enter_number_layout" />
 
-    <EditText
-        android:id="@+id/edit_text_phone"
+
+    <Button
+        android:id="@+id/button_birthday"
         android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/login_field_border_bg"
-        android:ems="10"
-        android:text="ajay@gmail.com"
-        android:hint="email id"
-        android:maxLength="10"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline8"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_birthday" />
-
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/signup_circle_bg"
+        android:text="@string/continue_text"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_birthday"
+        app:layout_constraintEnd_toEndOf="@+id/guideline8"
+        app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -105,30 +153,12 @@
         app:layout_constraintGuide_begin="100dp" />
 
 
-    <Button
-        android:id="@+id/button_birthday"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="84dp"
-        android:background="@drawable/signup_circle_bg"
-        android:text="@string/continue_text"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/guideline8"
-        app:layout_constraintHorizontal_bias="0.582"
-        app:layout_constraintStart_toStartOf="@+id/guideline6" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="40dp" />
+        app:layout_constraintGuide_end="26dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

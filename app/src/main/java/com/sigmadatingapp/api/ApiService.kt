@@ -8,10 +8,10 @@ import com.sigmadatingapp.model.Forgotpassword
 import retrofit2.Response
 import retrofit2.http.*
 
-interface ApiService{
+interface ApiService {
 
     @GET("employees")
-    suspend fun getEmployees():Response<Loginmodel>
+    suspend fun getEmployees(): Response<Loginmodel>
 
     @POST("users/login")
     suspend fun login(@Body jsonObject: JsonObject): Response<Loginmodel>
@@ -26,9 +26,14 @@ interface ApiService{
     @POST("twilio/sendotp")
     suspend fun user_login_phone(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-
     @POST("twilio/verifyotp")
     suspend fun user_phone_verifly(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/view")
+    suspend fun get_login_user_data(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/changepass")
+    suspend fun change_password(@Body jsonObject: JsonObject): Response<Loginmodel>
 
     @GET("common/get_common_listschoolscommunity")
     suspend fun listSchoolFeternity():Response<School_CommunityResponse>
