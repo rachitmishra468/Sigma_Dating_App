@@ -14,5 +14,6 @@ class MainRepository @Inject constructor(
     suspend fun user_forgotpass(jsonObject: JsonObject) = apiHelper.user_forgot_password(jsonObject)
     suspend fun user_login_phone(jsonObject: JsonObject) = apiHelper.user_login_phone(jsonObject)
     suspend fun user_phone_verifly(jsonObject: JsonObject) = apiHelper.user_phone_verifly(jsonObject)
+    suspend fun  ListSchoolFeternity()=apiHelper.getSchoolFeternityList()
 
 }

@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferencesStorage
 ) : ViewModel() {
 
-    private val _res = MutableLiveData<Resource<Loginmodel>>()
+   // private val _res = MutableLiveData<Resource<Loginmodel>>()
     private val _forgotResponse = MutableLiveData<Resource<Forgotpassword>>()
     var _res: MutableLiveData<Resource<Loginmodel>>? = null
 

@@ -73,8 +73,8 @@ class Login_Activity : AppCompatActivity() {
     lateinit var gso: GoogleSignInOptions
     lateinit var textforgot:TextView
 
-    lateinit var editText_otp: EditText
-    lateinit var verfie_otp: Button
+     var editText_otp: EditText?=null
+     var verfie_otp: Button?=null
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
@@ -172,7 +172,7 @@ textforgot.setOnClickListener {
         edittext_phone_no = findViewById(R.id.edittext_phone_no)
         mLoginButton = findViewById(R.id.login_button);
         textforgot=findViewById(R.id.textView2)
-
+        editText_otp=findViewById(R.id.editText_otp)
     }
 
 
@@ -192,8 +192,8 @@ textforgot.setOnClickListener {
         phone_number_button.setTextColor(this.getResources().getColor(R.color.white))
         phone_number_layout.visibility = View.GONE
         emailLayoutLayout.visibility = View.VISIBLE
-        editText_otp.visibility = View.GONE
-        verfie_otp.visibility = View.GONE
+        editText_otp?.visibility = View.GONE
+        verfie_otp?.visibility = View.GONE
         button_login_email_phone_both.visibility = View.VISIBLE
         button_login_email_phone_both.setText(R.string.sign_in)
         PHONE_LOGIN = false
@@ -226,7 +226,7 @@ textforgot.setOnClickListener {
 
 
     fun verifyotp(view: View) {
-        mainViewModel.phone_verifly_OTP(editText_otp.text.toString())
+        mainViewModel.phone_verifly_OTP(editText_otp?.text.toString())
     }
 
 
@@ -390,8 +390,8 @@ Log.d("TAG123","tags")
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
                             phone_number_layout.visibility=View.GONE
                             button_login_email_phone_both.visibility=View.GONE
-                            verfie_otp.visibility=View.VISIBLE
-                            editText_otp.visibility=View.VISIBLE
+                            verfie_otp?.visibility=View.VISIBLE
+                            editText_otp?.visibility=View.VISIBLE
 
                         } else {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)

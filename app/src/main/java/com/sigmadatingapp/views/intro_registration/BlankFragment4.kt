@@ -1,13 +1,30 @@
 package com.sigmadatingapp.views.intro_registration
 
+import FraternitiesList
+import School_CommunityResponse
+import SororitiesList
+import UniversityList
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
+import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
+import com.sigmadatingapp.adapters.CommunityAdapter
 import com.sigmadatingapp.databinding.FragmentSchoolInputBinding
+import com.sigmadatingapp.storage.AppConstants
+import com.sigmadatingapp.utilities.AppUtils
+import com.sigmadatingapp.views.Home
+import com.sigmadatingapp.views.login.LoginViewModel
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -19,20 +36,39 @@ class BlankFragment4 : Fragment() {
     private var Socority_button:Button?=null
     private var fraternity_button:Button?=null
     private var fraternity_autocomplte:AutoCompleteTextView?=null
-    private var edit_school:EditText?=null
+    val mainViewModel: RegistrationViewModel by viewModels()
+    private var edit_school:AutoCompleteTextView?=null
+    lateinit var fraternitiesList:List<FraternitiesList>
+    lateinit var sororitiesList:List<SororitiesList>
+    lateinit var schoolList:List<UniversityList>
+
+
     var sa = arrayOf("lorem ipsum", "lorem ipsum", " ipsum lorem ipsum", "lorem ipsum lorem ipsum", "lorem ipsuma")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         about_school_binding= FragmentSchoolInputBinding.inflate(inflater, container, false)
         continueSchool=    about_school_binding?.root?.findViewById(R.id.continue_school)
-        edit_school=    about_school_binding?.root?.findViewById(R.id.editText_school_name)
+        edit_school=    about_school_binding?.root?.findViewById(R.id.act_scholl)
         fraternity_autocomplte=    about_school_binding?.root?.findViewById(R.id.et_type)
         Socority_button=about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button=about_school_binding?.root?.findViewById(R.id.fraternity_button)
+        schoolListResponse()
+
+
         val adapter = ArrayAdapter(requireActivity(),
             android.R.layout.simple_list_item_1, sa)
         continueSchool?.setOnClickListener {
             (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+
+        }
+
+        requireActivity().let { ctx ->
+            val cityAdapter = CommunityAdapter(ctx, R.layout.customautotextview_layout, schoolList)
+            edit_school?.setAdapter(cityAdapter)
+            edit_school?.setOnItemClickListener { parent, _, position, _ ->
+                val city = cityAdapter.getItem(position) as UniversityList?
+                edit_school?.setText(city?.name)
+            }
 
         }
         fraternity_button?.setOnClickListener {
@@ -42,7 +78,7 @@ class BlankFragment4 : Fragment() {
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
             sa = arrayOf("lorem ipsum", "lorem ipsum", " ipsum lorem ipsum", "lorem ipsum lorem ipsum", "lorem ipsuma")
             val adapter = ArrayAdapter(requireActivity(),
-                android.R.layout.simple_list_item_1, sa)
+                android.R.layout.simple_list_item_1, fraternitiesList)
             adapter.setNotifyOnChange(true)
             fraternity_autocomplte?.threshold=1
         }
@@ -89,6 +125,36 @@ Toast.makeText(requireActivity(),adapter.getItem(i).toString(),Toast.LENGTH_LONG
                     putString(ARG_PARAM2, param2)
                 }
             }
+
+    }
+
+    fun schoolListResponse(){
+
+        mainViewModel.responseserver?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                             schoolList=res.data.universityList
+                            sororitiesList=res.data.sororitiesList
+                            fraternitiesList=res.data.fraternitiesList
+
+
+                            //sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                        } else {
+
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireActivity())
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
 
     }
 

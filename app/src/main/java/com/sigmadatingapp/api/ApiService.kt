@@ -1,6 +1,7 @@
 package com.sigmadatingapp.api
 
 
+import School_CommunityResponse
 import com.sigmadatingapp.model.Loginmodel
 import com.google.gson.JsonObject
 import com.sigmadatingapp.model.Forgotpassword
@@ -28,4 +29,7 @@ interface ApiService{
 
     @POST("twilio/verifyotp")
     suspend fun user_phone_verifly(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @GET("common/get_common_listschoolscommunity")
+    suspend fun listSchoolFeternity():Response<School_CommunityResponse>
 }

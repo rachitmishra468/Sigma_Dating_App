@@ -1,5 +1,6 @@
 package com.example.demoapp.api
 
+import School_CommunityResponse
 import com.sigmadatingapp.api.ApiService
 import com.sigmadatingapp.model.Loginmodel
 import com.google.gson.JsonObject
@@ -18,5 +19,7 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun user_login_phone(jsonObject: JsonObject): Response<Loginmodel> =apiService.user_login_phone(jsonObject)
     override suspend fun user_phone_verifly(jsonObject: JsonObject): Response<Loginmodel> =apiService.user_phone_verifly(jsonObject)
+    override suspend fun getSchoolFeternityList(): Response<School_CommunityResponse>   =apiService.listSchoolFeternity()
+
 
 }
