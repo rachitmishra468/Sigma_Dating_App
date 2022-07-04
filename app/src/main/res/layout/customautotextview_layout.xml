@@ -5,5 +5,7 @@
     android:ellipsize="middle"
     android:paddingStart="16dp"
     tools:text="@string/app_name"
+    android:textSize="18sp"
+    android:textColor="@color/blue"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" />

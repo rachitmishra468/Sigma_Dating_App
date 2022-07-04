@@ -35,6 +35,6 @@ interface ApiService {
     @POST("users/changepass")
     suspend fun change_password(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-    @GET("common/get_common_listschoolscommunity")
+    @GET("common/listschoolscommunity")
     suspend fun listSchoolFeternity():Response<SchoolCommunityResponse>
 }

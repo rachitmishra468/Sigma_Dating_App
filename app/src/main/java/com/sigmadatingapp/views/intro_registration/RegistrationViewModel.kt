@@ -26,7 +26,7 @@ public  class RegistrationViewModel @Inject constructor(val repository: MainRepo
 
 
     fun getSchoolingData()  = viewModelScope.launch {
-        responseserver!!.postValue(Resource.loading(null))
+        school_dataResponse.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
       //  jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
@@ -34,9 +34,9 @@ public  class RegistrationViewModel @Inject constructor(val repository: MainRepo
        // Log.d("TAG@123", jsonObject.toString())
         repository.ListSchoolFeternity().let {
             if (it.isSuccessful){
-                responseserver!!.postValue(Resource.success(it.body()))
+                school_dataResponse.postValue(Resource.success(it.body()))
             }else{
-                responseserver!!.postValue(Resource.error(it.errorBody().toString(), null))
+                school_dataResponse.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }

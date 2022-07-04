@@ -58,6 +58,7 @@
         android:background="@drawable/login_field_border_bg"
         android:drawablePadding="10dp"
         android:hint="@string/hint_school_name"
+        android:drawableRight="@drawable/ic_baseline_keyboard_arrow_down_24"
         android:inputType="textEmailAddress|textCapSentences"
         android:letterSpacing="0.10"
         android:paddingTop="15dp"
