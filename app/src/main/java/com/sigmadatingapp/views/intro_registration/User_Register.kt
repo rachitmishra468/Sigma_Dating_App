@@ -17,24 +17,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class User_Register @Inject constructor(
-    private val mainRepository: MainRepository,
-    private val sharedPreferencesStorage: SharedPreferencesStorage
-) : ViewModel() {
+class User_Register @Inject constructor(private val mainRepository: MainRepository, private val sharedPreferencesStorage: SharedPreferencesStorage) : ViewModel() {
 
-
-    private val _res = MutableLiveData<Resource<Loginmodel>>()
-
-    var res: LiveData<Resource<Loginmodel>>? = null
-        get() = _res
+    var registration: MutableLiveData<Resource<Loginmodel>>? = null
 
     init {
-        Register()
+        registration= MutableLiveData<Resource<Loginmodel>>()
     }
 
-
-    private fun Register() = viewModelScope.launch {
-        _res.postValue(Resource.loading(null))
+    fun Register() = viewModelScope.launch {
+        registration?.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
         jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
@@ -55,7 +47,13 @@ class User_Register @Inject constructor(
             sharedPreferencesStorage.getString(AppConstants.password)
         )
 
-        jsonObject.addProperty("phone", sharedPreferencesStorage.getString(AppConstants.phone))
+        jsonObject.addProperty(
+            "phone",
+            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                AppConstants.phone
+            )
+        )
+
         jsonObject.addProperty(
             "location",
             sharedPreferencesStorage.getString(AppConstants.location)
@@ -78,9 +76,9 @@ class User_Register @Inject constructor(
 
         mainRepository.user_register(jsonObject).let {
             if (it.isSuccessful) {
-                _res.postValue(Resource.success(it.body()))
+                registration?.postValue(Resource.success(it.body()))
             } else {
-                _res.postValue(Resource.error(it.errorBody().toString(), null))
+                registration?.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }

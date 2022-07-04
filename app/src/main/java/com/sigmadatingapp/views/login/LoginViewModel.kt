@@ -74,7 +74,9 @@ class LoginViewModel @Inject constructor(
 
         val jsonObject = JsonObject()
         jsonObject.addProperty(
-            "phone", sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(AppConstants.phone
+            "phone",
+            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                AppConstants.phone
             )
         )
 
@@ -91,14 +93,19 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun phone_verifly_OTP( OTP:String) = viewModelScope.launch {
+    fun phone_verifly_OTP(OTP: String) = viewModelScope.launch {
 
         verifly_otp?.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
-        jsonObject.addProperty("phone", sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(AppConstants.phone))
-        jsonObject.addProperty("otp",OTP)
-            Log.d("TAG@123", jsonObject.toString())
+        jsonObject.addProperty(
+            "phone",
+            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                AppConstants.phone
+            )
+        )
+        jsonObject.addProperty("otp", OTP)
+        Log.d("TAG@123", jsonObject.toString())
         mainRepository.user_phone_verifly(jsonObject).let {
             if (it.isSuccessful) {
                 verifly_otp?.postValue(Resource.success(it.body()))

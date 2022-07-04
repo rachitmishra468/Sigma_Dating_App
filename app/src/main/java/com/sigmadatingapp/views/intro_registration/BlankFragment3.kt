@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.hbb20.CountryCodePicker
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.AboutBirthdayBinding
 import com.sigmadatingapp.storage.AppConstants
@@ -35,6 +36,7 @@ class BlankFragment3 : Fragment() {
     lateinit var editbirthday: EditText
     private var ss: String? = null
     lateinit var email_id: EditText
+    lateinit var country_spinner: CountryCodePicker
 
     private var binding: AboutBirthdayBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +50,10 @@ class BlankFragment3 : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        // var root= inflater.inflate(R.layout.about_birthday, container, false)
+    ): View {
         binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
+        country_spinner = binding!!.root.findViewById(R.id.ccp)
         email_id = binding!!.root.findViewById(R.id.edit_emal)
         editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
         editbirthday.addTextChangedListener(textWatcher)
@@ -83,6 +84,14 @@ class BlankFragment3 : Fragment() {
                         AppConstants.Dob,
                         editbirthday.text.toString()
                     )
+
+
+                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                        AppConstants.USER_COUNTRY_CODE,
+                        country_spinner.selectedCountryCodeWithPlus
+                    )
+
+
                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
                    // (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
                   //  (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
@@ -93,11 +102,21 @@ class BlankFragment3 : Fragment() {
             }
         }
 
-        // binding!!.editTextBirthday.addTextChangedListener()
 
 
         return binding!!.root
     }
+
+
+    fun onCountryPickerClick_fag(view: View?) {
+        country_spinner.setOnCountryChangeListener(CountryCodePicker.OnCountryChangeListener {
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.USER_COUNTRY_CODE,
+                country_spinner.getSelectedCountryCodeWithPlus()
+            )
+        })
+    }
+
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -113,15 +132,6 @@ class BlankFragment3 : Fragment() {
         }
     }
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BlankFragment3.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             BlankFragment3().apply {

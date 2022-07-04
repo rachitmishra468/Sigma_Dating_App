@@ -19,7 +19,9 @@ class OnBoardingActivity : AppCompatActivity() {
     private lateinit var mViewPager: ViewPager2
     private lateinit var pageIndicator: TabLayout
     private var img_back: ImageView? = null
-     val userRegister: User_Register by viewModels()
+    val userRegister: User_Register by viewModels()
+
+
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {

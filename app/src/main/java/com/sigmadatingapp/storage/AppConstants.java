@@ -44,15 +44,12 @@ public class AppConstants {
 
     public static final String interested_in="interested_in";
     public static final String interests="interests";
-
+    public static final String upload_image="upload_image";
     public static final String isSocialLogin="isSocialLogin";
     public static final String location="location";
     public static final String password="password";
 
     public static final String phone="phone";
     public static final String university="university";
-    public static final String upload_image="upload_image";
-
-
 
 }

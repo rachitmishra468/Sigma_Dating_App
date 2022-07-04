@@ -23,10 +23,10 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class Profile_Photo : Fragment() {
-
     private var param1: String? = null
     private var param2: String? = null
     private var profile_continue: Button? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,15 +45,12 @@ class Profile_Photo : Fragment() {
 
         profile_continue = view.findViewById(R.id.profile_continue)
         profile_continue?.setOnClickListener {
-
-            // startActivity(Intent(context, Home::class.java))
-            //(activity as OnBoardingActivity?)?.finish
             if (AppUtils.isNetworkInterfaceAvailable(requireContext())) {
-                Register()
+                (activity as OnBoardingActivity?)?.userRegister?.Register()
             }
-
         }
 
+        Register()
 
         return view;
     }
@@ -71,7 +68,7 @@ class Profile_Photo : Fragment() {
 
 
     fun Register() {
-        (activity as OnBoardingActivity?)?.userRegister?.res?.observe(this, Observer {
+        (activity as OnBoardingActivity?)?.userRegister?.registration?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()

@@ -15,5 +15,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun user_register(jsonObject: JsonObject): Response<Loginmodel> =apiService.register(jsonObject)
     override suspend fun user_login_phone(jsonObject: JsonObject): Response<Loginmodel> =apiService.user_login_phone(jsonObject)
     override suspend fun user_phone_verifly(jsonObject: JsonObject): Response<Loginmodel> =apiService.user_phone_verifly(jsonObject)
+    override suspend fun get_login_user_data(jsonObject: JsonObject): Response<Loginmodel> =apiService.get_login_user_data(jsonObject)
+    override suspend fun change_password(jsonObject: JsonObject): Response<Loginmodel> =apiService.change_password(jsonObject)
 
 }
