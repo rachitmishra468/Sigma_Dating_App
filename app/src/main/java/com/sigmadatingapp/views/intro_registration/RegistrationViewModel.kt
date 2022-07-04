@@ -1,28 +1,27 @@
 package com.sigmadatingapp.views.intro_registration
 
-import School_CommunityResponse
-import android.util.Log
-import androidx.lifecycle.LiveData
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
-import com.sigmadatingapp.model.Forgotpassword
+import com.sigmadatingapp.model.SchoolCommunityResponse
 import com.sigmadatingapp.repository.MainRepository
-import com.sigmadatingapp.storage.AppConstants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RegistrationViewModel @Inject constructor(val repository: MainRepository) : ViewModel() {
+@HiltViewModel
+public  class RegistrationViewModel @Inject constructor(val repository: MainRepository) : ViewModel() {
 
-    private val school_dataResponse = MutableLiveData<Resource<School_CommunityResponse>>()
+    private val school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
 
     init {
         getSchoolingData()
     }
 
-    var responseserver: MutableLiveData<Resource<School_CommunityResponse>>? = null
+    var responseserver: MutableLiveData<Resource<SchoolCommunityResponse>>? = null
         get() = school_dataResponse
 
 

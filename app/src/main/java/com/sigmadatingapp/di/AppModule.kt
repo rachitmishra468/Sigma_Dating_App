@@ -2,7 +2,7 @@ package com.sigmadatingapp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.demoapp.api.ApiHelper
+import com.sigmadatingapp.api.ApiHelper
 import com.example.demoapp.api.ApiHelperImpl
 
 import com.example.demoapp.other.Constants

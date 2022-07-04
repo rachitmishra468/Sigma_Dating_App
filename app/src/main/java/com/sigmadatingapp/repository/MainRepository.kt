@@ -1,11 +1,12 @@
 package com.sigmadatingapp.repository
 
-import com.example.demoapp.api.ApiHelper
+import com.sigmadatingapp.api.ApiHelper
 import com.google.gson.JsonObject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
-    private val apiHelper:ApiHelper
+    private val apiHelper: ApiHelper
 ){
 
     suspend fun getEmployee() = apiHelper.getEmployees()

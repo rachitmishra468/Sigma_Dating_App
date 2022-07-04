@@ -118,22 +118,9 @@
         app:layout_constraintTop_toBottomOf="@+id/enter_number_layout" />
 
 
-    <Button
-        android:id="@+id/button_birthday"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/signup_circle_bg"
-        android:text="@string/continue_text"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_birthday"
-        app:layout_constraintEnd_toEndOf="@+id/guideline8"
-        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+
+
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -151,6 +138,26 @@
         android:orientation="horizontal"
 
         app:layout_constraintGuide_begin="100dp" />
+
+
+
+    <Button
+        android:id="@+id/button_birthday"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="84dp"
+        android:background="@drawable/signup_circle_bg"
+        android:text="@string/continue_text"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guideline8"
+        app:layout_constraintHorizontal_bias="0.582"
+        app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
 
     <androidx.constraintlayout.widget.Guideline

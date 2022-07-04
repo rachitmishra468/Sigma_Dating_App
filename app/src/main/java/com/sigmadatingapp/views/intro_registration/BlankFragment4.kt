@@ -1,33 +1,27 @@
 package com.sigmadatingapp.views.intro_registration
 
-import FraternitiesList
-import School_CommunityResponse
-import SororitiesList
-import UniversityList
-import android.content.Intent
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.CommunityAdapter
 import com.sigmadatingapp.databinding.FragmentSchoolInputBinding
-import com.sigmadatingapp.storage.AppConstants
+import com.sigmadatingapp.model.communityModel.FraternitiesList
+import com.sigmadatingapp.model.communityModel.SororitiesList
+import com.sigmadatingapp.model.communityModel.UniversityList
 import com.sigmadatingapp.utilities.AppUtils
-import com.sigmadatingapp.views.Home
-import com.sigmadatingapp.views.login.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
 class BlankFragment4 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
@@ -36,11 +30,11 @@ class BlankFragment4 : Fragment() {
     private var Socority_button:Button?=null
     private var fraternity_button:Button?=null
     private var fraternity_autocomplte:AutoCompleteTextView?=null
-    val mainViewModel: RegistrationViewModel by viewModels()
+    private val mainViewModel: RegistrationViewModel by viewModels()
     private var edit_school:AutoCompleteTextView?=null
-    lateinit var fraternitiesList:List<FraternitiesList>
-    lateinit var sororitiesList:List<SororitiesList>
-    lateinit var schoolList:List<UniversityList>
+     var fraternitiesList:List<FraternitiesList>?=null
+     var sororitiesList:List<SororitiesList>?=null
+     var schoolList:List<UniversityList>?=null
 
 
     var sa = arrayOf("lorem ipsum", "lorem ipsum", " ipsum lorem ipsum", "lorem ipsum lorem ipsum", "lorem ipsuma")
@@ -52,8 +46,8 @@ class BlankFragment4 : Fragment() {
         fraternity_autocomplte=    about_school_binding?.root?.findViewById(R.id.et_type)
         Socority_button=about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button=about_school_binding?.root?.findViewById(R.id.fraternity_button)
-        schoolListResponse()
 
+        schoolListResponse()
 
         val adapter = ArrayAdapter(requireActivity(),
             android.R.layout.simple_list_item_1, sa)
@@ -63,7 +57,7 @@ class BlankFragment4 : Fragment() {
         }
 
         requireActivity().let { ctx ->
-            val cityAdapter = CommunityAdapter(ctx, R.layout.customautotextview_layout, schoolList)
+            val cityAdapter = CommunityAdapter(ctx, R.layout.customautotextview_layout, schoolList!!)
             edit_school?.setAdapter(cityAdapter)
             edit_school?.setOnItemClickListener { parent, _, position, _ ->
                 val city = cityAdapter.getItem(position) as UniversityList?
@@ -78,7 +72,7 @@ class BlankFragment4 : Fragment() {
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
             sa = arrayOf("lorem ipsum", "lorem ipsum", " ipsum lorem ipsum", "lorem ipsum lorem ipsum", "lorem ipsuma")
             val adapter = ArrayAdapter(requireActivity(),
-                android.R.layout.simple_list_item_1, fraternitiesList)
+                android.R.layout.simple_list_item_1, fraternitiesList!!)
             adapter.setNotifyOnChange(true)
             fraternity_autocomplte?.threshold=1
         }
@@ -130,15 +124,18 @@ Toast.makeText(requireActivity(),adapter.getItem(i).toString(),Toast.LENGTH_LONG
 
     fun schoolListResponse(){
 
-        mainViewModel.responseserver?.observe(viewLifecycleOwner, Observer {
+        mainViewModel.responseserver?.observe(requireActivity(), Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
-                    it.data.let { res ->
-                        if (res?.status == true) {
-                             schoolList=res.data.universityList
-                            sororitiesList=res.data.sororitiesList
-                            fraternitiesList=res.data.fraternitiesList
+                    it.data.let { it1 ->
+                        if (it1?.status == true) {
+                            schoolList= ArrayList<UniversityList>()
+                            schoolList=it1.data.universityList
+                            sororitiesList= ArrayList<SororitiesList>()
+                            sororitiesList=it1.data.sororitiesList
+                            fraternitiesList= ArrayList<FraternitiesList>()
+                            fraternitiesList=it1.data.fraternitiesList
 
 
                             //sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)

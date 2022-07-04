@@ -1,10 +1,10 @@
 package com.sigmadatingapp.api
 
 
-import School_CommunityResponse
 import com.sigmadatingapp.model.Loginmodel
 import com.google.gson.JsonObject
 import com.sigmadatingapp.model.Forgotpassword
+import com.sigmadatingapp.model.SchoolCommunityResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -36,5 +36,5 @@ interface ApiService {
     suspend fun change_password(@Body jsonObject: JsonObject): Response<Loginmodel>
 
     @GET("common/get_common_listschoolscommunity")
-    suspend fun listSchoolFeternity():Response<School_CommunityResponse>
+    suspend fun listSchoolFeternity():Response<SchoolCommunityResponse>
 }

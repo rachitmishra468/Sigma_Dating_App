@@ -68,7 +68,7 @@ class Profile_Photo : Fragment() {
 
 
     fun Register() {
-        (activity as OnBoardingActivity?)?.userRegister?.registration?.observe(this, Observer {
+        (activity as OnBoardingActivity?)?.userRegister?.registration?.observe(requireActivity(), Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()

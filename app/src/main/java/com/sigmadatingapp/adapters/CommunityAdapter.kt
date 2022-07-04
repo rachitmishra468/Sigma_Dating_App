@@ -1,6 +1,5 @@
 package com.sigmadatingapp.adapters
 
-import UniversityList
 import android.app.Activity
 import android.content.Context
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.sigmadatingapp.R
+import com.sigmadatingapp.model.communityModel.UniversityList
 
 
 class CommunityAdapter (private val mContext: Context,

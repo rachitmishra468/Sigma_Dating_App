@@ -3,7 +3,6 @@ package com.sigmadatingapp.views.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.other.Status
 import com.sigmadatingapp.model.Loginmodel
 import com.sigmadatingapp.storage.AppConstants

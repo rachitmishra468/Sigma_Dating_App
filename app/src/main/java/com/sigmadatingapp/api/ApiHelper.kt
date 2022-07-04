@@ -1,8 +1,9 @@
-package com.example.demoapp.api
-import School_CommunityResponse
+package com.sigmadatingapp.api
+
 import com.sigmadatingapp.model.Loginmodel
 import com.google.gson.JsonObject
 import com.sigmadatingapp.model.Forgotpassword
+import com.sigmadatingapp.model.SchoolCommunityResponse
 import retrofit2.Response
 
 
@@ -19,6 +20,6 @@ interface ApiHelper {
     suspend fun get_login_user_data(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun change_password(jsonObject: JsonObject):Response<Loginmodel>
 
-    suspend fun getSchoolFeternityList():Response<School_CommunityResponse>
+    suspend fun getSchoolFeternityList():Response<SchoolCommunityResponse>
 
 }
