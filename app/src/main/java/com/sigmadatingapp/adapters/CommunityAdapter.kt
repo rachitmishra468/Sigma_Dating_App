@@ -15,16 +15,16 @@ class CommunityAdapter (private val mContext: Context,
                         cities: List<UniversityList>) :
     ArrayAdapter<UniversityList>(mContext, mLayoutResourceId, cities)
 {
-    private val city: MutableList<UniversityList> = ArrayList(cities)
+    private val schoolList: MutableList<UniversityList> = ArrayList(cities)
 
     override fun getCount(): Int {
-        return city.size
+        return schoolList.size
     }
     override fun getItem(position: Int): UniversityList {
-        return city[position]
+        return schoolList[position]
     }
     override fun getItemId(position: Int): Long {
-        return city[position].id.toLong()
+        return schoolList[position].id.toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -34,9 +34,9 @@ class CommunityAdapter (private val mContext: Context,
             convertView = inflater.inflate(mLayoutResourceId, parent, false)
         }
         try {
-            val city: UniversityList = getItem(position)
-            val cityAutoCompleteView = convertView!!.findViewById<View>(R.id.autoCompleteTextView) as TextView
-            cityAutoCompleteView.text = city.name
+            val schoolList: UniversityList = getItem(position)
+            val schoolListAutoCompleteView = convertView!!.findViewById<View>(R.id.autoCompleteTextView) as TextView
+            schoolListAutoCompleteView.text = schoolList.name
         } catch (e: Exception) {
             e.printStackTrace()
         }
