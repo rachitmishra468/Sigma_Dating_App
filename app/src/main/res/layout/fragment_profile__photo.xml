@@ -55,13 +55,13 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_choose_dummy"
-            android:layout_width="42dp"
+            android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:tint="@color/blue"
+            android:src="@drawable/ic_baseline_camera_alt_24"
 
-            android:src="@drawable/ic_baseline_camera_alt_24" />
+            android:tint="@color/blue" />
     </FrameLayout>
 
     <!--<FrameLayout

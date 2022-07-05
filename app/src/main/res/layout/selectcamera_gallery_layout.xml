@@ -5,40 +5,69 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
-    android:background="@color/white"
-    android:orientation="vertical">
-    <Button
+    android:padding="16dp"
+    android:weightSum="1"
+    android:gravity="center"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight=".5"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/button_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginLeft="30dp"
+        android:tint="@color/blue"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:src="@drawable/ic_baseline_camera_24"
         android:layout_marginRight="30dp"
-        android:background="@drawable/login_field_border_bg"
-        android:textColor="@color/blue"
-        android:layout_marginBottom="30dp"
-        android:text="Camera"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
+<TextView
+    android:layout_width="wrap_content"
+    android:textColor="@color/blue"
+    android:text="Camera"
+    android:layout_height="wrap_content">
 
-
-    <Button
+</TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight=".5"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/button_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:src="@drawable/ic_baseline_photo_library_24"
+        android:layout_marginTop="0dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:background="@drawable/login_field_border_bg"
-        android:textColor="@color/blue"
-        android:layout_marginBottom="30dp"
-        android:text="Gallery"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Gallery"
+            android:gravity="center"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/blue"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </LinearLayout>
 
 </LinearLayout>
