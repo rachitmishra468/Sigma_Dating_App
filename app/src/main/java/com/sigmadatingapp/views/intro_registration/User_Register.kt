@@ -23,6 +23,7 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
 
     init {
         registration= MutableLiveData<Resource<Loginmodel>>()
+        Register()
     }
 
     fun Register() = viewModelScope.launch {
