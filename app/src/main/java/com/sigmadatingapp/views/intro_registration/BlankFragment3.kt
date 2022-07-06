@@ -16,6 +16,10 @@ import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.AboutBirthdayBinding
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.utilities.AppUtils
+import com.sigmadatingapp.utilities.DateTextWatcher
+
+
+
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,33 +42,24 @@ class BlankFragment3 : Fragment() {
     lateinit var email_id: EditText
     lateinit var country_spinner: CountryCodePicker
 
-lateinit var edit_text_phone:EditText
+    lateinit var edit_text_phone: EditText
     private var binding: AboutBirthdayBinding? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
         country_spinner = binding!!.root.findViewById(R.id.ccp)
         email_id = binding!!.root.findViewById(R.id.edit_emal)
         editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
-        edit_text_phone=binding!!.root.findViewById(R.id.edit_text_phone)
-        editbirthday.addTextChangedListener(textWatcher)
+        edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)
+        editbirthday.addTextChangedListener(DateTextWatcher())
         button_birthday.setOnClickListener {
 
             if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {
                 email_id.error = "Invalid Email Address"
 
-            } else if (editbirthday.text.toString().isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
+            } else if (editbirthday.text.toString()
+                    .isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
             ) {
 
                 Toast.makeText(requireActivity(), "Enter Valid Date of Birth", Toast.LENGTH_LONG)
@@ -72,11 +67,16 @@ lateinit var edit_text_phone:EditText
 
             } else {
 
-                if (editbirthday.text.toString().isEmpty()||!AppUtils.isValidDate(editbirthday.text.toString().trim())) {
+                if (editbirthday.text.toString()
+                        .isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
+                ) {
 
-                    Toast.makeText(requireActivity(),"Enter Valid Date of Birth",Toast.LENGTH_LONG).show()
-                }
-                else{
+                    Toast.makeText(
+                        requireActivity(),
+                        "Enter Valid Date of Birth",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                         AppConstants.email,
@@ -95,10 +95,8 @@ lateinit var edit_text_phone:EditText
 
 
                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
-                   // (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Dob,editbirthday.text.toString())
-                  //  (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
-                }
 
+                }
 
 
             }
@@ -120,19 +118,7 @@ lateinit var edit_text_phone:EditText
     }
 
 
-    private val textWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
 
-
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-        }
-    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

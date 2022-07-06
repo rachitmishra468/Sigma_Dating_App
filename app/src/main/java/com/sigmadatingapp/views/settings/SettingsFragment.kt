@@ -54,7 +54,7 @@ class SettingsFragment : Fragment() {
             (activity as Home?)?.finish()
         }
         subscribe_Login_User_details()
-        subscribe_change_password()
+
         (activity as Home).homeviewmodel.get_Login_User_details(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
@@ -71,10 +71,10 @@ class SettingsFragment : Fragment() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Log.d("TAG@123", res.toString())
-                            _binding.textEmailId.setText(it.data?.data?.email)
-                            _binding.phoneNumberText.setText(it.data?.data?.phone)
-                            _binding.locationText.setText(it.data?.data?.location)
+                            Log.d("TAG@123", "111"+res.toString())
+                            _binding.textEmailId.setText(it.data?.user?.email)
+                            _binding.phoneNumberText.setText(it.data?.user?.phone)
+                            _binding.locationText.setText(it.data?.user?.location)
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -92,23 +92,19 @@ class SettingsFragment : Fragment() {
         })
     }
 
-    fun subscribe_change_password() {
+    fun subscribe_change_password(dialog: BottomSheetDialog) {
         (activity as Home?)?.homeviewmodel?.change_password?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Log.d("TAG@123", res.toString())
-                            res!!.message.let {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
-                                    .show()
-                            }
+                            dialog.dismiss()
+                            AppUtils.hideLoader()
+                            Log.d("TAG@123", "112"+res.toString())
+                            res.message.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
                         } else {
-                            res!!.message.let {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
-                                    .show()
-                            }
+                            res!!.message.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
 
                         }
                     }
@@ -142,11 +138,11 @@ class SettingsFragment : Fragment() {
             ) {
 
                 if (AppUtils.isValid_password(current_password.text.toString())) {
-
+                    subscribe_change_password(dialog)
                     (activity as Home).homeviewmodel.User_change_password(
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
-                        current_password.text.toString(),
-                        editText_password.text.toString()
+                        editText_password.text.toString(),
+                        editText_password_confirm.text.toString()
                     )
                 } else {
                     current_password.setError("Please Enter Valid Password")

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
 import com.sigmadatingapp.model.Loginmodel
+import com.sigmadatingapp.model.SchoolCommunityResponse
 import com.sigmadatingapp.repository.MainRepository
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.SharedPreferencesStorage
@@ -20,10 +21,11 @@ import javax.inject.Inject
 class User_Register @Inject constructor(private val mainRepository: MainRepository, private val sharedPreferencesStorage: SharedPreferencesStorage) : ViewModel() {
 
     var registration: MutableLiveData<Resource<Loginmodel>>? = null
-
+    var school_dataResponse : MutableLiveData<Resource<SchoolCommunityResponse>>?= null
     init {
         registration= MutableLiveData<Resource<Loginmodel>>()
-        Register()
+        school_dataResponse= MutableLiveData<Resource<SchoolCommunityResponse>>()
+       // Register()
     }
 
     fun Register() = viewModelScope.launch {
@@ -73,7 +75,7 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
         jsonObject.addProperty("device_token", "phoneNumber")
         jsonObject.addProperty("device_type", "Android")
 
-        Log.d("TAG@123", jsonObject.toString())
+        Log.d("TAG@123", "414"+jsonObject.toString())
 
         mainRepository.user_register(jsonObject).let {
             if (it.isSuccessful) {
@@ -83,5 +85,20 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
             }
         }
     }
+
+
+
+
+    fun getSchoolingData()  = viewModelScope.launch {
+        school_dataResponse?.postValue(Resource.loading(null))
+        mainRepository.ListSchoolFeternity().let {
+            if (it.isSuccessful){
+                school_dataResponse?.postValue(Resource.success(it.body()))
+            }else{
+                school_dataResponse?.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
 
 }

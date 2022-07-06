@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.CommunityAdapter
+import com.sigmadatingapp.adapters.FraternitiesAdapter
+import com.sigmadatingapp.adapters.SororitAdapter
 import com.sigmadatingapp.databinding.FragmentSchoolInputBinding
 import com.sigmadatingapp.model.communityModel.FraternitiesList
 import com.sigmadatingapp.model.communityModel.SororitiesList
@@ -32,7 +33,6 @@ class BlankFragment4 : Fragment() {
     private var Socority_button: Button? = null
     private var fraternity_button: Button? = null
     private var fraternity_autocomplte: AutoCompleteTextView? = null
-    private val mainViewModel: RegistrationViewModel by viewModels()
     private var schoolAct_Search: AutoCompleteTextView? = null
     var fraternitiesList: List<FraternitiesList>? = null
     var sororitiesList: List<SororitiesList>? = null
@@ -59,10 +59,21 @@ class BlankFragment4 : Fragment() {
         Socority_button = about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)
 
-        schoolListResponse()
+
 
         continueSchool?.setOnClickListener {
-            (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+
+            if (schoolAct_Search?.text.toString().equals("")) {
+                Toast.makeText(
+                    requireActivity(),
+                    "Enter School Name",
+                    Toast.LENGTH_LONG
+                )
+            } else {
+
+                (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+            }
+
 
         }
 
@@ -73,20 +84,40 @@ class BlankFragment4 : Fragment() {
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
 
+            fraternity_autocomplte?.setText("")
+            fraternity_autocomplte?.setHint("Select Fraternity")
+            val schoolAdapter = FraternitiesAdapter(
+                requireActivity(),
+                R.layout.customautotextview_layout,
+                fraternitiesList!!
+            )
+            fraternity_autocomplte?.threshold = 1
+            fraternity_autocomplte?.setAdapter(schoolAdapter)
+            fraternity_autocomplte?.setOnItemClickListener { parent, _, position, _ ->
+                val city = schoolAdapter.getItem(position) as FraternitiesList?
+                fraternity_autocomplte?.setText(city?.name)
+            }
         }
 
         Socority_button?.setOnClickListener {
             Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
-            Socority_button?.setTextColor(this.getResources().getColor(R.color.black))
+            Socority_button?.setTextColor(this.resources.getColor(R.color.black))
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
-          /*  val adapter =  ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, sa!!)
-            fraternity_autocomplte?.threshold=1
-            fraternity_autocomplte?.setAdapter(adapter)
-            fraternity_autocomplte?.setOnItemClickListener { adapterView, view, i, l ->
-                Toast.makeText(requireActivity(),adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
+            fraternity_autocomplte?.setText("")
+            fraternity_autocomplte?.setHint("Select Sorority")
+            val schoolAdapter = SororitAdapter(
+                requireActivity(),
+                R.layout.customautotextview_layout,
+                sororitiesList!!
+            )
+            fraternity_autocomplte?.threshold = 1
+            fraternity_autocomplte?.setAdapter(schoolAdapter)
+            fraternity_autocomplte?.setOnItemClickListener { parent, _, position, _ ->
+                val city = schoolAdapter.getItem(position) as SororitiesList?
+                fraternity_autocomplte?.setText(city?.name)
+            }
 
-            }*/
 
         }
 
@@ -96,46 +127,50 @@ class BlankFragment4 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        schoolListResponse()
+        (activity as OnBoardingActivity?)?.userRegister?.getSchoolingData()
     }
 
 
     fun schoolListResponse() {
 
-        mainViewModel.responseserver?.observe(requireActivity(), Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    AppUtils.hideLoader()
-                    it.data.let { it1 ->
-                        if (it1?.status == true) {
-                            schoolList = ArrayList<UniversityList>()
-                            schoolList = it1.data.universityList
-                            sororitiesList = ArrayList<SororitiesList>()
-                            sororitiesList = it1.data.sororitiesList
-                            fraternitiesList = ArrayList<FraternitiesList>()
-                            fraternitiesList = it1.data.fraternitiesList
+        (activity as OnBoardingActivity?)?.userRegister?.school_dataResponse?.observe(
+            requireActivity(),
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { it1 ->
+                            if (it1?.status == true) {
+                                Log.d("TAG@123", it.toString())
+                                schoolList = ArrayList<UniversityList>()
+                                schoolList = it1.data.universityList
+                                sororitiesList = ArrayList<SororitiesList>()
+                                sororitiesList = it1.data.sororitiesList
+                                fraternitiesList = ArrayList<FraternitiesList>()
+                                fraternitiesList = it1.data.fraternitiesList
+                                setAdapterData()
 
+                            } else {
 
-                            setAdapterData()
-                            //sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
-                        } else {
-
+                            }
                         }
                     }
-                }
-                Status.LOADING -> {
-                    AppUtils.showLoader(requireActivity())
-                }
-                Status.ERROR -> {
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireActivity())
+                    }
+                    Status.ERROR -> {
 
+                    }
                 }
-            }
-        })
+            })
 
 
     }
 
     private fun setAdapterData() {
-        val schoolAdapter = CommunityAdapter(requireActivity(), R.layout.customautotextview_layout, schoolList!!)
+        val schoolAdapter =
+            CommunityAdapter(requireActivity(), R.layout.customautotextview_layout, schoolList!!)
         schoolAct_Search?.threshold = 1
         schoolAct_Search?.setAdapter(schoolAdapter)
         schoolAct_Search?.setOnItemClickListener { parent, _, position, _ ->
@@ -144,13 +179,18 @@ class BlankFragment4 : Fragment() {
         }
 
 
-      /*  val adapter =  CommunityAdapter(requireActivity(), R.layout.customautotextview_layout, schoolList!!)
-        fraternity_autocomplte?.threshold=1
+        val adapter = FraternitiesAdapter(
+            requireActivity(),
+            R.layout.customautotextview_layout,
+            fraternitiesList!!
+        )
+        fraternity_autocomplte?.threshold = 1
         fraternity_autocomplte?.setAdapter(adapter)
-        fraternity_autocomplte?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(requireActivity(),adapter.getItem(i).toString(),Toast.LENGTH_LONG).show()
+        fraternity_autocomplte?.setOnItemClickListener { parent, _, position, _ ->
+            val city = adapter.getItem(position) as FraternitiesList?
+            fraternity_autocomplte?.setText(city?.name)
+        }
 
-        }*/
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

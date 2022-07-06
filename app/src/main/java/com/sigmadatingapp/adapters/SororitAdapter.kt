@@ -7,20 +7,25 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.sigmadatingapp.R
-import com.sigmadatingapp.model.communityModel.UniversityList
+import com.sigmadatingapp.model.communityModel.SororitiesList
 
 
-class CommunityAdapter (private val mContext: Context, private val mLayoutResourceId: Int, cities: List<UniversityList>) :
-    ArrayAdapter<UniversityList>(mContext, mLayoutResourceId, cities)
-{
-    private val schoolList: MutableList<UniversityList> = ArrayList(cities)
+class SororitAdapter(
+    private val mContext: Context,
+    private val mLayoutResourceId: Int,
+    cities: List<SororitiesList>
+) :
+    ArrayAdapter<SororitiesList>(mContext, mLayoutResourceId, cities) {
+    private val schoolList: MutableList<SororitiesList> = ArrayList(cities)
 
     override fun getCount(): Int {
         return schoolList.size
     }
-    override fun getItem(position: Int): UniversityList {
+
+    override fun getItem(position: Int): SororitiesList {
         return schoolList[position]
     }
+
     override fun getItemId(position: Int): Long {
         return schoolList[position].id.toLong()
     }
@@ -32,8 +37,9 @@ class CommunityAdapter (private val mContext: Context, private val mLayoutResour
             convertView = inflater.inflate(mLayoutResourceId, parent, false)
         }
         try {
-            val schoolList: UniversityList = getItem(position)
-            val schoolListAutoCompleteView = convertView!!.findViewById<View>(R.id.autoCompleteTextView) as TextView
+            val schoolList: SororitiesList = getItem(position)
+            val schoolListAutoCompleteView =
+                convertView!!.findViewById<View>(R.id.autoCompleteTextView) as TextView
             schoolListAutoCompleteView.text = schoolList.name
         } catch (e: Exception) {
             e.printStackTrace()

@@ -69,10 +69,10 @@ class Login_Activity : AppCompatActivity() {
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: SignInButton
     lateinit var gso: GoogleSignInOptions
-    lateinit var textforgot:TextView
+    lateinit var textforgot: TextView
 
-     var editText_otp: EditText?=null
-     var verfie_otp: Button?=null
+    var editText_otp: EditText? = null
+    var verfie_otp: Button? = null
 
 
     private var disposableObserver: SingleObserver<Loginmodel>? = null
@@ -87,14 +87,15 @@ class Login_Activity : AppCompatActivity() {
             .requestEmail()
             .build()
         signInButton = findViewById(R.id.sign_in_button)
+        verfie_otp = findViewById(R.id.verfie_otp)
         signInButton.setSize(SignInButton.SIZE_STANDARD)
         signInButton.setOnClickListener {
             signIn()
         }
 
-textforgot.setOnClickListener {
-    openforgotPasswordDialog()
-}
+        textforgot.setOnClickListener {
+            openforgotPasswordDialog()
+        }
         // Set the initial permissions to request from the user while logging in
 
 
@@ -120,26 +121,24 @@ textforgot.setOnClickListener {
     }
 
     private fun openforgotPasswordDialog() {
-        val dialog = BottomSheetDialog(this,R.style.DialogStyle)
-
-        // on below line we are inflating a layout file which we have created.
+        val dialog = BottomSheetDialog(this, R.style.DialogStyle)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_forgot, null)
         val btnSubmit = view.findViewById<Button>(R.id.button_forgot_submit)
-        val editTextEmail=view.findViewById<EditText>(R.id.editText_forgot_email)
+        val editTextEmail = view.findViewById<EditText>(R.id.editText_forgot_email)
         btnSubmit.setOnClickListener {
             if (AppUtils.isValidEmail(editTextEmail.text.toString())) {
                 sharedPreferencesStorage.setValue(AppConstants.email, editTextEmail.text.toString())
                 forgotPasswordCall(dialog)
-            }
-            else {
+                mainViewModel.User_forgot()
+            } else {
                 editTextEmail.error = "Invalid Email Address"
             }
             //dialog.dismiss()
         }
         dialog.setCanceledOnTouchOutside(true)
         dialog.setOnDismissListener {
-           dialog.dismiss()
-            Log.d("TAG@123","DISMISSED")
+            dialog.dismiss()
+            Log.d("TAG@123", "DISMISSED")
         }
 
         dialog.setCancelable(true)
@@ -169,8 +168,13 @@ textforgot.setOnClickListener {
         editText_password = findViewById(R.id.editText_password)
         edittext_phone_no = findViewById(R.id.edittext_phone_no)
         mLoginButton = findViewById(R.id.login_button);
-        textforgot=findViewById(R.id.textView2)
-        editText_otp=findViewById(R.id.editText_otp)
+        textforgot = findViewById(R.id.textView2)
+        editText_otp = findViewById(R.id.editText_otp)
+
+        login()
+        sent_otp()
+        verifly_otp()
+
     }
 
 
@@ -213,15 +217,7 @@ textforgot.setOnClickListener {
 
         startActivity(Intent(this, OnBoardingActivity::class.java))
         finish()
-       /* AppUtils.showLoader(this)
-        Handler().postDelayed(
-            {
-                AppUtils.hideLoader()
 
-
-            },
-            500
-        )*/
     }
 
 
@@ -249,10 +245,11 @@ textforgot.setOnClickListener {
                         country_spinner.selectedCountryCodeWithPlus
                     )
 
-                    Log.d("TAG@123", sharedPreferencesStorage.setValue(
-                        AppConstants.USER_COUNTRY_CODE,
-                        country_spinner.selectedCountryCodeWithPlus
-                    ).toString()
+                    Log.d(
+                        "TAG@123", sharedPreferencesStorage.setValue(
+                            AppConstants.USER_COUNTRY_CODE,
+                            country_spinner.selectedCountryCodeWithPlus
+                        ).toString()
                     )
                     mainViewModel.login_phone()
                 }
@@ -262,7 +259,7 @@ textforgot.setOnClickListener {
                     return
                 }
                 if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                    editText_password.error = "Password Length Must be of 6-8"
+                    editText_password.error = "Password Length Must be of 5-8"
                     return
                 }
 
@@ -291,7 +288,7 @@ textforgot.setOnClickListener {
                         if (res?.status == true) {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
-                            Log.d("TAG@123",res.user.id)
+                            Log.d("TAG@123", res.user.id)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
                             startActivity(Intent(this, Home::class.java))
@@ -315,6 +312,7 @@ textforgot.setOnClickListener {
 
 
     fun forgotPasswordCall(dialog: BottomSheetDialog) {
+
         mainViewModel.responsForgot?.observe(this, Observer {
 
             when (it.status) {
@@ -323,11 +321,12 @@ textforgot.setOnClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             dialog.dismiss()
-                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                .show()
 
                         } else {
-Log.d("TAG123","tags")
-                           // Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
+                            Log.d("TAG123", "tags")
+                            // Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -380,7 +379,6 @@ Log.d("TAG123","tags")
     }
 
 
-
     fun sent_otp() {
         mainViewModel.sent_otp?.observe(this, Observer {
             when (it.status) {
@@ -389,11 +387,12 @@ Log.d("TAG123","tags")
                     it.data.let { res ->
                         if (res?.status == true) {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
-                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG).show()
-                            phone_number_layout.visibility=View.GONE
-                            button_login_email_phone_both.visibility=View.GONE
-                            verfie_otp?.visibility=View.VISIBLE
-                            editText_otp?.visibility=View.VISIBLE
+                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                .show()
+                            phone_number_layout.visibility = View.GONE
+                            button_login_email_phone_both.visibility = View.GONE
+                            verfie_otp?.visibility = View.VISIBLE
+                            editText_otp?.visibility = View.VISIBLE
 
                         } else {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
@@ -413,7 +412,7 @@ Log.d("TAG123","tags")
     }
 
 
-   fun verifly_otp() {
+    fun verifly_otp() {
         mainViewModel.verifly_otp?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ object AppUtils {
         }
 
         fun showLoader(context: Context?) {
+            context?.javaClass?.name?.let { Log.d("TAG@123", it) }
             val builder = AlertDialog.Builder(context,R.style.NewDialog)
             val inflater = LayoutInflater.from(context)
             val view: View = inflater.inflate(R.layout.custom_loader, null, false)

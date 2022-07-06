@@ -43,7 +43,6 @@
             android:text="@string/tell_us"
             android:textColor="@color/light_text_color"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,70 +60,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-      <!--  <Button
-            android:id="@+id/rb_women"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/radius_border_bg"
-            android:drawablePadding="10dp"
-            android:gravity="center_horizontal"
-            android:hint="WOMAN"
-            android:letterSpacing="0.10"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:textColorHint="@color/hint_text_color"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/guideline3"
 
-            app:layout_constraintStart_toEndOf="@id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
-
-       <!-- <Button
-            android:id="@+id/rb_men"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/radius_border_bg"
-            android:drawablePadding="10dp"
-            android:gravity="center_horizontal"
-            android:hint="MEN"
-            android:letterSpacing="0.10"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:textColorHint="@color/hint_text_color"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/guideline3"
-
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/rb_women" />
-        <Button
-            android:id="@+id/more_btn"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/radius_border_bg"
-            android:drawablePadding="10dp"
-            android:gravity="center_horizontal"
-            android:hint="MORE"
-            android:letterSpacing="0.10"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:textColorHint="@color/hint_text_color"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/guideline3"
-
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/rb_men" />-->
  <RadioGroup
     android:id="@+id/rg"
     android:layout_width="0dp"
@@ -134,7 +70,6 @@
     app:layout_constraintStart_toEndOf="@id/guideline2"
     android:gravity="center_horizontal"
     app:layout_constraintHorizontal_bias="0.058"
-
     android:orientation="vertical"
     app:layout_constraintTop_toBottomOf="@+id/textView5"
     android:layout_height="wrap_content">
@@ -214,13 +149,12 @@
             android:textAllCaps="true"
             android:layout_marginBottom="6dp"
             android:textColor="@color/hint_text_color"
-
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.616"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/rg" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

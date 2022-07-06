@@ -32,6 +32,7 @@ import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.sigmadatingapp.R
+import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.SharedPreferencesStorage
 import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.views.Home
@@ -77,7 +78,8 @@ class Profile_Photo : Fragment() {
             // startActivity(Intent(context, Home::class.java))
             //(activity as OnBoardingActivity?)?.finish
             if (AppUtils.isNetworkInterfaceAvailable(requireContext())) {
-                Register()
+
+                (activity as OnBoardingActivity?)?.userRegister?.Register()
             }
 
         }
@@ -87,7 +89,7 @@ class Profile_Photo : Fragment() {
             RatePopup()
         }
 
-
+        Register()
         return view;
     }
 
@@ -287,6 +289,9 @@ class Profile_Photo : Fragment() {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
+
+                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.IS_AUTHENTICATED, true)
+                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.USER_ID, res.user.id)
                                 startActivity(Intent(context, Home::class.java))
                                 (activity as OnBoardingActivity?)?.finish()
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)

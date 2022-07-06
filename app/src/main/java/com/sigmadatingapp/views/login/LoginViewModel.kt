@@ -23,30 +23,27 @@ class LoginViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferencesStorage
 ) : ViewModel() {
 
-   // private val _res = MutableLiveData<Resource<Loginmodel>>()
-    private val _forgotResponse = MutableLiveData<Resource<Forgotpassword>>()
+
+
     var _res: MutableLiveData<Resource<Loginmodel>>? = null
 
     var sent_otp: MutableLiveData<Resource<Loginmodel>>? = null
 
     var verifly_otp: MutableLiveData<Resource<Loginmodel>>? = null
 
-    var responsForgot : LiveData<Resource<Forgotpassword>>? = null
-        get() = _forgotResponse
+    var responsForgot : MutableLiveData<Resource<Forgotpassword>>? = null
+
 
 
     init {
-        User_1_login()
-        User_forgot()
-    }
-
-
-    fun User_login(){
-
         _res = MutableLiveData<Resource<Loginmodel>>()
         sent_otp = MutableLiveData<Resource<Loginmodel>>()
         verifly_otp = MutableLiveData<Resource<Loginmodel>>()
+        responsForgot = MutableLiveData<Resource<Forgotpassword>>()
     }
+
+
+
 
 
     fun User_1_login() = viewModelScope.launch {
@@ -105,8 +102,8 @@ class LoginViewModel @Inject constructor(
 
 
     }
-    private fun User_forgot()  = viewModelScope.launch {
-        _forgotResponse.postValue(Resource.loading(null))
+     fun User_forgot()  = viewModelScope.launch {
+         responsForgot?.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
         jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
@@ -114,9 +111,9 @@ class LoginViewModel @Inject constructor(
         Log.d("TAG@123", jsonObject.toString())
         mainRepository.user_forgotpass(jsonObject).let {
             if (it.isSuccessful){
-                _forgotResponse.postValue(Resource.success(it.body()))
+                responsForgot?.postValue(Resource.success(it.body()))
             }else{
-                _forgotResponse.postValue(Resource.error(it.errorBody().toString(), null))
+                responsForgot?.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }

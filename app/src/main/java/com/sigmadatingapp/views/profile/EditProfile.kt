@@ -8,9 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
+import com.sigmadatingapp.adapters.Edit_Profile_Adapter
+import com.sigmadatingapp.adapters.Profile_Adapter
 import com.sigmadatingapp.databinding.FragmentEditProfileBinding
+import com.sigmadatingapp.model.EditProfiledata
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.views.Home
@@ -25,9 +29,10 @@ class EditProfile : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var _binding:FragmentEditProfileBinding?=null
+    private var _binding: FragmentEditProfileBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var photoAdapter: Edit_Profile_Adapter
+    private var dataList = mutableListOf<EditProfiledata>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,16 +41,37 @@ class EditProfile : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        _binding= FragmentEditProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
+
+
+        //add data
+        for (i in 1..2) {
+            dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/african-american-woman-talking-mobile-phone-black-people-50437769.jpg"))
+            dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beautiful-young-woman-maine-usa-close-up-portrait-native-108644385.jpg"))
+           // dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beauty-black-skin-woman-african-ethnic-female-face-young-african-american-model-long-afro-hair-smiling-model-isolated-163819588.jpg"))
+           // dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/african-american-woman-praying-african-american-woman-praying-god-seeking-prayer-213590092.jpg"))
+        }
+        _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
+        photoAdapter = Edit_Profile_Adapter(requireContext())
+        _binding?.updateImageView?.adapter = photoAdapter
+        photoAdapter.setDataList(dataList)
+
         _binding?.imageView2?.setOnClickListener {
             (activity as Home).onBackPressed()
         }
 
         subscribe_Login_User_details()
-        (activity as Home).homeviewmodel.get_Login_User_details((activity as Home).sharedPreferencesStorage.getString(
-            AppConstants.USER_ID))
+        (activity as Home).homeviewmodel.get_Login_User_details(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
         return binding.root
     }
 
@@ -63,22 +89,23 @@ class EditProfile : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding=null
+        _binding = null
     }
 
 
-    fun subscribe_Login_User_details(){
+    fun subscribe_Login_User_details() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Log.d("TAG@123",res.toString())
+                            Log.d("TAG@123", "1311" + res.toString())
 
 
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
                         }
                     }
                 }
@@ -90,9 +117,6 @@ class EditProfile : Fragment() {
                 }
             }
         })
-
-
-
 
 
     }

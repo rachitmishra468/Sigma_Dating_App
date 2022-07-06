@@ -30,7 +30,7 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
         val jsonObject = JsonObject()
         Log.d("TAG@123",id)
         jsonObject.addProperty("user_id", id)
-        Log.d("TAG@123", jsonObject.toString())
+        Log.d("TAG@123", "22 : -"+jsonObject.toString())
         mainRepository.get_login_user_data(jsonObject).let {
             if (it.isSuccessful) {
                 get_user_data.postValue(Resource.success(it.body()))
@@ -48,7 +48,7 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
         jsonObject.addProperty("id", id)
         jsonObject.addProperty("password", password)
         jsonObject.addProperty("password_confirm", password_confirm)
-        Log.d("TAG@123", jsonObject.toString())
+        Log.d("TAG@123", "-- "+jsonObject.toString())
         mainRepository.change_password(jsonObject).let {
             if (it.isSuccessful) {
                 change_password.postValue(Resource.success(it.body()))

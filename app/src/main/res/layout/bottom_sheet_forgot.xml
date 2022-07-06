@@ -10,6 +10,21 @@
     android:orientation="vertical"
     android:layout_margin="12dp"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forget Password"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="24dp"
+        />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_email_forgot"
         android:layout_width="match_parent"
@@ -28,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
-            android:hint="@string/email_text"
+            android:hint="Enter Your Email "
             android:inputType="textEmailAddress"
             android:letterSpacing="0.10"
             android:textColorHint="@color/hint_text_color"
