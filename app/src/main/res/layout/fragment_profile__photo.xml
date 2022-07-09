@@ -4,13 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_with_opecity"
     android:id="@+id/constraint_f1"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/imageView4"
     app:layout_constraintVertical_weight="6">
 
     <TextView
@@ -37,71 +36,40 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="54dp"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_profile"
-            android:layout_width="230dp"
-            android:elevation="8dp"
-            android:layout_height="230dp"
-            android:layout_gravity="top|center_horizontal"
+        <FrameLayout
 
-            android:src="@drawable/dummy_imf">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        </de.hdodenhof.circleimageview.CircleImageView>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_choose_dummy"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
-            android:layout_gravity="bottom|right"
-            android:visibility="gone"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_baseline_camera_alt_24"
-
-            android:tint="@color/blue" />
-    </FrameLayout>
-
-    <!--<FrameLayout
-        android:id="@+id/profile_card"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:layout_width="250dp"
-        android:layout_height="250dp">
-        <androidx.cardview.widget.CardView
-            app:cardUseCompatPadding="false"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_margin="10dp"
-            app:cardCornerRadius="90dp"
-            app:cardElevation="10sp"
-            >
-
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:src="@drawable/dummy_imf">
-
-            </ImageView>
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:layout_gravity="center"
+                app:civ_border_color="@color/hint_text_color"
+                app:civ_border_width="2dp"
+                android:src="@drawable/profile_blue"/>
 
             <ImageView
                 android:id="@+id/img_choose_dummy"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/folder"></ImageView>
-        </androidx.cardview.widget.CardView>
+                android:layout_gravity="center|bottom"
+                android:layout_marginLeft="70dp"
+                app:srcCompat="@drawable/icon_folder"
+                />
+        </FrameLayout>
 
 
-    </FrameLayout>-->
+
+    </FrameLayout>
+
 
 
     <CheckBox

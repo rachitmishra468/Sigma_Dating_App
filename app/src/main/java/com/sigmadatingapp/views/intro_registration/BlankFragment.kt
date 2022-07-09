@@ -32,9 +32,9 @@ class BlankFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var continue_first: Button?=null
-    private var editName: EditText? = null
-    var editlastName: EditText? = null
+    lateinit var continue_first: Button
+    lateinit var editName: EditText
+    lateinit var editlastName: EditText
     lateinit var constraint_f1: ConstraintLayout
     private var binding: AboutYourselfLayoutBinding? = null
 
@@ -56,21 +56,19 @@ class BlankFragment : Fragment() {
         binding = AboutYourselfLayoutBinding.inflate(inflater, container, false)
         continue_first = binding!!.root.findViewById(R.id.continue_first)
         constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
-        editlastName=binding!!.root.findViewById(R.id.et_lastname)
         editName=binding!!.root.findViewById(R.id.editText_name)
-        editName?.addTextChangedListener(textWatcher)
-        editlastName?.addTextChangedListener(textWatcher)
-        continue_first!!.setOnClickListener {
-            val fnmame = editName?.text.toString()
-            val lastname = editlastName?.text.toString()
+        editlastName=binding!!.root.findViewById(R.id.et_lastname)
+
+        continue_first.setOnClickListener {
 
             if (AppUtils.isNetworkInterfaceAvailable(requireActivity())) {
-                if (AppUtils.checkValidationOnFisrtStep(requireActivity(), constraint_f1, fnmame, lastname)) {
+                if (AppUtils.checkValidationOnFisrtStep(requireActivity(), constraint_f1, editName.text.toString(), editlastName.text.toString())) {
                     AppUtils.hideSoftKeyboard(requireActivity(), constraint_f1)
-                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.fisrtname, fnmame)
-                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Lastname, lastname)
+                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.fisrtname, editName.text.toString())
+                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.Lastname, editlastName.text.toString())
                     (activity as OnBoardingActivity?)?.setCurrentItem(1, false)
                 }
+
 
             } else {
                 Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()

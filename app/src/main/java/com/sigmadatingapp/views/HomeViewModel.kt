@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
 import com.sigmadatingapp.model.Loginmodel
+import com.sigmadatingapp.model.SchoolCommunityResponse
 import com.sigmadatingapp.repository.MainRepository
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.storage.SharedPreferencesStorage
@@ -19,10 +20,18 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
 
     lateinit var get_user_data: MutableLiveData<Resource<Loginmodel>>
     lateinit var change_password: MutableLiveData<Resource<Loginmodel>>
+    lateinit var upload_images: MutableLiveData<Resource<Loginmodel>>
+    lateinit var delete_images: MutableLiveData<Resource<Loginmodel>>
+    lateinit var school_dataResponse : MutableLiveData<Resource<SchoolCommunityResponse>>
+    lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
 
     init {
         get_user_data= MutableLiveData<Resource<Loginmodel>>()
         change_password=MutableLiveData<Resource<Loginmodel>>()
+        upload_images=MutableLiveData<Resource<Loginmodel>>()
+        delete_images=MutableLiveData<Resource<Loginmodel>>()
+        school_dataResponse= MutableLiveData<Resource<SchoolCommunityResponse>>()
+        update_profile= MutableLiveData<Resource<Loginmodel>>()
     }
 
     fun get_Login_User_details(id:String) = viewModelScope.launch {
@@ -58,5 +67,74 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
+
+
+    fun User_upload_images(id:String,img:String) = viewModelScope.launch {
+        upload_images.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        Log.d("TAG@123",id)
+        jsonObject.addProperty("user_id", id)
+        jsonObject.addProperty("upload_image", img)
+
+        Log.d("TAG@123", "-- "+jsonObject.toString())
+        mainRepository.upload_images(jsonObject).let {
+            if (it.isSuccessful) {
+                upload_images.postValue(Resource.success(it.body()))
+            } else {
+                upload_images.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+    fun User_delete_images(id:String,img:String) = viewModelScope.launch {
+        delete_images.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        Log.d("TAG@123",id)
+        jsonObject.addProperty("user_id", id)
+        jsonObject.addProperty("photo", img)
+
+        Log.d("TAG@123", "-- "+jsonObject.toString())
+        mainRepository.delete_images(jsonObject).let {
+            if (it.isSuccessful) {
+                delete_images.postValue(Resource.success(it.body()))
+            } else {
+                delete_images.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+    fun getSchoolingData()  = viewModelScope.launch {
+        school_dataResponse.postValue(Resource.loading(null))
+        mainRepository.ListSchoolFeternity().let {
+            if (it.isSuccessful){
+                school_dataResponse.postValue(Resource.success(it.body()))
+            }else{
+                school_dataResponse.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+    fun update_profile(id:String, university:String,community :String,interests:String,about:String) = viewModelScope.launch {
+        update_profile.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+
+        jsonObject.addProperty("user_id", id)
+        jsonObject.addProperty("university", university)
+        jsonObject.addProperty("community", community)
+        jsonObject.addProperty("interests", interests)
+        jsonObject.addProperty("about", about)
+
+        Log.d("TAG@123",jsonObject.toString())
+        mainRepository.Update_profile(jsonObject).let {
+            if (it.isSuccessful){
+                update_profile.postValue(Resource.success(it.body()))
+            }else{
+                update_profile.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
 
 }

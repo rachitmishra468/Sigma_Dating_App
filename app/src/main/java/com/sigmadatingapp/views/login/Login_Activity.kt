@@ -325,8 +325,9 @@ class Login_Activity : AppCompatActivity() {
                                 .show()
 
                         } else {
+                            dialog.dismiss()
                             Log.d("TAG123", "tags")
-                            // Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
+                             Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

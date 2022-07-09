@@ -1,5 +1,7 @@
 package com.sigmadatingapp.views
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +14,9 @@ import android.util.Log
 import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
 import com.sigmadatingapp.adapters.ProfileMatch
 import android.os.Handler
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
@@ -22,6 +26,10 @@ import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentFirstBinding
 import com.sigmadatingapp.model.EditProfiledata
 import de.hdodenhof.circleimageview.CircleImageView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
+import java.util.HashMap
 
 
 class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
@@ -39,6 +47,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var sigma_list: ImageView
     lateinit var editProfile: CircleImageView
     lateinit var notificationIcon: ConstraintLayout
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        Logoutuser()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,4 +167,20 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     override fun onCategoryClick(position: Profile?) {
         findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
     }
+
+    private fun Logoutuser() {
+        val dialog = Dialog(requireContext(), R.style.AppBaseTheme)
+        dialog.setContentView(R.layout.full_screen_dialog)
+        val logout = dialog.findViewById<Button>(R.id.logout)
+        val cancle = dialog.findViewById<Button>(R.id.cancel)
+        logout.setOnClickListener {
+            dialog.dismiss()
+        }
+        cancle.setOnClickListener {
+
+            (activity as Home).onBackPressed()
+        }
+        dialog.show()
+    }
+
 }

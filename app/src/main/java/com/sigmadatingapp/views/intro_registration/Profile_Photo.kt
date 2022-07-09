@@ -1,29 +1,32 @@
 package com.sigmadatingapp.views.intro_registration
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -38,6 +41,8 @@ import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.views.Home
 import com.sigmadatingapp.views.login.LoginViewModel
 import de.hdodenhof.circleimageview.CircleImageView
+import org.jetbrains.anko.doAsync
+import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 
@@ -49,12 +54,16 @@ class Profile_Photo : Fragment() {
     //Our constants
     private val OPERATION_CAPTURE_PHOTO = 1
     private val OPERATION_CHOOSE_PHOTO = 2
+    private val REQUEST_PERMISSION = 100
     private var param1: String? = null
     private var param2: String? = null
-    private var profile_continue: Button? = null
+    lateinit var profile_continue: Button
     private var imageProfile: CircleImageView? = null
     private var mUri: Uri? = null
-    var img_choose_dummy: CircleImageView? = null
+    lateinit var img_choose_dummy: ImageView
+    lateinit var tc_check: CheckBox
+    lateinit var constraint_f1: ConstraintLayout
+    lateinit var bitmap_string: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -72,31 +81,50 @@ class Profile_Photo : Fragment() {
         var view = inflater.inflate(R.layout.fragment_profile__photo, container, false)
 
         profile_continue = view.findViewById(R.id.profile_continue)
+        img_choose_dummy = view.findViewById(R.id.img_choose_dummy)
+        tc_check = view.findViewById(R.id.tc_check)
+        constraint_f1 = view.findViewById(R.id.constraint_f1)
         imageProfile = view.findViewById(R.id.img_profile)
-        profile_continue?.setOnClickListener {
-
-            // startActivity(Intent(context, Home::class.java))
-            //(activity as OnBoardingActivity?)?.finish
+        bitmap_string = ""
+        profile_continue.setOnClickListener {
             if (AppUtils.isNetworkInterfaceAvailable(requireContext())) {
 
-                (activity as OnBoardingActivity?)?.userRegister?.Register()
+                if (tc_check.isChecked) {
+                    if (bitmap_string.equals("")) {
+                        AppUtils.showErrorSnackBar(
+                            requireContext(),
+                            constraint_f1,
+                            "Please Select Profile Photo "
+                        )
+                    } else {
+                        (activity as OnBoardingActivity?)?.userRegister?.Register(bitmap_string)
+                    }
+
+                } else {
+                    AppUtils.showErrorSnackBar(
+                        requireContext(),
+                        constraint_f1,
+                        "Please check the box to continue. "
+                    )
+                }
+
             }
 
         }
 
-        imageProfile?.setOnClickListener {
+        img_choose_dummy.setOnClickListener {
 
-            RatePopup()
+            Popup()
         }
 
         Register()
         return view;
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
-    private fun RatePopup() {
+
+    private fun Popup() {
         val view = layoutInflater.inflate(R.layout.selectcamera_gallery_layout, null)
-        val dialog = activity?.let { BottomSheetDialog(requireActivity(),R.style.DialogStyle) }!!
+        val dialog = activity?.let { BottomSheetDialog(requireActivity(), R.style.DialogStyle) }!!
         dialog.setContentView(view)
         dialog.show()
         val lp = WindowManager.LayoutParams()
@@ -107,9 +135,8 @@ class Profile_Photo : Fragment() {
         dialog.window!!.attributes.windowAnimations = R.style.DialogStyle
         dialog.show()
         dialog.setCanceledOnTouchOutside(true)
-        img_choose_dummy = dialog.findViewById<CircleImageView>(R.id.img_choose_dummy)
-        val button_camera = dialog.findViewById<CircleImageView>(R.id.button_camera)
-        val button_gallery = dialog.findViewById<CircleImageView>(R.id.button_gallery)
+        val button_camera = dialog.findViewById<ImageView>(R.id.button_camera)
+        val button_gallery = dialog.findViewById<ImageView>(R.id.button_gallery)
 
 
         button_camera?.setOnClickListener {
@@ -122,7 +149,6 @@ class Profile_Photo : Fragment() {
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
             if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
-                //Requests permissions to be granted to this application at runtime
                 ActivityCompat.requestPermissions(
                     requireActivity(),
                     arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
@@ -178,12 +204,31 @@ class Profile_Photo : Fragment() {
         if (imagePath != null) {
             val bitmap = BitmapFactory.decodeFile(imagePath)
             imageProfile?.setImageBitmap(bitmap)
-            if (bitmap != null) {
-                img_choose_dummy?.visibility = View.GONE
-            }
+            val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
+            var bitmapl: Bitmap = drawable.getBitmap()
+            bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);
+            convertBitmapToBase64(bitmapl)
 
         } else {
             show("ImagePath is null")
+        }
+    }
+
+
+    fun convertBitmapToBase64(bm: Bitmap) {
+        val progressDialog = ProgressDialog(context)
+        progressDialog.setTitle("")
+        progressDialog.setMessage("please wait ...")
+        progressDialog.show()
+        doAsync {
+            var encoded = ""
+            val baos = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.PNG, 0, baos)
+            val b = baos.toByteArray()
+            encoded = Base64.encodeToString(b, Base64.DEFAULT)
+            bitmap_string=encoded
+            Log.d("TAG@123", "  images  --------- " + encoded)
+            progressDialog.dismiss()
         }
     }
 
@@ -205,7 +250,6 @@ class Profile_Photo : Fragment() {
     private fun handleImageOnKitkat(data: Intent?) {
         var imagePath: String? = null
         val uri = data!!.data
-        //DocumentsContract defines the contract between a documents provider and the platform.
         if (DocumentsContract.isDocumentUri(requireActivity(), uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             if ("com.android.providers.media.documents" == uri?.authority) {
@@ -242,7 +286,13 @@ class Profile_Photo : Fragment() {
                 ) {
                     openGallery()
                 } else {
-                    show("Unfortunately You are Denied Permission to Perform this Operation.")
+
+                    AppUtils.showErrorSnackBar(
+                        requireContext(),
+                        constraint_f1,
+                        "Unfortunately You are Denied Permission to Perform this Operation."
+                    )
+
                 }
         }
     }
@@ -259,22 +309,21 @@ class Profile_Photo : Fragment() {
                     val bitmap = BitmapFactory.decodeStream(
                         requireActivity().getContentResolver().openInputStream(mUri!!)
                     )
-                    img_choose_dummy?.let {
-                        if (bitmap!=null){
-                            it.visibility=View.GONE
-                        }
-                        else{
-                            it.visibility=View.VISIBLE
-                        }
-                    }
 
                     imageProfile!!.setImageBitmap(bitmap)
+                    val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
+                    var bitmapl: Bitmap = drawable.getBitmap()
+                    bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);
+                    convertBitmapToBase64(bitmapl)
+
 
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= 19) {
-                        handleImageOnKitkat(data)
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (Build.VERSION.SDK_INT >= 19) {
+                            handleImageOnKitkat(data)
+                        }
                     }
                 }
         }
@@ -290,8 +339,14 @@ class Profile_Photo : Fragment() {
                         it.data.let { res ->
                             if (res?.status == true) {
 
-                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.IS_AUTHENTICATED, true)
-                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.USER_ID, res.user.id)
+                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.IS_AUTHENTICATED,
+                                    true
+                                )
+                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.USER_ID,
+                                    res.user.id
+                                )
                                 startActivity(Intent(context, Home::class.java))
                                 (activity as OnBoardingActivity?)?.finish()
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)

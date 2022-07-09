@@ -28,7 +28,7 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
        // Register()
     }
 
-    fun Register() = viewModelScope.launch {
+    fun Register(bitmap:String) = viewModelScope.launch {
         registration?.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
@@ -63,20 +63,17 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
         )
         jsonObject.addProperty("dob", sharedPreferencesStorage.getString(AppConstants.Dob))
         jsonObject.addProperty("gender", sharedPreferencesStorage.getString(AppConstants.gender))
-
-        jsonObject.addProperty("university", "phoneNumber")
-        jsonObject.addProperty("community", "phoneNumber")
-        jsonObject.addProperty("interests", "phoneNumber")
+        jsonObject.addProperty("university", sharedPreferencesStorage.getString(AppConstants.university))
+        jsonObject.addProperty("community", sharedPreferencesStorage.getString(AppConstants.community))
+        jsonObject.addProperty("interests", "")
         jsonObject.addProperty("interested_in", "")
-        jsonObject.addProperty("facebookId", "phoneNumber")
-        jsonObject.addProperty("appleId", "phoneNumber")
-        jsonObject.addProperty("isSocialLogin", "phoneNumber")
-        jsonObject.addProperty("upload_image", "")
-        jsonObject.addProperty("device_token", "phoneNumber")
+        jsonObject.addProperty("facebookId", "")
+        jsonObject.addProperty("appleId", "")
+        jsonObject.addProperty("isSocialLogin", "")
+        jsonObject.addProperty("upload_image", bitmap)
+        jsonObject.addProperty("device_token", "")
         jsonObject.addProperty("device_type", "Android")
-
         Log.d("TAG@123", "414"+jsonObject.toString())
-
         mainRepository.user_register(jsonObject).let {
             if (it.isSuccessful) {
                 registration?.postValue(Resource.success(it.body()))

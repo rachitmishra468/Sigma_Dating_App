@@ -37,4 +37,18 @@ interface ApiService {
 
     @GET("common/listschoolscommunity")
     suspend fun listSchoolFeternity():Response<SchoolCommunityResponse>
+
+
+    @POST("users/uploadphoto")
+    suspend fun upload_images(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
+
+    @POST("users/deletephoto")
+    suspend fun delete_images(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
+
+    @POST("users/editprofile")
+    suspend fun Update_profile(@Body jsonObject: JsonObject): Response<Loginmodel>
 }

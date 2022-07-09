@@ -32,12 +32,7 @@ public class AppConstants {
 
     public static final String Gender="Gender";
     public static final String Dob="DOB";
-    public static final String userSchoolName="school_name";
-
-
-    public static final String community="Community";
     public static final String device_token="Device_token";
-
     public static final String email="Email";
     public static final String facebookId="facebookId";
     public static final String gender="gender";
@@ -51,5 +46,6 @@ public class AppConstants {
 
     public static final String phone="phone";
     public static final String university="university";
+    public static final String community="Community";
 
 }

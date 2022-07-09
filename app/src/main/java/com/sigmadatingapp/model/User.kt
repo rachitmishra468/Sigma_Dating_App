@@ -12,8 +12,13 @@ data class User(
     val upload_image:String,
     val location:String,
     val phone:String,
+    val university:String,
+    val community:String,
+    val interests:String,
+    var photos:ArrayList<String> = arrayListOf()
 
 
 
 
     )
+

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.sigmadatingapp.R
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.utilities.AppUtils
@@ -23,6 +24,7 @@ class Password : Fragment() {
 
     lateinit var editText_password: EditText
     lateinit var editText_password_confirm: EditText
+    lateinit var constraint_f1:ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,18 +42,33 @@ class Password : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.fragment_password, container, false)
-        editText_password = view.findViewById(R.id.editText_password_confirm)
+        editText_password = view.findViewById(R.id.editText_password)
         editText_password_confirm = view.findViewById(R.id.editText_password_confirm)
+        constraint_f1= view.findViewById(R.id.constraint_f1)
         create_password = view.findViewById(R.id.create_password)
         create_password?.setOnClickListener {
 
-            if (!AppUtils.isValid_password(editText_password_confirm.text.toString())) {
-
-                editText_password_confirm.error = "Password Length Must be of 6-8"
-
-            } else if (!AppUtils.isValid_password(editText_password.text.toString())) {
+            if (!AppUtils.isValid_password(editText_password.text.toString())) {
                 editText_password.error = "Password Length Must be of 6-8"
-
+                AppUtils.showErrorSnackBar(
+                    requireContext(),
+                    constraint_f1,
+                    "Password Length Must be of 6-8"
+                )
+            } else if (!AppUtils.isValid_password(editText_password_confirm.text.toString())) {
+                editText_password_confirm.error = "Password Length Must be of 6-8"
+                AppUtils.showErrorSnackBar(
+                    requireContext(),
+                    constraint_f1,
+                    "Password Length Must be of 6-8"
+                )
+            }else if (!editText_password_confirm.text.toString().equals(editText_password.text.toString())) {
+                editText_password_confirm.error = "Password does not Match"
+                AppUtils.showErrorSnackBar(
+                    requireContext(),
+                    constraint_f1,
+                    "Password does not Match"
+                )
             } else {
                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                     AppConstants.password,

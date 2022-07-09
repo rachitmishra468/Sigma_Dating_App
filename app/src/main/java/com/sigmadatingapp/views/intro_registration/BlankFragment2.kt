@@ -8,9 +8,11 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.sigmadatingapp.R
 import com.sigmadatingapp.storage.AppConstants
+import com.sigmadatingapp.utilities.AppUtils
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,6 +32,7 @@ class BlankFragment2 : Fragment() {
 
     lateinit var radioButtonSelect: RadioButton
     lateinit var continue_second: Button
+    lateinit var constraint_f1: ConstraintLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,6 +48,7 @@ class BlankFragment2 : Fragment() {
         var root = inflater.inflate(R.layout.about_yourself_layout2, container, false)
         radioGroup = root.findViewById(R.id.rg)
         continue_second = root.findViewById(R.id.continue_second)
+        constraint_f1 = root.findViewById(R.id.constraint_f1)
         radioGroup?.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {
                 continue_second.setBackgroundResource(R.drawable.signup_circle_bg)
@@ -54,7 +58,7 @@ class BlankFragment2 : Fragment() {
         continue_second.setOnClickListener {
             val selectedId = radioGroup?.getCheckedRadioButtonId()
             if (selectedId == -1) {
-                Toast.makeText(activity, "Select one field", Toast.LENGTH_SHORT).show()
+                AppUtils.showErrorSnackBar(requireContext(), constraint_f1, "Select one field")
                 return@setOnClickListener
             }
 

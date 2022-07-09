@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.hbb20.CountryCodePicker
 import com.sigmadatingapp.R
@@ -17,9 +18,6 @@ import com.sigmadatingapp.databinding.AboutBirthdayBinding
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.utilities.DateTextWatcher
-
-
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,29 +39,36 @@ class BlankFragment3 : Fragment() {
     private var ss: String? = null
     lateinit var email_id: EditText
     lateinit var country_spinner: CountryCodePicker
-
+    lateinit var constraint_f1: ConstraintLayout
     lateinit var edit_text_phone: EditText
     private var binding: AboutBirthdayBinding? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = AboutBirthdayBinding.inflate(inflater, container, false)
         button_birthday = binding!!.root.findViewById(R.id.button_birthday)
         country_spinner = binding!!.root.findViewById(R.id.ccp)
         email_id = binding!!.root.findViewById(R.id.edit_emal)
+        constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
         editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
         edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)
         editbirthday.addTextChangedListener(DateTextWatcher())
         button_birthday.setOnClickListener {
 
             if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {
-                email_id.error = "Invalid Email Address"
-
-            } else if (editbirthday.text.toString()
-                    .isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
+                AppUtils.showErrorSnackBar(requireContext(), constraint_f1, "Invalid Email Address")
+            } else if (edit_text_phone.text.toString().isEmpty() || !AppUtils.isValid_phone_number(
+                    edit_text_phone.text.toString().trim()
+                )
             ) {
-
-                Toast.makeText(requireActivity(), "Enter Valid Date of Birth", Toast.LENGTH_LONG)
-                    .show()
+                AppUtils.showErrorSnackBar(
+                    requireContext(),
+                    constraint_f1,
+                    "Enter Valid Phone Number"
+                )
 
             } else {
 
@@ -71,11 +76,12 @@ class BlankFragment3 : Fragment() {
                         .isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())
                 ) {
 
-                    Toast.makeText(
-                        requireActivity(),
-                        "Enter Valid Date of Birth",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    AppUtils.showErrorSnackBar(
+                        requireContext(),
+                        constraint_f1,
+                        "Enter Valid Date of Birth"
+                    )
+
                 } else {
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
@@ -90,7 +96,7 @@ class BlankFragment3 : Fragment() {
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                         AppConstants.USER_COUNTRY_CODE,
-                        country_spinner.selectedCountryCodeWithPlus
+                        country_spinner.selectedCountryCodeWithPlus+""+edit_text_phone.text.toString()
                     )
 
 
@@ -116,7 +122,6 @@ class BlankFragment3 : Fragment() {
             )
         })
     }
-
 
 
     companion object {

@@ -22,4 +22,13 @@ interface ApiHelper {
 
     suspend fun getSchoolFeternityList():Response<SchoolCommunityResponse>
 
+    suspend fun upload_images(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun Update_profile(jsonObject: JsonObject):Response<Loginmodel>
+
+
+
+
+
+
 }

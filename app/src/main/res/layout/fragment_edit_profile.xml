@@ -167,60 +167,21 @@
             />
 
 
-        <LinearLayout
-            android:id="@+id/interests_layout"
-            android:layout_width="wrap_content"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/rootContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
+            android:isScrollContainer="true"
+            app:singleSelection="false"
             app:layout_constraintTop_toBottomOf="@+id/interests_text"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp"
-            android:weightSum="5">
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:text="HIKING"
-                android:layout_margin="5dp"
-                android:background="@drawable/border_line_radius"
-                android:textColor="@color/blue"
-                 />
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="start"
-                android:text="FITNESS"
-                android:layout_margin="5dp"
-                android:background="@drawable/border_line_radius"
-                android:textColor="@color/blue"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/border_line_radius"
-                android:gravity="start"
-                android:padding="5dp"
-                android:text="FOOTBALL"
-                android:textColor="@color/blue"
-                tools:layout_editor_absoluteX="180dp"
-                tools:layout_editor_absoluteY="533dp" />
-
-
-        </LinearLayout>
-
-
-
-
+            android:weightSum="5"></com.google.android.material.chip.ChipGroup>
 
         <View
             android:id="@+id/v4"
@@ -232,10 +193,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/interests_layout" />
-
-
-
+            app:layout_constraintTop_toBottomOf="@id/rootContainer" />
 
         <TextView
             android:id="@+id/school_text"
@@ -253,22 +211,18 @@
             tools:layout_editor_absoluteY="196dp"
             />
 
-
-        <TextView
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/school_data"
-            android:layout_width="wrap_content"
-            style="@style/blue_NormalText"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:textSize="14sp"
-            android:text="Florida Univercity UK .."
-            android:textStyle="normal"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="20dp"
+            style="@android:style/Widget.Holo.Light.Spinner"
             app:layout_constraintTop_toBottomOf="@+id/school_text"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
+            tools:layout_editor_absoluteY="196dp"/>
 
         <View
             android:id="@+id/v5"
@@ -282,9 +236,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/school_data" />
 
-
-
-
         <TextView
             android:id="@+id/sorority_text"
             android:layout_width="wrap_content"
@@ -293,7 +244,7 @@
             android:gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:textSize="14sp"
-            android:text="School"
+            android:text="Sorority/Fraternity"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/v5"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
@@ -301,29 +252,19 @@
             tools:layout_editor_absoluteY="196dp"
             />
 
-
-        <TextView
-            android:id="@+id/sorority_data"
-            android:layout_width="wrap_content"
-            style="@style/blue_NormalText"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:textSize="14sp"
-            android:text="Florida Univercity UK .."
-            android:textStyle="normal"
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/et_type"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            style="@android:style/Widget.Holo.Light.Spinner"
             app:layout_constraintTop_toBottomOf="@+id/sorority_text"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
-
-
-
-
-
-
-
+            tools:layout_editor_absoluteY="196dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
