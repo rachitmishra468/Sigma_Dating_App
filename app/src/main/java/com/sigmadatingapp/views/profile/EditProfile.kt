@@ -180,12 +180,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                            try {
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
+                            }catch (e:Exception){}
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
                         }
+
                     }
                 }
                 Status.LOADING -> {
@@ -208,6 +211,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+
+                            try {
+
+
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
                             (activity as Home).homeviewmodel.get_Login_User_details(
@@ -215,6 +222,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                     AppConstants.USER_ID
                                 )
                             )
+                            }catch (e:Exception){}
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -242,6 +250,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+                            try {
+
+
                             Log.d("TAG@123", "1311" + res.toString())
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
@@ -250,6 +261,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                     AppConstants.USER_ID
                                 )
                             )
+                            }catch (e:Exception){}
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -280,6 +292,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                         // AppUtils.hideLoader()
                         it.data.let { it1 ->
                             if (it1?.status == true) {
+
+                                try {
+
+
                                 Log.d("TAG@123", it.toString())
                                 schoolList = ArrayList<UniversityList>()
                                 schoolList = it1.data.universityList
@@ -290,6 +306,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                 interest = it1.data.interestList
                                 setAdapterData()
                                 setupChipGroupDynamically(interest!!)
+                                }catch (e:Exception){}
                             } else {
 
                             }
@@ -315,6 +332,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+                            try {
+
+
                             dataList = ArrayList()
                             Log.d("TAG@123", "1311" + res.toString())
                             if (!res.user.photos.isNullOrEmpty()) {
@@ -338,6 +358,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
                             }
                             set_Adapterdata()
+                            }catch (e:Exception){}
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -569,9 +590,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             chip.isChecked = false
         }
         chip.chipCornerRadius = 1.0F
+        chip.setOnClickListener {
+            interests=chip.text.toString()
+        }
         chip.setOnCloseIconClickListener {
-
-            // Toast.makeText(requireContext(), "Chip deleted successfully", Toast.LENGTH_SHORT).show()
         }
         return chip
 

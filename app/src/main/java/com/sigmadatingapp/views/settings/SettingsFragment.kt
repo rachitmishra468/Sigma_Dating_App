@@ -68,7 +68,7 @@ class SettingsFragment : Fragment() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    AppUtils.hideLoader()
+
                     it.data.let { res ->
                         if (res?.status == true) {
                             Log.d("TAG@123", "111"+res.toString())
@@ -83,7 +83,7 @@ class SettingsFragment : Fragment() {
                     }
                 }
                 Status.LOADING -> {
-                    AppUtils.showLoader(requireContext())
+
                 }
                 Status.ERROR -> {
 

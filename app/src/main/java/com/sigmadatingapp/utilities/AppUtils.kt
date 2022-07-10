@@ -30,7 +30,10 @@ object AppUtils {
     private var dialog: Dialog? = null
 
     fun hideLoader() {
-        if (dialog!!.isShowing) dialog!!.dismiss()
+        try {
+            if (dialog!!.isShowing) dialog!!.dismiss()
+        }catch (e:Exception){}
+
     }
 
     fun showLoader(context: Context?) {

@@ -19,12 +19,17 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
+import com.example.demoapp.other.Status
 import com.sigmadatingapp.R
 import com.sigmadatingapp.databinding.FragmentFirstBinding
 import com.sigmadatingapp.model.EditProfiledata
+import com.sigmadatingapp.storage.AppConstants
+import com.sigmadatingapp.utilities.AppUtils
 import de.hdodenhof.circleimageview.CircleImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableSingleObserver
@@ -52,6 +57,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (activity as Home).homeviewmodel.get_Login_User_details(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
+
         Logoutuser()
     }
 
@@ -73,7 +84,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
         footer_transition()
-
+        subscribe_Login_User_details()
         return binding.root
 
     }
@@ -182,5 +193,39 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         }
         dialog.show()
     }
+
+
+
+    fun subscribe_Login_User_details() {
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+
+                            try {
+                                Log.d("TAG@123",it.data?.user.toString())
+                                Glide.with(requireContext()).load(it.data?.user?.upload_image).into(editProfile);
+                            }catch (e:Exception){
+                                Log.d("TAG@123","Exception"+e.message.toString())
+                            }
+
+                        } else {
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+
+    }
+
 
 }

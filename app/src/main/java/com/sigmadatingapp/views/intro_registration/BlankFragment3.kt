@@ -95,7 +95,7 @@ class BlankFragment3 : Fragment() {
 
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.USER_COUNTRY_CODE,
+                        AppConstants.phone,
                         country_spinner.selectedCountryCodeWithPlus+""+edit_text_phone.text.toString()
                     )
 

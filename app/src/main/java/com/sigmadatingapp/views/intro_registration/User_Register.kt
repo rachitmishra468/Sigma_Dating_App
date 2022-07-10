@@ -52,10 +52,9 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
 
         jsonObject.addProperty(
             "phone",
-            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
-                AppConstants.phone
+            sharedPreferencesStorage.getString(AppConstants.phone)
             )
-        )
+
 
         jsonObject.addProperty(
             "location",

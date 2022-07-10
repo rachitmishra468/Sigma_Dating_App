@@ -17,7 +17,7 @@
             android:layout_height="50dp"
             android:layout_margin="1dp"
             android:layout_weight="0.75"
-            android:src="@drawable/dummy_imf"
+            android:src="@drawable/profile_img"
             app:civ_border_color="@color/white"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"

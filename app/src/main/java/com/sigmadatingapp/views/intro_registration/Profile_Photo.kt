@@ -206,7 +206,7 @@ class Profile_Photo : Fragment() {
             imageProfile?.setImageBitmap(bitmap)
             val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
             var bitmapl: Bitmap = drawable.getBitmap()
-            bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);
+            bitmapl = Bitmap.createScaledBitmap(bitmapl, 350, 350, true);
             convertBitmapToBase64(bitmapl)
 
         } else {
@@ -225,7 +225,7 @@ class Profile_Photo : Fragment() {
             val baos = ByteArrayOutputStream()
             bm.compress(Bitmap.CompressFormat.PNG, 0, baos)
             val b = baos.toByteArray()
-            encoded = Base64.encodeToString(b, Base64.DEFAULT)
+            encoded = "data:image/png;base64,"+Base64.encodeToString(b, Base64.DEFAULT)
             bitmap_string=encoded
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()

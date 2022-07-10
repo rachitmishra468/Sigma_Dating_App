@@ -286,6 +286,7 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+                            Log.d("TAG@123",it.data?.user.toString())
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
                             Log.d("TAG@123", res.user.id)
@@ -320,6 +321,7 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+
                             dialog.dismiss()
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
@@ -387,6 +389,7 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
+
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
@@ -420,11 +423,22 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
-                            Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
-                                .show()
-                            startActivity(Intent(this, Home::class.java))
-                            finish()
+                            try {
+                                Log.d("TAG@123",it.data?.user.toString())
+                                if (it.data?.user==null){
+                                    startActivity(Intent(this, OnBoardingActivity::class.java))
+                                    finish()
+                                }else{
+                                sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
+                                sharedPreferencesStorage.setValue(AppConstants.USER_ID,  res.user.id)
+                                Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                    .show()
+                                startActivity(Intent(this, Home::class.java))
+                                finish()}
+                            }catch (e:Exception){
+                                Log.d("TAG@123",e.message.toString())
+                            }
+
                         } else {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
                             Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
