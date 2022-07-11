@@ -1,16 +1,16 @@
 package com.sigmadatingapp.views.intro_registration
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -19,32 +19,27 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.sigmadatingapp.R
 import com.sigmadatingapp.storage.AppConstants
-import com.sigmadatingapp.storage.SharedPreferencesStorage
 import com.sigmadatingapp.utilities.AppUtils
 import com.sigmadatingapp.views.Home
-import com.sigmadatingapp.views.login.LoginViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
-import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -192,6 +187,13 @@ class Profile_Photo : Fragment() {
         val intent = Intent("android.media.action.IMAGE_CAPTURE")
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
         startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
+        /*Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+            activity?.packageManager?.let {
+                intent.resolveActivity(it)?.also {
+                    startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
+                }
+            }
+        }*/
     }
 
     private fun openGallery() {
@@ -203,13 +205,15 @@ class Profile_Photo : Fragment() {
     private fun renderImage(imagePath: String?) {
         if (imagePath != null) {
             val bitmap = BitmapFactory.decodeFile(imagePath)
-            imageProfile?.setImageBitmap(bitmap)
+
+          val rotateBitamp=  AppUtils.getcheckImagerotation(imagePath,bitmap)
+            imageProfile?.setImageBitmap(rotateBitamp)
             val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
             var bitmapl: Bitmap = drawable.getBitmap()
             bitmapl = Bitmap.createScaledBitmap(bitmapl, 350, 350, true);
-            convertBitmapToBase64(bitmapl)
+            AppUtils.getResizedBitmap(bitmapl, 500)?.let { convertBitmapToBase64(it) }
 
-        } else {
+           } else {
             show("ImagePath is null")
         }
     }
@@ -306,15 +310,16 @@ class Profile_Photo : Fragment() {
         when (requestCode) {
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    val bitmap = BitmapFactory.decodeStream(
-                        requireActivity().getContentResolver().openInputStream(mUri!!)
+                    val bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(mUri!!)
                     )
 
+                   // val dd= AppUtils.
                     imageProfile!!.setImageBitmap(bitmap)
                     val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
                     var bitmapl: Bitmap = drawable.getBitmap()
                     bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);
-                    convertBitmapToBase64(bitmapl)
+                    //convertBitmapToBase64(bitmapl)
+                    AppUtils.getResizedBitmap(bitmapl, 500)?.let { convertBitmapToBase64(it) }
 
 
                 }
@@ -327,6 +332,20 @@ class Profile_Photo : Fragment() {
                     }
                 }
         }
+    }
+    fun getRealPathFromURI(uri: Uri?): String? {
+        var path = ""
+        if (requireActivity().getContentResolver() != null) {
+            val cursor: Cursor? =
+                uri?.let { requireActivity().getContentResolver().query(it, null, null, null, null) }
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val idx: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                path = cursor.getString(idx)
+                cursor.close()
+            }
+        }
+        return path
     }
 
     fun Register() {

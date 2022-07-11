@@ -63,7 +63,7 @@ class BlankFragment2 : Fragment() {
             }
 
             radioButtonSelect = root.findViewById(selectedId!!)
-            Toast.makeText(activity, radioButtonSelect.text, Toast.LENGTH_SHORT).show()
+         //   Toast.makeText(activity, radioButtonSelect.text, Toast.LENGTH_SHORT).show()
             (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.Gender,
                 radioButtonSelect.text

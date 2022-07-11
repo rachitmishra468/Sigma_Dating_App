@@ -471,7 +471,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
     private fun renderImage(imagePath: String?) {
         if (imagePath != null) {
             val bitmap = BitmapFactory.decodeFile(imagePath)
-            getResizedBitmap(bitmap, 500)?.let { convertBitmapToBase64(it) }
+            AppUtils.getResizedBitmap(bitmap, 500)?.let { convertBitmapToBase64(it) }
 
         } else {
             show("ImagePath is null")

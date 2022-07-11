@@ -6,7 +6,11 @@ import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.ConnectivityManager
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
@@ -15,6 +19,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.exifinterface.media.ExifInterface
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.snackbar.Snackbar
 import com.sigmadatingapp.R
@@ -281,4 +286,45 @@ object AppUtils {
 
         return true
     }
+
+    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+        var width = image.width
+        var height = image.height
+        val bitmapRatio = width.toFloat() / height.toFloat()
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
+    val ei: ExifInterface = ExifInterface(photoPath)
+    val orientation = ei.getAttributeInt(
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_UNDEFINED
+    )
+
+    var rotatedBitmap: Bitmap? = null
+    when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> rotatedBitmap = rotateImage(bitmap, 90F)
+        ExifInterface.ORIENTATION_ROTATE_180 -> rotatedBitmap = rotateImage(bitmap, 180F)
+        ExifInterface.ORIENTATION_ROTATE_270 -> rotatedBitmap = rotateImage(bitmap, 270F)
+        ExifInterface.ORIENTATION_NORMAL -> rotatedBitmap = bitmap
+        else -> rotatedBitmap = bitmap
+    }
+    return rotatedBitmap!!
+}
+    fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(
+            source, 0, 0, source.width, source.height,
+            matrix, true
+        )
+    }
+
+
 }
