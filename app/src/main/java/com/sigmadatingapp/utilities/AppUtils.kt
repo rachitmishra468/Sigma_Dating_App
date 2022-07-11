@@ -17,12 +17,15 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Adapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.snackbar.Snackbar
 import com.sigmadatingapp.R
+import com.sigmadatingapp.model.communityModel.UniversityList
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -326,5 +329,21 @@ public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
         )
     }
 
+
+
+
+
+    fun index(spinner: Spinner, value: String?): Int {
+        val adapter: Adapter = spinner.getAdapter()
+        val n: Int = adapter.getCount()
+        for (i in 0 until n) {
+            var name= (spinner.getItemAtPosition(i) as UniversityList).name
+            if(name.equals(value)){
+                return i
+                break
+            }
+        }
+        return 0
+    }
 
 }
