@@ -50,6 +50,10 @@ class SettingsFragment : Fragment() {
                 AppConstants.IS_AUTHENTICATED,
                 false
             )
+            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.Disclaimer,
+                false
+            )
             startActivity(Intent(requireContext(), Splash::class.java))
             (activity as Home?)?.finish()
         }

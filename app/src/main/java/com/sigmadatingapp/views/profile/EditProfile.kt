@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,36 +16,32 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.bridegroomed.model.User
 import com.example.demoapp.other.Status
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sigmadatingapp.R
 import com.sigmadatingapp.adapters.CommunityAdapter
 import com.sigmadatingapp.adapters.Edit_Profile_Adapter
-import com.sigmadatingapp.adapters.Profile_Adapter
 import com.sigmadatingapp.databinding.FragmentEditProfileBinding
-import com.sigmadatingapp.model.EditProfiledata
 import com.sigmadatingapp.model.communityModel.Interest
 import com.sigmadatingapp.model.communityModel.UniversityList
 import com.sigmadatingapp.storage.AppConstants
 import com.sigmadatingapp.utilities.AppUtils
+import com.sigmadatingapp.utilities.AppUtils.index
 import com.sigmadatingapp.views.Home
-import com.sigmadatingapp.views.intro_registration.OnBoardingActivity
-import okhttp3.internal.notifyAll
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -182,8 +177,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                         if (res?.status == true) {
                             try {
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
-                            }catch (e:Exception){}
+                                    .show()
+                            } catch (e: Exception) {
+                            }
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
@@ -215,14 +211,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                             try {
 
 
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
-                            (activity as Home).homeviewmodel.get_Login_User_details(
-                                (activity as Home).sharedPreferencesStorage.getString(
-                                    AppConstants.USER_ID
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                                (activity as Home).homeviewmodel.get_Login_User_details(
+                                    (activity as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.USER_ID
+                                    )
                                 )
-                            )
-                            }catch (e:Exception){}
+                            } catch (e: Exception) {
+                            }
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -253,15 +250,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                             try {
 
 
-                            Log.d("TAG@123", "1311" + res.toString())
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
-                            (activity as Home).homeviewmodel.get_Login_User_details(
-                                (activity as Home).sharedPreferencesStorage.getString(
-                                    AppConstants.USER_ID
+                                Log.d("TAG@123", "1311" + res.toString())
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                                (activity as Home).homeviewmodel.get_Login_User_details(
+                                    (activity as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.USER_ID
+                                    )
                                 )
-                            )
-                            }catch (e:Exception){}
+                            } catch (e: Exception) {
+                            }
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -296,17 +294,18 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                 try {
 
 
-                                Log.d("TAG@123", it.toString())
-                                schoolList = ArrayList<UniversityList>()
-                                schoolList = it1.data.universityList
-                                fraternitiesList = ArrayList<UniversityList>()
-                                fraternitiesList =
-                                    it1.data.fraternitiesList + it1.data.sororitiesList
-                                interest = ArrayList<Interest>()
-                                interest = it1.data.interestList
-                                setAdapterData()
-                                setupChipGroupDynamically(interest!!)
-                                }catch (e:Exception){}
+                                    Log.d("TAG@123", it.toString())
+                                    schoolList = ArrayList<UniversityList>()
+                                    schoolList = it1.data.universityList
+                                    fraternitiesList = ArrayList<UniversityList>()
+                                    fraternitiesList =
+                                        it1.data.fraternitiesList + it1.data.sororitiesList
+                                    interest = ArrayList<Interest>()
+                                    interest = it1.data.interestList
+                                    setAdapterData()
+                                    setupChipGroupDynamically(interest!!)
+                                } catch (e: Exception) {
+                                }
                             } else {
 
                             }
@@ -335,30 +334,31 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                             try {
 
 
-                            dataList = ArrayList()
-                            Log.d("TAG@123", "1311" + res.toString())
-                            if (!res.user.photos.isNullOrEmpty()) {
+                                dataList = ArrayList()
+                                Log.d("TAG@123", "1311" + res.toString())
+                                if (!res.user.photos.isNullOrEmpty()) {
 
-                                dataList = res.user.photos
+                                    dataList = res.user.photos
 
-                                res.user.university.let {
-                                    university = it
-                                }
-                                res.user.community.let {
-                                    community = it
-                                }
-                                res.user.about.let {
-                                    about = it
-                                    _binding?.etLastname?.setText(about)
-                                }
-                                res.user.interests.let {
-                                    interests = it
-                                }
+                                    res.user.university.let {
+                                        university = it
+                                    }
+                                    res.user.community.let {
+                                        community = it
+                                    }
+                                    res.user.about.let {
+                                        about = it
+                                        _binding?.etLastname?.setText(about)
+                                    }
+                                    res.user.interests.let {
+                                        interests = it
+                                    }
 
 
+                                }
+                                set_Adapterdata()
+                            } catch (e: Exception) {
                             }
-                            set_Adapterdata()
-                            }catch (e:Exception){}
 
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -546,6 +546,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             )
             schoolAct_spinner?.adapter = schoolAdapter
             schoolAdapter.notifyDataSetChanged()
+            schoolAct_spinner?.setSelection(index(schoolAct_spinner!!,university))
+
+
 
             val adapter = CommunityAdapter(
                 (activity as Home),
@@ -553,10 +556,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             )
             fraternity_Spinner.adapter = adapter
             adapter.notifyDataSetChanged()
+            fraternity_Spinner.setSelection(index(fraternity_Spinner,community))
         } catch (e: Exception) {
+
+            Log.d("TAG@123", "Ex -:" + e.message.toString())
         }
 
     }
+
+
 
 
     private fun setupChipGroupDynamically(list: List<Interest>) {
@@ -591,7 +599,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
         }
         chip.chipCornerRadius = 1.0F
         chip.setOnClickListener {
-            interests=chip.text.toString()
+            interests = chip.text.toString()
         }
         chip.setOnCloseIconClickListener {
         }

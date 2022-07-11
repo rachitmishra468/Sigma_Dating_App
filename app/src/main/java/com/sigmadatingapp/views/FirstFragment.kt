@@ -62,8 +62,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.USER_ID
             )
         )
+        if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer))(
+                Logoutuser()
+        )
 
-        Logoutuser()
     }
 
     override fun onCreateView(
@@ -97,7 +99,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         }
 
 
-        val adapter = ProfileMatch(courseModalArrayList!!, requireActivity(),this)
+        val adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
         binding.swipeDeck.setAdapter(adapter)
         binding.swipeDeck.setEventCallback(object : SwipeEventCallback {
             override fun cardSwipedLeft(position: Int) {
@@ -174,7 +176,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-
     override fun onCategoryClick(position: Profile?) {
         findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
     }
@@ -185,15 +186,21 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         val logout = dialog.findViewById<Button>(R.id.logout)
         val cancle = dialog.findViewById<Button>(R.id.cancel)
         logout.setOnClickListener {
+            (activity as Home).sharedPreferencesStorage.setValue(
+                AppConstants.Disclaimer,
+                true
+            )
             dialog.dismiss()
         }
         cancle.setOnClickListener {
-
+            (activity as Home).sharedPreferencesStorage.setValue(
+                AppConstants.Disclaimer,
+                false
+            )
             (activity as Home).onBackPressed()
         }
         dialog.show()
     }
-
 
 
     fun subscribe_Login_User_details() {
@@ -204,10 +211,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         if (res?.status == true) {
 
                             try {
-                                Log.d("TAG@123",it.data?.user.toString())
-                                Glide.with(requireContext()).load(it.data?.user?.upload_image).into(editProfile);
-                            }catch (e:Exception){
-                                Log.d("TAG@123","Exception"+e.message.toString())
+                                Log.d("TAG@123", it.data?.user.toString())
+                                Glide.with(requireContext()).load(it.data?.user?.upload_image)
+                                    .into(editProfile);
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception" + e.message.toString())
                             }
 
                         } else {

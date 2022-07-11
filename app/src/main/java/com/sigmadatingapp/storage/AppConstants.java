@@ -13,7 +13,7 @@ public class AppConstants {
     public static  boolean PHONE_LOGIN = false;
 
     public static String SHARED_PREF_NAME = "user_variable";
-    public static String KEY_IS_FROM_PRIVACY = "from_privacy";
+    public static String Disclaimer  = "disclaimer ";
 
     public static String IS_AUTHENTICATED = "is_authenticated";
     public static String IS_PROFILED = "is_profiled";
