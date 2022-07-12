@@ -41,6 +41,7 @@ import com.sigmadatingapp.utilities.AppUtils.index
 import com.sigmadatingapp.views.Home
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -335,7 +336,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
                                 dataList = ArrayList()
-                                Log.d("TAG@123", "1311" + res.toString())
+                                Log.d("TAG@123", "1311" +  it.data.toString())
                                 if (!res.user.photos.isNullOrEmpty()) {
 
                                     dataList = res.user.photos
@@ -390,18 +391,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
         if (boolean) {
-            val checkSelfPermission = ContextCompat.checkSelfPermission(
-                requireActivity(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-                )
-            } else {
+
                 openGallery()
-            }
+
 
         } else {
 
@@ -417,9 +409,14 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
     }
 
     private fun openGallery() {
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"
-        startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+        Intent(Intent.ACTION_GET_CONTENT).also { intent ->
+            intent.type = "image/*"
+            activity?.packageManager?.let {
+                intent.resolveActivity(it)?.also {
+                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+                }
+            }
+        }
     }
 
 
@@ -429,11 +426,21 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (Build.VERSION.SDK_INT >= 19) {
-                            handleImageOnKitkat(data)
+
+                    if (data!=null) {
+                        try {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                activity!!.contentResolver,
+                                data.data
+                            )
+                            Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+                            convertBitmapToBase64(bitmap)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
                         }
                     }
+
+
                 }
         }
     }

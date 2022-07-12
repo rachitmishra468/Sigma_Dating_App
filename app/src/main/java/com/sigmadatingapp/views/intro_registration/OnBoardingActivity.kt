@@ -32,7 +32,7 @@ class OnBoardingActivity : AppCompatActivity() {
         img_back = findViewById<ImageView>(R.id.img_back)
         pageIndicator = findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
-        mViewPager.setUserInputEnabled(true);
+        mViewPager.setUserInputEnabled(false);
         mViewPager.offscreenPageLimit = 1
         mViewPager.setPageTransformer(ZoomOutPageTransformer(1))
         mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

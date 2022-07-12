@@ -1,6 +1,7 @@
 package com.sigmadatingapp.views.intro_registration
 
 import android.Manifest
+import android.R.attr
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
@@ -45,6 +46,10 @@ import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
+import androidx.core.app.ActivityCompat.startActivityForResult
+import android.R.attr.data
+import java.io.IOException
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -144,20 +149,16 @@ class Profile_Photo : Fragment() {
             capturePhoto()
         }
         button_gallery?.setOnClickListener {
-            val checkSelfPermission = ContextCompat.checkSelfPermission(
-                requireActivity(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-                )
-            } else {
-                dialog.dismiss()
-                openGallery()
-            }
+            dialog.dismiss()
+            openGallery()
+
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
 
     }
 
@@ -195,9 +196,14 @@ class Profile_Photo : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"
-        startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+        Intent(Intent.ACTION_GET_CONTENT).also { intent ->
+            intent.type = "image/*"
+            activity?.packageManager?.let {
+                intent.resolveActivity(it)?.also {
+                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+                }
+            }
+        }
     }
 
     private fun renderImage(imagePath: String?) {
@@ -275,27 +281,6 @@ class Profile_Photo : Fragment() {
         renderImage(imagePath)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantedResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantedResults)
-        when (requestCode) {
-            1 ->
-                if (grantedResults.isNotEmpty() && grantedResults.get(0) ==
-                    PackageManager.PERMISSION_GRANTED
-                ) {
-                    openGallery()
-                } else {
-
-                    AppUtils.showErrorSnackBar(
-                        requireContext(),
-                        constraint_f1,
-                        "Unfortunately You are Denied Permission to Perform this Operation."
-                    )
-
-                }
-        }
-    }
 
     private fun show(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
@@ -320,11 +305,24 @@ class Profile_Photo : Fragment() {
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    if (resultCode == Activity.RESULT_OK) {
-                        if (Build.VERSION.SDK_INT >= 19) {
-                            handleImageOnKitkat(data)
+
+                    if (data!=null) {
+                        try {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                activity!!.contentResolver,
+                                data.data
+                            )
+                            imageProfile?.setImageBitmap(bitmap)
+                           Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+                            convertBitmapToBase64(bitmap)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
                         }
                     }
+                       /* if (Build.VERSION.SDK_INT >= 19) {
+                            handleImageOnKitkat(data)
+                        }*/
+
                 }
         }
     }
