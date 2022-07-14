@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/constraint_f1"
-    tools:context=".views.intro_registration.BlankFragment"
+    tools:context=".apk.views.intro_registration.BlankFragment"
     android:layout_marginBottom="28dp"
     android:background="@drawable/splash_bg">
 

@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:856275008761:android:a633b0594c63dd4e06b628",
+        "mobilesdk_app_id": "1:856275008761:android:4be7e747f014956406b628",
         "android_client_info": {
-          "package_name": "com.sigmadatingapp"
+          "package_name": "com.SigmaDating.apk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "856275008761-18ij50dj29rgg33qs6fhklqqpki4noha.apps.googleusercontent.com",
+          "client_id": "856275008761-04f2nlq466q5114ig7mhk8qg0t233u6i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.sigmadatingapp",
+            "package_name": "com.SigmaDating.apk",
             "certificate_hash": "c552614b56db5379a2d7a8cbd64e78494ff5c492"
           }
         },

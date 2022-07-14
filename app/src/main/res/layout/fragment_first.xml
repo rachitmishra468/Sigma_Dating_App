@@ -7,7 +7,7 @@
     android:background="@color/white_with_opecity"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="com.sigmadatingapp.views.FirstFragment">
+    tools:context="com.SigmaDating.apk.views.FirstFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
