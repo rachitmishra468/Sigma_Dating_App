@@ -26,6 +26,7 @@ import com.facebook.login.widget.LoginButton
 import java.util.*
 import com.facebook.FacebookException
 import com.SigmaDating.R
+import com.SigmaDating.apk.AppReseources
 import com.facebook.login.LoginResult
 
 
@@ -42,9 +43,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.apk.views.intro_registration.OnBoardingActivity
 import com.google.android.gms.common.api.GoogleApiClient
+import com.facebook.GraphResponse
 
+import org.json.JSONObject
 
-
+import com.facebook.GraphRequest
+import com.facebook.login.LoginManager
+import org.jetbrains.anko.email
 
 
 @AndroidEntryPoint
@@ -73,7 +78,8 @@ class Login_Activity : AppCompatActivity() {
     lateinit var editText_password: EditText
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
-    lateinit var signInButton: SignInButton
+    lateinit var signInButton: ImageView
+    lateinit var fb_sign_in_button:ImageView
     lateinit var gso: GoogleSignInOptions
     lateinit var textforgot: TextView
 
@@ -89,12 +95,14 @@ class Login_Activity : AppCompatActivity() {
         setContentView(R.layout.login_scroll)
         mCallbackManager = CallbackManager.Factory.create();
         initialize_view()
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
+        AppReseources.setGoogleSignInOptions()
+        gso= AppReseources.getGoogleSignInOptions()!!
         signInButton = findViewById(R.id.sign_in_button)
+        fb_sign_in_button=findViewById(R.id.fb_sign_in_button)
+        fb_sign_in_button.setOnClickListener {
+            mLoginButton.performClick();
+        }
         verfie_otp = findViewById(R.id.verfie_otp)
-        signInButton.setSize(SignInButton.SIZE_STANDARD)
         signInButton.setOnClickListener {
             signIn()
         }
@@ -112,7 +120,7 @@ class Login_Activity : AppCompatActivity() {
             object : FacebookCallback<LoginResult?> {
                 override fun onCancel() {
                     setResult(RESULT_CANCELED)
-                    finish()
+                   // finish()
                 }
 
                 override fun onError(@NonNull e: FacebookException) {
@@ -121,7 +129,50 @@ class Login_Activity : AppCompatActivity() {
 
                 override fun onSuccess(result: LoginResult?) {
                     setResult(RESULT_OK);
-                    finish();
+                    Log.d("TAG@123",""+result)
+
+                    val request = GraphRequest.newMeRequest(
+                        result?.accessToken
+                    ) { jsonObject, response ->
+
+                        Log.d("TAG@123", ""+jsonObject?.get("email"))
+
+                        sharedPreferencesStorage.setValue(
+                            AppConstants.upload_image,
+                            jsonObject?.get("picture").toString()
+                        )
+
+                        sharedPreferencesStorage.setValue(
+                            AppConstants.email,
+                            jsonObject?.get("email")
+                        )
+                        sharedPreferencesStorage.setValue(
+                            AppConstants.isSocialLogin,
+                            true
+                        )
+
+                        sharedPreferencesStorage.setValue(
+                            AppConstants.appleId,
+                            jsonObject?.get("email")
+                        )
+
+                        sharedPreferencesStorage.setValue(
+                            AppConstants.fisrtname,
+                            jsonObject?.get("name")
+                        )
+                        LoginManager.getInstance().logOut();
+                        mainViewModel.Register()
+
+                    }
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id,name,link,email,picture")
+                    request.parameters = parameters
+                    request.executeAsync()
+
+
+
+
+
                 }
             })
 
@@ -384,6 +435,11 @@ class Login_Activity : AppCompatActivity() {
             Log.d("TAG@123",""+account.displayName)
 
             sharedPreferencesStorage.setValue(
+                AppConstants.upload_image,
+                ""+account.photoUrl.toString()
+            )
+
+            sharedPreferencesStorage.setValue(
                 AppConstants.email,
                 account.email
             )
@@ -401,10 +457,7 @@ class Login_Activity : AppCompatActivity() {
                 AppConstants.fisrtname,
                 account.displayName
             )
-            sharedPreferencesStorage.setValue(
-                AppConstants.upload_image,
-                account.photoUrl
-            )
+
 
             mainViewModel.Register()
 

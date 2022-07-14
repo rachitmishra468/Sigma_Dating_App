@@ -368,32 +368,53 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:weightSum="1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.512"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/l2">
 
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_margin="10dp"
+                            app:cardCornerRadius="35dp"
+                            app:cardElevation="0sp"
+                            app:cardUseCompatPadding="true">
 
-
-                            <com.google.android.gms.common.SignInButton
+                            <ImageView
                                 android:id="@+id/sign_in_button"
-                                android:layout_width="200dp"
-                                android:layout_margin="10dp"
-                                android:layout_height="wrap_content"
-                                />
+                                android:layout_width="match_parent"
+                                android:src="@drawable/gsignin"
+                                android:layout_height="match_parent" />
 
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_margin="10dp"
+                            app:cardCornerRadius="35dp"
+                            app:cardElevation="0sp"
+                            app:cardUseCompatPadding="true">
 
                             <com.facebook.login.widget.LoginButton
                                 android:id="@+id/login_button"
-                                android:layout_width="200dp"
-                                android:layout_height="75dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                               />
+                                android:visibility="gone"
+                                android:background="@drawable/fb_icon" >
+                            </com.facebook.login.widget.LoginButton>
 
+                            <ImageView
+                                android:id="@+id/fb_sign_in_button"
+                                android:layout_width="match_parent"
+                                android:src="@drawable/fb_signin"
+                                android:layout_height="match_parent" />
 
+                        </androidx.cardview.widget.CardView>
 
 
 

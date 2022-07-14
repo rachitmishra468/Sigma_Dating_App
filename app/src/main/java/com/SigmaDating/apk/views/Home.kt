@@ -13,11 +13,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import com.google.android.gms.common.api.GoogleApiClient
 import android.R
+import android.util.Log
 import android.view.View
+import com.SigmaDating.apk.AppReseources
 
 import com.google.android.gms.common.SignInButton
 
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ResultCallback
@@ -32,7 +36,7 @@ class Home : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
     val homeviewmodel: HomeViewModel by viewModels()
-    private var mApiClient: GoogleApiClient? = null
+    lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,20 +71,12 @@ class Home : AppCompatActivity() {
      fun initializeGoogleSignIn() {
 
          try {
-             val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                 .requestProfile()
-                 .build()
-             mApiClient = GoogleApiClient.Builder(this)
-                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
-                 .build()
 
-             Auth.GoogleSignInApi.signOut(mApiClient!!).setResultCallback(
-                 ResultCallback<Status?>() {
-                     fun onResult(status: Status?) {
+             mGoogleSignInClient= GoogleSignIn.getClient(this,AppReseources.getGoogleSignInOptions()!!)
+             mGoogleSignInClient.signOut().addOnCompleteListener {
 
-                     }
-                 })
-
+                 Log.d("TAG@123","GoogleSignInOptions Logout ")
+             }
 
          }catch (e:Exception){}
     }

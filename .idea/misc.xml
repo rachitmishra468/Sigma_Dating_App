@@ -28,7 +28,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/about_yourself_layout.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/about_yourself_layout2.xml" value="0.14" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/activity_home.xml" value="0.16" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/activity_login.xml" value="0.67" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/app_item.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/bottom_sheet_forgot.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/chat_list_item.xml" value="0.21" />
@@ -38,9 +38,9 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/footer_layout.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_all__activitys.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_blank.xml" value="0.20416666666666666" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.11328125" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_password.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_profile__photo.xml" value="0.18" />

@@ -204,9 +204,19 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Log.d("TAG@123", it.data?.user.toString())
 
                                     Glide.with(requireContext()).load(it.data?.user?.upload_image)
-                                        .placeholder(R.drawable.dummy_imf)
                                         .error(R.drawable.profile_img)
                                         .into(editProfile);
+
+
+
+                                if(it.data?.user?.upload_image?.length==0||it.data?.user?.upload_image==null){
+                                    Glide.with(requireContext()).load( (activity as Home?)?.sharedPreferencesStorage!!.getString(AppConstants.upload_image))
+                                        .error(R.drawable.profile_img)
+                                        .into(editProfile);
+
+                                }else{
+
+                                }
 
 
                             } catch (e: Exception) {

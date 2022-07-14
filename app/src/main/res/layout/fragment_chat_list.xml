@@ -78,7 +78,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/notification_icon"></ImageView>
+                    android:src="@drawable/notifications_24"></ImageView>
 
 
             </LinearLayout>
@@ -113,7 +113,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:inputType="textPersonName"
-                android:hint="Search" />
+                android:hint="Search"
+                tools:ignore="MissingConstraints" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/chatlist_recyclerView"

@@ -70,20 +70,21 @@
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
 
 
-        <TextView
+        <Button
             android:id="@+id/done"
-            android:layout_width="wrap_content"
             style="@style/QText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:textSize="20sp"
             android:text="Done"
+            android:textAllCaps="false"
             android:textColor="@color/blue"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.786"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
-
 
         <TextView
             android:id="@+id/profile_photo"
@@ -104,7 +105,10 @@
             android:id="@+id/update_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+         android:layout_marginLeft="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
             tools:listitem="@layout/update_photo"
             tools:itemCount="1"
             app:layout_constraintStart_toEndOf="@+id/profile_photo"
@@ -130,7 +134,7 @@
 
         <EditText
             android:id="@+id/et_lastname"
-            android:layout_width="359dp"
+            android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/login_field_border_bg"
