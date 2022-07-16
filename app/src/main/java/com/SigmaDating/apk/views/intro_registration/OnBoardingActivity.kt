@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.views.intro_registration
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -24,11 +25,13 @@ class OnBoardingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity)
 
         mViewPager = findViewById(R.id.viewPager)
+        mViewPager.setOnTouchListener(null)
         img_back = findViewById<ImageView>(R.id.img_back)
         pageIndicator = findViewById(R.id.pageIndicator)
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)

@@ -11,18 +11,19 @@ import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.apk.repository.MainRepository
 import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import org.jetbrains.anko.custom.async
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel  @Inject constructor(private val mainRepository: MainRepository, private val sharedPreferencesStorage: SharedPreferencesStorage) : ViewModel() {
 
-    lateinit var get_user_data: MutableLiveData<Resource<Loginmodel>>
-    lateinit var change_password: MutableLiveData<Resource<Loginmodel>>
-    lateinit var upload_images: MutableLiveData<Resource<Loginmodel>>
-    lateinit var delete_images: MutableLiveData<Resource<Loginmodel>>
-    lateinit var school_dataResponse : MutableLiveData<Resource<SchoolCommunityResponse>>
-    lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
+    var get_user_data: MutableLiveData<Resource<Loginmodel>>
+    var change_password: MutableLiveData<Resource<Loginmodel>>
+    var upload_images: MutableLiveData<Resource<Loginmodel>>
+    var delete_images: MutableLiveData<Resource<Loginmodel>>
+    var school_dataResponse : MutableLiveData<Resource<SchoolCommunityResponse>>
+    var update_profile: MutableLiveData<Resource<Loginmodel>>
 
     init {
         get_user_data= MutableLiveData<Resource<Loginmodel>>()
@@ -64,6 +65,19 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
                 change_password.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
+    }
+
+
+     fun get_edit_page_data(id: String) {
+        val one = async { getSchoolingData() }
+        val two = async { get_Login_User_details(id) }
+
+    }
+
+    fun Update_edit_page_data(id:String, university:String,community :String,interests:String,about:String) {
+        val one = async { update_profile(id,university,community,interests,about) }
+        val two = async { get_Login_User_details(id) }
+
     }
 
 
@@ -126,7 +140,7 @@ class HomeViewModel  @Inject constructor(private val mainRepository: MainReposit
         jsonObject.addProperty("interests", interests)
         jsonObject.addProperty("about", about)
 
-        Log.d("TAG@123",jsonObject.toString())
+        Log.d("TAG@123","done Update"+jsonObject.toString())
         mainRepository.Update_profile(jsonObject).let {
             if (it.isSuccessful){
                 update_profile.postValue(Resource.success(it.body()))

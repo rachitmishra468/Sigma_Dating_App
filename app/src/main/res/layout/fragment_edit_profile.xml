@@ -133,7 +133,7 @@
             />
 
         <EditText
-            android:id="@+id/et_lastname"
+            android:id="@+id/user_about"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
@@ -164,7 +164,7 @@
             android:layout_marginTop="16dp"
             android:textSize="14sp"
             android:text="Interests"
-            app:layout_constraintTop_toBottomOf="@+id/et_lastname"
+            app:layout_constraintTop_toBottomOf="@+id/user_about"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp"
