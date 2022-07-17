@@ -23,9 +23,6 @@ class SecondFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private lateinit var photoAdapter: Profile_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
     lateinit var match_list: ImageView
@@ -35,7 +32,7 @@ class SecondFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         footer_transition()
         _binding?.editProfile?.setOnClickListener {
@@ -43,6 +40,10 @@ class SecondFragment : Fragment() {
         }
         _binding?.settingIcon?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_settings)
+        }
+
+        _binding?.movetonotification?.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
         return binding.root
 
@@ -81,7 +82,6 @@ class SecondFragment : Fragment() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
-        //For match match_list is Enable
 
         match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_solid))
         chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))

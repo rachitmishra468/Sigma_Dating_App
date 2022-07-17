@@ -30,7 +30,9 @@
             android:id="@+id/action_FirstFragment_to_reportUserFragment"
             app:destination="@id/reportUserFragment" />
 
-
+        <action
+            android:id="@+id/action_FirstFragment_to_all_activity"
+            app:destination="@id/all_Activitys" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -51,6 +53,10 @@
         <action
             android:id="@+id/action_FirstFragment_to_chat"
             app:destination="@id/chatListFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_notification"
+            app:destination="@id/all_Activitys" />
     </fragment>
 
 
@@ -137,6 +143,18 @@
             android:id="@+id/action_chatListFragment_to_userChatFragment"
             app:destination="@id/userChatFragment" />
 
+        <action
+            android:id="@+id/action_chatListFragment_to_editprofile"
+            app:destination="@id/editProfile" />
+
+        <action
+            android:id="@+id/action_chatListFragment_to_setting"
+            app:destination="@id/settings_frag" />
+        <action
+            android:id="@+id/action_chatListFragment_to_notification"
+            app:destination="@id/all_Activitys" />
+
+
 
     </fragment>
     <fragment
@@ -173,6 +191,12 @@
         android:name="com.SigmaDating.apk.views.profile.ReportUserFragment"
         android:label="fragment_report_user"
         tools:layout="@layout/fragment_report_user" />
+    <fragment
+        android:id="@+id/all_Activitys"
+        android:name="com.SigmaDating.apk.views.all_activity.All_Activitys"
+        android:label="All_Activitys" >
+
+    </fragment>
 
 
 </navigation>

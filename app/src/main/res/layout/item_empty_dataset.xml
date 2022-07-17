@@ -20,8 +20,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.422"
-        android:src="@drawable/ic_baseline_search_24" />
+        app:layout_constraintVertical_bias="0.422" />
 
     <TextView
         android:id="@+id/title"

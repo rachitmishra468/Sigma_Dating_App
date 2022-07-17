@@ -13,42 +13,66 @@ import java.util.ArrayList
 class ProfileMatch(private val courseData: ArrayList<Profile>, private val context: Context, var listener: OnCategoryClickListener
 ) : BaseAdapter() {
     override fun getCount(): Int {
-        // in get count method we are returning the size of our array list.
         return courseData.size
     }
 
     override fun getItem(position: Int): Any {
-        // in get item method we are returning the item from our array list.
         return courseData[position]
     }
 
     override fun getItemId(position: Int): Long {
-        // in get item id we are returning the position.
         return position.toLong()
     }
 
     interface OnCategoryClickListener {
-        fun onCategoryClick(position: Profile?)
+        fun onCategoryClick(position: Profile?,count :Int)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        // in get view method we are inflating our layout on below line.
         var v = convertView
-
-            // on below line we are inflating our layout.
             v = LayoutInflater.from(parent.context)
                 .inflate(R.layout.profile_match_layout, parent, false)
 
-        // on below line we are initializing our variables and setting data to our variables.
-        // ((TextView) v.findViewById(R.id.idTVCourseName)).setText(courseData.get(position).getName());
         (v.findViewById<View>(R.id.idIVCourse) as ImageView).setImageResource(
             courseData[position].profile_img)
 
         (v.findViewById<View>(R.id.bright_img) as ImageView).setOnClickListener {
             listener.onCategoryClick(
-                courseData[position]
+                courseData[position],1//done
             )
         }
+
+        (v.findViewById<View>(R.id.star_view) as ImageView).setOnClickListener {
+            listener.onCategoryClick(
+                courseData[position],2
+            )
+        }
+
+        (v.findViewById<View>(R.id.super_like) as ImageView).setOnClickListener {
+            listener.onCategoryClick(
+                courseData[position],3
+            )
+        }
+
+        (v.findViewById<View>(R.id.grid_view) as ImageView).setOnClickListener {
+            listener.onCategoryClick(
+                courseData[position],4
+            )
+        }
+
+        (v.findViewById<View>(R.id.cancle_view) as ImageView).setOnClickListener {
+            listener.onCategoryClick(
+                courseData[position],5
+            )
+        }
+
+        (v.findViewById<View>(R.id.idIVCourse) as ImageView).setOnClickListener {
+
+        }
+
+
+
+
         return v
     }
 }

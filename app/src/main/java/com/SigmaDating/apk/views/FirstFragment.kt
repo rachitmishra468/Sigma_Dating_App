@@ -40,6 +40,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var sigma_list: ImageView
     lateinit var editProfile: CircleImageView
     lateinit var notificationIcon: ConstraintLayout
+    lateinit var notification:ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +52,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             )
         )
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer))(
-                Logoutuser()
+                Disclaimer()
         )
 
     }
@@ -66,12 +67,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
         editProfile.setOnClickListener {
-            // findNavController().navigate(R.id.action_FirstFragment_to_edit_profile)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
-
         notificationIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_notification)
+            findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
         }
         footer_transition()
         subscribe_Login_User_details()
@@ -164,14 +163,24 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-    override fun onCategoryClick(position: Profile?) {
+    override fun onCategoryClick(position: Profile?,count:Int) {
 
-        findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+        when(count){
+            1->findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+            2->binding.swipeDeck.swipeTopCardRight(150)
+            3->binding.swipeDeck.swipeTopCardRight(150)
+            4->findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            5->binding.swipeDeck.swipeTopCardLeft(150)
+            6->findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+
+
+        }
+
 
 
     }
 
-    private fun Logoutuser() {
+    private fun Disclaimer() {
         val dialog = Dialog(requireContext(), R.style.AppBaseTheme)
         dialog.setContentView(R.layout.full_screen_dialog)
         val logout = dialog.findViewById<Button>(R.id.logout)

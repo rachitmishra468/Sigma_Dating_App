@@ -60,6 +60,7 @@
 
 
                 <ImageView
+                    android:id="@+id/movetoedit"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right|center"
@@ -67,18 +68,53 @@
                     android:src="@drawable/edit_profile"></ImageView>
 
                 <ImageView
+                    android:id="@+id/movetosetting"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:src="@drawable/settings_icon"></ImageView>
 
-                <ImageView
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/movetonotification"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/notifications_24"></ImageView>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/notification_Icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/notifications_24"
+                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvCounter"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/circle_shape"
+                        android:gravity="center"
+                        android:layout_marginRight="20dp"
+                        android:text="12"
+                        android:textColor="@color/white"
+                        android:textSize="8sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/notification_Icon"
+                        app:layout_constraintEnd_toEndOf="@+id/notification_Icon"
+                        app:layout_constraintStart_toStartOf="@+id/notification_Icon"
+                        app:layout_constraintTop_toTopOf="@+id/notification_Icon" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
 
             </LinearLayout>
