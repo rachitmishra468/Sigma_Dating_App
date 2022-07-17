@@ -89,7 +89,6 @@
         <TextView
             android:id="@+id/profile_photo"
             android:layout_width="wrap_content"
-            style="@style/QText"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="16dp"

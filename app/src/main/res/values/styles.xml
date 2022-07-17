@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget.Theme.SigmaDatingApp.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
@@ -45,6 +45,38 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowActivityTransitions" tools:targetApi="lollipop">true</item>
     </style>
 
+    <style name="AppBaseTheme2" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon -->
+        <!--        <item name="searchIcon">@null</item>-->
+        <!-- Gets rid of the "underline" in the text -->
+        <item name="queryBackground">@color/colorContainer</item>
+        <item name="background">@color/colorContainer</item>
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <item name="queryHint">@string/search_schools</item>
+        <item name="android:queryHint">@string/search_schools</item>
+        <item name="android:background">@drawable/login_field_border_bg</item>
+        <!--        <item name="closeIcon">@drawable/ic_clo</item>-->
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+    </style>
+
+    <color name="colorContainer">#EAEBEA</color>
+    <string name="search_schools">Search Schools</string>
 </resources>

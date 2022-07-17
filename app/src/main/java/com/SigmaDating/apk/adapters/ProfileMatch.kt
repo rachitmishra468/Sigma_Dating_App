@@ -42,8 +42,8 @@ class ProfileMatch(private val courseData: ArrayList<Profile>, private val conte
         // on below line we are initializing our variables and setting data to our variables.
         // ((TextView) v.findViewById(R.id.idTVCourseName)).setText(courseData.get(position).getName());
         (v.findViewById<View>(R.id.idIVCourse) as ImageView).setImageResource(
-            courseData[position].profile_img
-        )
+            courseData[position].profile_img)
+
         (v.findViewById<View>(R.id.bright_img) as ImageView).setOnClickListener {
             listener.onCategoryClick(
                 courseData[position]

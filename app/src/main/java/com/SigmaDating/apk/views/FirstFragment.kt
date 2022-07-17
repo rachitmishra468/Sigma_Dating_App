@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -164,7 +165,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
     override fun onCategoryClick(position: Profile?) {
+
         findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+
+
     }
 
     private fun Logoutuser() {

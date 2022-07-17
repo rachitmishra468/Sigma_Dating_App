@@ -46,6 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
+<!--
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/schoolAct_spinner"
         android:layout_width="0dp"
@@ -55,7 +56,18 @@
         app:layout_constraintEnd_toEndOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/textView5"/>
-
+-->
+<EditText
+    android:id="@+id/schoolAct_spinner"
+    android:layout_width="0dp"
+    android:layout_height="54dp"
+    android:layout_marginTop="20dp"
+    android:background="@drawable/login_field_border_bg"
+    android:hint="Select School"
+    style="@android:style/Widget.Holo.Light.Spinner"
+    app:layout_constraintEnd_toEndOf="@+id/guideline5"
+    app:layout_constraintStart_toStartOf="@+id/guideline4"
+    app:layout_constraintTop_toBottomOf="@+id/textView5"/>
     <LinearLayout
         android:id="@+id/linearr"
         android:layout_width="0dp"
@@ -115,11 +127,13 @@
 
 
 
-    <androidx.appcompat.widget.AppCompatSpinner
+    <EditText
         android:id="@+id/et_type"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/login_field_border_bg"
+        android:hint="Select Fraternity"
         style="@android:style/Widget.Holo.Light.Spinner"
         app:layout_constraintEnd_toEndOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"

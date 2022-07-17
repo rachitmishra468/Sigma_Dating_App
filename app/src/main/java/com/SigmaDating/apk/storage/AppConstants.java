@@ -31,6 +31,10 @@ public class AppConstants {
     public static final String Lastname="Lastname";
 
     public static final String Gender="Gender";
+    public static final String Fraternity="Fraternity";
+    public static final String Sorority="Sorority";
+    public static final String School="School";
+
     public static final String Dob="DOB";
     public static final String device_token="Device_token";
     public static final String email="Email";
