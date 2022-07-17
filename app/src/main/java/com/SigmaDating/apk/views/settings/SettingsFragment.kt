@@ -2,6 +2,8 @@ package com.SigmaDating.apk.views.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.text.method.DigitsKeyListener
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
@@ -25,6 +28,28 @@ class SettingsFragment : Fragment() {
     lateinit var _binding: FragmentSettingsBinding
     private val binding get() = _binding
 
+    fun Call_links() {
+
+        var link: String = "http://103.10.234.134/sigmadating/terms.php"
+        _binding.licencesText.setOnClickListener {
+            (activity as Home).OpenSocial(link)
+        }
+        _binding.privacyText.setOnClickListener {
+            (activity as Home).OpenSocial(link)
+        }
+
+        _binding.privacyTextTwo.setOnClickListener {
+            (activity as Home).OpenSocial(link)
+        }
+
+        _binding.termsServices.setOnClickListener {
+            (activity as Home).OpenSocial(link)
+        }
+        _binding.contactUs.setOnClickListener {
+            (activity as Home).OpenSocial(link)
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +62,15 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        Call_links()
         _binding.passwordUpdate.setOnClickListener {
             Update_password();
+        }
+        _binding.phoneNumberText.setOnClickListener {
+            Update_phone_location(true);
+        }
+        _binding.locationText.setOnClickListener {
+            Update_phone_location(false);
         }
         _binding.imageView2.setOnClickListener {
             (activity as Home).onBackPressed()
@@ -72,14 +104,18 @@ class SettingsFragment : Fragment() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Log.d("TAG@123", "111"+res.toString())
+                            Log.d("TAG@123", "111 " + it.data.toString())
                             _binding.textEmailId.setText(it.data?.user?.email)
                             _binding.phoneNumberText.setText(it.data?.user?.phone)
+                            if (it.data?.user?.phone?.isEmpty() == true) {
+                                _binding.phoneNumberText.setText("Update")
+                            }
                             _binding.locationText.setText(it.data?.user?.location)
-
+                            if (it.data?.user?.location?.isEmpty() == true) {
+                                _binding.locationText.setText("Update")
+                            }
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
@@ -105,10 +141,22 @@ class SettingsFragment : Fragment() {
                         if (res?.status == true) {
                             dialog.dismiss()
                             AppUtils.hideLoader()
-                            Log.d("TAG@123", "112"+res.toString())
-                            res.message.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
+                            Log.d("TAG@123", "112" + res.toString())
+                            res.message.let {
+                                Toast.makeText(
+                                    requireContext(),
+                                    it,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         } else {
-                            res!!.message.let { Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show() }
+                            res!!.message.let {
+                                Toast.makeText(
+                                    requireContext(),
+                                    it,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
 
                         }
                     }
@@ -141,7 +189,7 @@ class SettingsFragment : Fragment() {
                 )
             ) {
 
-                if (AppUtils.isValid_password(current_password.text.toString())) {
+                if (AppUtils.isValid_password(editText_password.text.toString())) {
                     subscribe_change_password(dialog)
                     (activity as Home).homeviewmodel.User_change_password(
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
@@ -149,7 +197,7 @@ class SettingsFragment : Fragment() {
                         editText_password_confirm.text.toString()
                     )
                 } else {
-                    current_password.setError("Please Enter Valid Password")
+                    editText_password.setError("Please Enter Valid Password")
                 }
 
             } else {
@@ -161,5 +209,54 @@ class SettingsFragment : Fragment() {
         dialog.setContentView(view)
         dialog.show()
     }
+
+
+    fun Update_phone_location(phone: Boolean) {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.update_phone_location, null)
+
+        val title_text = view.findViewById<TextView>(R.id.textView5)
+        val current_value = view.findViewById<EditText>(R.id.editText_password)
+        val update_value = view.findViewById<Button>(R.id.update_value)
+
+        title_text.setText(
+            if (phone) {
+                "Update Phone Number."
+            } else {
+                "Update Location With Post Code."
+            }
+        )
+        current_value.setHint(
+            if (phone) {
+                current_value.inputType= InputType.TYPE_CLASS_NUMBER
+                "Enter Phone Number."
+            } else {
+                current_value.inputType= InputType.TYPE_CLASS_TEXT
+                "Enter Location With Post Code."
+            }
+        )
+
+
+        update_value.setOnClickListener {
+            if (!current_value.text.toString().isEmpty()) {
+                subscribe_change_password(dialog)
+                var key =if (phone) {
+                    "phone"
+                } else {
+                    "location"
+                }
+                (activity as Home).homeviewmodel.update_phone_location(
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+                    key,current_value.text.toString()
+                )
+            } else {
+                current_value.setError("Please Enter .. ")
+            }
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
 
 }

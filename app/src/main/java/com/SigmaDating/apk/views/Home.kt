@@ -13,6 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import com.google.android.gms.common.api.GoogleApiClient
 import android.R
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import com.SigmaDating.apk.AppReseources
@@ -69,7 +71,6 @@ class Home : AppCompatActivity() {
 
 
      fun initializeGoogleSignIn() {
-
          try {
 
              mGoogleSignInClient= GoogleSignIn.getClient(this,AppReseources.getGoogleSignInOptions()!!)
@@ -79,5 +80,12 @@ class Home : AppCompatActivity() {
              }
 
          }catch (e:Exception){}
+    }
+
+
+    fun OpenSocial(Url: String?) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(Url)
+        startActivity(i)
     }
 }

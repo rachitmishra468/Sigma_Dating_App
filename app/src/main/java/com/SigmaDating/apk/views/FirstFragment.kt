@@ -31,10 +31,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
-
     private var courseModalArrayList: ArrayList<Profile>? = null
-
-
     var broken_heart: LottieAnimationView? = null
     var heart_loading: LottieAnimationView? = null
     lateinit var chatIcon: ImageView

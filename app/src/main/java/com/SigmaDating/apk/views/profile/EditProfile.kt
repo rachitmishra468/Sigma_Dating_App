@@ -18,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +26,7 @@ import com.example.demoapp.other.Status
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.SigmaDating.R
+import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.apk.adapters.CommunityAdapter
 import com.SigmaDating.apk.adapters.Edit_Profile_Adapter
 import com.SigmaDating.databinding.FragmentEditProfileBinding
@@ -37,10 +39,6 @@ import com.SigmaDating.apk.views.Home
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -328,11 +326,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-
-
                                 dataList = ArrayList()
+                                dataList.clear()
                                 interestsList=ArrayList()
-                                Log.d("TAG@123", "1311" + it.data.toString())
+                                interestsList.clear()
+                                Log.d("TAG@123", "1311" + it.toString())
                                 if (!res.user.photos.isNullOrEmpty()) {
                                     dataList = res.user.photos
                                 }
@@ -378,10 +376,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
     fun set_Adapterdata() {
-        dataList?.add("ADD_IMAGES")
+        dataList.add("ADD_IMAGES")
         photoAdapter = Edit_Profile_Adapter(requireContext(), this)
         _binding?.updateImageView?.adapter = photoAdapter
-        dataList?.let { photoAdapter.setDataList(it) }
+        dataList.let { photoAdapter.setDataList(it) }
+        photoAdapter.notifyDataSetChanged()
     }
 
     override fun onCategoryClick(position: Int, boolean: Boolean) {
@@ -469,21 +468,25 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
     private fun setAdapterData() {
 
         try {
-            val schoolAdapter = CommunityAdapter(
-                (activity as Home),
-                schoolList!! as ArrayList<UniversityList>
-            )
+            val schoolAdapter = AppReseources.getAppContext()?.let {
+                CommunityAdapter(
+                    it,
+                    schoolList!! as ArrayList<UniversityList>
+                )
+            }
             schoolAct_spinner?.adapter = schoolAdapter
-            schoolAdapter.notifyDataSetChanged()
+            schoolAdapter?.notifyDataSetChanged()
             schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
 
 
-            val adapter = CommunityAdapter(
-                (activity as Home),
-                fraternitiesList!! as ArrayList<UniversityList>
-            )
+            val adapter = AppReseources.getAppContext()?.let {
+                CommunityAdapter(
+                    it,
+                    fraternitiesList!! as ArrayList<UniversityList>
+                )
+            }
             fraternity_Spinner.adapter = adapter
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
             fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
         } catch (e: Exception) {
 
@@ -519,6 +522,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
         chip.isClickable = true
 
         chip.isChecked = interestsList.contains(label)
+        chip.setBackgroundColor(if(interestsList.contains(label)){
+            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
+        }
+        else{
+            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
+        })
+
 
         chip.chipCornerRadius = 1.0F
         chip.setOnClickListener {
@@ -526,11 +536,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             if (chip.isChecked) {
                 if (!interestsList.contains(label)) {
                     interestsList.add(label)
+                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900))
                 }
 
             } else {
                 if (interestsList.contains(label)) {
                     interestsList.remove(label)
+                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200))
 
                 }
             }

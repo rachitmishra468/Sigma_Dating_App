@@ -56,7 +56,8 @@ class SecondFragment : Fragment() {
         _binding?.recyclerView?.adapter = photoAdapter
 
         //add data
-        for (i in 1..10) {
+        dataList.clear()
+        for (i in 1..5) {
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/african-american-woman-talking-mobile-phone-black-people-50437769.jpg"))
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beautiful-young-woman-maine-usa-close-up-portrait-native-108644385.jpg"))
             dataList.add(EditProfiledata("https://thumbs.dreamstime.com/b/beauty-black-skin-woman-african-ethnic-female-face-young-african-american-model-long-afro-hair-smiling-model-isolated-163819588.jpg"))
@@ -68,9 +69,6 @@ class SecondFragment : Fragment() {
 
         photoAdapter.setDataList(dataList)
 
-        /*binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }*/
     }
 
     override fun onDestroyView() {
