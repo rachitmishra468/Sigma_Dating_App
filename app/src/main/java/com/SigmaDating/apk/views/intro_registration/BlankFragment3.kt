@@ -76,7 +76,7 @@ class BlankFragment3 : Fragment() {
                     AppUtils.showErrorSnackBar(
                         requireContext(),
                         constraint_f1,
-                        "Enter Valid Date of Birth"
+                        "Enter Valid Date of Birth. use MM/dd/YYYY format"
                     )
 
                 } else {

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
@@ -35,7 +36,15 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

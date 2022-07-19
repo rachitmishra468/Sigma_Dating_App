@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -615,19 +616,27 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         schoolAdapter.filter.filter(p0)
         return false
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
     override fun onItClick(position: UniversityList, stringtype: String) {
         var clickItemData = position.name
         if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {
             fraternity_Spinner!!.setText(clickItemData)
-            university = clickItemData
+            community = clickItemData
             /*  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                   AppConstants.community,
                   position.name
               )*/
         } else {
             schoolAct_spinner!!.setText(clickItemData)
-            community = clickItemData
+            university = clickItemData
             /*(activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.university,
                 position.name

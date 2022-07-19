@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -99,7 +100,15 @@ class SettingsFragment : Fragment() {
 
         return binding.root
     }
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
     fun subscribe_Login_User_details() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
             when (it.status) {
