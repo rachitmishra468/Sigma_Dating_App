@@ -75,12 +75,18 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_edit_page_data(id: String) {
-        val one = async { getSchoolingData() }
+        val one = async { getSchoolingData()
+
+        }
+
         if (userData != null) {
             get_user_data.postValue(userData)
         } else {
             val two = async { get_Login_User_details(id) }
         }
+
+
+
 
 
 

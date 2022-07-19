@@ -1,6 +1,7 @@
 package com.SigmaDating.apk.views.intro_registration
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,7 +96,8 @@ class BlankFragment3 : Fragment() {
                         country_spinner.selectedCountryCodeWithPlus+""+edit_text_phone.text.toString()
                     )
 
-
+val ee= AppUtils.getAgeDiffernce(editbirthday.text.toString())
+                    Log.d("TAG@123",ee.toString())
                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
 
                 }

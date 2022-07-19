@@ -14,9 +14,12 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,13 +27,14 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.example.demoapp.other.Status
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.SigmaDating.R
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
+import com.example.demoapp.other.Status
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
@@ -54,6 +58,7 @@ class Profile_Photo : Fragment() {
     private var mUri: Uri? = null
     lateinit var img_choose_dummy: ImageView
     lateinit var tc_check: CheckBox
+    private var text_termncon:TextView?=null
     lateinit var constraint_f1: ConstraintLayout
     lateinit var bitmap_string: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +80,7 @@ class Profile_Photo : Fragment() {
         profile_continue = view.findViewById(R.id.profile_continue)
         img_choose_dummy = view.findViewById(R.id.img_choose_dummy)
         tc_check = view.findViewById(R.id.tc_check)
+        text_termncon=view.findViewById(R.id.text_termncon)
         constraint_f1 = view.findViewById(R.id.constraint_f1)
         imageProfile = view.findViewById(R.id.img_profile)
         bitmap_string = ""
@@ -141,11 +147,28 @@ class Profile_Photo : Fragment() {
 
         }
 
+
+
+
+
+
     }
 
     override fun onResume() {
         super.onResume()
-
+        val ss = SpannableString(resources.getString(R.string.term_and_condition))
+        val span2: ClickableSpan = object : ClickableSpan() {
+            override fun onClick(textView: View) {
+                // term n conditions links opens
+                Log.d("TAG@123","clicked")
+            }
+        }
+        //ss.setSpan(span1, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(span2, 18, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        text_termncon?.let {
+            it.text = ss
+            it.movementMethod = LinkMovementMethod.getInstance()
+        }
 
     }
 
@@ -292,11 +315,10 @@ class Profile_Photo : Fragment() {
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-
                     if (data!=null) {
                         try {
                             val bitmap = MediaStore.Images.Media.getBitmap(
-                                activity!!.contentResolver,
+                                requireActivity().contentResolver,
                                 data.data
                             )
                             imageProfile?.setImageBitmap(bitmap)

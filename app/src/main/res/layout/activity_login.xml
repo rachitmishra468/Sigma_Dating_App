@@ -148,7 +148,7 @@
                                     android:inputType="textEmailAddress"
                                     android:letterSpacing="0.10"
                                     android:textColorHint="@color/hint_text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="15sp" />
                             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -178,7 +178,7 @@
                                     android:inputType="textPassword"
                                     android:letterSpacing="0.10"
                                     android:textColorHint="@color/hint_text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="15sp" />
                             </com.google.android.material.textfield.TextInputLayout>
 
 

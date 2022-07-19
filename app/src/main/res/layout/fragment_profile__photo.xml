@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/white_with_opecity"
@@ -71,17 +72,18 @@
     </FrameLayout>
 
 
-
     <CheckBox
         android:id="@+id/tc_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+        android:layout_marginStart="34dp"
+        android:layout_marginLeft="34dp"
         android:autoLink="web"
-        android:layout_marginTop="50dp"
-        android:text="@string/term_and_condition"
-        app:layout_constraintTop_toBottomOf="@+id/profile_card"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"></CheckBox>
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/guideline4">
+
+    </CheckBox>
 
     <Button
         android:id="@+id/profile_continue"
@@ -114,6 +116,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="30dp" />
+
+    <TextView
+        android:id="@+id/text_termncon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/term_and_condition"
+        app:layout_constraintStart_toEndOf="@+id/tc_check"
+        app:layout_constraintTop_toBottomOf="@+id/profile_card" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

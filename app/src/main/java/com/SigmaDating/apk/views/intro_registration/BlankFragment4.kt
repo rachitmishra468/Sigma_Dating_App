@@ -59,6 +59,8 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         fraternity_Spinner = about_school_binding?.root?.findViewById(R.id.et_type)!!
         Socority_button = about_school_binding?.root?.findViewById(R.id.Socority_button)
         fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)
+        fraternity_button!!.isSelected=true
+        fraternity_button!!.hint="Select Fraternity"
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
@@ -95,7 +97,20 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
 
         fraternity_button?.setOnClickListener {
+            if (!fraternity_button!!.isSelected){
+                fraternity_Spinner.setText("Select Fraternity")
+                fraternity_button!!.isSelected=true
+                Socority_button!!.isSelected=false
+            }
+            else{
+
+            }
             fraternity_Spinner?.hint = "Select Fraternity"
+               // schoolAct_spinner!!.isSelected=false
+                //fraternity_button!!.isSelected=true
+
+
+
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
@@ -109,7 +124,13 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         }
 
         Socority_button?.setOnClickListener {
-            fraternity_Spinner?.hint = "Select Socority"
+            if (!Socority_button!!.isSelected){
+                fraternity_button!!.isSelected=false
+                Socority_button!!.isSelected=true
+                fraternity_Spinner.setText("Select Sorority")
+            }
+
+            fraternity_Spinner?.hint = "Select Sorority"
             Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             Socority_button?.setTextColor(this.resources.getColor(R.color.black))

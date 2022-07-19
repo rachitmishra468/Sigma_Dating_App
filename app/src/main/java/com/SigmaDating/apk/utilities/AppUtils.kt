@@ -20,10 +20,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
-import com.airbnb.lottie.LottieAnimationView
-import com.google.android.material.snackbar.Snackbar
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.communityModel.UniversityList
+import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -115,7 +115,7 @@ object AppUtils {
 
     fun isValidDate(dateOfBirth: String): Boolean {
         var valid = true
-        val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
         formatter.setLenient(false)
         try {
             val date: Date = formatter.parse(dateOfBirth)
@@ -344,4 +344,27 @@ public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
         return 0
     }
 
+
+     fun getAgeDiffernce(dobString: String): Int {
+        var date: Date? = null
+        val sdf = SimpleDateFormat("MM/dd/yyyy")
+        try {
+            date = sdf.parse(dobString)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        if (date == null) return 0
+        val dob = Calendar.getInstance()
+        val today = Calendar.getInstance()
+        dob.time = date
+        val year = dob[Calendar.YEAR]
+        val month = dob[Calendar.MONTH]
+        val day = dob[Calendar.DAY_OF_MONTH]
+        dob[year, month + 1] = day
+        var age = today[Calendar.YEAR] - dob[Calendar.YEAR]
+        if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
+            age--
+        }
+        return age
+    }
 }

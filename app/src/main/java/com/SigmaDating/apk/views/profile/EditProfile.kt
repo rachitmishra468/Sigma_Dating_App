@@ -1,20 +1,16 @@
 package com.SigmaDating.apk.views.profile
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
-import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -22,28 +18,32 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.other.Status
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
-import com.SigmaDating.apk.adapters.CommunityAdapter
 import com.SigmaDating.apk.adapters.Edit_Profile_Adapter
+import com.SigmaDating.apk.adapters.SchoolAdapter
 import com.SigmaDating.databinding.FragmentEditProfileBinding
 import com.SigmaDating.apk.model.communityModel.Interest
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
-import com.SigmaDating.apk.utilities.AppUtils.index
+import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.views.Home
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
+class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
+    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -56,16 +56,18 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
     var fraternitiesList: List<UniversityList>? = null
     var schoolList: List<UniversityList>? = null
     var interest: List<Interest>? = null
-    lateinit var fraternity_Spinner: Spinner
-    private var schoolAct_spinner: Spinner? = null
+    lateinit var fraternity_Spinner: EditText
+    private var schoolAct_spinner: EditText? = null
     lateinit var rootContainer: ChipGroup
     var university: String? = null
     var community: String? = null
     var about: String? = null
-   // var interests: String? = null
+    // var interests: String? = null
 
 
-
+    private lateinit var schoolAdapter: SchoolAdapter
+    lateinit var dialog: Dialog
+    var searchRecyclerView: RecyclerView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -108,28 +110,41 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
         }
 
 
+        schoolAct_spinner!!.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
 
+                openSchoolSearchDialog(AppConstants.School,schoolList as List<UniversityList>)
+                true
+            } else false
+        }
 
+        fraternity_Spinner!!.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                schoolList = ArrayList<UniversityList>()
+                schoolList = fraternitiesList
+                openSchoolSearchDialog(AppConstants.Fraternity,fraternitiesList as List<UniversityList>)
+                true
+            } else false
+        }
+        /* schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                 university = (parent?.getItemAtPosition(pos) as UniversityList).name
+             }
 
-        schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                university = (parent?.getItemAtPosition(pos) as UniversityList).name
-            }
+             override fun onNothingSelected(p0: AdapterView<*>?) {
+             }
+         })
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        })
+         fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                 community = (parent?.getItemAtPosition(pos) as UniversityList).name
+             }
 
-        fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                community = (parent?.getItemAtPosition(pos) as UniversityList).name
-            }
+             override fun onNothingSelected(p0: AdapterView<*>?) {
+             }
+         })*/
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        })
-
-       // (activity as Home?)?.homeviewmodel?.getSchoolingData()
+        // (activity as Home?)?.homeviewmodel?.getSchoolingData()
 
         subscribe_Login_User_details()
         subscribe_edit_profile()
@@ -143,6 +158,25 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             )
         )
         return binding.root
+    }
+
+    private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
+        dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
+        dialog.setContentView(R.layout.search_dialog_school)
+        dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
+        searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
+        val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
+        searchRecyclerView!!.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.VERTICAL, false
+        )
+        schoolAdapter = SchoolAdapter(this, stringtype)
+        searchRecyclerView!!.adapter = schoolAdapter
+        schoolAdapter.addData(passDataList!!)
+        schoolAdapter.notifyDataSetChanged()
+        val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
+        schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
+        dialog.show()
     }
 
     companion object {
@@ -164,7 +198,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
     fun subscribe_edit_profile() {
-        (activity as Home?)?.homeviewmodel?.update_profile?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.update_profile?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
@@ -196,7 +230,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
     fun subscribe_delete_images() {
-        (activity as Home?)?.homeviewmodel?.delete_images?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.delete_images?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
@@ -236,7 +270,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
 
     fun subscribe_upload_images() {
-        (activity as Home?)?.homeviewmodel?.upload_images?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.upload_images?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
@@ -295,7 +329,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                         it1.data.fraternitiesList + it1.data.sororitiesList
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
-                                    setAdapterData()
+                                    university.let { schoolAct_spinner!!.setText(university) }
+                                    fraternity_Spinner.let { fraternity_Spinner.setText(community) }
+
+                                    // setAdapterData()
                                     setupChipGroupDynamically(interest!!)
 
 
@@ -318,9 +355,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
     }
 
+    private fun setSchooldata() {
+
+    }
+
     fun subscribe_Login_User_details() {
 
-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->
@@ -328,7 +369,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                             try {
                                 dataList = ArrayList()
                                 dataList.clear()
-                                interestsList=ArrayList()
+                                interestsList = ArrayList()
                                 interestsList.clear()
                                 Log.d("TAG@123", "1311" + it.toString())
                                 if (!res.user.photos.isNullOrEmpty()) {
@@ -336,23 +377,22 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                                 }
                                 set_Adapterdata()
 
-                                    res.user.university.let {
-                                        university = it
-                                    }
-                                    res.user.community.let {
-                                        community = it
-                                    }
-                                    res.user.about.let {
-                                        about = it
-                                        _binding?.userAbout?.setText(about)
-                                    }
+                                res.user.university.let {
+                                    university = it
+                                }
+                                res.user.community.let {
+                                    community = it
+                                }
+                                res.user.about.let {
+                                    about = it
+                                    _binding?.userAbout?.setText(about)
+                                }
 
                                 interestsList = res.user.interests.split(",") as ArrayList<String>
 
 
-
                             } catch (e: Exception) {
-                                Log.d("TAG@123","Exception ${e.message}")
+                                Log.d("TAG@123", "Exception ${e.message}")
 
                             }
 
@@ -426,7 +466,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
                     if (data != null) {
                         try {
                             val bitmap = MediaStore.Images.Media.getBitmap(
-                                activity!!.contentResolver,
+                                requireActivity().contentResolver,
                                 data.data
                             )
                             Bitmap.createScaledBitmap(bitmap, 350, 350, true);
@@ -465,35 +505,35 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
 
         }
     }
-    private fun setAdapterData() {
+    /* private fun setAdapterData() {
 
-        try {
-            val schoolAdapter = AppReseources.getAppContext()?.let {
-                CommunityAdapter(
-                    it,
-                    schoolList!! as ArrayList<UniversityList>
-                )
-            }
-            schoolAct_spinner?.adapter = schoolAdapter
-            schoolAdapter?.notifyDataSetChanged()
-            schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
+         try {
+             val schoolAdapter = AppReseources.getAppContext()?.let {
+                 CommunityAdapter(
+                     it,
+                     schoolList!! as ArrayList<UniversityList>
+                 )
+             }
+             schoolAct_spinner?.adapter = schoolAdapter
+             schoolAdapter?.notifyDataSetChanged()
+             schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
 
 
-            val adapter = AppReseources.getAppContext()?.let {
-                CommunityAdapter(
-                    it,
-                    fraternitiesList!! as ArrayList<UniversityList>
-                )
-            }
-            fraternity_Spinner.adapter = adapter
-            adapter?.notifyDataSetChanged()
-            fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
-        } catch (e: Exception) {
+             val adapter = AppReseources.getAppContext()?.let {
+                 CommunityAdapter(
+                     it,
+                     fraternitiesList!! as ArrayList<UniversityList>
+                 )
+             }
+             fraternity_Spinner.adapter = adapter
+             adapter?.notifyDataSetChanged()
+             fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
+         } catch (e: Exception) {
 
-            Log.d("TAG@123", "Ex -:" + e.message.toString())
-        }
+             Log.d("TAG@123", "Ex -:" + e.message.toString())
+         }
 
-    }
+     }*/
 
 
     private fun setupChipGroupDynamically(list: List<Interest>) {
@@ -522,12 +562,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
         chip.isClickable = true
 
         chip.isChecked = interestsList.contains(label)
-        chip.setBackgroundColor(if(interestsList.contains(label)){
-            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
-        }
-        else{
-            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
-        })
+        chip.setBackgroundColor(
+            if (interestsList.contains(label)) {
+                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
+            } else {
+                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
+            }
+        )
 
 
         chip.chipCornerRadius = 1.0F
@@ -536,13 +577,23 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
             if (chip.isChecked) {
                 if (!interestsList.contains(label)) {
                     interestsList.add(label)
-                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900))
+                    chip.setBackgroundColor(
+                        ContextCompat.getColor(
+                            AppReseources.getAppContext()!!,
+                            R.color.light_blue_900
+                        )
+                    )
                 }
 
             } else {
                 if (interestsList.contains(label)) {
                     interestsList.remove(label)
-                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200))
+                    chip.setBackgroundColor(
+                        ContextCompat.getColor(
+                            AppReseources.getAppContext()!!,
+                            R.color.teal_200
+                        )
+                    )
 
                 }
             }
@@ -553,6 +604,39 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
         }
         return chip
 
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        schoolAdapter.filter.filter(p0)
+        return false
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        schoolAdapter.filter.filter(p0)
+        return false
+    }
+
+    override fun onItClick(position: UniversityList, stringtype: String) {
+        var clickItemData = position.name
+        if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {
+            fraternity_Spinner!!.setText(clickItemData)
+            university = clickItemData
+            /*  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                  AppConstants.community,
+                  position.name
+              )*/
+        } else {
+            schoolAct_spinner!!.setText(clickItemData)
+            community = clickItemData
+            /*(activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.university,
+                position.name
+            )*/
+        }
+
+        if (dialog != null || dialog.isShowing) {
+            dialog.dismiss()
+        }
     }
 }
 
