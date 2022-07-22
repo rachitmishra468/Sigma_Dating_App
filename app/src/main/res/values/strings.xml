@@ -13,7 +13,7 @@
     <string name="send_enter_text">Enter OTP</string>
     <string name="stepone_header">Tell us a little\n about yourself.</string>
     <string name="name_ask_text">What is your name?</string>
-    <string name="what_school">What School do you attend?</string>
+    <string name="what_school">Which College or University do you attend?</string>
     <string name="first_name_text">First Name</string>
     <string name="hint_school_name">School Name</string>
     <string name="last_name_text">Last Name</string>
@@ -54,6 +54,12 @@
 
     <string name="term_and_condition">I agree with the <u>Terms and Conditions</u> <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
     <!--856275008761-pr04ias0a1j3pqo9gataltbneq1savj9.apps.googleusercontent.com-->
+
+    <string name="password_strength_weak">Your Password is Weak</string>
+    <string name="password_strength_medium">Your Password is Medium</string>
+    <string name="password_strength_strong">Your Password is Strong</string>
+    <string name="password_strength_very_strong">Your Password is Very Strong</string>
+
 
 
 </resources>

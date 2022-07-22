@@ -11,10 +11,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.hbb20.CountryCodePicker
 import com.SigmaDating.R
-import com.SigmaDating.databinding.AboutBirthdayBinding
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.DateTextWatcher
+import com.SigmaDating.databinding.AboutBirthdayBinding
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -76,7 +76,7 @@ class BlankFragment3 : Fragment() {
                     AppUtils.showErrorSnackBar(
                         requireContext(),
                         constraint_f1,
-                        "Enter Valid Date of Birth. use MM/dd/YYYY format"
+                        "Enter Valid Date of Birth(MM/DD/YYYY)"
                     )
 
                 } else {
@@ -93,11 +93,11 @@ class BlankFragment3 : Fragment() {
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                         AppConstants.phone,
-                        country_spinner.selectedCountryCodeWithPlus+""+edit_text_phone.text.toString()
+                        country_spinner.selectedCountryCodeWithPlus + "" + edit_text_phone.text.toString()
                     )
 
-val ee= AppUtils.getAgeDiffernce(editbirthday.text.toString())
-                    Log.d("TAG@123",ee.toString())
+                    val ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
+                    Log.d("TAG@123", ee.toString())
                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
 
                 }

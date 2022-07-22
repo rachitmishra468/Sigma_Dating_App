@@ -210,7 +210,7 @@ class Profile_Photo : Fragment() {
             intent.type = "image/*"
             activity?.packageManager?.let {
                 intent.resolveActivity(it)?.also {
-                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+                    (activity as Home).startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
                 }
             }
         }

@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="start"
-
         android:text="@string/tell_us"
         android:textColor="@color/light_text_color"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
@@ -30,7 +29,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginTop="28dp"
         android:alpha=".8"
-        android:text="What is your Email, Phone Number \nAnd birthday?"
+        android:text="What is your Email?"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -42,10 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/login_field_border_bg"
         android:hint="@string/email_text"
-        android:text="yxz@gmail.com"
+        android:text=""
         android:inputType="textEmailAddress"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
@@ -53,18 +52,33 @@
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
+    <TextView
+        android:id="@+id/textphone"
+        style="@style/QText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="28dp"
+        android:alpha=".8"
+        android:text="What is your Phone Number?"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/edit_emal" />
+
+
 
     <LinearLayout
         android:id="@+id/enter_number_layout"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/login_field_border_bg"
         android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/edit_emal">
+        app:layout_constraintTop_toBottomOf="@+id/textphone">
 
         <com.hbb20.CountryCodePicker
             android:id="@+id/ccp"
@@ -86,7 +100,7 @@
             android:layout_weight=".8"
             android:background="@color/white"
             android:ems="10"
-            android:text="6306636797"
+            android:text=""
             android:inputType="phone"
             android:maxLength="10"
             android:paddingLeft="5dp"
@@ -101,22 +115,37 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/textdob"
+        style="@style/QText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="28dp"
+        android:alpha=".8"
+        android:text="When is Your birthday?"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/enter_number_layout" />
+
+
     <EditText
         android:id="@+id/edit_text_birthday"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/login_field_border_bg"
         android:ems="10"
-        android:hint="DD/MM/YYYY"
-        android:text="15/01/1999"
+        android:hint="MM/DD/YYYY"
+        android:text=""
         android:maxLength="10"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/enter_number_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/textdob" />
 
 
     <Button
