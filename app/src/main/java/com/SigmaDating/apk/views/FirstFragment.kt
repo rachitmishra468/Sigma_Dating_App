@@ -23,16 +23,20 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
 import com.SigmaDating.R
+import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
-    private var courseModalArrayList: ArrayList<Profile>? = null
+    private var courseModalArrayList: ArrayList<Bids>? = null
     var broken_heart: LottieAnimationView? = null
     var heart_loading: LottieAnimationView? = null
     lateinit var chatIcon: ImageView
@@ -40,20 +44,19 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var sigma_list: ImageView
     lateinit var editProfile: CircleImageView
     lateinit var notificationIcon: ConstraintLayout
-    lateinit var notification:ConstraintLayout
+    lateinit var notification: ConstraintLayout
+    var cardViewChanger: CardViewChanger? = null
+
+    lateinit var adapter:ProfileMatch
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (activity as Home).homeviewmodel.get_Login_User_details(
-            (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        )
-        if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer))(
+
+        if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
-        )
+                )
 
     }
 
@@ -66,55 +69,59 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
+        cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
         editProfile.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
         notificationIcon.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
         }
+
+
+        (activity as Home).homeviewmodel.get_home_feb_data(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
         footer_transition()
         subscribe_Login_User_details()
+        subscribe_bids()
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        courseModalArrayList = ArrayList()
-        for (i in 1..10) {
-            courseModalArrayList!!.add(Profile("C++", R.drawable.dummy_imf))
-        }
 
+        cardViewChanger!!.setFlingListener(object : CardViewChanger.OnCardFlingListener {
+            override fun onCardExitLeft(dataObject: Any) {
+                Log.d("TAG@123", "onCardExitLeft")
 
-        val adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
-        binding.swipeDeck.setAdapter(adapter)
-        binding.swipeDeck.setEventCallback(object : SwipeEventCallback {
-            override fun cardSwipedLeft(position: Int) {
-                //  Toast.makeText(context, "Card Swiped Left", Toast.LENGTH_SHORT).show()
             }
 
-            override fun cardSwipedRight(position: Int) {
-                // Toast.makeText(context, "Card Swiped Right", Toast.LENGTH_SHORT).show()
+            override fun onCardExitRight(dataObject: Any) {
+                Log.d("TAG@123", "onCardExitRight")
+
             }
 
-            override fun cardsDepleted() {
-                // this method is called when no card is present
-                binding.brokenHeart.playAnimation()
-                play_animation()
-                //  Toast.makeText(context, "No more courses present", Toast.LENGTH_SHORT).show()
+            override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
+
             }
 
-            override fun cardActionDown() {
-                // this method is called when card is swiped down.
-                Log.i("TAG", "CARDS MOVED DOWN")
+            override fun onScroll(v: Float) {
+
             }
 
-            override fun cardActionUp() {
-                // this method is called when card is moved up.
-                Log.i("TAG", "CARDS MOVED UP")
+            override fun onCardExitTop(dataObject: Any) {
+                Log.d("TAG@123", "onCardExitTop")
+
+            }
+
+            override fun onCardExitBottom(dataObject: Any?) {
+                Log.d("TAG@123", "onCardExitBottom")
+
             }
         })
-
 
     }
 
@@ -163,19 +170,18 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-    override fun onCategoryClick(position: Profile?,count:Int) {
+    override fun onCategoryClick(position: Bids?, count: Int) {
 
-        when(count){
-            1->findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
-            2->binding.swipeDeck.swipeTopCardRight(150)
-            3->binding.swipeDeck.swipeTopCardRight(150)
-            4->findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            5->binding.swipeDeck.swipeTopCardLeft(150)
-            6->findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        when (count) {
+            1 -> findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+            2 -> cardViewChanger?.throwRight()
+            3 -> cardViewChanger?.throwTop()
+            4 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            5 -> cardViewChanger?.throwLeft()
+            6 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 
 
         }
-
 
 
     }
@@ -202,6 +208,41 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         dialog.show()
     }
 
+    fun subscribe_bids(){
+        (activity as Home?)?.homeviewmodel?.user_bids?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+
+                        if (res?.status == true) {
+                            try {
+                                Log.d("TAG@123","notifications_count  :"+ it.data?.notifications_count.toString())
+                                courseModalArrayList=it.data?.bids as ArrayList<Bids>
+                                adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
+                                cardViewChanger?.setAdapter(adapter)
+                                adapter.notifyDataSetChanged()
+
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception" + e.message.toString())
+                            }
+                        }else{
+
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
+
+                        }
+
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+    }
 
     fun subscribe_Login_User_details() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
@@ -213,18 +254,22 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                             try {
                                 Log.d("TAG@123", it.data?.user.toString())
 
-                                    Glide.with(requireContext()).load(it.data?.user?.upload_image)
+                                Glide.with(requireContext()).load(it.data?.user?.upload_image)
+                                    .error(R.drawable.profile_img)
+                                    .into(editProfile);
+
+
+
+                                if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
+                                    Glide.with(requireContext()).load(
+                                        (activity as Home?)?.sharedPreferencesStorage!!.getString(
+                                            AppConstants.upload_image
+                                        )
+                                    )
                                         .error(R.drawable.profile_img)
                                         .into(editProfile);
 
-
-
-                                if(it.data?.user?.upload_image?.length==0||it.data?.user?.upload_image==null){
-                                    Glide.with(requireContext()).load( (activity as Home?)?.sharedPreferencesStorage!!.getString(AppConstants.upload_image))
-                                        .error(R.drawable.profile_img)
-                                        .into(editProfile);
-
-                                }else{
+                                } else {
 
                                 }
 
@@ -252,3 +297,5 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
 }
+
+

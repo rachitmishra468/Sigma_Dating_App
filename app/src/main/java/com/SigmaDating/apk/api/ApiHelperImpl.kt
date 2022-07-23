@@ -5,6 +5,7 @@ import com.SigmaDating.apk.model.Loginmodel
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.api.ApiHelper
 import com.SigmaDating.apk.model.Forgotpassword
+import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.model.SchoolCommunityResponse
 import retrofit2.Response
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun change_password(jsonObject: JsonObject): Response<Loginmodel> =apiService.change_password(jsonObject)
     override suspend fun delete_images(jsonObject: JsonObject): Response<Loginmodel> =apiService.delete_images(jsonObject)
     override suspend fun Update_profile(jsonObject: JsonObject): Response<Loginmodel> =apiService.Update_profile(jsonObject)
-
+    override suspend fun get_user_bids(id: String): Response<home_model> =apiService.get_user_bids(id)
 
 
 }

@@ -4,6 +4,7 @@ package com.SigmaDating.apk.api
 import com.SigmaDating.apk.model.Loginmodel
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Forgotpassword
+import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.model.SchoolCommunityResponse
 import retrofit2.Response
 import retrofit2.http.*
@@ -37,6 +38,9 @@ interface ApiService {
 
     @GET("common/listschoolscommunity")
     suspend fun listSchoolFeternity():Response<SchoolCommunityResponse>
+
+    @GET("common/{id}")
+    suspend fun get_user_bids(@Path("id")id: String):Response<home_model>
 
 
     @POST("users/uploadphoto")

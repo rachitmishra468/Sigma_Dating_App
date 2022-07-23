@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
     android:paddingTop="5dp"
+    android:background="@color/white"
     android:paddingRight="10dp">
 
     <LinearLayout
@@ -42,21 +43,20 @@
 
                     <TextView
                         android:id="@+id/tv_username"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="5"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:gravity="center|left"
                         android:padding="2dp"
-                        android:text="Joe"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="22sp"
                         android:textStyle="bold"></TextView>
 
                     <View
-                        android:layout_width="2dp"
+                        android:layout_width="1dp"
                         android:layout_height="22sp"
                         android:layout_gravity="center"
                         android:background="@color/hint_text_color"
@@ -64,15 +64,14 @@
 
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="5"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:gravity="center|left"
                         android:paddingLeft="10dp"
-                        android:text="20"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="22sp"
                         android:textStyle="normal">

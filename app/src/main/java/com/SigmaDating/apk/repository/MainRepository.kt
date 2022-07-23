@@ -20,6 +20,6 @@ class MainRepository @Inject constructor(
     suspend fun upload_images(jsonObject: JsonObject)=apiHelper.upload_images(jsonObject)
     suspend fun delete_images(jsonObject: JsonObject)=apiHelper.delete_images(jsonObject)
     suspend fun Update_profile(jsonObject: JsonObject)=apiHelper.Update_profile(jsonObject)
-
+    suspend fun get_user_bids(id: String)= apiHelper.get_user_bids(id)
 
 }

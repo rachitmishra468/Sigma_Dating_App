@@ -127,25 +127,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 true
             } else false
         }
-        /* schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                 university = (parent?.getItemAtPosition(pos) as UniversityList).name
-             }
 
-             override fun onNothingSelected(p0: AdapterView<*>?) {
-             }
-         })
-
-         fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                 community = (parent?.getItemAtPosition(pos) as UniversityList).name
-             }
-
-             override fun onNothingSelected(p0: AdapterView<*>?) {
-             }
-         })*/
-
-        // (activity as Home?)?.homeviewmodel?.getSchoolingData()
 
         subscribe_Login_User_details()
         subscribe_edit_profile()

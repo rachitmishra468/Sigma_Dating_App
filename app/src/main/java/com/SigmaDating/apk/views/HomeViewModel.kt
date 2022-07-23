@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.SigmaDating.apk.model.home_model
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Loginmodel
@@ -28,6 +29,7 @@ class HomeViewModel @Inject constructor(
     var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
     var update_profile: MutableLiveData<Resource<Loginmodel>>
     lateinit var userData: Resource<Loginmodel>
+    var user_bids: MutableLiveData<Resource<home_model>>
 
     init {
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
@@ -36,7 +38,28 @@ class HomeViewModel @Inject constructor(
         delete_images = MutableLiveData<Resource<Loginmodel>>()
         school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
         update_profile = MutableLiveData<Resource<Loginmodel>>()
+         user_bids = MutableLiveData<Resource<home_model>>()
     }
+
+    fun get_home_feb_data(id: String){
+        val one = async {  get_Login_User_details(id) }
+        val two = async { get_Login_User_bids(id) }
+    }
+
+    fun get_Login_User_bids(id: String)= viewModelScope.launch {
+        user_bids.postValue(Resource.loading(null))
+        Log.d("TAG@123", "get_Login_User_bids")
+        mainRepository.get_user_bids(id).let {
+            if (it.isSuccessful) {
+                Log.d("TAG@123", "get_Login_User_bids  isSuccessful")
+                user_bids.postValue(Resource.success(it.body()))
+            } else {
+                Log.d("TAG@123", "get_Login_User_bids  isSuccessful false")
+                user_bids.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
 
     fun get_Login_User_details(id: String) = viewModelScope.launch {
         get_user_data.postValue(Resource.loading(null))
@@ -75,21 +98,8 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_edit_page_data(id: String) {
-        val one = async { getSchoolingData()
-
-        }
-
-        if (userData != null) {
-            get_user_data.postValue(userData)
-        } else {
-            val two = async { get_Login_User_details(id) }
-        }
-
-
-
-
-
-
+        val one = async { getSchoolingData() }
+        val two = async { get_Login_User_details(id) }
     }
 
     fun Update_edit_page_data(
