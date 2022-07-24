@@ -7,16 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.SigmaDating.apk.model.Profile
+import android.widget.Toast
+
+import com.SigmaDating.apk.adapters.ProfileMatch
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
-import com.SigmaDating.apk.adapters.ProfileMatch
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
@@ -25,6 +26,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlin.collections.ArrayList
 import java.util.*
 
 
@@ -106,7 +108,7 @@ var userId:String?=null
             }
 
             override fun onScroll(v: Float) {
-
+                Log.d("TAG@123", "onScroll")
             }
 
             override fun onCardExitTop(dataObject: Any) {
@@ -119,6 +121,10 @@ var userId:String?=null
 
             }
         })
+
+
+       // cardViewChanger.se
+
 
     }
 
@@ -134,6 +140,8 @@ var userId:String?=null
             1500
         )
     }
+
+
 
 
     override fun onDestroyView() {

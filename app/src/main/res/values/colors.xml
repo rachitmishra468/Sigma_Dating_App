@@ -20,4 +20,11 @@
     <color name="star_color">#FFC107</color>
     <color name="setting_color">#3F51B5</color>
     <color name="chat_color">#9C27B0</color>
+    <color name="bel_lightgrey_text">#72747A</color>
+    <color name="bel_grey_text">#C6C6C6</color>
+    <color name="colorAccent">#C6C6C6</color>
+    <color name="bel_red_text">#C6C6C6</color>
+    <color name="colorPrimary">#C6C6C6</color>
+
+
 </resources>
