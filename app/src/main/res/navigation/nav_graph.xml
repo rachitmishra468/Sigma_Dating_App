@@ -13,7 +13,11 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment" >
+            <argument
+                android:name="userId"
+                app:argType="string" />
+        </action>
 
         <action
             android:id="@+id/action_FirstFragment_to_chat"
@@ -36,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.SigmaDating.apk.views.SecondFragment"
+        android:name="com.SigmaDating.apk.views.userdashboard.SecondFragment"
         android:label="second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -138,7 +142,10 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/SecondFragment"
+            app:enterAnim="@anim/slide_right"
+            app:exitAnim="@anim/slide_left"
+            />
         <action
             android:id="@+id/action_chatListFragment_to_userChatFragment"
             app:destination="@id/userChatFragment" />

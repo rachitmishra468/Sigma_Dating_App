@@ -13,9 +13,9 @@ import com.SigmaDating.apk.model.EditProfiledata
 
 class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {
 
-    var dataList = emptyList<EditProfiledata>()
+    var dataList = emptyList<String>()
 
-    internal fun setDataList(dataList: List<EditProfiledata>) {
+    internal fun setDataList(dataList: List<String>) {
         this.dataList = dataList
     }
 
@@ -45,7 +45,7 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
         var data = dataList[position]
 
         // Set item views based on your views and data model
-        Glide.with(context).load(data.icon).into(holder.image);
+        Glide.with(context).load(data.trim()).into(holder.image);
 
     }
 

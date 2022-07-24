@@ -14,6 +14,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/edit_profile"
             android:layout_width="0dp"
+            android:transitionName="img_trans"
             android:layout_height="50dp"
             android:layout_margin="1dp"
             android:layout_weight="0.75"

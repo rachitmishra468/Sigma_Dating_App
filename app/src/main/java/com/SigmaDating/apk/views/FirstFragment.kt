@@ -2,34 +2,30 @@ package com.SigmaDating.apk.views
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.SigmaDating.apk.model.Profile
-import android.widget.Toast
-
-import android.util.Log
-import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
-import com.SigmaDating.apk.adapters.ProfileMatch
-import android.os.Handler
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.SigmaDating.R
+import com.SigmaDating.apk.adapters.ProfileMatch
+import com.SigmaDating.apk.model.Bids
+import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.views.CardManager.CardViewChanger
+import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
-import com.SigmaDating.R
-import com.SigmaDating.apk.model.Bids
-import com.SigmaDating.databinding.FragmentFirstBinding
-import com.SigmaDating.apk.storage.AppConstants
-import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
@@ -46,7 +42,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var notificationIcon: ConstraintLayout
     lateinit var notification: ConstraintLayout
     var cardViewChanger: CardViewChanger? = null
-
+var userId:String?=null
     lateinit var adapter:ProfileMatch
 
 
@@ -60,18 +56,19 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
         editProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            val extras = FragmentNavigatorExtras(editProfile to "large_image")
+            val bundle = Bundle()
+            userId= (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID)
+            bundle.putString("user_id", userId)
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,extras)
         }
         notificationIcon.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
@@ -209,7 +206,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
     fun subscribe_bids(){
-        (activity as Home?)?.homeviewmodel?.user_bids?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.user_bids?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->
@@ -245,7 +242,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
     fun subscribe_Login_User_details() {
-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->

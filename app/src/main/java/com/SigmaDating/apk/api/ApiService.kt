@@ -55,4 +55,7 @@ interface ApiService {
 
     @POST("users/editprofile")
     suspend fun Update_profile(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+   /* @POST("users/view")
+    suspend fun getUserDashboard(@Body jsonObject: JsonObject): Response<UserDashboardModel>*/
 }

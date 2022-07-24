@@ -156,6 +156,7 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/logo_detail"
+                    android:transitionName="large_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"

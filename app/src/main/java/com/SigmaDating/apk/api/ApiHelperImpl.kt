@@ -27,6 +27,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun delete_images(jsonObject: JsonObject): Response<Loginmodel> =apiService.delete_images(jsonObject)
     override suspend fun Update_profile(jsonObject: JsonObject): Response<Loginmodel> =apiService.Update_profile(jsonObject)
     override suspend fun get_user_bids(id: String): Response<home_model> =apiService.get_user_bids(id)
+  //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
 
 
 }

@@ -1,0 +1,971 @@
+Index: app/src/main/java/com/SigmaDating/apk/views/intro_registration/Profile_Photo.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.views.intro_registration\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.annotation.TargetApi\r\nimport android.app.Activity\r\nimport android.app.ProgressDialog\r\nimport android.content.ContentUris\r\nimport android.content.Intent\r\nimport android.graphics.Bitmap\r\nimport android.graphics.BitmapFactory\r\nimport android.graphics.drawable.BitmapDrawable\r\nimport android.net.Uri\r\nimport android.os.Build\r\nimport android.os.Bundle\r\nimport android.provider.DocumentsContract\r\nimport android.provider.MediaStore\r\nimport android.util.Base64\r\nimport android.util.Log\r\nimport androidx.fragment.app.Fragment\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.view.WindowManager\r\nimport android.widget.*\r\nimport androidx.constraintlayout.widget.ConstraintLayout\r\nimport androidx.core.content.FileProvider\r\nimport androidx.lifecycle.Observer\r\nimport com.example.demoapp.other.Status\r\nimport com.google.android.material.bottomsheet.BottomSheetDialog\r\nimport com.SigmaDating.R\r\nimport com.SigmaDating.apk.storage.AppConstants\r\nimport com.SigmaDating.apk.utilities.AppUtils\r\nimport com.SigmaDating.apk.views.Home\r\nimport de.hdodenhof.circleimageview.CircleImageView\r\nimport org.jetbrains.anko.doAsync\r\nimport java.io.ByteArrayOutputStream\r\nimport java.io.File\r\nimport java.io.IOException\r\n\r\n\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\nclass Profile_Photo : Fragment() {\r\n\r\n    //Our constants\r\n    private val OPERATION_CAPTURE_PHOTO = 1\r\n    private val OPERATION_CHOOSE_PHOTO = 2\r\n    private val REQUEST_PERMISSION = 100\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    lateinit var profile_continue: Button\r\n    private var imageProfile: CircleImageView? = null\r\n    private var mUri: Uri? = null\r\n    lateinit var img_choose_dummy: ImageView\r\n    lateinit var tc_check: CheckBox\r\n    lateinit var constraint_f1: ConstraintLayout\r\n    lateinit var bitmap_string: String\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        arguments?.let {\r\n            param1 = it.getString(ARG_PARAM1)\r\n            param2 = it.getString(ARG_PARAM2)\r\n        }\r\n    }\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n\r\n        var view = inflater.inflate(R.layout.fragment_profile__photo, container, false)\r\n\r\n        profile_continue = view.findViewById(R.id.profile_continue)\r\n        img_choose_dummy = view.findViewById(R.id.img_choose_dummy)\r\n        tc_check = view.findViewById(R.id.tc_check)\r\n        constraint_f1 = view.findViewById(R.id.constraint_f1)\r\n        imageProfile = view.findViewById(R.id.img_profile)\r\n        bitmap_string = \"\"\r\n        profile_continue.setOnClickListener {\r\n            if (AppUtils.isNetworkInterfaceAvailable(requireContext())) {\r\n\r\n                if (tc_check.isChecked) {\r\n                    if (bitmap_string.equals(\"\")) {\r\n                        AppUtils.showErrorSnackBar(\r\n                            requireContext(),\r\n                            constraint_f1,\r\n                            \"Please Select Profile Photo \"\r\n                        )\r\n                    } else {\r\n                        (activity as OnBoardingActivity?)?.userRegister?.Register(bitmap_string)\r\n                    }\r\n\r\n                } else {\r\n                    AppUtils.showErrorSnackBar(\r\n                        requireContext(),\r\n                        constraint_f1,\r\n                        \"Please check the box to continue. \"\r\n                    )\r\n                }\r\n\r\n            }\r\n\r\n        }\r\n\r\n        img_choose_dummy.setOnClickListener {\r\n\r\n            Popup()\r\n        }\r\n\r\n        Register()\r\n        return view;\r\n    }\r\n\r\n\r\n    private fun Popup() {\r\n        val view = layoutInflater.inflate(R.layout.selectcamera_gallery_layout, null)\r\n        val dialog = activity?.let { BottomSheetDialog(requireActivity(), R.style.DialogStyle) }!!\r\n        dialog.setContentView(view)\r\n        dialog.show()\r\n        val lp = WindowManager.LayoutParams()\r\n        lp.copyFrom(dialog.window!!.attributes)\r\n        lp.width = WindowManager.LayoutParams.MATCH_PARENT\r\n        lp.height = WindowManager.LayoutParams.WRAP_CONTENT\r\n        dialog.window!!.attributes = lp\r\n        dialog.window!!.attributes.windowAnimations = R.style.DialogStyle\r\n        dialog.show()\r\n        dialog.setCanceledOnTouchOutside(true)\r\n        val button_camera = dialog.findViewById<ImageView>(R.id.button_camera)\r\n        val button_gallery = dialog.findViewById<ImageView>(R.id.button_gallery)\r\n\r\n\r\n        button_camera?.setOnClickListener {\r\n            dialog.dismiss()\r\n            capturePhoto()\r\n        }\r\n        button_gallery?.setOnClickListener {\r\n            dialog.dismiss()\r\n            openGallery()\r\n\r\n        }\r\n\r\n    }\r\n\r\n    override fun onResume() {\r\n        super.onResume()\r\n\r\n\r\n    }\r\n\r\n\r\n    companion object {\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            Profile_Photo().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n    }\r\n\r\n    private fun capturePhoto() {\r\n        val capturedImage = File(requireActivity().externalCacheDir, \"My_Captured_Photo.jpg\")\r\n        if (capturedImage.exists()) {\r\n            capturedImage.delete()\r\n        }\r\n        capturedImage.createNewFile()\r\n        mUri = if (Build.VERSION.SDK_INT >= 24) {\r\n            FileProvider.getUriForFile(\r\n                requireActivity(),\r\n                \"com.sigmadatingapp.fileprovider\",\r\n                capturedImage\r\n            )\r\n        } else {\r\n            Uri.fromFile(capturedImage)\r\n        }\r\n\r\n        val intent = Intent(\"android.media.action.IMAGE_CAPTURE\")\r\n        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)\r\n        startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)\r\n    }\r\n\r\n    private fun openGallery() {\r\n        Intent(Intent.ACTION_GET_CONTENT).also { intent ->\r\n            intent.type = \"image/*\"\r\n            activity?.packageManager?.let {\r\n                intent.resolveActivity(it)?.also {\r\n                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun renderImage(imagePath: String?) {\r\n        if (imagePath != null) {\r\n            val bitmap = BitmapFactory.decodeFile(imagePath)\r\n            imageProfile?.setImageBitmap(bitmap)\r\n            val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable\r\n            var bitmapl: Bitmap = drawable.getBitmap()\r\n            bitmapl = Bitmap.createScaledBitmap(bitmapl, 350, 350, true);\r\n            convertBitmapToBase64(bitmapl)\r\n\r\n        } else {\r\n            show(\"ImagePath is null\")\r\n        }\r\n    }\r\n\r\n\r\n    fun convertBitmapToBase64(bm: Bitmap) {\r\n        val progressDialog = ProgressDialog(context)\r\n        progressDialog.setTitle(\"\")\r\n        progressDialog.setMessage(\"please wait ...\")\r\n        progressDialog.show()\r\n        doAsync {\r\n            var encoded = \"\"\r\n            val baos = ByteArrayOutputStream()\r\n            bm.compress(Bitmap.CompressFormat.PNG, 0, baos)\r\n            val b = baos.toByteArray()\r\n            encoded = \"data:image/png;base64,\"+Base64.encodeToString(b, Base64.DEFAULT)\r\n            bitmap_string=encoded\r\n            Log.d(\"TAG@123\", \"  images  --------- \" + encoded)\r\n            progressDialog.dismiss()\r\n        }\r\n    }\r\n\r\n    @SuppressLint(\"Range\")\r\n    private fun getImagePath(uri: Uri, selection: String?): String {\r\n        var path: String? = null\r\n\r\n        val cursor = activity?.contentResolver?.query(uri, null, selection, null, null)\r\n        if (cursor != null) {\r\n            if (cursor.moveToFirst()) {\r\n                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))\r\n            }\r\n            cursor.close()\r\n        }\r\n        return path!!\r\n    }\r\n\r\n    @TargetApi(19)\r\n    private fun handleImageOnKitkat(data: Intent?) {\r\n        var imagePath: String? = null\r\n        val uri = data!!.data\r\n        if (DocumentsContract.isDocumentUri(requireActivity(), uri)) {\r\n            val docId = DocumentsContract.getDocumentId(uri)\r\n            if (\"com.android.providers.media.documents\" == uri?.authority) {\r\n                val id = docId.split(\":\")[1]\r\n                val selsetion = MediaStore.Images.Media._ID + \"=\" + id\r\n                imagePath = getImagePath(\r\n                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,\r\n                    selsetion\r\n                )\r\n            } else if (\"com.android.providers.downloads.documents\" == uri?.authority) {\r\n                val contentUri = ContentUris.withAppendedId(\r\n                    Uri.parse(\r\n                        \"content://downloads/public_downloads\"\r\n                    ), java.lang.Long.valueOf(docId)\r\n                )\r\n                imagePath = getImagePath(contentUri, null)\r\n            }\r\n        } else if (\"content\".equals(uri?.scheme, ignoreCase = true)) {\r\n            imagePath = getImagePath(uri!!, null)\r\n        } else if (\"file\".equals(uri!!.scheme, ignoreCase = true)) {\r\n            imagePath = uri.path\r\n        }\r\n        renderImage(imagePath)\r\n    }\r\n\r\n\r\n    private fun show(message: String) {\r\n        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()\r\n    }\r\n\r\n    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {\r\n        super.onActivityResult(requestCode, resultCode, data)\r\n        when (requestCode) {\r\n            OPERATION_CAPTURE_PHOTO ->\r\n                if (resultCode == Activity.RESULT_OK) {\r\n                    val bitmap = BitmapFactory.decodeStream(\r\n                        requireActivity().getContentResolver().openInputStream(mUri!!)\r\n                    )\r\n\r\n                    imageProfile!!.setImageBitmap(bitmap)\r\n                    val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable\r\n                    var bitmapl: Bitmap = drawable.getBitmap()\r\n                    bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);\r\n                    convertBitmapToBase64(bitmapl)\r\n\r\n\r\n                }\r\n            OPERATION_CHOOSE_PHOTO ->\r\n                if (resultCode == Activity.RESULT_OK) {\r\n\r\n                    if (data!=null) {\r\n                        try {\r\n                            val bitmap = MediaStore.Images.Media.getBitmap(\r\n                                activity!!.contentResolver,\r\n                                data.data\r\n                            )\r\n                            imageProfile?.setImageBitmap(bitmap)\r\n                           Bitmap.createScaledBitmap(bitmap, 350, 350, true);\r\n                            convertBitmapToBase64(bitmap)\r\n                        } catch (e: IOException) {\r\n                            e.printStackTrace()\r\n                        }\r\n                    }\r\n                       /* if (Build.VERSION.SDK_INT >= 19) {\r\n                            handleImageOnKitkat(data)\r\n                        }*/\r\n\r\n                }\r\n        }\r\n    }\r\n\r\n    fun Register() {\r\n        (activity as OnBoardingActivity?)?.userRegister?.registration?.observe(\r\n            requireActivity(),\r\n            Observer {\r\n                when (it.status) {\r\n                    Status.SUCCESS -> {\r\n                        AppUtils.hideLoader()\r\n                        it.data.let { res ->\r\n                            if (res?.status == true) {\r\n\r\n                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                                    AppConstants.IS_AUTHENTICATED,\r\n                                    true\r\n                                )\r\n                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                                    AppConstants.USER_ID,\r\n                                    res.user.id\r\n                                )\r\n                                startActivity(Intent(context, Home::class.java))\r\n                                (activity as OnBoardingActivity?)?.finish()\r\n                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)\r\n                                    .show()\r\n                            } else {\r\n\r\n                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                    .show()\r\n                            }\r\n                        }\r\n                    }\r\n                    Status.LOADING -> {\r\n                        AppUtils.showLoader(requireContext())\r\n                    }\r\n                    Status.ERROR -> {\r\n\r\n                    }\r\n                }\r\n            })\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/Profile_Photo.kt b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/Profile_Photo.kt
+--- a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/Profile_Photo.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/Profile_Photo.kt	
+@@ -14,9 +14,12 @@
+ import android.os.Bundle
+ import android.provider.DocumentsContract
+ import android.provider.MediaStore
++import android.text.SpannableString
++import android.text.Spanned
++import android.text.method.LinkMovementMethod
++import android.text.style.ClickableSpan
+ import android.util.Base64
+ import android.util.Log
+-import androidx.fragment.app.Fragment
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+@@ -24,13 +27,14 @@
+ import android.widget.*
+ import androidx.constraintlayout.widget.ConstraintLayout
+ import androidx.core.content.FileProvider
++import androidx.fragment.app.Fragment
+ import androidx.lifecycle.Observer
+-import com.example.demoapp.other.Status
+-import com.google.android.material.bottomsheet.BottomSheetDialog
+ import com.SigmaDating.R
+ import com.SigmaDating.apk.storage.AppConstants
+ import com.SigmaDating.apk.utilities.AppUtils
+ import com.SigmaDating.apk.views.Home
++import com.example.demoapp.other.Status
++import com.google.android.material.bottomsheet.BottomSheetDialog
+ import de.hdodenhof.circleimageview.CircleImageView
+ import org.jetbrains.anko.doAsync
+ import java.io.ByteArrayOutputStream
+@@ -54,6 +58,7 @@
+     private var mUri: Uri? = null
+     lateinit var img_choose_dummy: ImageView
+     lateinit var tc_check: CheckBox
++    private var text_termncon:TextView?=null
+     lateinit var constraint_f1: ConstraintLayout
+     lateinit var bitmap_string: String
+     override fun onCreate(savedInstanceState: Bundle?) {
+@@ -75,6 +80,7 @@
+         profile_continue = view.findViewById(R.id.profile_continue)
+         img_choose_dummy = view.findViewById(R.id.img_choose_dummy)
+         tc_check = view.findViewById(R.id.tc_check)
++        text_termncon=view.findViewById(R.id.text_termncon)
+         constraint_f1 = view.findViewById(R.id.constraint_f1)
+         imageProfile = view.findViewById(R.id.img_profile)
+         bitmap_string = ""
+@@ -141,11 +147,28 @@
+ 
+         }
+ 
++
++
++
++
++
+     }
+ 
+     override fun onResume() {
+         super.onResume()
+-
++        val ss = SpannableString(resources.getString(R.string.term_and_condition))
++        val span2: ClickableSpan = object : ClickableSpan() {
++            override fun onClick(textView: View) {
++                // term n conditions links opens
++                Log.d("TAG@123","clicked")
++            }
++        }
++        //ss.setSpan(span1, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
++        ss.setSpan(span2, 18, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
++        text_termncon?.let {
++            it.text = ss
++            it.movementMethod = LinkMovementMethod.getInstance()
++        }
+ 
+     }
+ 
+@@ -292,11 +315,10 @@
+                 }
+             OPERATION_CHOOSE_PHOTO ->
+                 if (resultCode == Activity.RESULT_OK) {
+-
+                     if (data!=null) {
+                         try {
+                             val bitmap = MediaStore.Images.Media.getBitmap(
+-                                activity!!.contentResolver,
++                                requireActivity().contentResolver,
+                                 data.data
+                             )
+                             imageProfile?.setImageBitmap(bitmap)
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    xmlns:dist=\"http://schemas.android.com/apk/distribution\"\r\n    package=\"com.SigmaDating\">\r\n\r\n    <uses-feature\r\n        android:name=\"android.hardware.camera\"\r\n        android:required=\"true\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n\r\n    <dist:module dist:instant=\"true\" />\r\n    <application\r\n        android:name=\"com.SigmaDating.apk.Sigmadatingapp\"\r\n        android:allowBackup=\"false\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.SigmaDatingApp\"\r\n        android:usesCleartextTraffic=\"${usesCleartextTraffic}\"\r\n        android:screenOrientation=\"portrait\"\r\n        tools:ignore=\"GoogleAppIndexingWarning\">\r\n        <activity\r\n            android:name=\"com.SigmaDating.apk.views.intro_registration.OnBoardingActivity\"\r\n            android:configChanges=\"orientation|keyboardHidden|screenSize\"\r\n            android:exported=\"true\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:theme=\"@style/Theme.SigmaDatingApp.NoActionBar\">\r\n\r\n        </activity>\r\n        <activity\r\n            android:name=\"com.SigmaDating.apk.views.Home\"\r\n            android:exported=\"true\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:theme=\"@style/Theme.SigmaDatingApp.NoActionBar\" >\r\n        </activity>\r\n        <activity\r\n            android:name=\"com.SigmaDating.apk.views.login.Login_Activity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:theme=\"@style/Theme.SigmaDatingApp.NoActionBar\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\"com.SigmaDating.apk.views.Splash\"\r\n            android:exported=\"true\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:theme=\"@style/Theme.Design.NoActionBar\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n\r\n        </activity>\r\n\r\n\r\n        <activity android:name=\"com.facebook.FacebookActivity\"\r\n            android:configChanges=\"keyboard|keyboardHidden|screenLayout|screenSize|orientation\"\r\n            android:label=\"@string/app_name\" />\r\n        <activity\r\n            android:name=\"com.facebook.CustomTabActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.VIEW\" />\r\n                <category android:name=\"android.intent.category.DEFAULT\" />\r\n                <category android:name=\"android.intent.category.BROWSABLE\" />\r\n                <data android:scheme=\"@string/fb_login_protocol_scheme\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <provider\r\n            android:authorities=\"${applicationId}.fileprovider\"\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\">\r\n            <meta-data\r\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/file_paths\" />\r\n        </provider>\r\n        <meta-data android:name=\"com.facebook.sdk.ApplicationId\" android:value=\"@string/facebook_app_id\"/>\r\n\r\n        <meta-data android:name=\"com.facebook.sdk.ClientToken\" android:value=\"@string/facebook_client_token\"/>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	
++++ b/app/src/main/AndroidManifest.xml	
+@@ -10,7 +10,6 @@
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+-
+     <dist:module dist:instant="true" />
+     <application
+         android:name="com.SigmaDating.apk.Sigmadatingapp"
+@@ -22,14 +21,14 @@
+         android:theme="@style/Theme.SigmaDatingApp"
+         android:usesCleartextTraffic="${usesCleartextTraffic}"
+         android:screenOrientation="portrait"
+-        tools:ignore="GoogleAppIndexingWarning">
++        tools:ignore="GoogleAppIndexingWarning"  >
+         <activity
+             android:name="com.SigmaDating.apk.views.intro_registration.OnBoardingActivity"
+             android:configChanges="orientation|keyboardHidden|screenSize"
+             android:exported="true"
+             android:screenOrientation="portrait"
++            android:windowSoftInputMode="adjustPan"
+             android:theme="@style/Theme.SigmaDatingApp.NoActionBar">
+-
+         </activity>
+         <activity
+             android:name="com.SigmaDating.apk.views.Home"
+Index: app/src/main/java/com/SigmaDating/apk/views/profile/EditProfile.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.views.profile\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.annotation.TargetApi\r\nimport android.app.Activity\r\nimport android.app.ProgressDialog\r\nimport android.content.ContentUris\r\nimport android.content.Intent\r\nimport android.graphics.Bitmap\r\nimport android.graphics.BitmapFactory\r\nimport android.net.Uri\r\nimport android.os.Bundle\r\nimport android.provider.DocumentsContract\r\nimport android.provider.MediaStore\r\nimport android.util.Base64\r\nimport android.util.Log\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.*\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.lifecycle.Observer\r\nimport androidx.recyclerview.widget.GridLayoutManager\r\nimport com.example.demoapp.other.Status\r\nimport com.google.android.material.chip.Chip\r\nimport com.google.android.material.chip.ChipGroup\r\nimport com.SigmaDating.R\r\nimport com.SigmaDating.apk.AppReseources\r\nimport com.SigmaDating.apk.adapters.CommunityAdapter\r\nimport com.SigmaDating.apk.adapters.Edit_Profile_Adapter\r\nimport com.SigmaDating.databinding.FragmentEditProfileBinding\r\nimport com.SigmaDating.apk.model.communityModel.Interest\r\nimport com.SigmaDating.apk.model.communityModel.UniversityList\r\nimport com.SigmaDating.apk.storage.AppConstants\r\nimport com.SigmaDating.apk.utilities.AppUtils\r\nimport com.SigmaDating.apk.utilities.AppUtils.index\r\nimport com.SigmaDating.apk.views.Home\r\nimport org.jetbrains.anko.doAsync\r\nimport java.io.ByteArrayOutputStream\r\nimport java.io.IOException\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\n\r\nclass EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {\r\n    // TODO: Rename and change types of parameters\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    private val OPERATION_CHOOSE_PHOTO = 2\r\n    private var _binding: FragmentEditProfileBinding? = null\r\n    private val binding get() = _binding!!\r\n    private lateinit var photoAdapter: Edit_Profile_Adapter\r\n    lateinit var dataList: ArrayList<String>\r\n    lateinit var interestsList: ArrayList<String>\r\n    var fraternitiesList: List<UniversityList>? = null\r\n    var schoolList: List<UniversityList>? = null\r\n    var interest: List<Interest>? = null\r\n    lateinit var fraternity_Spinner: Spinner\r\n    private var schoolAct_spinner: Spinner? = null\r\n    lateinit var rootContainer: ChipGroup\r\n    var university: String? = null\r\n    var community: String? = null\r\n    var about: String? = null\r\n   // var interests: String? = null\r\n\r\n\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        arguments?.let {\r\n            param1 = it.getString(ARG_PARAM1)\r\n            param2 = it.getString(ARG_PARAM2)\r\n        }\r\n\r\n\r\n    }\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n\r\n        _binding = FragmentEditProfileBinding.inflate(inflater, container, false)\r\n        schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)\r\n        fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!\r\n        rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!\r\n        _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)\r\n        _binding?.imageView2?.setOnClickListener {\r\n            (activity as Home).onBackPressed()\r\n        }\r\n        _binding?.done?.setOnClickListener {\r\n            var t = interestsList.joinToString(\",\")\r\n\r\n            university?.let { it1 ->\r\n                community?.let { it2 ->\r\n                    (activity as Home).homeviewmodel.Update_edit_page_data(\r\n                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),\r\n                        it1,\r\n                        it2,\r\n                        t,\r\n                        _binding!!.userAbout.text.toString()\r\n                    )\r\n                }\r\n\r\n            }\r\n        }\r\n\r\n\r\n\r\n\r\n\r\n        schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {\r\n            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {\r\n                university = (parent?.getItemAtPosition(pos) as UniversityList).name\r\n            }\r\n\r\n            override fun onNothingSelected(p0: AdapterView<*>?) {\r\n            }\r\n        })\r\n\r\n        fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {\r\n            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {\r\n                community = (parent?.getItemAtPosition(pos) as UniversityList).name\r\n            }\r\n\r\n            override fun onNothingSelected(p0: AdapterView<*>?) {\r\n            }\r\n        })\r\n\r\n       // (activity as Home?)?.homeviewmodel?.getSchoolingData()\r\n\r\n        subscribe_Login_User_details()\r\n        subscribe_edit_profile()\r\n        subscribe_upload_images()\r\n        subscribe_delete_images()\r\n        schoolListResponse()\r\n\r\n        (activity as Home).homeviewmodel.get_edit_page_data(\r\n            (activity as Home).sharedPreferencesStorage.getString(\r\n                AppConstants.USER_ID\r\n            )\r\n        )\r\n        return binding.root\r\n    }\r\n\r\n    companion object {\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            EditProfile().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n    }\r\n\r\n\r\n    override fun onDestroy() {\r\n        super.onDestroy()\r\n        _binding = null\r\n    }\r\n\r\n\r\n    fun subscribe_edit_profile() {\r\n        (activity as Home?)?.homeviewmodel?.update_profile?.observe(this, Observer {\r\n            when (it.status) {\r\n                Status.SUCCESS -> {\r\n                    AppUtils.hideLoader()\r\n                    it.data.let { res ->\r\n                        if (res?.status == true) {\r\n                            try {\r\n                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)\r\n                                    .show()\r\n                            } catch (e: Exception) {\r\n                            }\r\n                        } else {\r\n                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                .show()\r\n                        }\r\n\r\n                    }\r\n                }\r\n                Status.LOADING -> {\r\n                    AppUtils.showLoader(requireContext())\r\n                }\r\n                Status.ERROR -> {\r\n\r\n                }\r\n            }\r\n        })\r\n\r\n\r\n    }\r\n\r\n\r\n    fun subscribe_delete_images() {\r\n        (activity as Home?)?.homeviewmodel?.delete_images?.observe(this, Observer {\r\n            when (it.status) {\r\n                Status.SUCCESS -> {\r\n                    AppUtils.hideLoader()\r\n                    it.data.let { res ->\r\n                        if (res?.status == true) {\r\n\r\n                            try {\r\n\r\n\r\n                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                    .show()\r\n                                (activity as Home).homeviewmodel.get_Login_User_details(\r\n                                    (activity as Home).sharedPreferencesStorage.getString(\r\n                                        AppConstants.USER_ID\r\n                                    )\r\n                                )\r\n                            } catch (e: Exception) {\r\n                            }\r\n\r\n                        } else {\r\n                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                .show()\r\n                        }\r\n                    }\r\n                }\r\n                Status.LOADING -> {\r\n                    AppUtils.showLoader(requireContext())\r\n                }\r\n                Status.ERROR -> {\r\n\r\n                }\r\n            }\r\n        })\r\n\r\n\r\n    }\r\n\r\n\r\n    fun subscribe_upload_images() {\r\n        (activity as Home?)?.homeviewmodel?.upload_images?.observe(this, Observer {\r\n            when (it.status) {\r\n                Status.SUCCESS -> {\r\n                    AppUtils.hideLoader()\r\n                    it.data.let { res ->\r\n                        if (res?.status == true) {\r\n                            try {\r\n\r\n\r\n                                Log.d(\"TAG@123\", \"1311\" + it.data.toString())\r\n                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                    .show()\r\n                                (activity as Home).homeviewmodel.get_Login_User_details(\r\n                                    (activity as Home).sharedPreferencesStorage.getString(\r\n                                        AppConstants.USER_ID\r\n                                    )\r\n                                )\r\n                            } catch (e: Exception) {\r\n                            }\r\n\r\n                        } else {\r\n                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                .show()\r\n                        }\r\n                    }\r\n                }\r\n                Status.LOADING -> {\r\n                    AppUtils.showLoader(requireContext())\r\n                }\r\n                Status.ERROR -> {\r\n\r\n                }\r\n            }\r\n        })\r\n\r\n\r\n    }\r\n\r\n\r\n    fun schoolListResponse() {\r\n\r\n        (activity as Home?)?.homeviewmodel?.school_dataResponse?.observe(\r\n            requireActivity(),\r\n            Observer {\r\n                when (it.status) {\r\n                    Status.SUCCESS -> {\r\n                        // AppUtils.hideLoader()\r\n                        it.data.let { it1 ->\r\n                            if (it1?.status == true) {\r\n\r\n                                try {\r\n                                    Log.d(\"TAG@123\", it.toString())\r\n                                    schoolList = ArrayList<UniversityList>()\r\n                                    schoolList = it1.data.universityList\r\n                                    fraternitiesList = ArrayList<UniversityList>()\r\n                                    fraternitiesList =\r\n                                        it1.data.fraternitiesList + it1.data.sororitiesList\r\n                                    interest = ArrayList<Interest>()\r\n                                    interest = it1.data.interestList\r\n                                    setAdapterData()\r\n                                    setupChipGroupDynamically(interest!!)\r\n\r\n\r\n                                } catch (e: Exception) {\r\n                                }\r\n                            } else {\r\n\r\n                            }\r\n                        }\r\n                    }\r\n                    Status.LOADING -> {\r\n                        //AppUtils.showLoader(requireActivity())\r\n                    }\r\n                    Status.ERROR -> {\r\n\r\n                    }\r\n                }\r\n            })\r\n\r\n\r\n    }\r\n\r\n    fun subscribe_Login_User_details() {\r\n\r\n        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {\r\n            when (it.status) {\r\n                Status.SUCCESS -> {\r\n                    it.data.let { res ->\r\n                        if (res?.status == true) {\r\n                            try {\r\n                                dataList = ArrayList()\r\n                                dataList.clear()\r\n                                interestsList=ArrayList()\r\n                                interestsList.clear()\r\n                                Log.d(\"TAG@123\", \"1311\" + it.toString())\r\n                                if (!res.user.photos.isNullOrEmpty()) {\r\n                                    dataList = res.user.photos\r\n                                }\r\n                                set_Adapterdata()\r\n\r\n                                    res.user.university.let {\r\n                                        university = it\r\n                                    }\r\n                                    res.user.community.let {\r\n                                        community = it\r\n                                    }\r\n                                    res.user.about.let {\r\n                                        about = it\r\n                                        _binding?.userAbout?.setText(about)\r\n                                    }\r\n\r\n                                interestsList = res.user.interests.split(\",\") as ArrayList<String>\r\n\r\n\r\n\r\n                            } catch (e: Exception) {\r\n                                Log.d(\"TAG@123\",\"Exception ${e.message}\")\r\n\r\n                            }\r\n\r\n                        } else {\r\n                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)\r\n                                .show()\r\n                        }\r\n                    }\r\n                }\r\n                Status.LOADING -> {\r\n\r\n                }\r\n                Status.ERROR -> {\r\n\r\n                }\r\n            }\r\n        })\r\n\r\n\r\n    }\r\n\r\n\r\n    fun set_Adapterdata() {\r\n        dataList.add(\"ADD_IMAGES\")\r\n        photoAdapter = Edit_Profile_Adapter(requireContext(), this)\r\n        _binding?.updateImageView?.adapter = photoAdapter\r\n        dataList.let { photoAdapter.setDataList(it) }\r\n        photoAdapter.notifyDataSetChanged()\r\n    }\r\n\r\n    override fun onCategoryClick(position: Int, boolean: Boolean) {\r\n\r\n\r\n        if (boolean) {\r\n\r\n            openGallery()\r\n\r\n\r\n        } else {\r\n\r\n            (activity as Home).homeviewmodel.User_delete_images(\r\n\r\n                (activity as Home).sharedPreferencesStorage.getString(\r\n                    AppConstants.USER_ID\r\n                ), dataList.get(position)\r\n\r\n            )\r\n        }\r\n\r\n    }\r\n\r\n    private fun openGallery() {\r\n        Intent(Intent.ACTION_GET_CONTENT).also { intent ->\r\n            intent.type = \"image/*\"\r\n            activity?.packageManager?.let {\r\n                intent.resolveActivity(it)?.also {\r\n                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {\r\n        super.onActivityResult(requestCode, resultCode, data)\r\n        when (requestCode) {\r\n\r\n            OPERATION_CHOOSE_PHOTO ->\r\n                if (resultCode == Activity.RESULT_OK) {\r\n\r\n                    if (data != null) {\r\n                        try {\r\n                            val bitmap = MediaStore.Images.Media.getBitmap(\r\n                                activity!!.contentResolver,\r\n                                data.data\r\n                            )\r\n                            Bitmap.createScaledBitmap(bitmap, 350, 350, true);\r\n                            convertBitmapToBase64(bitmap)\r\n                        } catch (e: IOException) {\r\n                            e.printStackTrace()\r\n                        }\r\n                    }\r\n\r\n\r\n                }\r\n        }\r\n    }\r\n\r\n\r\n    fun convertBitmapToBase64(bm: Bitmap) {\r\n        val progressDialog = ProgressDialog(context)\r\n        progressDialog.setTitle(\"\")\r\n        progressDialog.setMessage(\"please wait ...\")\r\n        progressDialog.show()\r\n        doAsync {\r\n            var encoded = \"\"\r\n            val baos = ByteArrayOutputStream()\r\n            bm.compress(Bitmap.CompressFormat.PNG, 0, baos)\r\n            val b = baos.toByteArray()\r\n            encoded = Base64.encodeToString(b, Base64.DEFAULT)\r\n            (activity as Home).homeviewmodel.User_upload_images(\r\n                (activity as Home).sharedPreferencesStorage.getString(\r\n                    AppConstants.USER_ID\r\n                ), \"data:image/png;base64,\" + encoded\r\n            )\r\n\r\n            Log.d(\"TAG@123\", \"  images  --------- \" + encoded)\r\n            progressDialog.dismiss()\r\n\r\n\r\n        }\r\n    }\r\n    private fun setAdapterData() {\r\n\r\n        try {\r\n            val schoolAdapter = AppReseources.getAppContext()?.let {\r\n                CommunityAdapter(\r\n                    it,\r\n                    schoolList!! as ArrayList<UniversityList>\r\n                )\r\n            }\r\n            schoolAct_spinner?.adapter = schoolAdapter\r\n            schoolAdapter?.notifyDataSetChanged()\r\n            schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))\r\n\r\n\r\n            val adapter = AppReseources.getAppContext()?.let {\r\n                CommunityAdapter(\r\n                    it,\r\n                    fraternitiesList!! as ArrayList<UniversityList>\r\n                )\r\n            }\r\n            fraternity_Spinner.adapter = adapter\r\n            adapter?.notifyDataSetChanged()\r\n            fraternity_Spinner.setSelection(index(fraternity_Spinner, community))\r\n        } catch (e: Exception) {\r\n\r\n            Log.d(\"TAG@123\", \"Ex -:\" + e.message.toString())\r\n        }\r\n\r\n    }\r\n\r\n\r\n    private fun setupChipGroupDynamically(list: List<Interest>) {\r\n        try {\r\n            rootContainer.removeAllViews()\r\n            for (i in list.indices) {\r\n                rootContainer.addView(createChip(list.get(i).interest, i))\r\n            }\r\n        } catch (e: Exception) {\r\n        }\r\n    }\r\n\r\n    private fun createChip(label: String, index: Int): Chip {\r\n\r\n        val chip = Chip(requireContext(), null)\r\n        chip.layoutParams = LinearLayout.LayoutParams(\r\n            ViewGroup.LayoutParams.WRAP_CONTENT,\r\n            ViewGroup.LayoutParams.WRAP_CONTENT\r\n        )\r\n\r\n        chip.text = label\r\n\r\n        chip.isCloseIconVisible = false\r\n        chip.isChipIconVisible = true\r\n        chip.isCheckable = true\r\n        chip.isClickable = true\r\n\r\n        chip.isChecked = interestsList.contains(label)\r\n        chip.setBackgroundColor(if(interestsList.contains(label)){\r\n            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)\r\n        }\r\n        else{\r\n            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)\r\n        })\r\n\r\n\r\n        chip.chipCornerRadius = 1.0F\r\n        chip.setOnClickListener {\r\n            Log.d(\"TAG@123\", interestsList.toString())\r\n            if (chip.isChecked) {\r\n                if (!interestsList.contains(label)) {\r\n                    interestsList.add(label)\r\n                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900))\r\n                }\r\n\r\n            } else {\r\n                if (interestsList.contains(label)) {\r\n                    interestsList.remove(label)\r\n                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200))\r\n\r\n                }\r\n            }\r\n            Log.d(\"TAG@123\", interestsList.toString())\r\n\r\n        }\r\n        chip.setOnCloseIconClickListener {\r\n        }\r\n        return chip\r\n\r\n    }\r\n}\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/views/profile/EditProfile.kt b/app/src/main/java/com/SigmaDating/apk/views/profile/EditProfile.kt
+--- a/app/src/main/java/com/SigmaDating/apk/views/profile/EditProfile.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/views/profile/EditProfile.kt	
+@@ -1,20 +1,16 @@
+ package com.SigmaDating.apk.views.profile
+ 
+-import android.annotation.SuppressLint
+-import android.annotation.TargetApi
+ import android.app.Activity
++import android.app.Dialog
+ import android.app.ProgressDialog
+-import android.content.ContentUris
+ import android.content.Intent
+ import android.graphics.Bitmap
+-import android.graphics.BitmapFactory
+-import android.net.Uri
+ import android.os.Bundle
+-import android.provider.DocumentsContract
+ import android.provider.MediaStore
+ import android.util.Base64
+ import android.util.Log
+ import android.view.LayoutInflater
++import android.view.MotionEvent
+ import android.view.View
+ import android.view.ViewGroup
+ import android.widget.*
+@@ -22,28 +18,32 @@
+ import androidx.fragment.app.Fragment
+ import androidx.lifecycle.Observer
+ import androidx.recyclerview.widget.GridLayoutManager
++import androidx.recyclerview.widget.LinearLayoutManager
++import androidx.recyclerview.widget.RecyclerView
+ import com.example.demoapp.other.Status
+ import com.google.android.material.chip.Chip
+ import com.google.android.material.chip.ChipGroup
+ import com.SigmaDating.R
+ import com.SigmaDating.apk.AppReseources
+-import com.SigmaDating.apk.adapters.CommunityAdapter
+ import com.SigmaDating.apk.adapters.Edit_Profile_Adapter
++import com.SigmaDating.apk.adapters.SchoolAdapter
+ import com.SigmaDating.databinding.FragmentEditProfileBinding
+ import com.SigmaDating.apk.model.communityModel.Interest
+ import com.SigmaDating.apk.model.communityModel.UniversityList
+ import com.SigmaDating.apk.storage.AppConstants
+ import com.SigmaDating.apk.utilities.AppUtils
+-import com.SigmaDating.apk.utilities.AppUtils.index
++import com.SigmaDating.apk.utilities.EmptyDataObserver
+ import com.SigmaDating.apk.views.Home
+ import org.jetbrains.anko.doAsync
+ import java.io.ByteArrayOutputStream
+ import java.io.IOException
++
+ private const val ARG_PARAM1 = "param1"
+ private const val ARG_PARAM2 = "param2"
+ 
+ 
+-class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener {
++class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
++    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener {
+     // TODO: Rename and change types of parameters
+     private var param1: String? = null
+     private var param2: String? = null
+@@ -56,16 +56,18 @@
+     var fraternitiesList: List<UniversityList>? = null
+     var schoolList: List<UniversityList>? = null
+     var interest: List<Interest>? = null
+-    lateinit var fraternity_Spinner: Spinner
+-    private var schoolAct_spinner: Spinner? = null
++    lateinit var fraternity_Spinner: EditText
++    private var schoolAct_spinner: EditText? = null
+     lateinit var rootContainer: ChipGroup
+     var university: String? = null
+     var community: String? = null
+     var about: String? = null
+-   // var interests: String? = null
++    // var interests: String? = null
+ 
+ 
+-
++    private lateinit var schoolAdapter: SchoolAdapter
++    lateinit var dialog: Dialog
++    var searchRecyclerView: RecyclerView? = null
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         arguments?.let {
+@@ -108,28 +110,41 @@
+         }
+ 
+ 
++        schoolAct_spinner!!.setOnTouchListener { v, event ->
++            if (event.action == MotionEvent.ACTION_UP) {
+ 
++                openSchoolSearchDialog(AppConstants.School,schoolList as List<UniversityList>)
++                true
++            } else false
++        }
+ 
+-
+-        schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+-            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+-                university = (parent?.getItemAtPosition(pos) as UniversityList).name
+-            }
++        fraternity_Spinner!!.setOnTouchListener { v, event ->
++            if (event.action == MotionEvent.ACTION_UP) {
++                schoolList = ArrayList<UniversityList>()
++                schoolList = fraternitiesList
++                openSchoolSearchDialog(AppConstants.Fraternity,fraternitiesList as List<UniversityList>)
++                true
++            } else false
++        }
++        /* schoolAct_spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
++             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
++                 university = (parent?.getItemAtPosition(pos) as UniversityList).name
++             }
+ 
+-            override fun onNothingSelected(p0: AdapterView<*>?) {
+-            }
+-        })
++             override fun onNothingSelected(p0: AdapterView<*>?) {
++             }
++         })
+ 
+-        fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+-            override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+-                community = (parent?.getItemAtPosition(pos) as UniversityList).name
+-            }
++         fraternity_Spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
++             override fun onItemSelected(parent: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
++                 community = (parent?.getItemAtPosition(pos) as UniversityList).name
++             }
+ 
+-            override fun onNothingSelected(p0: AdapterView<*>?) {
+-            }
+-        })
++             override fun onNothingSelected(p0: AdapterView<*>?) {
++             }
++         })*/
+ 
+-       // (activity as Home?)?.homeviewmodel?.getSchoolingData()
++        // (activity as Home?)?.homeviewmodel?.getSchoolingData()
+ 
+         subscribe_Login_User_details()
+         subscribe_edit_profile()
+@@ -145,6 +160,25 @@
+         return binding.root
+     }
+ 
++    private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
++        dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
++        dialog.setContentView(R.layout.search_dialog_school)
++        dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
++        searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
++        val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
++        searchRecyclerView!!.layoutManager = LinearLayoutManager(
++            requireActivity(),
++            LinearLayoutManager.VERTICAL, false
++        )
++        schoolAdapter = SchoolAdapter(this, stringtype)
++        searchRecyclerView!!.adapter = schoolAdapter
++        schoolAdapter.addData(passDataList!!)
++        schoolAdapter.notifyDataSetChanged()
++        val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
++        schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
++        dialog.show()
++    }
++
+     companion object {
+         @JvmStatic
+         fun newInstance(param1: String, param2: String) =
+@@ -164,7 +198,7 @@
+ 
+ 
+     fun subscribe_edit_profile() {
+-        (activity as Home?)?.homeviewmodel?.update_profile?.observe(this, Observer {
++        (activity as Home?)?.homeviewmodel?.update_profile?.observe(viewLifecycleOwner, Observer {
+             when (it.status) {
+                 Status.SUCCESS -> {
+                     AppUtils.hideLoader()
+@@ -196,7 +230,7 @@
+ 
+ 
+     fun subscribe_delete_images() {
+-        (activity as Home?)?.homeviewmodel?.delete_images?.observe(this, Observer {
++        (activity as Home?)?.homeviewmodel?.delete_images?.observe(viewLifecycleOwner, Observer {
+             when (it.status) {
+                 Status.SUCCESS -> {
+                     AppUtils.hideLoader()
+@@ -236,7 +270,7 @@
+ 
+ 
+     fun subscribe_upload_images() {
+-        (activity as Home?)?.homeviewmodel?.upload_images?.observe(this, Observer {
++        (activity as Home?)?.homeviewmodel?.upload_images?.observe(viewLifecycleOwner, Observer {
+             when (it.status) {
+                 Status.SUCCESS -> {
+                     AppUtils.hideLoader()
+@@ -295,7 +329,10 @@
+                                         it1.data.fraternitiesList + it1.data.sororitiesList
+                                     interest = ArrayList<Interest>()
+                                     interest = it1.data.interestList
+-                                    setAdapterData()
++                                    university.let { schoolAct_spinner!!.setText(university) }
++                                    fraternity_Spinner.let { fraternity_Spinner.setText(community) }
++
++                                    // setAdapterData()
+                                     setupChipGroupDynamically(interest!!)
+ 
+ 
+@@ -318,9 +355,13 @@
+ 
+     }
+ 
++    private fun setSchooldata() {
++
++    }
++
+     fun subscribe_Login_User_details() {
+ 
+-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
++        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
+             when (it.status) {
+                 Status.SUCCESS -> {
+                     it.data.let { res ->
+@@ -328,7 +369,7 @@
+                             try {
+                                 dataList = ArrayList()
+                                 dataList.clear()
+-                                interestsList=ArrayList()
++                                interestsList = ArrayList()
+                                 interestsList.clear()
+                                 Log.d("TAG@123", "1311" + it.toString())
+                                 if (!res.user.photos.isNullOrEmpty()) {
+@@ -336,23 +377,22 @@
+                                 }
+                                 set_Adapterdata()
+ 
+-                                    res.user.university.let {
+-                                        university = it
+-                                    }
+-                                    res.user.community.let {
+-                                        community = it
+-                                    }
+-                                    res.user.about.let {
+-                                        about = it
+-                                        _binding?.userAbout?.setText(about)
+-                                    }
++                                res.user.university.let {
++                                    university = it
++                                }
++                                res.user.community.let {
++                                    community = it
++                                }
++                                res.user.about.let {
++                                    about = it
++                                    _binding?.userAbout?.setText(about)
++                                }
+ 
+                                 interestsList = res.user.interests.split(",") as ArrayList<String>
+ 
+ 
+-
+                             } catch (e: Exception) {
+-                                Log.d("TAG@123","Exception ${e.message}")
++                                Log.d("TAG@123", "Exception ${e.message}")
+ 
+                             }
+ 
+@@ -426,7 +466,7 @@
+                     if (data != null) {
+                         try {
+                             val bitmap = MediaStore.Images.Media.getBitmap(
+-                                activity!!.contentResolver,
++                                requireActivity().contentResolver,
+                                 data.data
+                             )
+                             Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+@@ -465,35 +505,35 @@
+ 
+         }
+     }
+-    private fun setAdapterData() {
++    /* private fun setAdapterData() {
+ 
+-        try {
+-            val schoolAdapter = AppReseources.getAppContext()?.let {
+-                CommunityAdapter(
+-                    it,
+-                    schoolList!! as ArrayList<UniversityList>
+-                )
+-            }
+-            schoolAct_spinner?.adapter = schoolAdapter
+-            schoolAdapter?.notifyDataSetChanged()
+-            schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
++         try {
++             val schoolAdapter = AppReseources.getAppContext()?.let {
++                 CommunityAdapter(
++                     it,
++                     schoolList!! as ArrayList<UniversityList>
++                 )
++             }
++             schoolAct_spinner?.adapter = schoolAdapter
++             schoolAdapter?.notifyDataSetChanged()
++             schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
+ 
+ 
+-            val adapter = AppReseources.getAppContext()?.let {
+-                CommunityAdapter(
+-                    it,
+-                    fraternitiesList!! as ArrayList<UniversityList>
+-                )
+-            }
+-            fraternity_Spinner.adapter = adapter
+-            adapter?.notifyDataSetChanged()
+-            fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
+-        } catch (e: Exception) {
++             val adapter = AppReseources.getAppContext()?.let {
++                 CommunityAdapter(
++                     it,
++                     fraternitiesList!! as ArrayList<UniversityList>
++                 )
++             }
++             fraternity_Spinner.adapter = adapter
++             adapter?.notifyDataSetChanged()
++             fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
++         } catch (e: Exception) {
+ 
+-            Log.d("TAG@123", "Ex -:" + e.message.toString())
+-        }
++             Log.d("TAG@123", "Ex -:" + e.message.toString())
++         }
+ 
+-    }
++     }*/
+ 
+ 
+     private fun setupChipGroupDynamically(list: List<Interest>) {
+@@ -522,12 +562,13 @@
+         chip.isClickable = true
+ 
+         chip.isChecked = interestsList.contains(label)
+-        chip.setBackgroundColor(if(interestsList.contains(label)){
+-            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
+-        }
+-        else{
+-            ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
+-        })
++        chip.setBackgroundColor(
++            if (interestsList.contains(label)) {
++                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
++            } else {
++                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
++            }
++        )
+ 
+ 
+         chip.chipCornerRadius = 1.0F
+@@ -536,13 +577,23 @@
+             if (chip.isChecked) {
+                 if (!interestsList.contains(label)) {
+                     interestsList.add(label)
+-                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900))
++                    chip.setBackgroundColor(
++                        ContextCompat.getColor(
++                            AppReseources.getAppContext()!!,
++                            R.color.light_blue_900
++                        )
++                    )
+                 }
+ 
+             } else {
+                 if (interestsList.contains(label)) {
+                     interestsList.remove(label)
+-                    chip.setBackgroundColor( ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200))
++                    chip.setBackgroundColor(
++                        ContextCompat.getColor(
++                            AppReseources.getAppContext()!!,
++                            R.color.teal_200
++                        )
++                    )
+ 
+                 }
+             }
+@@ -553,6 +604,39 @@
+         }
+         return chip
+ 
++    }
++
++    override fun onQueryTextSubmit(p0: String?): Boolean {
++        schoolAdapter.filter.filter(p0)
++        return false
++    }
++
++    override fun onQueryTextChange(p0: String?): Boolean {
++        schoolAdapter.filter.filter(p0)
++        return false
++    }
++
++    override fun onItClick(position: UniversityList, stringtype: String) {
++        var clickItemData = position.name
++        if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {
++            fraternity_Spinner!!.setText(clickItemData)
++            university = clickItemData
++            /*  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
++                  AppConstants.community,
++                  position.name
++              )*/
++        } else {
++            schoolAct_spinner!!.setText(clickItemData)
++            community = clickItemData
++            /*(activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
++                AppConstants.university,
++                position.name
++            )*/
++        }
++
++        if (dialog != null || dialog.isShowing) {
++            dialog.dismiss()
++        }
+     }
+ }
+ 
+Index: app/src/main/res/layout/fragment_edit_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<ScrollView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/white_with_opecity\"\r\n    android:fillViewport=\"true\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginBottom=\"32dp\"\r\n        tools:context=\".apk.views.settings.SettingsFragment\">\r\n\r\n\r\n        <androidx.constraintlayout.widget.Guideline\r\n            android:id=\"@+id/guideline_left\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            app:layout_constraintGuide_begin=\"24dp\" />\r\n\r\n        <androidx.constraintlayout.widget.Guideline\r\n            android:id=\"@+id/guideline_right\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            app:layout_constraintGuide_end=\"24dp\" />\r\n\r\n        <androidx.constraintlayout.widget.Guideline\r\n            android:id=\"@+id/guideline_top\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"\r\n            app:layout_constraintGuide_begin=\"24dp\" />\r\n\r\n        <androidx.constraintlayout.widget.Guideline\r\n            android:id=\"@+id/guideline_bottom\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"\r\n            app:layout_constraintGuide_end=\"24dp\" />\r\n\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView2\"\r\n            android:layout_width=\"24dp\"\r\n            android:layout_height=\"24dp\"\r\n            android:layout_marginStart=\"4dp\"\r\n            android:layout_marginLeft=\"4dp\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:src=\"@drawable/ic_baseline_arrow_back_ios_24\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            app:layout_constraintTop_toTopOf=\"@+id/guideline_top\" />\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView6\"\r\n            android:layout_width=\"wrap_content\"\r\n            style=\"@style/QText\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"20sp\"\r\n            android:text=\"Edit Profile\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline_right\"\r\n            app:layout_constraintHorizontal_bias=\"0.45\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/imageView2\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/guideline_top\" />\r\n\r\n\r\n        <Button\r\n            android:id=\"@+id/done\"\r\n            style=\"@style/QText\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"4dp\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:text=\"Done\"\r\n            android:textAllCaps=\"false\"\r\n            android:textColor=\"@color/blue\"\r\n            android:textSize=\"20sp\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline_right\"\r\n            app:layout_constraintHorizontal_bias=\"0.786\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/textView6\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/guideline_top\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/profile_photo\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"Profiles Photos\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/imageView2\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            />\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/update_image_view\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n         android:layout_marginLeft=\"1dp\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:layout_marginBottom=\"5dp\"\r\n            android:layout_marginRight=\"5dp\"\r\n            tools:listitem=\"@layout/update_photo\"\r\n            tools:itemCount=\"1\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/profile_photo\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/profile_photo\" />\r\n\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/about_text\"\r\n            android:layout_width=\"wrap_content\"\r\n            style=\"@style/QText\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"About Me\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/update_image_view\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            />\r\n\r\n        <EditText\r\n            android:id=\"@+id/user_about\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"150dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:background=\"@drawable/login_field_border_bg\"\r\n            android:drawablePadding=\"10dp\"\r\n            android:hint=\"Tell me ..\"\r\n            android:gravity=\"top|left\"\r\n            android:inputType=\"textMultiLine\"\r\n            android:maxLines=\"6\"\r\n            android:minLines=\"6\"\r\n            android:paddingTop=\"15dp\"\r\n            android:paddingBottom=\"15dp\"\r\n            android:textColorHint=\"@color/hint_text_color\"\r\n            android:textSize=\"18sp\"\r\n            app:layout_constraintEnd_toEndOf=\"@+id/guideline_right\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/guideline_left\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/about_text\" />\r\n\r\n\r\n\r\n\r\n        <TextView\r\n            android:id=\"@+id/interests_text\"\r\n            android:layout_width=\"wrap_content\"\r\n            style=\"@style/QText\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"Interests\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/user_about\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            />\r\n\r\n\r\n        <com.google.android.material.chip.ChipGroup\r\n            android:id=\"@+id/rootContainer\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:isScrollContainer=\"true\"\r\n            app:singleSelection=\"false\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/interests_text\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/guideline_left\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline_right\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            android:weightSum=\"5\"></com.google.android.material.chip.ChipGroup>\r\n\r\n        <View\r\n            android:id=\"@+id/v4\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"2dp\"\r\n            android:layout_marginTop=\"12dp\"\r\n            android:layout_marginBottom=\"24dp\"\r\n            android:alpha=\".6\"\r\n            android:background=\"@color/hint_text_color\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@id/rootContainer\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/school_text\"\r\n            android:layout_width=\"wrap_content\"\r\n            style=\"@style/QText\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"School\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/v4\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            />\r\n\r\n        <androidx.appcompat.widget.AppCompatSpinner\r\n            android:id=\"@+id/school_data\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"54dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            style=\"@android:style/Widget.Holo.Light.Spinner\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/school_text\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/guideline_left\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline_right\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"/>\r\n\r\n        <View\r\n            android:id=\"@+id/v5\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"2dp\"\r\n            android:layout_marginTop=\"12dp\"\r\n            android:layout_marginBottom=\"24dp\"\r\n            android:alpha=\".6\"\r\n            android:background=\"@color/hint_text_color\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@id/school_data\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/sorority_text\"\r\n            android:layout_width=\"wrap_content\"\r\n            style=\"@style/QText\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:textSize=\"14sp\"\r\n            android:text=\"Sorority/Fraternity\"\r\n            android:textStyle=\"bold\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/v5\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"\r\n            />\r\n\r\n        <androidx.appcompat.widget.AppCompatSpinner\r\n            android:id=\"@+id/et_type\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"54dp\"\r\n            android:layout_marginTop=\"20dp\"\r\n            android:layout_marginBottom=\"20dp\"\r\n            style=\"@android:style/Widget.Holo.Light.Spinner\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/sorority_text\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline_left\"\r\n            app:layout_constraintStart_toEndOf=\"@+id/guideline_left\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline_right\"\r\n            tools:layout_editor_absoluteX=\"137dp\"\r\n            tools:layout_editor_absoluteY=\"196dp\"/>\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n</ScrollView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_edit_profile.xml b/app/src/main/res/layout/fragment_edit_profile.xml
+--- a/app/src/main/res/layout/fragment_edit_profile.xml	
++++ b/app/src/main/res/layout/fragment_edit_profile.xml	
+@@ -92,7 +92,7 @@
+             android:layout_height="wrap_content"
+             android:gravity="center_horizontal"
+             android:layout_marginTop="16dp"
+-            android:textSize="14sp"
++            android:textSize="16sp"
+             android:text="Profiles Photos"
+             app:layout_constraintTop_toBottomOf="@+id/imageView2"
+             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+@@ -123,7 +123,7 @@
+             android:layout_height="wrap_content"
+             android:gravity="center_horizontal"
+             android:layout_marginTop="16dp"
+-            android:textSize="14sp"
++            android:textSize="16sp"
+             android:text="About Me"
+             app:layout_constraintTop_toBottomOf="@+id/update_image_view"
+             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+@@ -161,7 +161,7 @@
+             android:layout_height="wrap_content"
+             android:gravity="center_horizontal"
+             android:layout_marginTop="16dp"
+-            android:textSize="14sp"
++            android:textSize="16sp"
+             android:text="Interests"
+             app:layout_constraintTop_toBottomOf="@+id/user_about"
+             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+@@ -205,7 +205,7 @@
+             android:layout_height="wrap_content"
+             android:gravity="center_horizontal"
+             android:layout_marginTop="16dp"
+-            android:textSize="14sp"
++            android:textSize="16sp"
+             android:text="School"
+             android:textStyle="bold"
+             app:layout_constraintTop_toBottomOf="@+id/v4"
+@@ -214,11 +214,13 @@
+             tools:layout_editor_absoluteY="196dp"
+             />
+ 
+-        <androidx.appcompat.widget.AppCompatSpinner
++        <EditText
+             android:id="@+id/school_data"
+             android:layout_width="0dp"
+             android:layout_height="54dp"
+-            android:layout_marginTop="20dp"
++            android:layout_marginTop="10dp"
++            android:textSize="16sp"
++            android:background="@drawable/login_field_border_bg"
+             style="@android:style/Widget.Holo.Light.Spinner"
+             app:layout_constraintTop_toBottomOf="@+id/school_text"
+             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+@@ -246,7 +248,7 @@
+             android:layout_height="wrap_content"
+             android:gravity="center_horizontal"
+             android:layout_marginTop="16dp"
+-            android:textSize="14sp"
++            android:textSize="16sp"
+             android:text="Sorority/Fraternity"
+             android:textStyle="bold"
+             app:layout_constraintTop_toBottomOf="@+id/v5"
+@@ -255,12 +257,14 @@
+             tools:layout_editor_absoluteY="196dp"
+             />
+ 
+-        <androidx.appcompat.widget.AppCompatSpinner
++        <EditText
+             android:id="@+id/et_type"
+             android:layout_width="0dp"
+             android:layout_height="54dp"
+-            android:layout_marginTop="20dp"
++            android:layout_marginTop="10dp"
+             android:layout_marginBottom="20dp"
++            android:textSize="16sp"
++            android:background="@drawable/login_field_border_bg"
+             style="@android:style/Widget.Holo.Light.Spinner"
+             app:layout_constraintTop_toBottomOf="@+id/sorority_text"
+             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">Sigma Dating App</string>\r\n    <string name=\"login_header\">Hey There! Login Now</string>\r\n    <string name=\"email_text\">Email</string>\r\n    <string name=\"fraternity_text\">Fraternity</string>\r\n    <string name=\"sorority_text\">Sorority</string>\r\n    <string name=\"sign_in\">SIGN IN</string>\r\n    <string name=\"email_error\">Invalid email address</string>\r\n    <string name=\"phone_text\">Phone Number</string>\r\n    <string name=\"phone_xx\">xxx-xxx-xxxx</string>\r\n    <string name=\"password_text\">Password</string>\r\n    <string name=\"send_otp_text\">SEND OTP</string>\r\n    <string name=\"send_enter_text\">Enter OTP</string>\r\n    <string name=\"stepone_header\">Tell us a little\\n about yourself.</string>\r\n    <string name=\"name_ask_text\">What is your name?</string>\r\n    <string name=\"what_school\">What School do you attend?</string>\r\n    <string name=\"first_name_text\">First Name</string>\r\n    <string name=\"hint_school_name\">School Name</string>\r\n    <string name=\"last_name_text\">Last Name</string>\r\n    <string name=\"iam_text\">I am a</string>\r\n    <string name=\"woman_text\">Women</string>\r\n    <string name=\"man_text\">Man</string>\r\n    <string name=\"more\">Man</string>\r\n    <string name=\"forgot_password_text\">Forgot Password? </string>\r\n    <string name=\"dont_have_acc\">Don\\'t have an account </string>\r\n    <string name=\"signup_text\">SIGN UP</string>\r\n    <string name=\"sign_in_text\">OR SIGN IN WITH</string>\r\n    <string name=\"continue_text\">CONTINUE</string>\r\n    <string name=\"tell_us\">Tell us a little\\nabout yourself</string>\r\n    <string name=\"tell_us_school\">Tell us about\\n your school</string>\r\n    <string name=\"title_activity_on_boarding\">OnBoardingActivity</string>\r\n    <string name=\"dummy_button\">Dummy Button</string>\r\n    <string name=\"dummy_content\">DUMMY\\nCONTENT</string>\r\n    <string name=\"title_activity_onboarding\">OnboardingActivity_</string>\r\n    <!-- Strings used for fragments for navigation -->\r\n    <string name=\"first_fragment_label\">First Fragment</string>\r\n    <string name=\"second_fragment_label\">Second Fragment</string>\r\n    <string name=\"next\">Next</string>\r\n    <string name=\"previous\">Previous</string>\r\n\r\n    <string name=\"hello_first_fragment\">Hello first fragment</string>\r\n    <string name=\"hello_second_fragment\">Hello second fragment. Arg: %1$s</string>\r\n    <!-- TODO: Remove or change this placeholder text -->\r\n    <string name=\"hello_blank_fragment\">Hello blank fragment</string>\r\n    <string name=\"internetdisconnect\">internet not connected</string>\r\n\r\n\r\n    <string name=\"dummy_text\">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>\r\n\r\n\r\n    <string name=\"facebook_app_id\">833040661414380</string>\r\n    <string name=\"fb_login_protocol_scheme\">fb833040661414380</string>\r\n    <string name=\"facebook_client_token\">45b0c477021194b4b5d95bde259fcc58</string>\r\n\r\n    <string name=\"term_and_condition\">I agree with the <u>Terms and Conditions</u> <a href=\"https://www.rushdatingapp.com/terms-and-conditions/\"></a></string>\r\n    <!--856275008761-pr04ias0a1j3pqo9gataltbneq1savj9.apps.googleusercontent.com-->\r\n\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	
++++ b/app/src/main/res/values/strings.xml	
+@@ -1,6 +1,6 @@
+ <resources>
+     <string name="app_name">Sigma Dating App</string>
+-    <string name="login_header">Hey There! Login Now</string>
++    <string name="login_header">Welcome to Sigma</string>
+     <string name="email_text">Email</string>
+     <string name="fraternity_text">Fraternity</string>
+     <string name="sorority_text">Sorority</string>
+Index: app/src/main/java/com/SigmaDating/apk/views/HomeViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.views\r\n\r\nimport android.util.Log\r\nimport androidx.lifecycle.MutableLiveData\r\nimport androidx.lifecycle.ViewModel\r\nimport androidx.lifecycle.viewModelScope\r\nimport com.example.demoapp.other.Resource\r\nimport com.google.gson.JsonObject\r\nimport com.SigmaDating.apk.model.Loginmodel\r\nimport com.SigmaDating.model.SchoolCommunityResponse\r\nimport com.SigmaDating.apk.repository.MainRepository\r\nimport com.SigmaDating.apk.storage.SharedPreferencesStorage\r\nimport dagger.hilt.android.lifecycle.HiltViewModel\r\nimport kotlinx.coroutines.*\r\nimport org.jetbrains.anko.custom.async\r\nimport javax.inject.Inject\r\n\r\n@HiltViewModel\r\nclass HomeViewModel @Inject constructor(\r\n    private val mainRepository: MainRepository,\r\n    private val sharedPreferencesStorage: SharedPreferencesStorage\r\n) : ViewModel() {\r\n\r\n    var get_user_data: MutableLiveData<Resource<Loginmodel>>\r\n    var change_password: MutableLiveData<Resource<Loginmodel>>\r\n    var upload_images: MutableLiveData<Resource<Loginmodel>>\r\n    var delete_images: MutableLiveData<Resource<Loginmodel>>\r\n    var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>\r\n    var update_profile: MutableLiveData<Resource<Loginmodel>>\r\n    lateinit var userData: Resource<Loginmodel>\r\n\r\n    init {\r\n        get_user_data = MutableLiveData<Resource<Loginmodel>>()\r\n        change_password = MutableLiveData<Resource<Loginmodel>>()\r\n        upload_images = MutableLiveData<Resource<Loginmodel>>()\r\n        delete_images = MutableLiveData<Resource<Loginmodel>>()\r\n        school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()\r\n        update_profile = MutableLiveData<Resource<Loginmodel>>()\r\n    }\r\n\r\n    fun get_Login_User_details(id: String) = viewModelScope.launch {\r\n        get_user_data.postValue(Resource.loading(null))\r\n        val jsonObject = JsonObject()\r\n        Log.d(\"TAG@123\", id)\r\n        jsonObject.addProperty(\"user_id\", id)\r\n        Log.d(\"TAG@123\", \"22 : -\" + jsonObject.toString())\r\n        mainRepository.get_login_user_data(jsonObject).let {\r\n            if (it.isSuccessful) {\r\n                userData = Resource.success(it.body())\r\n                get_user_data.postValue(Resource.success(it.body()))\r\n            } else {\r\n                get_user_data.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    fun User_change_password(id: String, password: String, password_confirm: String) =\r\n        viewModelScope.launch {\r\n            change_password.postValue(Resource.loading(null))\r\n            val jsonObject = JsonObject()\r\n            Log.d(\"TAG@123\", id)\r\n            jsonObject.addProperty(\"id\", id)\r\n            jsonObject.addProperty(\"password\", password)\r\n            jsonObject.addProperty(\"password_confirm\", password_confirm)\r\n            Log.d(\"TAG@123\", \"-- \" + jsonObject.toString())\r\n            mainRepository.change_password(jsonObject).let {\r\n                if (it.isSuccessful) {\r\n                    change_password.postValue(Resource.success(it.body()))\r\n                } else {\r\n                    change_password.postValue(Resource.error(it.errorBody().toString(), null))\r\n                }\r\n            }\r\n        }\r\n\r\n\r\n    fun get_edit_page_data(id: String) {\r\n        val one = async { getSchoolingData() }\r\n        if (userData != null) {\r\n            get_user_data.postValue(userData)\r\n        } else {\r\n            val two = async { get_Login_User_details(id) }\r\n        }\r\n\r\n\r\n\r\n    }\r\n\r\n    fun Update_edit_page_data(\r\n        id: String,\r\n        university: String,\r\n        community: String,\r\n        interests: String,\r\n        about: String\r\n    ) {\r\n        val one = async { update_profile(id, university, community, interests, about) }\r\n        val two = async { get_Login_User_details(id) }\r\n\r\n    }\r\n\r\n\r\n    fun User_upload_images(id: String, img: String) = viewModelScope.launch {\r\n        upload_images.postValue(Resource.loading(null))\r\n        val jsonObject = JsonObject()\r\n        Log.d(\"TAG@123\", id)\r\n        jsonObject.addProperty(\"user_id\", id)\r\n        jsonObject.addProperty(\"upload_image\", img)\r\n\r\n        Log.d(\"TAG@123\", \"-- \" + jsonObject.toString())\r\n        mainRepository.upload_images(jsonObject).let {\r\n            if (it.isSuccessful) {\r\n                upload_images.postValue(Resource.success(it.body()))\r\n            } else {\r\n                upload_images.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    fun User_delete_images(id: String, img: String) = viewModelScope.launch {\r\n        delete_images.postValue(Resource.loading(null))\r\n        val jsonObject = JsonObject()\r\n        Log.d(\"TAG@123\", id)\r\n        jsonObject.addProperty(\"user_id\", id)\r\n        jsonObject.addProperty(\"photo\", img)\r\n\r\n        Log.d(\"TAG@123\", \"-- \" + jsonObject.toString())\r\n        mainRepository.delete_images(jsonObject).let {\r\n            if (it.isSuccessful) {\r\n                delete_images.postValue(Resource.success(it.body()))\r\n            } else {\r\n                delete_images.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    fun getSchoolingData() = viewModelScope.launch {\r\n        school_dataResponse.postValue(Resource.loading(null))\r\n        mainRepository.ListSchoolFeternity().let {\r\n            if (it.isSuccessful) {\r\n                school_dataResponse.postValue(Resource.success(it.body()))\r\n            } else {\r\n                school_dataResponse.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n    fun update_profile(\r\n        id: String,\r\n        university: String,\r\n        community: String,\r\n        interests: String,\r\n        about: String\r\n    ) = viewModelScope.launch {\r\n        update_profile.postValue(Resource.loading(null))\r\n        val jsonObject = JsonObject()\r\n\r\n        jsonObject.addProperty(\"user_id\", id)\r\n        jsonObject.addProperty(\"university\", university)\r\n        jsonObject.addProperty(\"community\", community)\r\n        jsonObject.addProperty(\"interests\", interests)\r\n        jsonObject.addProperty(\"about\", about)\r\n\r\n        Log.d(\"TAG@123\", \"done Update\" + jsonObject.toString())\r\n        mainRepository.Update_profile(jsonObject).let {\r\n            if (it.isSuccessful) {\r\n                update_profile.postValue(Resource.success(it.body()))\r\n            } else {\r\n                update_profile.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n\r\n    fun update_phone_location(\r\n        id: String,\r\n        key: String,\r\n        vlaue: String,\r\n\r\n    ) = viewModelScope.launch {\r\n        update_profile.postValue(Resource.loading(null))\r\n        val jsonObject = JsonObject()\r\n\r\n        jsonObject.addProperty(\"user_id\", id)\r\n        jsonObject.addProperty(key,vlaue)\r\n\r\n\r\n        Log.d(\"TAG@123\", \"done Update\" + jsonObject.toString())\r\n        mainRepository.Update_profile(jsonObject).let {\r\n            if (it.isSuccessful) {\r\n                change_password.postValue(Resource.success(it.body()))\r\n            } else {\r\n                change_password.postValue(Resource.error(it.errorBody().toString(), null))\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/views/HomeViewModel.kt b/app/src/main/java/com/SigmaDating/apk/views/HomeViewModel.kt
+--- a/app/src/main/java/com/SigmaDating/apk/views/HomeViewModel.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/views/HomeViewModel.kt	
+@@ -75,7 +75,10 @@
+ 
+ 
+     fun get_edit_page_data(id: String) {
+-        val one = async { getSchoolingData() }
++        val one = async { getSchoolingData()
++
++        }
++
+         if (userData != null) {
+             get_user_data.postValue(userData)
+         } else {
+@@ -84,6 +87,9 @@
+ 
+ 
+ 
++
++
++
+     }
+ 
+     fun Update_edit_page_data(
+Index: app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment3.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.views.intro_registration\r\n\r\nimport android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Button\r\nimport android.widget.EditText\r\nimport androidx.constraintlayout.widget.ConstraintLayout\r\nimport androidx.fragment.app.Fragment\r\nimport com.hbb20.CountryCodePicker\r\nimport com.SigmaDating.R\r\nimport com.SigmaDating.databinding.AboutBirthdayBinding\r\nimport com.SigmaDating.apk.storage.AppConstants\r\nimport com.SigmaDating.apk.utilities.AppUtils\r\nimport com.SigmaDating.apk.utilities.DateTextWatcher\r\n\r\n\r\n// TODO: Rename parameter arguments, choose names that match\r\n// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\n/**\r\n * A simple [Fragment] subclass.\r\n * Use the [BlankFragment3.newInstance] factory method to\r\n * create an instance of this fragment.\r\n */\r\nclass BlankFragment3 : Fragment() {\r\n    // TODO: Rename and change types of parameters\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    lateinit var button_birthday: Button\r\n    lateinit var editbirthday: EditText\r\n    private var ss: String? = null\r\n    lateinit var email_id: EditText\r\n    lateinit var country_spinner: CountryCodePicker\r\n    lateinit var constraint_f1: ConstraintLayout\r\n    lateinit var edit_text_phone: EditText\r\n    private var binding: AboutBirthdayBinding? = null\r\n\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View {\r\n        binding = AboutBirthdayBinding.inflate(inflater, container, false)\r\n        button_birthday = binding!!.root.findViewById(R.id.button_birthday)\r\n        country_spinner = binding!!.root.findViewById(R.id.ccp)\r\n        email_id = binding!!.root.findViewById(R.id.edit_emal)\r\n        constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)\r\n        editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)\r\n        edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)\r\n        editbirthday.addTextChangedListener(DateTextWatcher())\r\n        button_birthday.setOnClickListener {\r\n\r\n            if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {\r\n                AppUtils.showErrorSnackBar(requireContext(), constraint_f1, \"Invalid Email Address\")\r\n            } else if (edit_text_phone.text.toString().isEmpty() || !AppUtils.isValid_phone_number(\r\n                    edit_text_phone.text.toString().trim()\r\n                )\r\n            ) {\r\n                AppUtils.showErrorSnackBar(\r\n                    requireContext(),\r\n                    constraint_f1,\r\n                    \"Enter Valid Phone Number\"\r\n                )\r\n\r\n            } else {\r\n\r\n                if (editbirthday.text.toString()\r\n                        .isEmpty() || !AppUtils.isValidDate(editbirthday.text.toString().trim())\r\n                ) {\r\n\r\n                    AppUtils.showErrorSnackBar(\r\n                        requireContext(),\r\n                        constraint_f1,\r\n                        \"Enter Valid Date of Birth\"\r\n                    )\r\n\r\n                } else {\r\n\r\n                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                        AppConstants.email,\r\n                        email_id.text.toString()\r\n                    )\r\n                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                        AppConstants.Dob,\r\n                        editbirthday.text.toString()\r\n                    )\r\n\r\n\r\n                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                        AppConstants.phone,\r\n                        country_spinner.selectedCountryCodeWithPlus+\"\"+edit_text_phone.text.toString()\r\n                    )\r\n\r\n\r\n                    (activity as OnBoardingActivity?)?.setCurrentItem(3, true)\r\n\r\n                }\r\n\r\n\r\n            }\r\n        }\r\n\r\n\r\n\r\n        return binding!!.root\r\n    }\r\n\r\n\r\n    fun onCountryPickerClick_fag(view: View?) {\r\n        country_spinner.setOnCountryChangeListener(CountryCodePicker.OnCountryChangeListener {\r\n            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                AppConstants.USER_COUNTRY_CODE,\r\n                country_spinner.getSelectedCountryCodeWithPlus()\r\n            )\r\n        })\r\n    }\r\n\r\n\r\n    companion object {\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            BlankFragment3().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment3.kt b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment3.kt
+--- a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment3.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment3.kt	
+@@ -1,6 +1,7 @@
+ package com.SigmaDating.apk.views.intro_registration
+ 
+ import android.os.Bundle
++import android.util.Log
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+@@ -95,7 +96,8 @@
+                         country_spinner.selectedCountryCodeWithPlus+""+edit_text_phone.text.toString()
+                     )
+ 
+-
++val ee= AppUtils.getAgeDiffernce(editbirthday.text.toString())
++                    Log.d("TAG@123",ee.toString())
+                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+ 
+                 }
+Index: app/src/main/java/com/SigmaDating/apk/utilities/AppUtils.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.utilities\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.app.AlertDialog\r\nimport android.app.Dialog\r\nimport android.content.BroadcastReceiver\r\nimport android.content.Context\r\nimport android.content.IntentFilter\r\nimport android.graphics.Bitmap\r\nimport android.graphics.Matrix\r\nimport android.net.ConnectivityManager\r\nimport android.text.TextUtils\r\nimport android.util.Log\r\nimport android.util.Patterns\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.inputmethod.InputMethodManager\r\nimport android.widget.Adapter\r\nimport android.widget.Spinner\r\nimport android.widget.TextView\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.exifinterface.media.ExifInterface\r\nimport com.airbnb.lottie.LottieAnimationView\r\nimport com.google.android.material.snackbar.Snackbar\r\nimport com.SigmaDating.R\r\nimport com.SigmaDating.apk.model.communityModel.UniversityList\r\nimport java.text.DateFormat\r\nimport java.text.ParseException\r\nimport java.text.SimpleDateFormat\r\nimport java.util.*\r\nimport java.util.regex.Pattern\r\n\r\n\r\nobject AppUtils {\r\n\r\n    private var dialog: Dialog? = null\r\n\r\n    fun hideLoader() {\r\n        try {\r\n            if (dialog!!.isShowing) dialog!!.dismiss()\r\n        }catch (e:Exception){}\r\n\r\n    }\r\n\r\n    fun showLoader(context: Context?) {\r\n        context?.javaClass?.name?.let { Log.d(\"TAG@123\", it) }\r\n        val builder = AlertDialog.Builder(context, R.style.NewDialog)\r\n        val inflater = LayoutInflater.from(context)\r\n        val view: View = inflater.inflate(R.layout.custom_loader, null, false)\r\n        builder.setView(view)\r\n        dialog?.getWindow()?.setDimAmount(0f);\r\n        dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);\r\n        dialog = builder.create()\r\n        (dialog as AlertDialog?)?.setCancelable(false)\r\n        val groupcreate: LottieAnimationView =\r\n            view.findViewById<View>(R.id.email) as LottieAnimationView\r\n        groupcreate.setAnimation(R.raw.loader)\r\n        groupcreate.playAnimation()\r\n        (dialog as AlertDialog?)?.getWindow()!!\r\n            .setBackgroundDrawableResource(R.color.hint_text_color)\r\n        (dialog as AlertDialog?)?.show()\r\n    }\r\n\r\n    fun isValidEmail(email: String?): Boolean {\r\n        val emailRegex = \"^[a-zA-Z0-9_+&*-]+(?:\\\\.\" +\r\n                \"[a-zA-Z0-9_+&*-]+)*@\" +\r\n                \"(?:[a-zA-Z0-9-]+\\\\.)+[a-z\" +\r\n                \"A-Z]{2,7}$\"\r\n        val pat = Pattern.compile(emailRegex)\r\n        return !(email == null || email.isEmpty() || !pat.matcher(email).matches())\r\n    }\r\n\r\n\r\n    fun isValid_password(password: String?): Boolean {\r\n\r\n        if (password != null) {\r\n            return (password.length > 5)\r\n        }\r\n\r\n        return false\r\n    }\r\n\r\n\r\n    fun isValid_password_match(new_password: String?, confirm_password: String): Boolean {\r\n\r\n        if (new_password.equals(confirm_password)) {\r\n            return true\r\n        }\r\n\r\n        return false\r\n    }\r\n\r\n\r\n    fun isValid_phone_number(number: String?): Boolean {\r\n        if (number?.matches(\".*[0-9].*\".toRegex()) == false) {\r\n            return false\r\n        }\r\n        if (number?.length != 10) {\r\n            return false\r\n        }\r\n        return true\r\n    }\r\n\r\n    fun checkIfEmailIsValid(emailInputText: String): String? {\r\n        if (!Patterns.EMAIL_ADDRESS.matcher(emailInputText).matches()) {\r\n            return \"Invalid Email Address\"\r\n        } else {\r\n            return null\r\n        }\r\n    }\r\n\r\n    fun isValidEmail(target: CharSequence?): Boolean {\r\n        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()\r\n    }\r\n\r\n    fun isValidDate(dateOfBirth: String): Boolean {\r\n        var valid = true\r\n        val formatter: DateFormat = SimpleDateFormat(\"dd/MM/yyyy\")\r\n        formatter.setLenient(false)\r\n        try {\r\n            val date: Date = formatter.parse(dateOfBirth)\r\n            return true\r\n        } catch (e: ParseException) {\r\n            return false\r\n            //If input date is in different format or invalid.\r\n        }\r\n        return valid\r\n    }\r\n\r\n    fun validateDate(date: String): Boolean {\r\n        val regex = \"^(0[0-9]||1[0-2])/([0-2][0-9]||3[0-1])/([0-9][0-9])?[0-9][0-9]$\"\r\n        val matcher = Pattern.compile(regex).matcher(date)\r\n        return if (matcher.matches()) {\r\n            matcher.reset()\r\n            if (matcher.find()) {\r\n                val dateDetails = date.split(\"/\")\r\n                val day: String = dateDetails[1]\r\n                val month: String = dateDetails[0]\r\n                val year: String = dateDetails[2]\r\n                if (validateMonthWithMaxDate(day, month)) {\r\n                    false\r\n                } else if (isFebruaryMonth(month)) {\r\n                    if (isLeapYear(year)) {\r\n                        leapYearWith29Date(day)\r\n                    } else {\r\n                        notLeapYearFebruary(day)\r\n                    }\r\n                } else {\r\n                    true\r\n                }\r\n            } else {\r\n                false\r\n            }\r\n        } else {\r\n            false\r\n        }\r\n    }\r\n\r\n    private fun validateMonthWithMaxDate(day: String, month: String): Boolean =\r\n        day == \"31\" && (month == \"4\" || month == \"6\" || month == \"9\" || month == \"11\" || month == \"04\" || month == \"06\" || month == \"09\")\r\n\r\n    private fun isFebruaryMonth(month: String): Boolean = month == \"2\" || month == \"02\"\r\n    private fun isLeapYear(year: String): Boolean = year.toInt() % 4 == 0\r\n    private fun leapYearWith29Date(day: String): Boolean = !(day == \"30\" || day == \"31\")\r\n    private fun notLeapYearFebruary(day: String): Boolean =\r\n        !(day == \"29\" || day == \"30\" || day == \"31\")\r\n\r\n    fun registerBroadCastReceiver(context: Context, receiver: BroadcastReceiver?) {\r\n        val intentFilter = IntentFilter()\r\n        intentFilter.addAction(\"android.net.conn.CONNECTIVITY_CHANGE\")\r\n        context.registerReceiver(receiver, intentFilter)\r\n    }\r\n\r\n    fun unregisterBroadCastReceiver(context: Context, receiver: BroadcastReceiver?) {\r\n        if (receiver != null) context.unregisterReceiver(receiver)\r\n    }\r\n\r\n    fun internetConnectivityAction(context: Context, isconnected: Boolean, container: View?) {\r\n        if (isconnected) {\r\n//            showNormalSnackBar(context, container, context.getString(R.string.internetconnected));\r\n        } else {\r\n            showErrorSnackBar(\r\n                context,\r\n                container,\r\n                context.getString(R.string.internetdisconnect)\r\n            )\r\n        }\r\n    }\r\n\r\n    fun isNetworkInterfaceAvailable(context: Context): Boolean {\r\n        val connectivityManager =\r\n            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager\r\n        val activeNetwork = connectivityManager.activeNetworkInfo\r\n        return activeNetwork != null && activeNetwork.isConnectedOrConnecting\r\n    }\r\n\r\n    @SuppressLint(\"ResourceAsColor\")\r\n    fun showSnackBar(\r\n        context: Context?,\r\n        view: View?,\r\n        message: String?,\r\n        colorid: Int,\r\n        textcolorid: Int\r\n    ) {\r\n        val snackbar = Snackbar.make(view!!, message!!, Snackbar.LENGTH_LONG)\r\n        val snackbarView = snackbar.view\r\n        snackbarView.setBackgroundColor(ContextCompat.getColor(context!!, colorid))\r\n        val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView\r\n        textView.setTextColor(R.color.cardview_shadow_end_color)\r\n        snackbar.show()\r\n    }\r\n\r\n    fun showErrorSnackBar(context: Context?, view: View?, message: String?) {\r\n        val snackbar = Snackbar.make(view!!, message!!, Snackbar.LENGTH_LONG)\r\n        val snackbarView = snackbar.view\r\n        snackbarView.setBackgroundColor(\r\n            ContextCompat.getColor(\r\n                context!!,\r\n                R.color.light_blue_900\r\n            )\r\n        )\r\n        val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView\r\n        textView.setTextColor(ContextCompat.getColor(context, R.color.white))\r\n        snackbar.show()\r\n    }\r\n\r\n    fun showNormalSnackBar(context: Context?, view: View?, message: String?) {\r\n        val snackbar = Snackbar.make(view!!, message!!, Snackbar.LENGTH_LONG)\r\n        val snackbarView = snackbar.view\r\n        snackbarView.setBackgroundColor(\r\n            ContextCompat.getColor(\r\n                context!!,\r\n                R.color.hint_text_color\r\n            )\r\n        )\r\n        val textView = snackbarView.findViewById<View>(R.id.snackbar_text) as TextView\r\n        textView.maxLines = 5\r\n        textView.setTextColor(ContextCompat.getColor(context, R.color.white))\r\n        snackbar.show()\r\n    }\r\n\r\n    fun hideSoftKeyboard(activity: Context, view: View) {\r\n        val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager\r\n        imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)\r\n    }\r\n\r\n    fun showSoftKeyBoard(context: Context, view: View) {\r\n        if (view.requestFocus()) {\r\n            val inputMethodManager =\r\n                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager\r\n            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)\r\n        }\r\n    }\r\n\r\n    fun setCustomDate(inputdate: String): String? {\r\n        var newformateddate = \"\"\r\n        val toformatstr = \"MMM dd, yyyy | hh:mm aa\"\r\n        val todateFormat = SimpleDateFormat(toformatstr)\r\n        val fromformatstr = \"yyyy-MM-dd hh:mm:ss\"\r\n        val fromdateFormat = SimpleDateFormat(fromformatstr)\r\n        try {\r\n            val date = fromdateFormat.parse(inputdate.trim { it <= ' ' })\r\n            newformateddate = todateFormat.format(date)\r\n        } catch (e: ParseException) {\r\n            e.printStackTrace()\r\n        }\r\n        return newformateddate\r\n    }\r\n\r\n\r\n    fun checkValidationOnFisrtStep(\r\n        context: Context,\r\n        view: View?,\r\n        fname: String,\r\n        lastname: String\r\n    ): Boolean {\r\n        val pattern = Regex(\"^[A-Za-z]+$\")\r\n\r\n        Log.d(\"TAG@123\",\"fname :\"+fname+\" :: lastname :\"+lastname)\r\n        if (fname.isEmpty() || fname == \"null\") {\r\n            showErrorSnackBar(context, view, \"Enter valid First Name\")\r\n            return false\r\n        } else if(lastname.isEmpty() || lastname.isBlank() || fname == \"null\") {\r\n            showErrorSnackBar(context, view, \"Enter valid  Last Name\")\r\n            return false\r\n        }\r\n\r\n        return true\r\n    }\r\n\r\n    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {\r\n        var width = image.width\r\n        var height = image.height\r\n        val bitmapRatio = width.toFloat() / height.toFloat()\r\n        if (bitmapRatio > 1) {\r\n            width = maxSize\r\n            height = (width / bitmapRatio).toInt()\r\n        } else {\r\n            height = maxSize\r\n            width = (height * bitmapRatio).toInt()\r\n        }\r\n        return Bitmap.createScaledBitmap(image, width, height, true)\r\n    }\r\npublic fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{\r\n    val ei: ExifInterface = ExifInterface(photoPath)\r\n    val orientation = ei.getAttributeInt(\r\n        ExifInterface.TAG_ORIENTATION,\r\n        ExifInterface.ORIENTATION_UNDEFINED\r\n    )\r\n\r\n    var rotatedBitmap: Bitmap? = null\r\n    when (orientation) {\r\n        ExifInterface.ORIENTATION_ROTATE_90 -> rotatedBitmap = rotateImage(bitmap, 90F)\r\n        ExifInterface.ORIENTATION_ROTATE_180 -> rotatedBitmap = rotateImage(bitmap, 180F)\r\n        ExifInterface.ORIENTATION_ROTATE_270 -> rotatedBitmap = rotateImage(bitmap, 270F)\r\n        ExifInterface.ORIENTATION_NORMAL -> rotatedBitmap = bitmap\r\n        else -> rotatedBitmap = bitmap\r\n    }\r\n    return rotatedBitmap!!\r\n}\r\n    fun rotateImage(source: Bitmap, angle: Float): Bitmap? {\r\n        val matrix = Matrix()\r\n        matrix.postRotate(angle)\r\n        return Bitmap.createBitmap(\r\n            source, 0, 0, source.width, source.height,\r\n            matrix, true\r\n        )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    fun index(spinner: Spinner, value: String?): Int {\r\n        val adapter: Adapter = spinner.getAdapter()\r\n        val n: Int = adapter.getCount()\r\n        for (i in 0 until n) {\r\n            var name= (spinner.getItemAtPosition(i) as UniversityList).name\r\n            if(name.equals(value)){\r\n                return i\r\n                break\r\n            }\r\n        }\r\n        return 0\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/utilities/AppUtils.kt b/app/src/main/java/com/SigmaDating/apk/utilities/AppUtils.kt
+--- a/app/src/main/java/com/SigmaDating/apk/utilities/AppUtils.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/utilities/AppUtils.kt	
+@@ -20,10 +20,10 @@
+ import android.widget.TextView
+ import androidx.core.content.ContextCompat
+ import androidx.exifinterface.media.ExifInterface
+-import com.airbnb.lottie.LottieAnimationView
+-import com.google.android.material.snackbar.Snackbar
+ import com.SigmaDating.R
+ import com.SigmaDating.apk.model.communityModel.UniversityList
++import com.airbnb.lottie.LottieAnimationView
++import com.google.android.material.snackbar.Snackbar
+ import java.text.DateFormat
+ import java.text.ParseException
+ import java.text.SimpleDateFormat
+@@ -115,7 +115,7 @@
+ 
+     fun isValidDate(dateOfBirth: String): Boolean {
+         var valid = true
+-        val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
++        val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
+         formatter.setLenient(false)
+         try {
+             val date: Date = formatter.parse(dateOfBirth)
+@@ -344,4 +344,27 @@
+         return 0
+     }
+ 
++
++     fun getAgeDiffernce(dobString: String): Int {
++        var date: Date? = null
++        val sdf = SimpleDateFormat("MM/dd/yyyy")
++        try {
++            date = sdf.parse(dobString)
++        } catch (e: ParseException) {
++            e.printStackTrace()
++        }
++        if (date == null) return 0
++        val dob = Calendar.getInstance()
++        val today = Calendar.getInstance()
++        dob.time = date
++        val year = dob[Calendar.YEAR]
++        val month = dob[Calendar.MONTH]
++        val day = dob[Calendar.DAY_OF_MONTH]
++        dob[year, month + 1] = day
++        var age = today[Calendar.YEAR] - dob[Calendar.YEAR]
++        if (today[Calendar.DAY_OF_YEAR] < dob[Calendar.DAY_OF_YEAR]) {
++            age--
++        }
++        return age
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment4.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.SigmaDating.apk.views.intro_registration\r\n\r\n\r\nimport android.app.Dialog\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.view.LayoutInflater\r\nimport android.view.MotionEvent\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.*\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.lifecycle.Observer\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.SigmaDating.R\r\nimport com.SigmaDating.apk.adapters.CommunityAdapter\r\nimport com.SigmaDating.apk.adapters.SchoolAdapter\r\nimport com.SigmaDating.apk.model.communityModel.UniversityList\r\nimport com.SigmaDating.apk.storage.AppConstants\r\nimport com.SigmaDating.apk.utilities.EmptyDataObserver\r\nimport com.SigmaDating.databinding.FragmentSchoolInputBinding\r\nimport com.example.demoapp.other.Constants\r\nimport com.example.demoapp.other.Status\r\nimport dagger.hilt.android.AndroidEntryPoint\r\n\r\n\r\nprivate const val ARG_PARAM1 = \"param1\"\r\nprivate const val ARG_PARAM2 = \"param2\"\r\n\r\n@AndroidEntryPoint\r\nclass BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,\r\n    SchoolAdapter.OnItemClickListener {\r\n    private var param1: String? = null\r\n    private var param2: String? = null\r\n    private var about_school_binding: FragmentSchoolInputBinding? = null\r\n    private var continueSchool: Button? = null\r\n    private var Socority_button: Button? = null\r\n    private var fraternity_button: Button? = null\r\n    lateinit var fraternity_Spinner: EditText\r\n    private var schoolAct_spinner: EditText? = null\r\n    var fraternitiesList: List<UniversityList>? = null\r\n    var sororitiesList: List<UniversityList>? = null\r\n    var schoolList: List<UniversityList>? = null\r\n    var schoolListCopy: List<UniversityList>? = null\r\n    lateinit var commonDataList: ArrayList<String>\r\n    private lateinit var schoolAdapter: SchoolAdapter\r\n    lateinit var dialog: Dialog\r\n    var searchRecyclerView: RecyclerView? = null\r\n    override fun onCreateView(\r\n        inflater: LayoutInflater,\r\n        container: ViewGroup?,\r\n        savedInstanceState: Bundle?\r\n    ): View? {\r\n\r\n        about_school_binding = FragmentSchoolInputBinding.inflate(inflater, container, false)\r\n        continueSchool = about_school_binding?.root?.findViewById(R.id.continue_school)\r\n        schoolAct_spinner = about_school_binding?.root?.findViewById(R.id.schoolAct_spinner)\r\n        fraternity_Spinner = about_school_binding?.root?.findViewById(R.id.et_type)!!\r\n        Socority_button = about_school_binding?.root?.findViewById(R.id.Socority_button)\r\n        fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)\r\n\r\n        schoolAct_spinner!!.setOnTouchListener { v, event ->\r\n            if (event.action == MotionEvent.ACTION_UP) {\r\n                schoolList = ArrayList<UniversityList>()\r\n                schoolList = schoolListCopy\r\n                openSchoolSearchDialog(AppConstants.School)\r\n                true\r\n            } else false\r\n        }\r\n\r\n        fraternity_Spinner!!.setOnTouchListener { v, event ->\r\n            if (event.action == MotionEvent.ACTION_UP) {\r\n                schoolList = ArrayList<UniversityList>()\r\n                schoolList = fraternitiesList\r\n                openSchoolSearchDialog(AppConstants.Fraternity)\r\n                true\r\n            } else false\r\n        }\r\n\r\n\r\n        continueSchool?.setOnClickListener {\r\n            schoolAct_spinner.let {\r\n                if (it!!.text.isEmpty() or it.text.equals(\"\")) {\r\n                    Toast.makeText(\r\n                        requireActivity(),\r\n                        \"Select School/University Name\",\r\n                        Toast.LENGTH_LONG\r\n                    )\r\n                } else {\r\n                    (activity as OnBoardingActivity?)?.setCurrentItem(4, true)\r\n                }\r\n            }\r\n        }\r\n\r\n\r\n        fraternity_button?.setOnClickListener {\r\n            fraternity_Spinner?.hint = \"Select Fraternity\"\r\n            fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))\r\n            Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))\r\n            fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))\r\n            Socority_button?.setTextColor(this.getResources().getColor(R.color.white))\r\n\r\n            schoolList = ArrayList<UniversityList>()\r\n            schoolList = fraternitiesList\r\n            schoolAdapter = SchoolAdapter(this, AppConstants.Fraternity)\r\n\r\n\r\n        }\r\n\r\n        Socority_button?.setOnClickListener {\r\n            fraternity_Spinner?.hint = \"Select Socority\"\r\n            Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))\r\n            fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))\r\n            Socority_button?.setTextColor(this.resources.getColor(R.color.black))\r\n            fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))\r\n            schoolList = ArrayList<UniversityList>()\r\n            schoolList = sororitiesList\r\n            schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)\r\n        }\r\n\r\n\r\n        return about_school_binding?.root\r\n    }\r\n\r\n\r\n    fun openSchoolSearchDialog(stringtype: String) {\r\n        dialog = Dialog(requireContext(), R.style.AppBaseTheme2)\r\n        dialog.setContentView(R.layout.search_dialog_school)\r\n        dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)\r\n        searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)\r\n        val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)\r\n        searchRecyclerView!!.layoutManager = LinearLayoutManager(\r\n            requireActivity(),\r\n            LinearLayoutManager.VERTICAL, false\r\n        )\r\n        schoolAdapter = SchoolAdapter(this, stringtype)\r\n        searchRecyclerView!!.adapter = schoolAdapter\r\n        schoolAdapter.addData(schoolList!!)\r\n        schoolAdapter.notifyDataSetChanged()\r\n        val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)\r\n        schoolAdapter.registerAdapterDataObserver(emptyDataObserver)\r\n        dialog.show()\r\n\r\n    }\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        schoolListResponse()\r\n        (activity as OnBoardingActivity?)?.userRegister?.getSchoolingData()\r\n    }\r\n\r\n\r\n    fun schoolListResponse() {\r\n\r\n        (activity as OnBoardingActivity?)?.userRegister?.school_dataResponse?.observe(\r\n            requireActivity(),\r\n            Observer {\r\n                when (it.status) {\r\n                    Status.SUCCESS -> {\r\n                        // AppUtils.hideLoader()\r\n                        it.data.let { it1 ->\r\n                            if (it1?.status == true) {\r\n                                Log.d(\"TAG@123\", it.toString())\r\n                                schoolList = ArrayList<UniversityList>()\r\n                                schoolList = it1.data.universityList\r\n                                schoolListCopy=schoolList\r\n                                sororitiesList = ArrayList<UniversityList>()\r\n                                sororitiesList = it1.data.sororitiesList\r\n                                fraternitiesList = ArrayList<UniversityList>()\r\n                                fraternitiesList = it1.data.fraternitiesList\r\n                                //setAdapterData()\r\n\r\n                            } else {\r\n\r\n                            }\r\n                        }\r\n                    }\r\n                    Status.LOADING -> {\r\n                        //AppUtils.showLoader(requireActivity())\r\n                    }\r\n                    Status.ERROR -> {\r\n\r\n                    }\r\n                }\r\n            })\r\n\r\n\r\n    }\r\n\r\n\r\n    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {\r\n        super.onViewCreated(view, savedInstanceState)\r\n    }\r\n\r\n    companion object {\r\n\r\n        @JvmStatic\r\n        fun newInstance(param1: String, param2: String) =\r\n            BlankFragment4().apply {\r\n                arguments = Bundle().apply {\r\n                    putString(ARG_PARAM1, param1)\r\n                    putString(ARG_PARAM2, param2)\r\n                }\r\n            }\r\n\r\n    }\r\n\r\n    override fun onQueryTextSubmit(p0: String?): Boolean {\r\n        schoolAdapter.filter.filter(p0)\r\n        return false\r\n    }\r\n\r\n    override fun onQueryTextChange(p0: String?): Boolean {\r\n        schoolAdapter.filter.filter(p0)\r\n\r\n        return false\r\n    }\r\n\r\n    override fun onItClick(position: UniversityList, stringtype: String) {\r\n        var clickItemData = position.name\r\n        if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {\r\n            fraternity_Spinner!!.setText(clickItemData)\r\n            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                AppConstants.community,\r\n                position.name\r\n            )\r\n        } else {\r\n            schoolAct_spinner!!.setText(clickItemData)\r\n            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(\r\n                AppConstants.university,\r\n                position.name\r\n            )\r\n        }\r\n\r\n        if (dialog != null || dialog.isShowing) {\r\n            dialog.dismiss()\r\n        }\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment4.kt b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment4.kt
+--- a/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment4.kt	
++++ b/app/src/main/java/com/SigmaDating/apk/views/intro_registration/BlankFragment4.kt	
+@@ -59,6 +59,8 @@
+         fraternity_Spinner = about_school_binding?.root?.findViewById(R.id.et_type)!!
+         Socority_button = about_school_binding?.root?.findViewById(R.id.Socority_button)
+         fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)
++        fraternity_button!!.isSelected=true
++        fraternity_button!!.hint="Select Fraternity"
+ 
+         schoolAct_spinner!!.setOnTouchListener { v, event ->
+             if (event.action == MotionEvent.ACTION_UP) {
+@@ -95,7 +97,20 @@
+ 
+ 
+         fraternity_button?.setOnClickListener {
++            if (!fraternity_button!!.isSelected){
++                fraternity_Spinner.setText("Select Fraternity")
++                fraternity_button!!.isSelected=true
++                Socority_button!!.isSelected=false
++            }
++            else{
++
++            }
+             fraternity_Spinner?.hint = "Select Fraternity"
++               // schoolAct_spinner!!.isSelected=false
++                //fraternity_button!!.isSelected=true
++
++
++
+             fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+             fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
+@@ -109,7 +124,13 @@
+         }
+ 
+         Socority_button?.setOnClickListener {
+-            fraternity_Spinner?.hint = "Select Socority"
++            if (!Socority_button!!.isSelected){
++                fraternity_button!!.isSelected=false
++                Socority_button!!.isSelected=true
++                fraternity_Spinner.setText("Select Sorority")
++            }
++
++            fraternity_Spinner?.hint = "Select Sorority"
+             Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+             Socority_button?.setTextColor(this.resources.getColor(R.color.black))
+Index: app/src/main/res/layout/fragment_profile__photo.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_width=\"match_parent\"\r\n    android:background=\"@color/white_with_opecity\"\r\n    android:id=\"@+id/constraint_f1\"\r\n    app:layout_constraintBottom_toBottomOf=\"parent\"\r\n    app:layout_constraintEnd_toEndOf=\"parent\"\r\n    app:layout_constraintHorizontal_bias=\"1.0\"\r\n    app:layout_constraintStart_toStartOf=\"parent\"\r\n    app:layout_constraintVertical_weight=\"6\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView5\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:paddingLeft=\"8dp\"\r\n        style=\"@style/QText\"\r\n        android:text=\"Select profile photo\"\r\n        android:textColor=\"@color/black\"\r\n        android:textSize=\"20sp\"\r\n        android:alpha=\".8\"\r\n        android:gravity=\"center\"\r\n        app:layout_constraintHorizontal_bias=\"0.05\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n         />\r\n\r\n\r\n    <FrameLayout\r\n        android:id=\"@+id/profile_card\"\r\n        android:layout_width=\"250dp\"\r\n        android:layout_height=\"250dp\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginTop=\"54dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView5\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\">\r\n\r\n        <FrameLayout\r\n\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\">\r\n\r\n\r\n            <de.hdodenhof.circleimageview.CircleImageView\r\n                android:id=\"@+id/img_profile\"\r\n                android:layout_width=\"210dp\"\r\n                android:layout_height=\"210dp\"\r\n                android:layout_gravity=\"center\"\r\n                app:civ_border_color=\"@color/hint_text_color\"\r\n                app:civ_border_width=\"2dp\"\r\n                android:src=\"@drawable/profile_blue\"/>\r\n\r\n            <ImageView\r\n                android:id=\"@+id/img_choose_dummy\"\r\n                android:layout_width=\"50dp\"\r\n                android:layout_height=\"50dp\"\r\n                android:layout_gravity=\"center|bottom\"\r\n                android:layout_marginLeft=\"70dp\"\r\n                app:srcCompat=\"@drawable/icon_folder\"\r\n                />\r\n        </FrameLayout>\r\n\r\n\r\n\r\n    </FrameLayout>\r\n\r\n\r\n\r\n    <CheckBox\r\n        android:id=\"@+id/tc_check\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:autoLink=\"web\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:text=\"@string/term_and_condition\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/profile_card\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"></CheckBox>\r\n\r\n    <Button\r\n        android:id=\"@+id/profile_continue\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"46dp\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:layout_marginLeft=\"26dp\"\r\n        android:layout_marginRight=\"26dp\"\r\n        android:background=\"@drawable/signup_circle_bg\"\r\n        android:fontFamily=\"@font/varela_regular\"\r\n        android:text=\"@string/continue_text\"\r\n        android:textAllCaps=\"true\"\r\n        android:textColor=\"@color/white\"\r\n        android:textSize=\"16sp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/guideline5\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline4\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/tc_check\" />\r\n\r\n    <androidx.constraintlayout.widget.Guideline\r\n        android:id=\"@+id/guideline4\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        app:layout_constraintGuide_begin=\"30dp\" />\r\n\r\n    <androidx.constraintlayout.widget.Guideline\r\n        android:id=\"@+id/guideline5\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        app:layout_constraintGuide_end=\"30dp\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_profile__photo.xml b/app/src/main/res/layout/fragment_profile__photo.xml
+--- a/app/src/main/res/layout/fragment_profile__photo.xml	
++++ b/app/src/main/res/layout/fragment_profile__photo.xml	
+@@ -2,6 +2,7 @@
+ <androidx.constraintlayout.widget.ConstraintLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="@color/white_with_opecity"
+@@ -71,17 +72,18 @@
+     </FrameLayout>
+ 
+ 
+-
+     <CheckBox
+         android:id="@+id/tc_check"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
++
++        android:layout_marginStart="34dp"
++        android:layout_marginLeft="34dp"
+         android:autoLink="web"
+-        android:layout_marginTop="50dp"
+-        android:text="@string/term_and_condition"
+-        app:layout_constraintTop_toBottomOf="@+id/profile_card"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"></CheckBox>
++        app:layout_constraintBaseline_toBaselineOf="@+id/textView12"
++        app:layout_constraintStart_toStartOf="@+id/guideline4">
++
++    </CheckBox>
+ 
+     <Button
+         android:id="@+id/profile_continue"
+@@ -115,5 +117,15 @@
+         android:orientation="vertical"
+         app:layout_constraintGuide_end="30dp" />
+ 
++    <TextView
++        android:id="@+id/text_termncon"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="76dp"
++        android:layout_marginLeft="10dp"
++        android:text="@string/term_and_condition"
++        app:layout_constraintStart_toEndOf="@+id/tc_check"
++        app:layout_constraintTop_toBottomOf="@+id/profile_card" />
++
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/about_birthday.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:id=\"@+id/constraint_f1\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView_title\"\r\n        style=\"@style/QText\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:gravity=\"start\"\r\n\r\n        android:text=\"@string/tell_us\"\r\n        android:textColor=\"@color/light_text_color\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/guideline7\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.032\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView4\"\r\n        style=\"@style/QText\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"2dp\"\r\n        android:layout_marginTop=\"28dp\"\r\n        android:alpha=\".8\"\r\n        android:text=\"What is your Email, Phone Number \\nAnd birthday?\"\r\n        android:textColor=\"@color/black\"\r\n        android:textSize=\"20sp\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/guideline7\" />\r\n\r\n\r\n    <EditText\r\n        android:id=\"@+id/edit_emal\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"54dp\"\r\n        android:layout_marginLeft=\"2dp\"\r\n        android:layout_marginTop=\"28dp\"\r\n        android:background=\"@drawable/login_field_border_bg\"\r\n        android:hint=\"@string/email_text\"\r\n        android:text=\"yxz@gmail.com\"\r\n        android:inputType=\"textEmailAddress\"\r\n        android:textSize=\"14sp\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/guideline8\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView4\" />\r\n\r\n\r\n    <LinearLayout\r\n        android:id=\"@+id/enter_number_layout\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"54dp\"\r\n        android:layout_marginTop=\"28dp\"\r\n        android:background=\"@drawable/login_field_border_bg\"\r\n        android:orientation=\"horizontal\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/guideline8\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/edit_emal\">\r\n\r\n        <com.hbb20.CountryCodePicker\r\n            android:id=\"@+id/ccp\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\".2\"\r\n            android:background=\"@android:color/transparent\" />\r\n\r\n        <View\r\n            android:layout_width=\"1dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:alpha=\".3\"\r\n            android:background=\"@color/light_black\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/edit_text_phone\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\".8\"\r\n            android:background=\"@color/white\"\r\n            android:ems=\"10\"\r\n            android:text=\"6306636797\"\r\n            android:inputType=\"phone\"\r\n            android:maxLength=\"10\"\r\n            android:paddingLeft=\"5dp\"\r\n            android:hint=\"@string/phone_text\"\r\n            android:textSize=\"14sp\"\r\n            app:layout_constraintEnd_toStartOf=\"@+id/guideline8\"\r\n            app:layout_constraintHorizontal_bias=\"0.0\"\r\n            app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n            app:layout_constraintTop_toBottomOf=\"@+id/enter_number_layout\" />\r\n\r\n\r\n    </LinearLayout>\r\n\r\n\r\n    <EditText\r\n        android:id=\"@+id/edit_text_birthday\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"54dp\"\r\n        android:layout_marginLeft=\"2dp\"\r\n        android:layout_marginTop=\"28dp\"\r\n        android:background=\"@drawable/login_field_border_bg\"\r\n        android:ems=\"10\"\r\n        android:hint=\"DD/MM/YYYY\"\r\n        android:text=\"15/01/1999\"\r\n        android:maxLength=\"10\"\r\n        android:textSize=\"14sp\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/guideline8\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/enter_number_layout\" />\r\n\r\n\r\n    <Button\r\n        android:id=\"@+id/button_birthday\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"46dp\"\r\n        android:layout_marginLeft=\"40dp\"\r\n        android:layout_marginRight=\"40dp\"\r\n        android:layout_marginBottom=\"84dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:background=\"@drawable/signup_circle_bg\"\r\n        android:text=\"@string/continue_text\"\r\n        android:textAllCaps=\"true\"\r\n        android:textColor=\"@color/white\"\r\n        android:textSize=\"16sp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/guideline8\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/guideline6\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/edit_text_birthday\"\r\n        />\r\n\r\n\r\n\r\n\r\n\r\n    <androidx.constraintlayout.widget.Guideline\r\n        android:id=\"@+id/guideline6\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        app:layout_constraintGuide_begin=\"26dp\" />\r\n\r\n\r\n    <androidx.constraintlayout.widget.Guideline\r\n        android:id=\"@+id/guideline7\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n\r\n        app:layout_constraintGuide_begin=\"100dp\" />\r\n\r\n\r\n\r\n\r\n\r\n    <androidx.constraintlayout.widget.Guideline\r\n        android:id=\"@+id/guideline8\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        app:layout_constraintGuide_end=\"26dp\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/about_birthday.xml b/app/src/main/res/layout/about_birthday.xml
+--- a/app/src/main/res/layout/about_birthday.xml	
++++ b/app/src/main/res/layout/about_birthday.xml	
+@@ -47,7 +47,7 @@
+         android:hint="@string/email_text"
+         android:text="yxz@gmail.com"
+         android:inputType="textEmailAddress"
+-        android:textSize="14sp"
++        android:textSize="15sp"
+         app:layout_constraintEnd_toStartOf="@+id/guideline8"
+         app:layout_constraintHorizontal_bias="0.0"
+         app:layout_constraintStart_toStartOf="@+id/guideline6"
+@@ -91,7 +91,7 @@
+             android:maxLength="10"
+             android:paddingLeft="5dp"
+             android:hint="@string/phone_text"
+-            android:textSize="14sp"
++            android:textSize="15sp"
+             app:layout_constraintEnd_toStartOf="@+id/guideline8"
+             app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintStart_toStartOf="@+id/guideline6"
+@@ -112,7 +112,7 @@
+         android:hint="DD/MM/YYYY"
+         android:text="15/01/1999"
+         android:maxLength="10"
+-        android:textSize="14sp"
++        android:textSize="15sp"
+         app:layout_constraintEnd_toStartOf="@+id/guideline8"
+         app:layout_constraintHorizontal_bias="0.0"
+         app:layout_constraintStart_toStartOf="@+id/guideline6"
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:fillViewport=\"true\">\r\n\r\n    <RelativeLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n        <RelativeLayout\r\n            android:id=\"@+id/bottom_navigation\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@drawable/top_right_left_circle_bg\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <androidx.cardview.widget.CardView\r\n                android:id=\"@+id/c1\"\r\n                style=\"@style/CustomCardViewStyle\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_marginTop=\"0dp\"\r\n                app:cardBackgroundColor=\"@color/white\"\r\n                app:cardElevation=\"0dp\"\r\n                app:layout_constraintBottom_toBottomOf=\"parent\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintHorizontal_bias=\"0.95\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintVertical_bias=\"1.0\"\r\n                app:strokeWidth=\"4dp\">\r\n\r\n                <androidx.constraintlayout.widget.ConstraintLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_marginStart=\"16dp\"\r\n                    android:layout_marginTop=\"16dp\"\r\n                    android:layout_marginEnd=\"16dp\"\r\n                    android:layout_marginBottom=\"16dp\"\r\n                    android:paddingBottom=\"18dp\">\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/textView\"\r\n                        style=\"@style/QText\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"10dp\"\r\n                        android:gravity=\"center\"\r\n                        android:text=\"@string/login_header\"\r\n                        android:textColor=\"@color/black\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n                    <LinearLayout\r\n                        android:id=\"@+id/linearr\"\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"15sp\"\r\n                        android:background=\"@drawable/gray_circle_radius_bg\"\r\n                        android:gravity=\"center_horizontal\"\r\n                        android:orientation=\"horizontal\"\r\n                        android:weightSum=\"1\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@id/textView\">\r\n\r\n                        <Button\r\n                            android:id=\"@+id/email_button\"\r\n                            android:layout_width=\"0dp\"\r\n                            style=\"@style/QText\"\r\n                            android:layout_height=\"40dp\"\r\n                            android:layout_weight=\".5\"\r\n                            android:background=\"@drawable/white_radius_bg\"\r\n                            android:onClick=\"email_button_click\"\r\n                            android:text=\"@string/email_text\"\r\n                            android:textStyle=\"bold\"\r\n                            android:textAllCaps=\"false\"\r\n                            android:textColor=\"@color/black\"\r\n                            android:textSize=\"14sp\" />\r\n\r\n\r\n                        <Button\r\n                            android:id=\"@+id/phone_number_button\"\r\n                            android:layout_width=\"0dp\"\r\n                            style=\"@style/QText\"\r\n                            android:layout_height=\"40dp\"\r\n                            android:layout_marginLeft=\"12dp\"\r\n                            android:layout_weight=\".5\"\r\n                            android:background=\"@drawable/gray_circle_radius_bg\"\r\n                            android:onClick=\"phonenumber_button_click\"\r\n                            android:text=\"@string/phone_text\"\r\n                            android:textStyle=\"bold\"\r\n                            android:textAllCaps=\"false\"\r\n                            android:textColor=\"@color/white\"\r\n                            android:textSize=\"14sp\" />\r\n                    </LinearLayout>\r\n\r\n\r\n                    <androidx.constraintlayout.widget.ConstraintLayout\r\n                        android:id=\"@+id/c2\"\r\n                        android:layout_width=\"0dp\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"24dp\"\r\n                        android:visibility=\"visible\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.0\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@id/linearr\">\r\n\r\n\r\n                        <LinearLayout\r\n                            android:id=\"@+id/emailLayoutLayout\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_marginTop=\"24dp\"\r\n                            android:orientation=\"vertical\"\r\n                            android:weightSum=\"1\"\r\n                            android:padding=\"5dp\"\r\n                            app:layout_constraintEnd_toEndOf=\"parent\"\r\n                            app:layout_constraintStart_toStartOf=\"parent\"\r\n                            app:layout_constraintTop_toBottomOf=\"@id/linearr\"\r\n                            tools:ignore=\"NotSibling\">\r\n\r\n\r\n                            <com.google.android.material.textfield.TextInputLayout\r\n                                android:id=\"@+id/layout_email\"\r\n                                android:layout_width=\"match_parent\"\r\n                                android:layout_height=\"wrap_content\"\r\n                                android:layout_marginTop=\"20dp\"\r\n                                style=\"@style/TextInputLayout\"\r\n                                android:background=\"@drawable/login_field_border_bg\"\r\n                                android:textColorHint=\"@color/hint_text_color\"\r\n                                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                                app:layout_constraintStart_toStartOf=\"parent\"\r\n                                app:layout_constraintTop_toBottomOf=\"@id/editText_email\"\r\n                                app:passwordToggleTint=\"@color/hint_text_color\">\r\n\r\n                                <EditText\r\n                                    android:id=\"@+id/editText_email\"\r\n                                    android:layout_width=\"match_parent\"\r\n                                    android:layout_height=\"wrap_content\"\r\n                                    android:backgroundTint=\"@android:color/transparent\"\r\n                                    android:hint=\"@string/email_text\"\r\n                                    android:inputType=\"textEmailAddress\"\r\n                                    android:letterSpacing=\"0.10\"\r\n                                    android:textColorHint=\"@color/hint_text_color\"\r\n                                    android:textSize=\"14sp\" />\r\n                            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n\r\n\r\n\r\n                            <com.google.android.material.textfield.TextInputLayout\r\n                                android:id=\"@+id/layout_password\"\r\n                                android:layout_width=\"match_parent\"\r\n                                android:layout_height=\"wrap_content\"\r\n                                android:layout_marginTop=\"20dp\"\r\n                                android:background=\"@drawable/login_field_border_bg\"\r\n                                android:textColorHint=\"@color/hint_text_color\"\r\n                                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                                app:layout_constraintStart_toStartOf=\"parent\"\r\n                                app:layout_constraintTop_toBottomOf=\"@id/editText_email\"\r\n                                app:passwordToggleEnabled=\"true\"\r\n                                style=\"@style/TextInputLayout\"\r\n                                app:passwordToggleTint=\"@color/hint_text_color\">\r\n\r\n                                <EditText\r\n                                    android:id=\"@+id/editText_password\"\r\n                                    android:layout_width=\"match_parent\"\r\n                                    android:layout_height=\"wrap_content\"\r\n                                    android:backgroundTint=\"@android:color/transparent\"\r\n                                    android:hint=\"@string/password_text\"\r\n                                    android:inputType=\"textPassword\"\r\n                                    android:letterSpacing=\"0.10\"\r\n                                    android:textColorHint=\"@color/hint_text_color\"\r\n                                    android:textSize=\"14sp\" />\r\n                            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n                            <TextView\r\n                                style=\"@style/QText\"\r\n                                android:id=\"@+id/textView2\"\r\n                                android:layout_width=\"wrap_content\"\r\n                                android:layout_height=\"wrap_content\"\r\n                                android:layout_marginTop=\"8dp\"\r\n                                android:text=\"@string/forgot_password_text\"\r\n                                android:textColor=\"@color/light_black\"\r\n                                android:textSize=\"14sp\"\r\n                                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                                app:layout_constraintHorizontal_bias=\"0.06\"\r\n                                app:layout_constraintStart_toStartOf=\"parent\"\r\n                                app:layout_constraintTop_toBottomOf=\"@+id/layout_password\" />\r\n\r\n\r\n                        </LinearLayout>\r\n\r\n                        <LinearLayout\r\n                            android:id=\"@+id/phone_number_layout\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_marginLeft=\"6dp\"\r\n                            android:layout_marginTop=\"24dp\"\r\n                            android:layout_marginRight=\"6dp\"\r\n                            android:background=\"@drawable/login_field_border_bg\"\r\n                            android:orientation=\"vertical\"\r\n                            android:visibility=\"gone\"\r\n                            android:weightSum=\"1\"\r\n                            app:layout_constraintEnd_toEndOf=\"parent\"\r\n                            app:layout_constraintStart_toStartOf=\"parent\"\r\n                            app:layout_constraintTop_toBottomOf=\"@id/emailLayoutLayout\">\r\n\r\n\r\n                            <LinearLayout\r\n                                android:id=\"@+id/enter_number_layout\"\r\n                                android:layout_width=\"fill_parent\"\r\n                                android:layout_height=\"match_parent\"\r\n                                android:orientation=\"horizontal\">\r\n\r\n                            <com.hbb20.CountryCodePicker\r\n                                android:id=\"@+id/ccp\"\r\n                                android:layout_width=\"0dp\"\r\n                                android:layout_height=\"match_parent\"\r\n                                android:layout_weight=\".20\"\r\n                                android:onClick=\"onCountryPickerClick\"\r\n                                android:background=\"@android:color/transparent\"\r\n                                android:padding=\"5dp\" />\r\n\r\n                            <View\r\n                                android:layout_width=\"1dp\"\r\n                                android:layout_height=\"match_parent\"\r\n                                android:alpha=\".3\"\r\n                                android:background=\"@color/light_black\" />\r\n\r\n                            <EditText\r\n                                android:id=\"@+id/edittext_phone_no\"\r\n                                android:layout_width=\"0dp\"\r\n                                android:layout_height=\"54dp\"\r\n                                android:layout_marginLeft=\"6dp\"\r\n                                android:layout_weight=\".80\"\r\n                                android:drawablePadding=\"10dp\"\r\n                                android:hint=\"@string/phone_xx\"\r\n                                android:inputType=\"number\"\r\n                                android:maxLength=\"10\"\r\n                                android:letterSpacing=\"0.10\"\r\n                                android:textColorHint=\"@color/hint_text_color\"\r\n                                android:textSize=\"18sp\" />\r\n\r\n                            </LinearLayout>\r\n\r\n                        </LinearLayout>\r\n\r\n                        <EditText\r\n                            android:id=\"@+id/editText_otp\"\r\n                            style=\"@style/NormalText\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"54dp\"\r\n                            android:layout_marginLeft=\"1dp\"\r\n                            android:layout_marginTop=\"22dp\"\r\n                            android:layout_marginRight=\"1dp\"\r\n                            android:background=\"@drawable/login_field_border_bg\"\r\n                            android:drawablePadding=\"10dp\"\r\n                            android:hint=\"@string/send_enter_text\"\r\n                            android:inputType=\"text\"\r\n                            android:visibility=\"gone\"\r\n                            android:letterSpacing=\"0.10\"\r\n                            android:paddingTop=\"15dp\"\r\n                            android:paddingBottom=\"15dp\"\r\n                            android:textColorHint=\"@color/hint_text_color\"\r\n                            android:textSize=\"18sp\"\r\n                            app:layout_constraintEnd_toEndOf=\"parent\"\r\n                            app:layout_constraintHorizontal_bias=\"0.512\"\r\n                            app:layout_constraintStart_toStartOf=\"parent\"\r\n                            app:layout_constraintTop_toBottomOf=\"@+id/phone_number_layout\"\r\n                            />\r\n\r\n\r\n\r\n                        <Button\r\n                            android:id=\"@+id/verfie_otp\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"50dp\"\r\n                            android:layout_marginTop=\"30dp\"\r\n                            android:layout_marginLeft=\"32dp\"\r\n                            android:layout_marginRight=\"32dp\"\r\n                            android:background=\"@drawable/circle_radius_bg\"\r\n                            android:text=\"VERIFY OTP\"\r\n                            android:visibility=\"gone\"\r\n                            android:textAllCaps=\"true\"\r\n                            android:textColor=\"@color/white\"\r\n                            android:textSize=\"16sp\"\r\n                            android:onClick=\"verifyotp\"\r\n                            app:layout_constraintEnd_toEndOf=\"parent\"\r\n                            app:layout_constraintHorizontal_bias=\"0.512\"\r\n                            app:layout_constraintStart_toStartOf=\"parent\"\r\n                            app:layout_constraintTop_toBottomOf=\"@+id/editText_otp\" />\r\n\r\n\r\n\r\n                    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n\r\n                    <Button\r\n                        android:id=\"@+id/button_login_email_phone_both\"\r\n                        android:layout_width=\"0dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:layout_marginLeft=\"56dp\"\r\n                        android:layout_marginTop=\"30dp\"\r\n                        android:layout_marginRight=\"56dp\"\r\n                        android:background=\"@drawable/circle_radius_bg\"\r\n                        android:text=\"@string/sign_in\"\r\n                        android:textAllCaps=\"true\"\r\n                        android:textColor=\"@color/white\"\r\n                        android:textSize=\"16sp\"\r\n                        android:onClick=\"login_call\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.512\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@+id/c2\" />\r\n\r\n\r\n                    <LinearLayout\r\n                        android:id=\"@+id/l2\"\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"26dp\"\r\n                        android:orientation=\"horizontal\"\r\n                        android:weightSum=\"1\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.512\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@+id/button_login_email_phone_both\">\r\n\r\n                        <View\r\n                            android:layout_width=\"0dp\"\r\n                            android:layout_height=\"1dp\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:layout_marginLeft=\"12dp\"\r\n                            android:layout_weight=\".25\"\r\n                            android:background=\"@color/black\" />\r\n\r\n                        <TextView\r\n                            android:layout_width=\"0dp\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:layout_weight=\".40\"\r\n                            android:gravity=\"center\"\r\n                            android:text=\"@string/sign_in_text\"\r\n                            android:textAllCaps=\"true\"\r\n                            android:textColor=\"@color/black\"\r\n                            android:textSize=\"14sp\" />\r\n\r\n                        <View\r\n                            android:layout_width=\"0dp\"\r\n                            android:layout_height=\"1dp\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:layout_weight=\".25\"\r\n                            android:background=\"@color/black\" />\r\n\r\n                    </LinearLayout>\r\n\r\n                    <LinearLayout\r\n                        android:id=\"@+id/l3\"\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:gravity=\"center\"\r\n                        android:orientation=\"horizontal\"\r\n                        android:weightSum=\"1\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.512\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@+id/l2\">\r\n\r\n                        <androidx.cardview.widget.CardView\r\n                            android:layout_width=\"80dp\"\r\n                            android:layout_height=\"80dp\"\r\n                            android:layout_margin=\"10dp\"\r\n                            app:cardCornerRadius=\"35dp\"\r\n                            app:cardElevation=\"0sp\"\r\n                            app:cardUseCompatPadding=\"true\">\r\n\r\n                            <ImageView\r\n                                android:id=\"@+id/sign_in_button\"\r\n                                android:layout_width=\"match_parent\"\r\n                                android:src=\"@drawable/gsignin\"\r\n                                android:layout_height=\"match_parent\" />\r\n\r\n                        </androidx.cardview.widget.CardView>\r\n\r\n                        <androidx.cardview.widget.CardView\r\n                            android:layout_width=\"80dp\"\r\n                            android:layout_height=\"80dp\"\r\n                            android:layout_margin=\"10dp\"\r\n                            app:cardCornerRadius=\"35dp\"\r\n                            app:cardElevation=\"0sp\"\r\n                            app:cardUseCompatPadding=\"true\">\r\n\r\n                            <com.facebook.login.widget.LoginButton\r\n                                android:id=\"@+id/login_button\"\r\n                                android:layout_width=\"match_parent\"\r\n                                android:layout_height=\"match_parent\"\r\n                                android:layout_gravity=\"center\"\r\n                                android:visibility=\"gone\"\r\n                                android:background=\"@drawable/fb_icon\" >\r\n                            </com.facebook.login.widget.LoginButton>\r\n\r\n                            <ImageView\r\n                                android:id=\"@+id/fb_sign_in_button\"\r\n                                android:layout_width=\"match_parent\"\r\n                                android:src=\"@drawable/fb_signin\"\r\n                                android:layout_height=\"match_parent\" />\r\n\r\n                        </androidx.cardview.widget.CardView>\r\n\r\n\r\n\r\n\r\n\r\n                    </LinearLayout>\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/textView3\"\r\n                        android:layout_width=\"0dp\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"20dp\"\r\n                        android:alpha=\".7\"\r\n                        android:gravity=\"center_horizontal\"\r\n                        android:text=\"@string/dont_have_acc\"\r\n                        android:textColor=\"@color/light_black\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.135\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@+id/l3\" />\r\n\r\n                    <Button\r\n                        android:id=\"@+id/button_signup\"\r\n                        android:layout_width=\"0dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:layout_marginLeft=\"56dp\"\r\n                        android:layout_marginTop=\"16dp\"\r\n                        android:layout_marginRight=\"56dp\"\r\n                        android:background=\"@drawable/signup_circle_bg\"\r\n                        android:text=\"SIGN UP\"\r\n                        android:onClick=\"sign_up\"\r\n                        android:textAllCaps=\"true\"\r\n                        android:textColor=\"@color/white\"\r\n                        android:textSize=\"16sp\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.512\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@+id/textView3\" />\r\n\r\n\r\n                </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n\r\n            </androidx.cardview.widget.CardView>\r\n        </RelativeLayout>\r\n    </RelativeLayout>\r\n</RelativeLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_login.xml b/app/src/main/res/layout/activity_login.xml
+--- a/app/src/main/res/layout/activity_login.xml	
++++ b/app/src/main/res/layout/activity_login.xml	
+@@ -148,7 +148,7 @@
+                                     android:inputType="textEmailAddress"
+                                     android:letterSpacing="0.10"
+                                     android:textColorHint="@color/hint_text_color"
+-                                    android:textSize="14sp" />
++                                    android:textSize="15sp" />
+                             </com.google.android.material.textfield.TextInputLayout>
+ 
+ 
+@@ -178,7 +178,7 @@
+                                     android:inputType="textPassword"
+                                     android:letterSpacing="0.10"
+                                     android:textColorHint="@color/hint_text_color"
+-                                    android:textSize="14sp" />
++                                    android:textSize="15sp" />
+                             </com.google.android.material.textfield.TextInputLayout>
+ 
+ 
