@@ -10,14 +10,12 @@ import com.SigmaDating.apk.model.Profile
 import android.widget.Toast
 
 import android.util.Log
-import com.daprlabs.cardstack.SwipeDeck.SwipeEventCallback
 import com.SigmaDating.apk.adapters.ProfileMatch
 import android.os.Handler
 import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -28,7 +26,6 @@ import com.SigmaDating.databinding.FragmentFirstBinding
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import de.hdodenhof.circleimageview.CircleImageView
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -109,7 +106,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
 
             override fun onScroll(v: Float) {
-
+                Log.d("TAG@123", "onScroll")
             }
 
             override fun onCardExitTop(dataObject: Any) {
@@ -122,6 +119,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
             }
         })
+
+
+       // cardViewChanger.se
+
 
     }
 
@@ -137,6 +138,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             1500
         )
     }
+
+
 
 
     override fun onDestroyView() {

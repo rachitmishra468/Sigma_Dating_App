@@ -36,9 +36,9 @@
 
 
     <style name="AppBaseTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryDark">@color/purple_200</item>
+        <item name="colorAccent">@color/purple_200</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -49,9 +49,9 @@
     </style>
 
     <style name="AppBaseTheme2" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryDark">@color/purple_200</item>
+        <item name="colorAccent">@color/purple_200</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -73,8 +73,8 @@
         <item name="android:queryHint">@string/search_schools</item>
         <item name="android:background">@drawable/login_field_border_bg</item>
         <!--        <item name="closeIcon">@drawable/ic_clo</item>-->
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/colorAccent</item>
+        <item name="android:textColor">@color/purple_200</item>
+        <item name="android:textColorSecondary">@color/purple_200</item>
     </style>
 
     <color name="colorContainer">#EAEBEA</color>
