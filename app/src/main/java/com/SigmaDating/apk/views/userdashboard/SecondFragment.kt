@@ -19,7 +19,9 @@ import com.SigmaDating.databinding.FragmentSecondBinding
 
 
 import com.SigmaDating.apk.model.EditProfiledata
+import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.views.Home
+import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
 
 /**
@@ -56,12 +58,7 @@ class SecondFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
 
-        val animation =
-            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
 
-        sharedElementEnterTransition = animation
-        sharedElementReturnTransition = animation
-        userID = getArguments()?.getString("user_id")
         return binding.root
 
     }
@@ -71,26 +68,35 @@ class SecondFragment : Fragment() {
 
 
         subscribe_Login_User_details()
-
+        userID = getArguments()?.getString("user_id")
         if (userID != null) {
             (activity as Home).homeviewmodel.get_Login_User_details(
                 userID!!
             )
         }
+        val animation =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+
+        //sharedElementEnterTransition = animation
+       // sharedElementReturnTransition = animation
 
     }
 
-    fun setAdapterListData(dataListuser: ArrayList<String>) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+    fun setAdapterListData( dataListuser: ArrayList<String>) {
         _binding?.recyclerView?.layoutManager = GridLayoutManager(requireContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
         //add data
-        dataList.clear()
+
         photoAdapter.setDataList(dataListuser)
+        photoAdapter.notifyDataSetChanged()
     }
 
     fun subscribe_Login_User_details() {
-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->
@@ -100,11 +106,23 @@ class SecondFragment : Fragment() {
                                 it.nameText.setText(res?.user.first_name + res?.user.last_name)
                                 it.addresText.setText(res?.user.location)
                             }
-                            it.data?.user.let {
+
+                            it.data?.user?.upload_image?.let {
+                                Glide.with(requireContext()).load(it)
+                                    .error(R.drawable.profile_img)
+                                    .into(_binding!!.logoDetail);
+                            }
+                            dataListuser.clear()
+                            dataListuser= mutableListOf<String>()
+                            it.data?.user?.photos?.let {
                                 if (it != null) {
-                                    dataListuser = it.photos
+                                    dataListuser = it
+
                                     setAdapterListData(dataListuser as ArrayList<String>)
                                 }
+                            }?: run {
+                                dataListuser.clear()
+                                setAdapterListData(dataListuser as ArrayList<String>)
                             }
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -125,6 +143,7 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 
 

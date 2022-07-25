@@ -15,6 +15,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
@@ -27,7 +28,6 @@ import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlin.collections.ArrayList
-import java.util.*
 
 
 class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
@@ -65,12 +65,12 @@ var userId:String?=null
         notificationIcon = binding.root.findViewById(R.id.notification)
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
         editProfile.setOnClickListener {
-            val extras = FragmentNavigatorExtras(editProfile to "large_image")
+            //val extras = FragmentNavigatorExtras(editProfile to "large_image")
             val bundle = Bundle()
             userId= (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID)
             bundle.putString("user_id", userId)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,extras)
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,null)
         }
         notificationIcon.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
@@ -147,6 +147,8 @@ var userId:String?=null
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        Log.d("TAG@123","on destroy called")
     }
 
 
@@ -175,13 +177,24 @@ var userId:String?=null
     }
 
 
-    override fun onCategoryClick(position: Bids?, count: Int) {
+    override fun onCategoryClick(position: Bids?, count: Int, extras: FragmentNavigator.Extras?) {
 
         when (count) {
             1 -> findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
             2 -> cardViewChanger?.throwRight()
             3 -> cardViewChanger?.throwTop()
-            4 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            4 -> {
+                extras?.let {
+                    val bundle = Bundle()
+                    bundle.putString("user_id", position?.id)
+                    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle,null,extras)
+                }?:run {
+                    val bundle = Bundle()
+                    bundle.putString("user_id", position?.id)
+                    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,null)
+
+                }
+            }
             5 -> cardViewChanger?.throwLeft()
             6 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 

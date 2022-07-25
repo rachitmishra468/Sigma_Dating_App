@@ -14,9 +14,6 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" >
-            <argument
-                android:name="userId"
-                app:argType="string" />
         </action>
 
         <action

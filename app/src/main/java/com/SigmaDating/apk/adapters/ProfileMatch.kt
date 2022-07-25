@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
-import com.SigmaDating.apk.model.Profile
 import com.bumptech.glide.Glide
 import java.util.ArrayList
 
@@ -28,7 +29,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
     }
 
     interface OnCategoryClickListener {
-        fun onCategoryClick(position: Bids?,count :Int)
+        fun onCategoryClick(position: Bids?, count: Int, extras: FragmentNavigator.Extras?)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -42,31 +43,34 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
         +""+courseData[position].last_name)
 
         (v.findViewById<View>(R.id.bright_img) as ImageView).setOnClickListener {
-            listener.onCategoryClick(courseData[position],1//done
+            listener.onCategoryClick(
+                courseData[position], 1, null//done
             )
         }
 
         (v.findViewById<View>(R.id.star_view) as ImageView).setOnClickListener {
+            val extras = FragmentNavigatorExtras(mageview to "large_image")
             listener.onCategoryClick(
-                courseData[position],2
+
+                courseData[position],2,extras
             )
         }
 
         (v.findViewById<View>(R.id.super_like) as ImageView).setOnClickListener {
             listener.onCategoryClick(
-                courseData[position],3
+                courseData[position], 3, null
             )
         }
 
         (v.findViewById<View>(R.id.grid_view) as ImageView).setOnClickListener {
             listener.onCategoryClick(
-                courseData[position],4
+                courseData[position], 4, null
             )
         }
 
         (v.findViewById<View>(R.id.cancle_view) as ImageView).setOnClickListener {
             listener.onCategoryClick(
-                courseData[position],5
+                courseData[position], 5, null
             )
         }
 
