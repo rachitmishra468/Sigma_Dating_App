@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -210,7 +211,7 @@ class Profile_Photo : Fragment() {
             intent.type = "image/*"
             activity?.packageManager?.let {
                 intent.resolveActivity(it)?.also {
-                    (activity as Home).startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
+                    startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
                 }
             }
         }

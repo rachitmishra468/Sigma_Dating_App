@@ -1,6 +1,14 @@
 package com.SigmaDating.apk.views.settings
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.DigitsKeyListener
@@ -14,55 +22,78 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.SigmaDating.R
+import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.databinding.FragmentSettingsBinding
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.apk.views.Splash
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import java.util.*
 
 class SettingsFragment : Fragment() {
 
     lateinit var _binding: FragmentSettingsBinding
     private val binding get() = _binding
 
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private val permissionId = 2
+
     fun Call_links() {
 
         var link: String = "http://103.10.234.134/sigmadating/terms.php"
+        var link_null: String = "http://103.10.234.134/sigmadating/terms.php"
         _binding.licencesText.setOnClickListener {
             link = Home.get_settingpage_data("licenses")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
         _binding.privacyText.setOnClickListener {
             link = Home.get_settingpage_data("privacy-preferences")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
 
         _binding.privacyTextTwo.setOnClickListener {
             link = Home.get_settingpage_data("terms-of-service")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
 
         _binding.termsServices.setOnClickListener {
             link = Home.get_settingpage_data("terms-of-service")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
         _binding.contactUs.setOnClickListener {
             link = Home.get_settingpage_data("support")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
 
         _binding.community.setOnClickListener {
             link = Home.get_settingpage_data("community-guidelines")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
 
         _binding.sefery.setOnClickListener {
             link = Home.get_settingpage_data("safety-guidelines")
-            (activity as Home).OpenSocial(link)
+            link?.let {
+                (activity as Home).OpenSocial(link)
+            }
         }
     }
 
@@ -113,6 +144,8 @@ class SettingsFragment : Fragment() {
             )
         )
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        getLocation()
         return binding.root
     }
     override fun onResume() {
@@ -282,5 +315,73 @@ class SettingsFragment : Fragment() {
         dialog.show()
     }
 
+
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) { mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    val location: Location? = task.result
+                    if (location != null) {
+                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                        val list: List<Address> =
+                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                       /* mainBinding.apply {
+                            tvLatitude.text = "Latitude\n${list[0].latitude}"
+                            tvLongitude.text = "Longitude\n${list[0].longitude}"
+                            tvCountryName.text = "Country Name\n${list[0].countryName}"
+                            tvLocality.text = "Locality\n${list[0].locality}"
+                            tvAddress.text = "Address\n${list[0].getAddressLine(0)}"
+                        }*/
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            permissionId
+        )
+    }
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionId) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getLocation()
+            }
+        }
+    }
 
 }

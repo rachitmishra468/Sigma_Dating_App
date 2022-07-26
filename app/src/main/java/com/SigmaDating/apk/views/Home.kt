@@ -85,9 +85,13 @@ class Home : AppCompatActivity() {
 
 
     fun OpenSocial(Url: String?) {
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(Url)
-        startActivity(i)
+        try {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(Url)
+            startActivity(i)
+
+        }catch (e:Exception){}
+
     }
 
 
