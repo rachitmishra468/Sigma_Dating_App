@@ -43,14 +43,14 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_blank.xml" value="0.20416666666666666" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.11328125" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_password.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_profile__photo.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_report_user.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_school_input.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_second.xml" value="0.12" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/full_screen_dialog.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/login_scroll.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/main_activity.xml" value="0.18541666666666667" />
@@ -124,23 +124,20 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating/app/src/main/res/layout/user_chat_fragment.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_main_drwable.xml" value="0.152" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_selected.xml" value="0.152" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_unselect.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/match_image_bg.xml" value="0.148" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/white_radius_bg.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/about_birthday.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/about_yourself_layout.xml" value="0.11458333333333333" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/activity_home.xml" value="0.14114583333333333" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/activity_login.xml" value="0.11458333333333333" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/app_item.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/chat_list_item.xml" value="0.17552083333333332" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/content_home.xml" value="0.14114583333333333" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_edit_profile.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_password.xml" value="0.11458333333333333" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_profile__photo.xml" value="0.22" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_report_user.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_school_input.xml" value="0.22" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_second.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_settings.xml" value="0.12273550724637682" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/full_screen_dialog.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/item_empty_dataset.xml" value="0.17552083333333332" />
@@ -149,7 +146,6 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/profile_match_layout.xml" value="0.16145833333333334" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/school_list_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/search_dialog_school.xml" value="0.17447916666666666" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/toolbar_hadder.xml" value="0.14114583333333333" />
       </map>
     </option>
   </component>

@@ -59,6 +59,9 @@
             </com.SigmaDating.apk.views.CardManager.CardViewChanger>
 
 
+
+
+
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/broken_heart"
                 android:layout_width="match_parent"

@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.SigmaDating.R
+import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.snackbar.Snackbar
@@ -29,16 +30,20 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 
 object AppUtils {
 
     private var dialog: Dialog? = null
 
+
+
     fun hideLoader() {
         try {
             if (dialog!!.isShowing) dialog!!.dismiss()
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
 
     }
 
@@ -276,11 +281,11 @@ object AppUtils {
     ): Boolean {
         val pattern = Regex("^[A-Za-z]+$")
 
-        Log.d("TAG@123","fname :"+fname+" :: lastname :"+lastname)
+        Log.d("TAG@123", "fname :" + fname + " :: lastname :" + lastname)
         if (fname.isEmpty() || fname == "null") {
             showErrorSnackBar(context, view, "Enter valid First Name")
             return false
-        } else if(lastname.isEmpty() || lastname.isBlank() || fname == "null") {
+        } else if (lastname.isEmpty() || lastname.isBlank() || fname == "null") {
             showErrorSnackBar(context, view, "Enter valid  Last Name")
             return false
         }
@@ -301,23 +306,25 @@ object AppUtils {
         }
         return Bitmap.createScaledBitmap(image, width, height, true)
     }
-public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
-    val ei: ExifInterface = ExifInterface(photoPath)
-    val orientation = ei.getAttributeInt(
-        ExifInterface.TAG_ORIENTATION,
-        ExifInterface.ORIENTATION_UNDEFINED
-    )
 
-    var rotatedBitmap: Bitmap? = null
-    when (orientation) {
-        ExifInterface.ORIENTATION_ROTATE_90 -> rotatedBitmap = rotateImage(bitmap, 90F)
-        ExifInterface.ORIENTATION_ROTATE_180 -> rotatedBitmap = rotateImage(bitmap, 180F)
-        ExifInterface.ORIENTATION_ROTATE_270 -> rotatedBitmap = rotateImage(bitmap, 270F)
-        ExifInterface.ORIENTATION_NORMAL -> rotatedBitmap = bitmap
-        else -> rotatedBitmap = bitmap
+    public fun getcheckImagerotation(photoPath: String, bitmap: Bitmap): Bitmap {
+        val ei: ExifInterface = ExifInterface(photoPath)
+        val orientation = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
+
+        var rotatedBitmap: Bitmap? = null
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotatedBitmap = rotateImage(bitmap, 90F)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotatedBitmap = rotateImage(bitmap, 180F)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotatedBitmap = rotateImage(bitmap, 270F)
+            ExifInterface.ORIENTATION_NORMAL -> rotatedBitmap = bitmap
+            else -> rotatedBitmap = bitmap
+        }
+        return rotatedBitmap!!
     }
-    return rotatedBitmap!!
-}
+
     fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
         val matrix = Matrix()
         matrix.postRotate(angle)
@@ -328,15 +335,12 @@ public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
     }
 
 
-
-
-
     fun index(spinner: Spinner, value: String?): Int {
         val adapter: Adapter = spinner.getAdapter()
         val n: Int = adapter.getCount()
         for (i in 0 until n) {
-            var name= (spinner.getItemAtPosition(i) as UniversityList).name
-            if(name.equals(value)){
+            var name = (spinner.getItemAtPosition(i) as UniversityList).name
+            if (name.equals(value)) {
                 return i
                 break
             }
@@ -345,7 +349,7 @@ public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
     }
 
 
-     fun getAgeDiffernce(dobString: String): Int {
+    fun getAgeDiffernce(dobString: String): Int {
         var date: Date? = null
         val sdf = SimpleDateFormat("MM/dd/yyyy")
         try {
@@ -367,4 +371,7 @@ public fun getcheckImagerotation(photoPath:String, bitmap: Bitmap):Bitmap{
         }
         return age
     }
+
+
+
 }

@@ -18,6 +18,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.View
 import com.SigmaDating.apk.AppReseources
+import com.SigmaDating.apk.model.Pages
 
 import com.google.android.gms.common.SignInButton
 
@@ -87,5 +88,21 @@ class Home : AppCompatActivity() {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse(Url)
         startActivity(i)
+    }
+
+
+    companion object{
+         lateinit var pages :ArrayList<Pages>
+
+        fun get_settingpage_data(alias: String): String {
+            for (i in 0..pages.size) {
+                var page = pages.get(i)
+                if (alias.equals(page.alias)) {
+                    return page.url
+                }
+            }
+            return ""
+        }
+
     }
 }

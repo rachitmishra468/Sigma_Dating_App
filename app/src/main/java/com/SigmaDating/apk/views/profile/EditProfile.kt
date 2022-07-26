@@ -95,7 +95,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         }
         _binding?.done?.setOnClickListener {
             var t = interestsList.joinToString(",")
-
             university?.let { it1 ->
                 community?.let { it2 ->
                     (activity as Home).homeviewmodel.Update_edit_page_data(
@@ -113,7 +112,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-
                 openSchoolSearchDialog(AppConstants.School,schoolList as List<UniversityList>)
                 true
             } else false
@@ -128,12 +126,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             } else false
         }
 
-
+        schoolListResponse()
         subscribe_Login_User_details()
         subscribe_edit_profile()
         subscribe_upload_images()
         subscribe_delete_images()
-        schoolListResponse()
+
 
         (activity as Home).homeviewmodel.get_edit_page_data(
             (activity as Home).sharedPreferencesStorage.getString(
@@ -188,8 +186,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
                             } catch (e: Exception) {
                             }
                         } else {
@@ -260,8 +257,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-
-
                                 Log.d("TAG@123", "1311" + it.data.toString())
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                     .show()
@@ -308,18 +303,17 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     schoolList = ArrayList<UniversityList>()
                                     schoolList = it1.data.universityList
                                     fraternitiesList = ArrayList<UniversityList>()
-                                    fraternitiesList =
-                                        it1.data.fraternitiesList + it1.data.sororitiesList
+                                    fraternitiesList = it1.data.fraternitiesList + it1.data.sororitiesList
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
-                                    university.let { schoolAct_spinner!!.setText(university) }
-                                    fraternity_Spinner.let { fraternity_Spinner.setText(community) }
+
 
                                     // setAdapterData()
                                     setupChipGroupDynamically(interest!!)
 
 
                                 } catch (e: Exception) {
+                                    Log.d("TAG@123", "Exception schoolListResponse ${e.message}")
                                 }
                             } else {
 
@@ -338,9 +332,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     }
 
-    private fun setSchooldata() {
 
-    }
 
     fun subscribe_Login_User_details() {
 
@@ -362,20 +354,28 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
                                 res.user.university.let {
                                     university = it
+                                    schoolAct_spinner!!.setText(university)
+                                }?: run {
+                                    university = ""
                                 }
                                 res.user.community.let {
                                     community = it
+                                    fraternity_Spinner.setText(community)
+                                }?: run {
+                                    university = ""
                                 }
                                 res.user.about.let {
                                     about = it
                                     _binding?.userAbout?.setText(about)
+                                }?: run {
+                                    about = ""
+                                    _binding?.userAbout?.setText(about)
                                 }
-
                                 interestsList = res.user.interests.split(",") as ArrayList<String>
 
 
                             } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception ${e.message}")
+                                Log.d("TAG@123", "Exception subscribe_Login_User_details ${e.message}")
 
                             }
 

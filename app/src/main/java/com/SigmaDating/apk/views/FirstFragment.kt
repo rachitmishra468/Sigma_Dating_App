@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.views
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
@@ -20,8 +21,11 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
+import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
+import com.SigmaDating.apk.views.Home.Companion.get_settingpage_data
+import com.SigmaDating.apk.views.Home.Companion.pages
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -44,12 +48,16 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var notificationIcon: ConstraintLayout
     lateinit var notification: ConstraintLayout
     var cardViewChanger: CardViewChanger? = null
+    private var idUserConnected = ""
 var userId:String?=null
     lateinit var adapter:ProfileMatch
+    lateinit var credentials_card:ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("TAG@123", "FirstFragment onCreate")
+
 
 
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
@@ -59,13 +67,13 @@ var userId:String?=null
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
+        Log.d("TAG@123", "FirstFragment onCreateView")
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
+        credentials_card= binding.root.findViewById(R.id.credentials_card)
         editProfile.setOnClickListener {
-            //val extras = FragmentNavigatorExtras(editProfile to "large_image")
             val bundle = Bundle()
             userId= (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID)
@@ -76,12 +84,12 @@ var userId:String?=null
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
         }
 
-
         (activity as Home).homeviewmodel.get_home_feb_data(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
             )
         )
+
         footer_transition()
         subscribe_Login_User_details()
         subscribe_bids()
@@ -91,16 +99,22 @@ var userId:String?=null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("TAG@123", "FirstFragment onViewCreated")
         cardViewChanger!!.setFlingListener(object : CardViewChanger.OnCardFlingListener {
             override fun onCardExitLeft(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitLeft")
-
+                if (dataObject is Bids) {
+                    idUserConnected = (dataObject as Bids).id
+                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                }
             }
 
             override fun onCardExitRight(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitRight")
-
+                if (dataObject is Bids) {
+                    idUserConnected = (dataObject as Bids).id
+                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                }
             }
 
             override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
@@ -113,7 +127,13 @@ var userId:String?=null
 
             override fun onCardExitTop(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitTop")
-
+                if (dataObject is Bids) {
+                    idUserConnected = (dataObject as Bids).id
+                   /* if(courseModalArrayList?.contains(dataObject) == true){
+                        courseModalArrayList?.remove(dataObject)
+                    }*/
+                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                }
             }
 
             override fun onCardExitBottom(dataObject: Any?) {
@@ -122,11 +142,9 @@ var userId:String?=null
             }
         })
 
-
-       // cardViewChanger.se
-
-
     }
+
+
 
 
     fun play_animation() {
@@ -236,6 +254,7 @@ var userId:String?=null
                             try {
                                 Log.d("TAG@123","notifications_count  :"+ it.data?.notifications_count.toString())
                                 courseModalArrayList=it.data?.bids as ArrayList<Bids>
+                                pages=it.data.pages as ArrayList<Pages>
                                 adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()

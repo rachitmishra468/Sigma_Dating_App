@@ -22,17 +22,18 @@ class HomeViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferencesStorage
 ) : ViewModel() {
 
-    var get_user_data: MutableLiveData<Resource<Loginmodel>>
-    var change_password: MutableLiveData<Resource<Loginmodel>>
-    var upload_images: MutableLiveData<Resource<Loginmodel>>
-    var delete_images: MutableLiveData<Resource<Loginmodel>>
-    var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
-    var update_profile: MutableLiveData<Resource<Loginmodel>>
-    lateinit var userData: Resource<Loginmodel>
-    var user_bids: MutableLiveData<Resource<home_model>>
+    val get_user_data: MutableLiveData<Resource<Loginmodel>>
+    val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
+    val change_password: MutableLiveData<Resource<Loginmodel>>
+    val upload_images: MutableLiveData<Resource<Loginmodel>>
+    val delete_images: MutableLiveData<Resource<Loginmodel>>
+    val school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
+    val update_profile: MutableLiveData<Resource<Loginmodel>>
+    val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
+        get_secound_feb_data= MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
         upload_images = MutableLiveData<Resource<Loginmodel>>()
         delete_images = MutableLiveData<Resource<Loginmodel>>()
@@ -69,10 +70,26 @@ class HomeViewModel @Inject constructor(
         Log.d("TAG@123", "22 : -" + jsonObject.toString())
         mainRepository.get_login_user_data(jsonObject).let {
             if (it.isSuccessful) {
-                userData = Resource.success(it.body())
                 get_user_data.postValue(Resource.success(it.body()))
             } else {
                 get_user_data.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+
+    fun get_secound_feb_User_details(id: String) = GlobalScope.launch {
+        get_secound_feb_data.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        Log.d("TAG@123", id)
+        jsonObject.addProperty("user_id", id)
+        Log.d("TAG@123", "22 : -" + jsonObject.toString())
+        mainRepository.get_login_user_data(jsonObject).let {
+            if (it.isSuccessful) {
+                get_secound_feb_data.postValue(Resource.success(it.body()))
+            } else {
+                get_secound_feb_data.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }
@@ -100,6 +117,7 @@ class HomeViewModel @Inject constructor(
     fun get_edit_page_data(id: String) {
         val one = async { getSchoolingData() }
         val two = async { get_Login_User_details(id) }
+
     }
 
     fun Update_edit_page_data(

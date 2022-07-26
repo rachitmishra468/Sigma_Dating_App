@@ -8,353 +8,342 @@
     android:background="@color/white_with_opecity"
     android:orientation="vertical"
     android:weightSum="10">
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_weight="3"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
-    app:cardMaxElevation="6dp"
-    android:layout_height="0dp">
 
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:background="@drawable/toolbar_two"
-        android:orientation="vertical"
-        android:weightSum="5">
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:cardMaxElevation="6dp"
+        app:cardUseCompatPadding="true">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:background="@drawable/toolbar_bg_img"
-            android:layout_gravity="left|center"
-            android:gravity="left"
-            android:weightSum="4">
+            android:layout_height="match_parent"
+
+            android:background="@drawable/toolbar_two"
+            android:orientation="vertical"
+            android:weightSum="5">
+
+
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_gravity="left|center"
-                android:layout_marginLeft="0dp"
-                android:layout_weight="2.5"
+                android:layout_weight="2"
+                android:background="@drawable/toolbar_bg_img"
                 android:gravity="left"
                 android:orientation="horizontal"
-                >
-
-            <ImageView
-                android:id="@+id/close_home"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:scaleType="fitCenter"
-                android:layout_gravity="left"
                 android:padding="10dp"
-                android:src="@drawable/app_logo"/>
+                android:weightSum="4">
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right|center"
-                android:layout_marginLeft="0dp"
-                android:layout_weight="1.5"
-                android:gravity="right"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-
-                <ImageView
-                    android:id="@+id/edit_profile"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right|center"
-                    android:layout_weight=".8"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:alpha=".8"
-                    android:src="@drawable/edit_profile"></ImageView>
-
-                <ImageView
-                    android:id="@+id/setting_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:layout_weight="1"
-                    android:src="@drawable/settings_icon"></ImageView>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/movetonotification"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_gravity="left|center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_weight="2.5"
+                    android:gravity="left"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/notification_Icon"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/notifications_24"
+                        android:id="@+id/close_home"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
                         android:padding="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/app_logo" />
 
-                    <TextView
-                        android:id="@+id/tvCounter"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="35dp"
-                        android:background="@drawable/circle_shape"
-                        android:gravity="center"
-                        android:layout_marginRight="20dp"
-                        android:text="12"
-                        android:textColor="@color/white"
-                        android:textSize="8sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/notification_Icon"
-                        app:layout_constraintEnd_toEndOf="@+id/notification_Icon"
-                        app:layout_constraintStart_toStartOf="@+id/notification_Icon"
-                        app:layout_constraintTop_toTopOf="@+id/notification_Icon" />
+                </LinearLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_gravity="clip_vertical"
-                android:gravity="clip_vertical"
-                android:padding="10dp"
-                android:weightSum="3">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="bottom|center"
-                    android:gravity="bottom|center">
+                    android:layout_gravity="right|center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_weight="1.5"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/logo_detail"
-                    android:transitionName="large_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_margin="1dp"
-                    app:civ_border_width="2dp"
 
-                    android:src="@drawable/profile_img"
-                    app:civ_border_color="@color/hint_text_color"
-                    app:tint="@color/hint_text_color">
-                </de.hdodenhof.circleimageview.CircleImageView>
-
-                    <TextView
-                        android:layout_width="80dp"
+                    <ImageView
+                        android:id="@+id/edit_profile"
+                        android:layout_width="0dp"
                         android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_gravity="bottom"
-                        android:layout_weight="1"
-                        android:background="@drawable/circle_radius_bg"
-                        android:gravity="center"
-                        android:padding="2dp"
-                        android:text="1 M"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/logo_detail">
+                        android:layout_gravity="right|center"
+                        android:layout_weight=".8"
+                        android:alpha=".8"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/edit_profile"></ImageView>
 
-                    </TextView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/setting_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/settings_icon"></ImageView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/movetonotification"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/notification_Icon"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:padding="10dp"
+                            android:src="@drawable/notifications_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvCounter"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/circle_shape"
+                            android:gravity="center"
+                            android:text="12"
+                            android:textColor="@color/white"
+                            android:textSize="8sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@+id/notification_Icon"
+                            app:layout_constraintEnd_toEndOf="@+id/notification_Icon"
+                            app:layout_constraintStart_toStartOf="@+id/notification_Icon"
+                            app:layout_constraintTop_toTopOf="@+id/notification_Icon" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="clip_vertical"
+                    android:layout_weight="1"
+                    android:gravity="clip_vertical"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:weightSum="3">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom|center"
+                        android:gravity="bottom|center">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/logo_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_margin="1dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/profile_img"
+                            android:transitionName="large_image"
+
+                            app:civ_border_color="@color/hint_text_color"
+                            app:civ_border_width="2dp"
+                            app:tint="@color/hint_text_color"></de.hdodenhof.circleimageview.CircleImageView>
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="bottom"
+                            android:layout_weight="1"
+                            android:background="@drawable/circle_radius_bg"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="1 M"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/logo_detail">
+
+                        </TextView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_marginTop="2dp"
-                    >
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-                    <TextView
-                        android:id="@+id/name_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="LauraDoo test"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:padding="2dp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                       >
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp">
 
-                    </TextView>
+                        <TextView
+                            android:id="@+id/name_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:text="LauraDoo test"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="1dp"
-                        android:layout_height="20sp"
-                        android:padding="5dp"
-                        android:background="@color/black"
-                        app:layout_constraintBottom_toBottomOf="@+id/name_text"
-                        app:layout_constraintStart_toEndOf="@+id/name_text"
-                        app:layout_constraintTop_toTopOf="@+id/name_text"
-                        ></View>
+                        </TextView>
 
-
-
-                    <TextView
-                        android:id="@+id/age_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="19"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:padding="2dp"
-                        app:layout_constraintStart_toEndOf="@+id/divider"
-                        app:layout_constraintTop_toTopOf="parent"
-                        >
-
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/addres_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Florida Atlantic University"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="normal"
-                        android:padding="3dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                       app:layout_constraintTop_toBottomOf="@+id/name_text"
-                        >
-
-                    </TextView>
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="1dp"
+                            android:layout_height="20sp"
+                            android:background="@color/black"
+                            android:padding="5dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/name_text"
+                            app:layout_constraintStart_toEndOf="@+id/name_text"
+                            app:layout_constraintTop_toTopOf="@+id/name_text"></View>
 
 
+                        <TextView
+                            android:id="@+id/age_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="2dp"
+                            android:text="19"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/divider"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/addres_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="Florida Atlantic University"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="normal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/name_text">
+
+                        </TextView>
 
 
-                    <ImageView
-                        android:id="@+id/profile_img"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="5dp"
-                        android:tintMode="src_in"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="30dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:layout_marginBottom="20dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/comments_disable"/>
+                        <ImageView
+                            android:id="@+id/profile_img"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginBottom="20dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="5dp"
+                            android:src="@drawable/comments_disable"
+                            android:tintMode="src_in"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/heart_solid"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="5dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:tintMode="src_in"
-                        app:layout_constraintTop_toTopOf="@+id/profile_img"
-                        app:layout_constraintEnd_toStartOf="@+id/profile_img"
-                        app:layout_constraintBottom_toBottomOf="@+id/profile_img"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/star_img"/>
+                        <ImageView
+                            android:id="@+id/heart_solid"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="6dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="5dp"
+                            android:src="@drawable/star_img"
+                            android:tintMode="src_in"
+                            app:layout_constraintBottom_toBottomOf="@+id/profile_img"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/profile_img"
+                            app:layout_constraintTop_toTopOf="@+id/profile_img" />
 
-                    <ImageView
-                        android:id="@+id/star_img"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="5dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        app:layout_constraintTop_toTopOf="@+id/heart_solid"
-                        app:layout_constraintEnd_toStartOf="@+id/heart_solid"
-                        app:layout_constraintBottom_toBottomOf="@+id/profile_img"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/heart_solid">
-                    </ImageView>
+                        <ImageView
+                            android:id="@+id/star_img"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="6dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="5dp"
+                            android:src="@drawable/heart_solid"
+                            app:layout_constraintBottom_toBottomOf="@+id/profile_img"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/heart_solid"
+                            app:layout_constraintTop_toTopOf="@+id/heart_solid"></ImageView>
 
 
-                    <ImageView
-                        android:id="@+id/comments"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="5dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:tintMode="src_in"
-                        app:layout_constraintTop_toTopOf="@+id/star_img"
-                        app:layout_constraintEnd_toStartOf="@+id/star_img"
-                        app:layout_constraintBottom_toBottomOf="@+id/profile_img"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/profile_img">
-                    </ImageView>
+                        <ImageView
+                            android:id="@+id/comments"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="6dp"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:padding="5dp"
+                            android:src="@drawable/profile_img"
+                            android:tintMode="src_in"
+                            app:layout_constraintBottom_toBottomOf="@+id/profile_img"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/star_img"
+                            app:layout_constraintTop_toTopOf="@+id/star_img"></ImageView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                </LinearLayout>
 
 
             </LinearLayout>
-
-
         </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
-        app:cardBackgroundColor="@color/white_with_opecity"
-        app:cardElevation="3dp"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="3"
+        app:cardBackgroundColor="@color/white_with_opecity"
+        app:cardElevation="3dp">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -388,9 +377,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardElevation="3dp"
-
             app:cardCornerRadius="2dp"
+
+            app:cardElevation="3dp"
             app:cardUseCompatPadding="false">
 
             <LinearLayout

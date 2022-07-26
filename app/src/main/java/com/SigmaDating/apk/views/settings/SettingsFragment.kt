@@ -33,20 +33,35 @@ class SettingsFragment : Fragment() {
 
         var link: String = "http://103.10.234.134/sigmadating/terms.php"
         _binding.licencesText.setOnClickListener {
+            link = Home.get_settingpage_data("licenses")
             (activity as Home).OpenSocial(link)
         }
         _binding.privacyText.setOnClickListener {
+            link = Home.get_settingpage_data("privacy-preferences")
             (activity as Home).OpenSocial(link)
         }
 
         _binding.privacyTextTwo.setOnClickListener {
+            link = Home.get_settingpage_data("terms-of-service")
             (activity as Home).OpenSocial(link)
         }
 
         _binding.termsServices.setOnClickListener {
+            link = Home.get_settingpage_data("terms-of-service")
             (activity as Home).OpenSocial(link)
         }
         _binding.contactUs.setOnClickListener {
+            link = Home.get_settingpage_data("support")
+            (activity as Home).OpenSocial(link)
+        }
+
+        _binding.community.setOnClickListener {
+            link = Home.get_settingpage_data("community-guidelines")
+            (activity as Home).OpenSocial(link)
+        }
+
+        _binding.sefery.setOnClickListener {
+            link = Home.get_settingpage_data("safety-guidelines")
             (activity as Home).OpenSocial(link)
         }
     }

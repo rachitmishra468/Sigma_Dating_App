@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.BaseAdapter
 import android.view.ViewGroup
@@ -7,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
+import com.SigmaDating.apk.model.Profile
+import com.SigmaDating.apk.views.OnSwipeTouchListener
 import com.bumptech.glide.Glide
 import java.util.ArrayList
 
@@ -38,6 +42,40 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
         Glide.with(context).load(courseData[position].upload_image).into(mageview);
+
+        mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+
+                listener.onCategoryClick(
+                    courseData[position],5,null
+                )
+
+            }
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                listener.onCategoryClick(
+                    courseData[position],2,null
+                )
+            }
+            @SuppressLint("ClickableViewAccessibility")
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                listener.onCategoryClick(
+                    courseData[position],3,null
+                )
+            }
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+
+            }
+        })
+
+
+
+
+
+
 
         (v.findViewById<View>(R.id.tv_username) as TextView).setText(courseData[position].first_name
         +""+courseData[position].last_name)

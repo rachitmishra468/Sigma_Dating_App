@@ -482,28 +482,17 @@
 
 
             <TextView
+                android:id="@+id/community"
                 style="@style/NormalText"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".6"
                 android:gravity="start|center"
-                android:text="Community Guidelines" />
+                android:text="Community Guidelines"
+                android:paddingRight="5dp"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"/>
 
-            <TextView
-                style="@style/grey_NormalText"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight=".3"
-                android:gravity="end|center"
-                android:text="Email@gmail.com"
-                android:visibility="invisible" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".1"
-                android:gravity="start|center"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
         </LinearLayout>
 
         <View
@@ -535,28 +524,16 @@
 
 
             <TextView
-                style="@style/NormalText"
-                android:layout_width="0dp"
+                android:id="@+id/sefery"                style="@style/NormalText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".4"
                 android:gravity="start|center"
-                android:text="Safety Guides" />
+                android:text="Safety Guides"
+                android:paddingRight="5dp"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
-            <TextView
-                style="@style/grey_NormalText"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight=".5"
-                android:gravity="end|center"
-                android:text="Email@gmail.com"
-                android:visibility="invisible" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".1"
-                android:gravity="start|center"
-                android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
         </LinearLayout>
 
         <View
