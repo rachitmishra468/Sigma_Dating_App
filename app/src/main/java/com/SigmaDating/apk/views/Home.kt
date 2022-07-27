@@ -98,6 +98,8 @@ class Home : AppCompatActivity() {
     companion object{
          lateinit var pages :ArrayList<Pages>
 
+         lateinit var notifications_count:String
+
         fun get_settingpage_data(alias: String): String {
             for (i in 0..pages.size) {
                 var page = pages.get(i)

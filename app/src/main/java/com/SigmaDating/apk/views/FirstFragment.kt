@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.SigmaDating.apk.adapters.ProfileMatch
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +26,7 @@ import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import com.SigmaDating.apk.views.Home.Companion.get_settingpage_data
+import com.SigmaDating.apk.views.Home.Companion.notifications_count
 import com.SigmaDating.apk.views.Home.Companion.pages
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
@@ -52,6 +54,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 var userId:String?=null
     lateinit var adapter:ProfileMatch
     lateinit var credentials_card:ConstraintLayout
+    lateinit var tvCounter:TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +76,7 @@ var userId:String?=null
         notificationIcon = binding.root.findViewById(R.id.notification)
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
         credentials_card= binding.root.findViewById(R.id.credentials_card)
+        tvCounter= binding.root.findViewById(R.id.tvCounter)
         editProfile.setOnClickListener {
             val bundle = Bundle()
             userId= (activity as Home).sharedPreferencesStorage.getString(
@@ -255,6 +259,10 @@ var userId:String?=null
                                 Log.d("TAG@123","notifications_count  :"+ it.data?.notifications_count.toString())
                                 courseModalArrayList=it.data?.bids as ArrayList<Bids>
                                 pages=it.data.pages as ArrayList<Pages>
+                                notifications_count=it.data.notifications_count
+                                notifications_count.let {
+                                    tvCounter.setText(notifications_count)
+                                }
                                 adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()

@@ -35,6 +35,11 @@ import com.SigmaDating.apk.views.Home
 import com.SigmaDating.apk.views.Splash
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class SettingsFragment : Fragment() {
@@ -44,6 +49,11 @@ class SettingsFragment : Fragment() {
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
+    var age_range = ""
+    var distance = ""
+    var location_text = ""
+    var latitude = ""
+    var longitude = ""
 
     fun Call_links() {
 
@@ -63,7 +73,7 @@ class SettingsFragment : Fragment() {
         }
 
         _binding.privacyTextTwo.setOnClickListener {
-            link = Home.get_settingpage_data("terms-of-service")
+            link = Home.get_settingpage_data("privacy-policy")
             link?.let {
                 (activity as Home).OpenSocial(link)
             }
@@ -107,7 +117,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         Call_links()
         _binding.passwordUpdate.setOnClickListener {
@@ -121,6 +131,43 @@ class SettingsFragment : Fragment() {
         }
         _binding.imageView2.setOnClickListener {
             (activity as Home).onBackPressed()
+        }
+
+        _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
+            val values = rangeSlider.values
+            Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
+            Log.d("TAG@123", value.toString())
+          //  _binding.textView11.text = "${values[0].toInt()}-${values[1].toInt()} miles"
+            _binding.textView11.text = "${value.toString()} miles"
+
+            distance = value.toString()
+        }
+
+        _binding.seekBarAge.addOnChangeListener { rangeSlider, value, fromUser ->
+            val values = rangeSlider.values
+            Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
+            _binding.textView8.text = "${values[0].toInt()}-${values[1].toInt()} "
+            age_range = "${values[0].toInt()}-${values[1].toInt()}"
+
+        }
+
+        _binding.updateSetting.setOnClickListener {
+            val jsonObject = JsonObject()
+            Log.d(
+                "TAG@123",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty(
+                "user_id",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty("age_range", age_range)
+            jsonObject.addProperty("distance", distance)
+            jsonObject.addProperty("location", _binding.locationText.text.toString())
+            jsonObject.addProperty("latitude", latitude)
+            jsonObject.addProperty("longitude", longitude)
+            Log.d("TAG@123", "updateSetting :" + jsonObject.toString())
+            (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
         }
 
         _binding.continueLogout.setOnClickListener {
@@ -138,16 +185,20 @@ class SettingsFragment : Fragment() {
         }
         subscribe_Login_User_details()
 
+        subscribe_setting_update_details()
+
         (activity as Home).homeviewmodel.get_Login_User_details(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
             )
         )
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
         getLocation()
         return binding.root
     }
+
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
@@ -157,8 +208,36 @@ class SettingsFragment : Fragment() {
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
+
+    fun subscribe_setting_update_details() {
+        (activity as Home?)?.homeviewmodel?.setting_update_details?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            Log.d("TAG@123", "111 " + res.message)
+                            Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                .show()
+                        } else {
+                            Log.d("TAG@123", "111 " + res?.message)
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+    }
+
+
     fun subscribe_Login_User_details() {
-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->
@@ -169,10 +248,27 @@ class SettingsFragment : Fragment() {
                             if (it.data?.user?.phone?.isEmpty() == true) {
                                 _binding.phoneNumberText.setText("Update")
                             }
-                            _binding.locationText.setText(it.data?.user?.location)
+                           _binding.locationText.setText(it.data?.user?.location)
+
+                            latitude = it.data?.user?.latitude.toString()
+                            longitude = it.data?.user?.longitude.toString()
                             if (it.data?.user?.location?.isEmpty() == true) {
-                                _binding.locationText.setText("Update")
+                                _binding.locationText.setText(location_text)
+                                location_text = it.data.user.location.toString()
                             }
+
+
+                            if (it.data?.user?.age_range?.isEmpty() == false) {
+                                _binding.textView8.setText(it.data.user.age_range)
+                              //  _binding.seekBarAge.setValues(1.0f,5.0f);
+
+                            }
+
+                            if (it.data?.user?.distance?.isEmpty() == false) {
+                                _binding.textView11.setText(it.data.user.distance+" miles")
+                            }
+
+
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
@@ -190,7 +286,7 @@ class SettingsFragment : Fragment() {
     }
 
     fun subscribe_change_password(dialog: BottomSheetDialog) {
-        (activity as Home?)?.homeviewmodel?.change_password?.observe(this, Observer {
+        (activity as Home?)?.homeviewmodel?.change_password?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
@@ -275,6 +371,7 @@ class SettingsFragment : Fragment() {
         val title_text = view.findViewById<TextView>(R.id.textView5)
         val current_value = view.findViewById<EditText>(R.id.editText_password)
         val update_value = view.findViewById<Button>(R.id.update_value)
+        val update_current=view.findViewById<Button>(R.id.update_current)
 
         title_text.setText(
             if (phone) {
@@ -285,27 +382,49 @@ class SettingsFragment : Fragment() {
         )
         current_value.setHint(
             if (phone) {
-                current_value.inputType= InputType.TYPE_CLASS_NUMBER
+                update_current.visibility=View.GONE
+                current_value.inputType = InputType.TYPE_CLASS_NUMBER
                 "Enter Phone Number."
             } else {
-                current_value.inputType= InputType.TYPE_CLASS_TEXT
+                update_current.visibility=View.VISIBLE
+                current_value.inputType = InputType.TYPE_CLASS_TEXT
                 "Enter Location With Post Code."
             }
         )
-
+        update_current.setOnClickListener {
+            _binding.locationText.text=location_text
+            dialog.dismiss()
+        }
 
         update_value.setOnClickListener {
             if (!current_value.text.toString().isEmpty()) {
                 subscribe_change_password(dialog)
-                var key =if (phone) {
-                    "phone"
+                var key = if (phone) {
+                        (activity as Home).homeviewmodel.update_phone_location(
+                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+                        "phone", current_value.text.toString()
+                    )
                 } else {
-                    "location"
+                    val jsonObject = JsonObject()
+                    Log.d(
+                        "TAG@123",
+                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                    )
+                    jsonObject.addProperty(
+                        "user_id",
+                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                    )
+                    jsonObject.addProperty("age_range", age_range)
+                    jsonObject.addProperty("distance", distance)
+                    jsonObject.addProperty("location",current_value.text.toString())
+                    jsonObject.addProperty("latitude", latitude)
+                    jsonObject.addProperty("longitude", longitude)
+                    Log.d("TAG@123", "updateSetting :" + jsonObject.toString())
+                    (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
+                    _binding.locationText.text=current_value.text.toString()
+                    dialog.dismiss()
                 }
-                (activity as Home).homeviewmodel.update_phone_location(
-                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
-                    key,current_value.text.toString()
-                )
+
             } else {
                 current_value.setError("Please Enter .. ")
             }
@@ -319,34 +438,46 @@ class SettingsFragment : Fragment() {
     @SuppressLint("MissingPermission", "SetTextI18n")
     private fun getLocation() {
         if (checkPermissions()) {
-            if (isLocationEnabled()) { mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     val location: Location? = task.result
                     if (location != null) {
                         val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
                         val list: List<Address> =
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                       /* mainBinding.apply {
-                            tvLatitude.text = "Latitude\n${list[0].latitude}"
-                            tvLongitude.text = "Longitude\n${list[0].longitude}"
-                            tvCountryName.text = "Country Name\n${list[0].countryName}"
-                            tvLocality.text = "Locality\n${list[0].locality}"
-                            tvAddress.text = "Address\n${list[0].getAddressLine(0)}"
-                        }*/
+
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(500)
+                            latitude = "${list[0].latitude}"
+                            longitude = "${list[0].longitude}"
+                            // tvCountryName.text = "Country Name\n${list[0].countryName}"
+                            // tvLocality.text = "Locality\n${list[0].locality}"
+                            location_text = "${list[0].getAddressLine(0)}"
+                        }
+
+
                     }
                 }
+
             } else {
-                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
             }
         } else {
             requestPermissions()
         }
     }
+
     private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
     }
+
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -361,6 +492,7 @@ class SettingsFragment : Fragment() {
         }
         return false
     }
+
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -371,6 +503,7 @@ class SettingsFragment : Fragment() {
             permissionId
         )
     }
+
     @SuppressLint("MissingSuperCall")
     override fun onRequestPermissionsResult(
         requestCode: Int,

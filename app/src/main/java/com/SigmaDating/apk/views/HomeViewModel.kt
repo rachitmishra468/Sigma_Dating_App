@@ -22,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferencesStorage
 ) : ViewModel() {
 
+    val setting_update_details: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
     val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
     val change_password: MutableLiveData<Resource<Loginmodel>>
@@ -32,6 +33,7 @@ class HomeViewModel @Inject constructor(
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
+        setting_update_details= MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
         get_secound_feb_data= MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
@@ -46,6 +48,23 @@ class HomeViewModel @Inject constructor(
         val one = async {  get_Login_User_details(id) }
         val two = async { get_Login_User_bids(id) }
     }
+
+
+
+
+    fun get_setting_update_details(jsonObject:JsonObject) = viewModelScope.launch {
+        setting_update_details.postValue(Resource.loading(null))
+        mainRepository.get_setting_update_details(jsonObject).let {
+            if (it.isSuccessful) {
+                setting_update_details.postValue(Resource.success(it.body()))
+            } else {
+                setting_update_details.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+
 
     fun get_Login_User_bids(id: String)= viewModelScope.launch {
         user_bids.postValue(Resource.loading(null))
