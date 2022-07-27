@@ -454,7 +454,7 @@ class SettingsFragment : Fragment() {
                             longitude = "${list[0].longitude}"
                             // tvCountryName.text = "Country Name\n${list[0].countryName}"
                             // tvLocality.text = "Locality\n${list[0].locality}"
-                            location_text = "${list[0].getAddressLine(0)}"
+                            location_text = "${list[0].locality}"
                         }
 
 
