@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutChat"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="20dp">
 
@@ -22,7 +22,7 @@
         tools:ignore="UselessParent">
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/interest_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -40,6 +40,7 @@
             android:layout_toEndOf="@+id/text"
             android:layout_toRightOf="@+id/text"
             android:text="1:30 P.M."
+            android:visibility="gone"
             android:textColor="#888" />
 
         <ImageView
@@ -61,11 +62,12 @@
         android:id="@+id/test_arrow"
         android:layout_width="20dp"
         android:layout_height="20dp"
+
         android:layout_alignParentLeft="true"
         android:layout_marginTop="1dp"
         android:layout_marginRight="-6dp"
         android:src="@drawable/app_logo"
-        android:visibility="visible"
+        android:visibility="gone"
         app:civ_border_color="@color/blue"
         app:civ_border_width="1dp" />
 </RelativeLayout>

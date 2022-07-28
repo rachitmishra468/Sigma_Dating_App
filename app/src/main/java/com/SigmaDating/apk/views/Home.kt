@@ -33,7 +33,6 @@ import com.google.android.gms.common.api.Status
 
 @AndroidEntryPoint
 class Home : AppCompatActivity() {
-
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     private lateinit var appBarConfiguration: AppBarConfiguration

@@ -195,10 +195,22 @@ var userId:String?=null
     }
 
 
-    override fun onCategoryClick(position: Bids?, count: Int, extras: FragmentNavigator.Extras?) {
+    override fun onCategoryClick(position: Bids?, count: Int, extras: FragmentNavigator.Extras?, imageView: ImageView) {
 
         when (count) {
-            1 -> findNavController().navigate(R.id.action_FirstFragment_to_reportUserFragment)
+            1 ->{
+                val bundle = Bundle()
+                bundle.putString("user_id", position?.id)
+val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
+
+                val action = FirstFragmentDirections.actionFirstFragmentToReportUserFragment(
+
+                    userImage = position.upload_image,
+                    userId=position.id
+
+                )
+                findNavController().navigate(action,extrass)
+            }
             2 -> cardViewChanger?.throwRight()
             3 -> cardViewChanger?.throwTop()
             4 -> {

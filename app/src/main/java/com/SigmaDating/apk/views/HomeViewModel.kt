@@ -24,6 +24,7 @@ class HomeViewModel @Inject constructor(
 
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
     val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
+    val get_UserReportdata: MutableLiveData<Resource<Loginmodel>>
     val change_password: MutableLiveData<Resource<Loginmodel>>
     val upload_images: MutableLiveData<Resource<Loginmodel>>
     val delete_images: MutableLiveData<Resource<Loginmodel>>
@@ -32,6 +33,7 @@ class HomeViewModel @Inject constructor(
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
+        get_UserReportdata=MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
         get_secound_feb_data= MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
@@ -90,6 +92,21 @@ class HomeViewModel @Inject constructor(
                 get_secound_feb_data.postValue(Resource.success(it.body()))
             } else {
                 get_secound_feb_data.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun get_UserReport_details(id: String) = GlobalScope.launch {
+        get_UserReportdata.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        Log.d("TAG@123", id)
+        jsonObject.addProperty("user_id", id)
+        Log.d("TAG@123", "22 : -" + jsonObject.toString())
+        mainRepository.get_login_user_data(jsonObject).let {
+            if (it.isSuccessful) {
+                get_UserReportdata.postValue(Resource.success(it.body()))
+            } else {
+                get_UserReportdata.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }

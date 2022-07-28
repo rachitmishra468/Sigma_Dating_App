@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
@@ -160,6 +161,7 @@ class SecondFragment : Fragment() {
                             if (!res.user.photos.isNullOrEmpty()) {
                                 dataListuser = res.user.photos
                             }
+
                             setAdapterListData(dataListuser as ArrayList<String>)
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)

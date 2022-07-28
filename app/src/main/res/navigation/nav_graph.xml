@@ -192,7 +192,33 @@
         android:id="@+id/reportUserFragment"
         android:name="com.SigmaDating.apk.views.profile.ReportUserFragment"
         android:label="fragment_report_user"
-        tools:layout="@layout/fragment_report_user" />
+        tools:layout="@layout/fragment_report_user" >
+        <argument
+            android:name="user_image"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="user_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+
+        <action
+            android:id="@+id/action_reportUserFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+        <action
+            android:id="@+id/action_reportUserFragment_to_userChatFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+        <action
+            android:id="@+id/action_reportUserFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
     <fragment
         android:id="@+id/all_Activitys"
         android:name="com.SigmaDating.apk.views.all_activity.All_Activitys"
