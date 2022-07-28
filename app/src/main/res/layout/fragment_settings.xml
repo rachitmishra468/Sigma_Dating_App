@@ -68,6 +68,24 @@
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
 
+
+        <Button
+            android:id="@+id/update_setting"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_horizontal"
+            android:text="Update"
+            android:textAllCaps="false"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.786"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
+
         <LinearLayout
             android:id="@+id/main_linear"
             android:layout_width="0dp"
@@ -410,11 +428,15 @@
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/rg" />
 
-        <SeekBar
+        <com.google.android.material.slider.RangeSlider
             android:id="@+id/seekBar_age"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:valueFrom="20.0"
+            android:valueTo="30.0"
+            app:values="@array/initial_slider_values"
+            android:stepSize="1.0"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textView_age" />
@@ -433,14 +455,20 @@
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/seekBar_age" />
 
-        <SeekBar
+
+        <com.google.android.material.slider.RangeSlider
             android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:valueFrom="10.0"
+            android:valueTo="80.0"
+            app:values="@array/initial_slider_distance"
+            android:stepSize="10.0"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textView_distance" />
+
 
         <View
             android:id="@+id/v2"
@@ -777,7 +805,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="18-26"
+            android:text="20-30"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.896"
             app:layout_constraintStart_toEndOf="@+id/textView_age"
@@ -788,7 +816,7 @@
             style="@style/blue_NormalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="25 miles"
+            android:text="100 miles"
             app:layout_constraintBaseline_toBaselineOf="@+id/textView_distance"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.906"

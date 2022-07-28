@@ -37,25 +37,25 @@ interface ApiService {
     suspend fun change_password(@Body jsonObject: JsonObject): Response<Loginmodel>
 
     @GET("common/listschoolscommunity")
-    suspend fun listSchoolFeternity():Response<SchoolCommunityResponse>
+    suspend fun listSchoolFeternity(): Response<SchoolCommunityResponse>
 
     @GET("common/{id}")
-    suspend fun get_user_bids(@Path("id")id: String):Response<home_model>
+    suspend fun get_user_bids(@Path("id") id: String): Response<home_model>
 
 
     @POST("users/uploadphoto")
     suspend fun upload_images(@Body jsonObject: JsonObject): Response<Loginmodel>
 
 
-
     @POST("users/deletephoto")
     suspend fun delete_images(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-
+    @POST("users/editsettings")
+    suspend fun get_setting_update_details(@Body jsonObject: JsonObject): Response<Loginmodel>
 
     @POST("users/editprofile")
     suspend fun Update_profile(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-   /* @POST("users/view")
-    suspend fun getUserDashboard(@Body jsonObject: JsonObject): Response<UserDashboardModel>*/
+    /* @POST("users/view")
+     suspend fun getUserDashboard(@Body jsonObject: JsonObject): Response<UserDashboardModel>*/
 }

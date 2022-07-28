@@ -84,14 +84,20 @@ class Home : AppCompatActivity() {
 
 
     fun OpenSocial(Url: String?) {
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(Url)
-        startActivity(i)
+        try {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(Url)
+            startActivity(i)
+
+        }catch (e:Exception){}
+
     }
 
 
     companion object{
          lateinit var pages :ArrayList<Pages>
+
+         lateinit var notifications_count:String
 
         fun get_settingpage_data(alias: String): String {
             for (i in 0..pages.size) {

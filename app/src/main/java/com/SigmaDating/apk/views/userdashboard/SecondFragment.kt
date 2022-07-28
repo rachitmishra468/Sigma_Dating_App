@@ -107,6 +107,11 @@ class SecondFragment : Fragment() {
             delay(100)
             subscribe_Login_User_details()
         }
+
+
+        Home.notifications_count.let {
+            _binding?.tvCounter?.setText(Home.notifications_count)
+        }
     }
 
     override fun onDetach() {
