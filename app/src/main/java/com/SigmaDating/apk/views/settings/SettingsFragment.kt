@@ -54,6 +54,7 @@ class SettingsFragment : Fragment() {
     var location_text = ""
     var latitude = ""
     var longitude = ""
+    
 
     fun Call_links() {
 
@@ -61,47 +62,47 @@ class SettingsFragment : Fragment() {
         var link_null: String = "http://103.10.234.134/sigmadating/terms.php"
         _binding.licencesText.setOnClickListener {
             link = Home.get_settingpage_data("licenses")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
         _binding.privacyText.setOnClickListener {
             link = Home.get_settingpage_data("privacy-preferences")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
 
         _binding.privacyTextTwo.setOnClickListener {
             link = Home.get_settingpage_data("privacy-policy")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
 
         _binding.termsServices.setOnClickListener {
             link = Home.get_settingpage_data("terms-of-service")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
         _binding.contactUs.setOnClickListener {
             link = Home.get_settingpage_data("support")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
 
         _binding.community.setOnClickListener {
             link = Home.get_settingpage_data("community-guidelines")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
 
         _binding.sefery.setOnClickListener {
             link = Home.get_settingpage_data("safety-guidelines")
-            link?.let {
+            link.let {
                 (activity as Home).OpenSocial(link)
             }
         }
