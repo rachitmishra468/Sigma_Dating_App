@@ -24,6 +24,8 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun get_setting_update_details(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.get_setting_update_details(jsonObject)
 
+
+
     override suspend fun user_forgot_password(jsonObject: JsonObject): Response<Forgotpassword> =
         apiService.forgotpass(jsonObject)
 
@@ -32,6 +34,10 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun user_phone_verifly(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.user_phone_verifly(jsonObject)
+
+    override suspend fun get_profile_swipe_details(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.get_profile_swipe_details(jsonObject)
+
 
     override suspend fun getSchoolFeternityList(): Response<SchoolCommunityResponse> =
         apiService.listSchoolFeternity()

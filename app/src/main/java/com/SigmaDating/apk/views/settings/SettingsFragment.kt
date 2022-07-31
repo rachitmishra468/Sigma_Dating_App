@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.SigmaDating.R
@@ -54,58 +55,77 @@ class SettingsFragment : Fragment() {
     var location_text = ""
     var latitude = ""
     var longitude = ""
-    
+
 
     fun Call_links() {
-
-        var link: String = "http://103.10.234.134/sigmadating/terms.php"
-        var link_null: String = "http://103.10.234.134/sigmadating/terms.php"
+        val bundle = Bundle()
         _binding.licencesText.setOnClickListener {
-            link = Home.get_settingpage_data("licenses")
+           var link = Home.get_settingpage_data("licenses")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
+
         }
         _binding.privacyText.setOnClickListener {
-            link = Home.get_settingpage_data("privacy-preferences")
+            var link = Home.get_settingpage_data("privacy-preferences")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
 
         _binding.privacyTextTwo.setOnClickListener {
-            link = Home.get_settingpage_data("privacy-policy")
+
+            var link = Home.get_settingpage_data("privacy-policy")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
 
         _binding.termsServices.setOnClickListener {
-            link = Home.get_settingpage_data("terms-of-service")
+            var link = Home.get_settingpage_data("terms-of-service")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
         _binding.contactUs.setOnClickListener {
-            link = Home.get_settingpage_data("support")
+
+            var link = Home.get_settingpage_data("support")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
 
         _binding.community.setOnClickListener {
-            link = Home.get_settingpage_data("community-guidelines")
+
+            var link = Home.get_settingpage_data("community-guidelines")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
 
         _binding.sefery.setOnClickListener {
-            link = Home.get_settingpage_data("safety-guidelines")
+
+            var link = Home.get_settingpage_data("safety-guidelines")
             link.let {
-                (activity as Home).OpenSocial(link)
+                bundle.putString("Url_Link", link?.url)
+                bundle.putString("Hadder_text", link?.title)
+                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
+
+
     }
 
 
@@ -138,7 +158,7 @@ class SettingsFragment : Fragment() {
             val values = rangeSlider.values
             Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
             Log.d("TAG@123", value.toString())
-          //  _binding.textView11.text = "${values[0].toInt()}-${values[1].toInt()} miles"
+            //  _binding.textView11.text = "${values[0].toInt()}-${values[1].toInt()} miles"
             _binding.textView11.text = "${value.toString()} miles"
 
             distance = value.toString()
@@ -211,29 +231,31 @@ class SettingsFragment : Fragment() {
     }
 
     fun subscribe_setting_update_details() {
-        (activity as Home?)?.homeviewmodel?.setting_update_details?.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data.let { res ->
-                        if (res?.status == true) {
-                            Log.d("TAG@123", "111 " + res.message)
-                            Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                .show()
-                        } else {
-                            Log.d("TAG@123", "111 " + res?.message)
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
+        (activity as Home?)?.homeviewmodel?.setting_update_details?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                Log.d("TAG@123", "111 " + res.message)
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                Log.d("TAG@123", "111 " + res?.message)
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                            }
                         }
                     }
-                }
-                Status.LOADING -> {
+                    Status.LOADING -> {
 
-                }
-                Status.ERROR -> {
+                    }
+                    Status.ERROR -> {
 
+                    }
                 }
-            }
-        })
+            })
     }
 
 
@@ -249,7 +271,7 @@ class SettingsFragment : Fragment() {
                             if (it.data?.user?.phone?.isEmpty() == true) {
                                 _binding.phoneNumberText.setText("Update")
                             }
-                           _binding.locationText.setText(it.data?.user?.location)
+                            _binding.locationText.setText(it.data?.user?.location)
 
                             latitude = it.data?.user?.latitude.toString()
                             longitude = it.data?.user?.longitude.toString()
@@ -261,12 +283,12 @@ class SettingsFragment : Fragment() {
 
                             if (it.data?.user?.age_range?.isEmpty() == false) {
                                 _binding.textView8.setText(it.data.user.age_range)
-                              //  _binding.seekBarAge.setValues(1.0f,5.0f);
+                                //  _binding.seekBarAge.setValues(1.0f,5.0f);
 
                             }
 
                             if (it.data?.user?.distance?.isEmpty() == false) {
-                                _binding.textView11.setText(it.data.user.distance+" miles")
+                                _binding.textView11.setText(it.data.user.distance + " miles")
                             }
 
 
@@ -372,7 +394,7 @@ class SettingsFragment : Fragment() {
         val title_text = view.findViewById<TextView>(R.id.textView5)
         val current_value = view.findViewById<EditText>(R.id.editText_password)
         val update_value = view.findViewById<Button>(R.id.update_value)
-        val update_current=view.findViewById<Button>(R.id.update_current)
+        val update_current = view.findViewById<Button>(R.id.update_current)
 
         title_text.setText(
             if (phone) {
@@ -383,17 +405,17 @@ class SettingsFragment : Fragment() {
         )
         current_value.setHint(
             if (phone) {
-                update_current.visibility=View.GONE
+                update_current.visibility = View.GONE
                 current_value.inputType = InputType.TYPE_CLASS_NUMBER
                 "Enter Phone Number."
             } else {
-                update_current.visibility=View.VISIBLE
+                update_current.visibility = View.VISIBLE
                 current_value.inputType = InputType.TYPE_CLASS_TEXT
                 "Enter Location With Post Code."
             }
         )
         update_current.setOnClickListener {
-            _binding.locationText.text=location_text
+            _binding.locationText.text = location_text
             dialog.dismiss()
         }
 
@@ -401,7 +423,7 @@ class SettingsFragment : Fragment() {
             if (!current_value.text.toString().isEmpty()) {
                 subscribe_change_password(dialog)
                 var key = if (phone) {
-                        (activity as Home).homeviewmodel.update_phone_location(
+                    (activity as Home).homeviewmodel.update_phone_location(
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
                         "phone", current_value.text.toString()
                     )
@@ -417,12 +439,12 @@ class SettingsFragment : Fragment() {
                     )
                     jsonObject.addProperty("age_range", age_range)
                     jsonObject.addProperty("distance", distance)
-                    jsonObject.addProperty("location",current_value.text.toString())
+                    jsonObject.addProperty("location", current_value.text.toString())
                     jsonObject.addProperty("latitude", latitude)
                     jsonObject.addProperty("longitude", longitude)
                     Log.d("TAG@123", "updateSetting :" + jsonObject.toString())
                     (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
-                    _binding.locationText.text=current_value.text.toString()
+                    _binding.locationText.text = current_value.text.toString()
                     dialog.dismiss()
                 }
 

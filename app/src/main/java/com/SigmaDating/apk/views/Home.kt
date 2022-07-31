@@ -46,7 +46,7 @@ class Home : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(com.SigmaDating.R.id.nav_host_fragment_content_home)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -70,16 +70,18 @@ class Home : AppCompatActivity() {
     }
 
 
-     fun initializeGoogleSignIn() {
-         try {
+    fun initializeGoogleSignIn() {
+        try {
 
-             mGoogleSignInClient= GoogleSignIn.getClient(this,AppReseources.getGoogleSignInOptions()!!)
-             mGoogleSignInClient.signOut().addOnCompleteListener {
+            mGoogleSignInClient =
+                GoogleSignIn.getClient(this, AppReseources.getGoogleSignInOptions()!!)
+            mGoogleSignInClient.signOut().addOnCompleteListener {
 
-                 Log.d("TAG@123","GoogleSignInOptions Logout ")
-             }
+                Log.d("TAG@123", "GoogleSignInOptions Logout ")
+            }
 
-         }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
     }
 
 
@@ -89,24 +91,25 @@ class Home : AppCompatActivity() {
             i.data = Uri.parse(Url)
             startActivity(i)
 
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
 
     }
 
 
-    companion object{
-         lateinit var pages :ArrayList<Pages>
+    companion object {
+        lateinit var pages: ArrayList<Pages>
 
-         lateinit var notifications_count:String
+        lateinit var notifications_count: String
 
-        fun get_settingpage_data(alias: String): String {
+        fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
                 var page = pages.get(i)
                 if (alias.equals(page.alias)) {
-                    return page.url
+                    return page
                 }
             }
-            return ""
+            return null
         }
 
     }

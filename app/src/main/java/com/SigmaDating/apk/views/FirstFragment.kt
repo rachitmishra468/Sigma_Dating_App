@@ -32,6 +32,7 @@ import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
+import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlin.collections.ArrayList
 
@@ -51,10 +52,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var notification: ConstraintLayout
     var cardViewChanger: CardViewChanger? = null
     private var idUserConnected = ""
-var userId:String?=null
-    lateinit var adapter:ProfileMatch
-    lateinit var credentials_card:ConstraintLayout
-    lateinit var tvCounter:TextView
+    var userId: String? = null
+    lateinit var adapter: ProfileMatch
+    lateinit var credentials_card: ConstraintLayout
+    lateinit var tvCounter: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,20 +70,30 @@ var userId:String?=null
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         Log.d("TAG@123", "FirstFragment onCreateView")
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
-        credentials_card= binding.root.findViewById(R.id.credentials_card)
-        tvCounter= binding.root.findViewById(R.id.tvCounter)
+        credentials_card = binding.root.findViewById(R.id.credentials_card)
+        tvCounter = binding.root.findViewById(R.id.tvCounter)
         editProfile.setOnClickListener {
             val bundle = Bundle()
-            userId= (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID)
+            userId = (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
             bundle.putString("user_id", userId)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,null)
+            findNavController().navigate(
+                R.id.action_FirstFragment_to_SecondFragment,
+                bundle,
+                null,
+                null
+            )
         }
         notificationIcon.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
@@ -97,6 +108,7 @@ var userId:String?=null
         footer_transition()
         subscribe_Login_User_details()
         subscribe_bids()
+        subscribe_swipe()
         return binding.root
 
     }
@@ -109,7 +121,8 @@ var userId:String?=null
                 Log.d("TAG@123", "onCardExitLeft")
                 if (dataObject is Bids) {
                     idUserConnected = (dataObject as Bids).id
-                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                    swipe_update(idUserConnected, "dislike")
                 }
             }
 
@@ -117,7 +130,8 @@ var userId:String?=null
                 Log.d("TAG@123", "onCardExitRight")
                 if (dataObject is Bids) {
                     idUserConnected = (dataObject as Bids).id
-                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                    swipe_update(idUserConnected, "like")
                 }
             }
 
@@ -133,10 +147,11 @@ var userId:String?=null
                 Log.d("TAG@123", "onCardExitTop")
                 if (dataObject is Bids) {
                     idUserConnected = (dataObject as Bids).id
-                   /* if(courseModalArrayList?.contains(dataObject) == true){
-                        courseModalArrayList?.remove(dataObject)
-                    }*/
-                    Log.d("TAG@123", "idUserConnected "+idUserConnected)
+                    /* if(courseModalArrayList?.contains(dataObject) == true){
+                         courseModalArrayList?.remove(dataObject)
+                     }*/
+                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                    swipe_update(idUserConnected, "superlike")
                 }
             }
 
@@ -147,8 +162,6 @@ var userId:String?=null
         })
 
     }
-
-
 
 
     fun play_animation() {
@@ -164,13 +177,11 @@ var userId:String?=null
     }
 
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
 
-        Log.d("TAG@123","on destroy called")
+        Log.d("TAG@123", "on destroy called")
     }
 
 
@@ -199,21 +210,23 @@ var userId:String?=null
     }
 
 
-    override fun onCategoryClick(position: Bids?, count: Int, extras: FragmentNavigator.Extras?, imageView: ImageView) {
+    override fun onCategoryClick(
+        position: Bids?,
+        count: Int,
+        extras: FragmentNavigator.Extras?,
+        imageView: ImageView
+    ) {
 
         when (count) {
-            1 ->{
+            1 -> {
                 val bundle = Bundle()
                 bundle.putString("user_id", position?.id)
-val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
-
+                val extrass = FragmentNavigatorExtras(imageView to position!!.upload_image)
                 val action = FirstFragmentDirections.actionFirstFragmentToReportUserFragment(
-
                     userImage = position.upload_image,
-                    userId=position.id
-
+                    userId = position.id
                 )
-                findNavController().navigate(action,extrass)
+                findNavController().navigate(action, extrass)
             }
             2 -> cardViewChanger?.throwRight()
             3 -> cardViewChanger?.throwTop()
@@ -221,18 +234,26 @@ val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
                 extras?.let {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
-                    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle,null,extras)
-                }?:run {
+                    findNavController().navigate(
+                        R.id.action_FirstFragment_to_SecondFragment,
+                        bundle,
+                        null,
+                        extras
+                    )
+                } ?: run {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
-                    findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment,bundle,null,null)
+                    findNavController().navigate(
+                        R.id.action_FirstFragment_to_SecondFragment,
+                        bundle,
+                        null,
+                        null
+                    )
 
                 }
             }
             5 -> cardViewChanger?.throwLeft()
             6 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-
-
         }
 
 
@@ -260,33 +281,21 @@ val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
         dialog.show()
     }
 
-    fun subscribe_bids(){
-        (activity as Home?)?.homeviewmodel?.user_bids?.observe(viewLifecycleOwner, Observer {
+    fun subscribe_swipe() {
+        (activity as Home?)?.homeviewmodel?.profile_swipe?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data.let { res ->
-
                         if (res?.status == true) {
                             try {
-                                Log.d("TAG@123","notifications_count  :"+ it.data?.notifications_count.toString())
-                                courseModalArrayList=it.data?.bids as ArrayList<Bids>
-                                pages=it.data.pages as ArrayList<Pages>
-                                notifications_count=it.data.notifications_count
-                                notifications_count.let {
-                                    tvCounter.setText(notifications_count)
-                                }
-                                adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
-                                cardViewChanger?.setAdapter(adapter)
-                                adapter.notifyDataSetChanged()
-
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
+                                Log.d("TAG@123", "Exception" + it.data?.message)
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception" + e.message.toString())
                             }
-                        }else{
-
+                        } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()
-
                         }
 
                     }
@@ -300,6 +309,50 @@ val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
         })
 
     }
+
+
+    fun subscribe_bids() {
+        (activity as Home?)?.homeviewmodel?.user_bids?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            try {
+                                Log.d(
+                                    "TAG@123",
+                                    "notifications_count  :" + it.data?.notifications_count.toString()
+                                )
+                                courseModalArrayList = it.data?.bids as ArrayList<Bids>
+                                pages = it.data.pages as ArrayList<Pages>
+                                notifications_count = it.data.notifications_count
+                                notifications_count.let {
+                                    tvCounter.setText(notifications_count)
+                                }
+                                adapter =
+                                    ProfileMatch(courseModalArrayList!!, requireActivity(), this)
+                                cardViewChanger?.setAdapter(adapter)
+                                adapter.notifyDataSetChanged()
+
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception" + e.message.toString())
+                            }
+                        } else {
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+    }
+
 
     fun subscribe_Login_User_details() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
@@ -350,6 +403,19 @@ val extrass= FragmentNavigatorExtras(imageView to position!!.upload_image)
         })
 
 
+    }
+
+
+    fun swipe_update(id: String, key: String) {
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "user_id",
+            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+        )
+        jsonObject.addProperty("profile_id", id)
+        jsonObject.addProperty(key, "yes")
+        Log.d("TAG@123", jsonObject.toString())
+        (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }
 
 

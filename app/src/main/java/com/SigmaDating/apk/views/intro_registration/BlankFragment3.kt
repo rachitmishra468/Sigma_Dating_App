@@ -1,12 +1,15 @@
 package com.SigmaDating.apk.views.intro_registration
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.hbb20.CountryCodePicker
@@ -15,6 +18,10 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.DateTextWatcher
 import com.SigmaDating.databinding.AboutBirthdayBinding
+import java.text.SimpleDateFormat
+import java.time.Year
+import java.util.*
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,14 +39,13 @@ class BlankFragment3 : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var button_birthday: Button
-    lateinit var editbirthday: EditText
+    lateinit var editbirthday: TextView
     private var ss: String? = null
     lateinit var email_id: EditText
     lateinit var country_spinner: CountryCodePicker
     lateinit var constraint_f1: ConstraintLayout
     lateinit var edit_text_phone: EditText
     private var binding: AboutBirthdayBinding? = null
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,9 +56,13 @@ class BlankFragment3 : Fragment() {
         country_spinner = binding!!.root.findViewById(R.id.ccp)
         email_id = binding!!.root.findViewById(R.id.edit_emal)
         constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
-        editbirthday = binding!!.root.findViewById<EditText>(R.id.edit_text_birthday)
+        editbirthday = binding!!.root.findViewById<TextView>(R.id.edit_text_birthday)
         edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)
-        editbirthday.addTextChangedListener(DateTextWatcher())
+
+        editbirthday.setOnClickListener {
+            date_picker()
+        }
+
         button_birthday.setOnClickListener {
 
             if (AppUtils.checkIfEmailIsValid(email_id.text.toString()) != null) {
@@ -131,5 +141,44 @@ class BlankFragment3 : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+
+
+    fun date_picker(){
+        // Get instance of calendar
+        // mCalendar will be set to current/today's date
+        val mCalendar = Calendar.getInstance()
+
+        // Creating a simple calendar dialog.
+        // It was 9 Aug 2021 when this program was developed.
+        val mDialog = DatePickerDialog(requireContext(), { _, mYear, mMonth, mDay ->
+            mCalendar[Calendar.YEAR] = mYear
+            mCalendar[Calendar.MONTH] = mMonth
+            mCalendar[Calendar.DAY_OF_MONTH] = mDay
+            //val myFormat = "dd/MM/yyyy"
+            val myFormat = "MM/dd/yyyy"
+            val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
+            editbirthday.text = sdf.format(mCalendar.time)
+
+        }, mCalendar[Calendar.YEAR], mCalendar[Calendar.MONTH], mCalendar[Calendar.DAY_OF_MONTH])
+
+        val minDay = 1
+        val minMonth = 1
+        val minYear = Calendar.getInstance().get(Calendar.YEAR)-30;
+        mCalendar.set(minYear, minMonth-1, minDay)
+        mDialog.datePicker.minDate = mCalendar.timeInMillis
+
+        // Changing mCalendar date from current to
+        // some random MAX day 20/08/2021 20 Aug 2021
+        val maxDay = 31
+        val maxMonth = 12
+        val maxYear = Calendar.getInstance().get(Calendar.YEAR)-18;
+        mCalendar.set(maxYear, maxMonth-1, maxDay)
+        mDialog.datePicker.maxDate = mCalendar.timeInMillis
+
+        // Display the calendar dialog
+        mDialog.show()
+
     }
 }
