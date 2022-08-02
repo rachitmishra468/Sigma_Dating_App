@@ -212,6 +212,11 @@
             />
 
         <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+        <action
             android:id="@+id/action_reportUserFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" >
         </action>

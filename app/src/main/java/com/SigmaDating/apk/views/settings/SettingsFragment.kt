@@ -42,6 +42,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import android.widget.RadioButton
+
+import androidx.annotation.IdRes
+
+import android.widget.RadioGroup
+
 
 class SettingsFragment : Fragment() {
 
@@ -55,12 +61,13 @@ class SettingsFragment : Fragment() {
     var location_text = ""
     var latitude = ""
     var longitude = ""
+    var interested_in = ""
 
 
     fun Call_links() {
         val bundle = Bundle()
         _binding.licencesText.setOnClickListener {
-           var link = Home.get_settingpage_data("licenses")
+            var link = Home.get_settingpage_data("licenses")
             link.let {
                 bundle.putString("Url_Link", link?.url)
                 bundle.putString("Hadder_text", link?.title)
@@ -154,6 +161,12 @@ class SettingsFragment : Fragment() {
             (activity as Home).onBackPressed()
         }
 
+        _binding.rg.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding.root.findViewById(checkedId) as RadioButton
+            interested_in = rb.text.toString()
+            Log.d("TAG@123", "interested_in  $interested_in")
+        }
+
         _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
             val values = rangeSlider.values
             Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
@@ -187,11 +200,25 @@ class SettingsFragment : Fragment() {
             jsonObject.addProperty("location", _binding.locationText.text.toString())
             jsonObject.addProperty("latitude", latitude)
             jsonObject.addProperty("longitude", longitude)
-            Log.d("TAG@123", "updateSetting :" + jsonObject.toString())
+            jsonObject.addProperty("interested_in", interested_in)
+            Log.d("TAG@123", "interested_in :" + jsonObject.toString())
             (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
         }
 
         _binding.continueLogout.setOnClickListener {
+            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.IS_AUTHENTICATED,
+                false
+            )
+            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.Disclaimer,
+                false
+            )
+            (activity as Home?)?.initializeGoogleSignIn()
+            startActivity(Intent(requireContext(), Splash::class.java))
+            (activity as Home?)?.finish()
+        }
+        _binding.continueDeleteAccount.setOnClickListener {
             (activity as Home?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.IS_AUTHENTICATED,
                 false
@@ -236,6 +263,7 @@ class SettingsFragment : Fragment() {
             Observer {
                 when (it.status) {
                     Status.SUCCESS -> {
+                        AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
                                 Log.d("TAG@123", "111 " + res.message)
@@ -249,10 +277,10 @@ class SettingsFragment : Fragment() {
                         }
                     }
                     Status.LOADING -> {
-
+                        AppUtils.showLoader(requireContext())
                     }
                     Status.ERROR -> {
-
+                        AppUtils.hideLoader()
                     }
                 }
             })
@@ -263,6 +291,7 @@ class SettingsFragment : Fragment() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
                             Log.d("TAG@123", "111 " + it.data.toString())
@@ -283,11 +312,32 @@ class SettingsFragment : Fragment() {
 
                             if (it.data?.user?.age_range?.isEmpty() == false) {
                                 _binding.textView8.setText(it.data.user.age_range)
-                                //  _binding.seekBarAge.setValues(1.0f,5.0f);
 
+                                try {
+                                    _binding.seekBarAge.setValues(
+                                        res.user.age_range.split("-").get(0).toFloat(),
+                                        res.user.age_range.split("-").get(1).toFloat()
+                                    )
+                                } catch (e: Exception) {
+                                    Log.d("TAG@123", "seekBarAge ${e.message}")
+                                }
                             }
 
+                            if (it.data?.user?.interested_in?.isEmpty() == false) {
+                                interested_in = it.data.user.interested_in
+                                when (interested_in) {
+                                    "Women" -> _binding.rbWomen.setChecked(true);
+                                    "Men" -> _binding.rbMen.setChecked(true);
+                                    "Other" -> _binding.rbMore.setChecked(true);
+                                }
+                            }
+
+                            // _binding.seekBarAge.setValues(20F, 25F)
+
                             if (it.data?.user?.distance?.isEmpty() == false) {
+                                if (it.data.user.distance.toFloat() > 10) {
+                                    _binding.seekBar.setValues(10F, it.data.user.distance.toFloat())
+                                }
                                 _binding.textView11.setText(it.data.user.distance + " miles")
                             }
 
@@ -299,10 +349,10 @@ class SettingsFragment : Fragment() {
                     }
                 }
                 Status.LOADING -> {
-
+                    AppUtils.showLoader(requireContext())
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })

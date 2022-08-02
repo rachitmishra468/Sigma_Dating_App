@@ -180,9 +180,11 @@ class HomeViewModel @Inject constructor(
         about: String
     ) {
         val one = async { update_profile(id, university, community, interests, about) }
-        val two = async { get_Login_User_details(id) }
+       // val two = async { get_Login_User_details(id) }
+
 
     }
+
 
 
     fun User_upload_images(id: String, img: String) = viewModelScope.launch {
@@ -242,7 +244,6 @@ class HomeViewModel @Inject constructor(
     ) = viewModelScope.launch {
         update_profile.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
-
         jsonObject.addProperty("user_id", id)
         jsonObject.addProperty("university", university)
         jsonObject.addProperty("community", community)
@@ -253,6 +254,7 @@ class HomeViewModel @Inject constructor(
         mainRepository.Update_profile(jsonObject).let {
             if (it.isSuccessful) {
                 update_profile.postValue(Resource.success(it.body()))
+                get_Login_User_details(id)
             } else {
                 update_profile.postValue(Resource.error(it.errorBody().toString(), null))
             }

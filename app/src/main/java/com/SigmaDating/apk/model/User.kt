@@ -19,6 +19,7 @@ data class User(
     val distance:String,
     val latitude:String,
     val longitude:String,
+    val interested_in:String,
     var photos:ArrayList<String> = arrayListOf()
 
 

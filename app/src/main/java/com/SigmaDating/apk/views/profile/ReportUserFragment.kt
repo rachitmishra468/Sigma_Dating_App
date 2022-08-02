@@ -61,6 +61,7 @@ class ReportUserFragment : Fragment() {
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
+    lateinit var tvCounter:TextView
     private val args: ReportUserFragmentArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,14 +84,39 @@ class ReportUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // var view= inflater.inflate(R.layout.fragment_report_user, container, false)
         _binding = FragmentReportUserBinding.inflate(inflater, container, false)
         edit_profile = _binding!!.root.findViewById(R.id.edit_profile)
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
+        tvCounter= _binding!!.root.findViewById(R.id.tvCounter)
         //_binding.
         footer_transition()
         edit_profile.setOnClickListener {
             (activity as Home).onBackPressed()
+        }
+        _binding!!.cancelReportfb.setOnClickListener {
+            (activity as Home).onBackPressed()
+        }
+        _binding!!.superLikeRf.setOnClickListener {
+            (activity as Home).onBackPressed()
+        }
+        _binding!!.starRf.setOnClickListener {
+            (activity as Home).onBackPressed()
+        }
+
+        Home.notifications_count.let {
+            tvCounter.setText(Home.notifications_count)
+        }
+
+        userID = getArguments()?.getString("user_id")
+        _binding!!.grideReportFg.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("user_id",userID)
+            findNavController().navigate(
+                R.id.action_FirstFragment_to_SecondFragment,
+                bundle,
+                null,
+                null
+            )
         }
         userID = getArguments()?.getString("user_id")
         if (userID == null) {
@@ -149,19 +175,7 @@ class ReportUserFragment : Fragment() {
                                 val interest = res.user.interests.split(",").toTypedArray()
                                 val dd = interest.toList()
 
-                                // setAdapterData()
                                 setupChipGroupDynamically(dd)
-
-                                /* it.data?.user?.upload_image?.let {
-                                     Glide.with(AppReseources.getAppContext()!!).load(it)
-                                         .error(R.drawable.profile_img)
-                                         .into(_binding!!.logoDetail);
-                                 }*/
-                                //dataListuser.clear()
-                                /* if (!res.user.photos.isNullOrEmpty()) {
-                                     dataListuser = res.user.photos
-                                 }*/
-                                //     setAdapterListData(dataListuser as ArrayList<String>)
                             } else {
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                     .show()

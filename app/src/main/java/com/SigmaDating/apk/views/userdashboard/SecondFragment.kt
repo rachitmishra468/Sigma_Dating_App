@@ -23,6 +23,7 @@ import com.SigmaDating.apk.adapters.Profile_Adapter
 import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentSecondBinding
 import com.bumptech.glide.Glide
@@ -149,6 +150,7 @@ class SecondFragment : Fragment() {
         (activity as Home?)?.homeviewmodel?.get_secound_feb_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
                             Log.d("TAG@123", "111 " + it.data?.user.toString())
@@ -176,11 +178,11 @@ class SecondFragment : Fragment() {
                 }
                 Status.LOADING -> {
 
-
+                    AppUtils.showLoader(requireContext())
                     Log.d("TAG@123", "LOADING is null")
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })
