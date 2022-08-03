@@ -44,7 +44,7 @@ enum class PasswordStrength private constructor(internal var resId: Int, color: 
 
         //This value determines if the password should require upper case. Set it as "false" if you
         //do not require upper cases for your password field.
-        internal var REQUIRE_UPPER_CASE = false
+        internal var REQUIRE_UPPER_CASE = true
 
         fun calculateStrength(password: String): PasswordStrength {
             var currentScore = 0

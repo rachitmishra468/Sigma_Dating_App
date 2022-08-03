@@ -274,9 +274,8 @@ class Login_Activity : AppCompatActivity() {
     }
 
     fun sign_up(view: View) {
-
         startActivity(Intent(this, OnBoardingActivity::class.java))
-        finish()
+       // finish()
 
     }
 

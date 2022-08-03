@@ -21,6 +21,8 @@ class MainRepository @Inject constructor(
     suspend fun get_setting_update_details(jsonObject: JsonObject) = apiHelper.get_setting_update_details(jsonObject)
     suspend fun get_login_user_data(jsonObject: JsonObject) = apiHelper.get_login_user_data(jsonObject)
     suspend fun change_password(jsonObject: JsonObject)=apiHelper.change_password(jsonObject)
+    suspend fun User_delete_account(jsonObject: JsonObject)=apiHelper.User_delete_account(jsonObject)
+
     suspend fun upload_images(jsonObject: JsonObject)=apiHelper.upload_images(jsonObject)
     suspend fun delete_images(jsonObject: JsonObject)=apiHelper.delete_images(jsonObject)
     suspend fun Update_profile(jsonObject: JsonObject)=apiHelper.Update_profile(jsonObject)

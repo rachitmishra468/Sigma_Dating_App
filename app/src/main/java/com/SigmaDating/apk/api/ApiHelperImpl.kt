@@ -51,6 +51,10 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun change_password(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.change_password(jsonObject)
 
+    override suspend fun User_delete_account(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.User_delete_account(jsonObject)
+
+
     override suspend fun delete_images(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.delete_images(jsonObject)
 

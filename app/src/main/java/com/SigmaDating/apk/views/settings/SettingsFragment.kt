@@ -47,6 +47,7 @@ import android.widget.RadioButton
 import androidx.annotation.IdRes
 
 import android.widget.RadioGroup
+import retrofit2.http.DELETE
 
 
 class SettingsFragment : Fragment() {
@@ -149,7 +150,7 @@ class SettingsFragment : Fragment() {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         Call_links()
         _binding.passwordUpdate.setOnClickListener {
-            Update_password();
+            Update_password(false);
         }
         _binding.phoneNumberText.setOnClickListener {
             Update_phone_location(true);
@@ -168,12 +169,9 @@ class SettingsFragment : Fragment() {
         }
 
         _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
-            val values = rangeSlider.values
-            Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
             Log.d("TAG@123", value.toString())
             //  _binding.textView11.text = "${values[0].toInt()}-${values[1].toInt()} miles"
-            _binding.textView11.text = "${value.toString()} miles"
-
+            _binding.textView11.text = "$value miles"
             distance = value.toString()
         }
 
@@ -218,18 +216,10 @@ class SettingsFragment : Fragment() {
             startActivity(Intent(requireContext(), Splash::class.java))
             (activity as Home?)?.finish()
         }
+
+
         _binding.continueDeleteAccount.setOnClickListener {
-            (activity as Home?)?.sharedPreferencesStorage?.setValue(
-                AppConstants.IS_AUTHENTICATED,
-                false
-            )
-            (activity as Home?)?.sharedPreferencesStorage?.setValue(
-                AppConstants.Disclaimer,
-                false
-            )
-            (activity as Home?)?.initializeGoogleSignIn()
-            startActivity(Intent(requireContext(), Splash::class.java))
-            (activity as Home?)?.finish()
+            Update_password(true);
         }
         subscribe_Login_User_details()
 
@@ -335,8 +325,8 @@ class SettingsFragment : Fragment() {
                             // _binding.seekBarAge.setValues(20F, 25F)
 
                             if (it.data?.user?.distance?.isEmpty() == false) {
-                                if (it.data.user.distance.toFloat() > 10) {
-                                    _binding.seekBar.setValues(10F, it.data.user.distance.toFloat())
+                                if (it.data.user.distance.toFloat() > 25) {
+                                    _binding.seekBar.setValue(it.data.user.distance.toFloat())
                                 }
                                 _binding.textView11.setText(it.data.user.distance + " miles")
                             }
@@ -353,6 +343,58 @@ class SettingsFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     AppUtils.hideLoader()
+                }
+            }
+        })
+    }
+
+    fun subscribe_delete_account(dialog: BottomSheetDialog) {
+        (activity as Home?)?.homeviewmodel?.change_password?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            dialog.dismiss()
+                            AppUtils.hideLoader()
+                            Log.d("TAG@123", "112" + res.toString())
+                            res.message.let {
+                                Toast.makeText(
+                                    requireContext(),
+                                    it,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                                AppConstants.IS_AUTHENTICATED,
+                                false
+                            )
+                            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                                AppConstants.Disclaimer,
+                                false
+                            )
+                            (activity as Home?)?.initializeGoogleSignIn()
+                            startActivity(Intent(requireContext(), Splash::class.java))
+                            (activity as Home?)?.finish()
+
+                        } else {
+                            res!!.message.let {
+                                Toast.makeText(
+                                    requireContext(),
+                                    it,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
+                }
+                Status.ERROR -> {
+
                 }
             }
         })
@@ -397,18 +439,52 @@ class SettingsFragment : Fragment() {
         })
     }
 
-    fun Update_password() {
+
+
+
+    fun Update_password(delete: Boolean) {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.update_password_sheet_dialog, null)
-
         val current_password = view.findViewById<EditText>(R.id.current_password)
+        val textView=view.findViewById<TextView>(R.id.textView5)
         val editText_password = view.findViewById<EditText>(R.id.editText_password)
         val editText_password_confirm = view.findViewById<EditText>(R.id.editText_password_confirm)
-
         val btnClose = view.findViewById<Button>(R.id.create_password)
+        val hint= view.findViewById<TextView>(R.id.hint)
+        if (delete) {
+            hint.setText("")
+            textView.setText("Delete Account")
+            btnClose.setText("Confirm")
+            editText_password.visibility=View.GONE
+            editText_password_confirm.hint="Enter Password"
+        } 
+
+
+
 
         btnClose.setOnClickListener {
+            if (delete) {
+                if (AppUtils.isValid_password(editText_password_confirm.text.toString(),)
+                ) {
 
+                    if (AppUtils.isValid_password(editText_password_confirm.text.toString())) {
+                        subscribe_delete_account(dialog)
+                        (activity as Home).homeviewmodel.User_delete_account(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+                            editText_password_confirm.text.toString(),
+                        )
+                    } else {
+                        editText_password_confirm.setError("Please Enter Valid Password")
+                    }
+
+                } else {
+
+                    Toast.makeText(context, "Please Enter Valid Password", Toast.LENGTH_SHORT).show()
+                }
+                
+                
+            }
+            else{
             if (AppUtils.isValid_password_match(
                     editText_password.text.toString(),
                     editText_password_confirm.text.toString()
@@ -430,7 +506,7 @@ class SettingsFragment : Fragment() {
 
                 Toast.makeText(context, "Password Does Not Match", Toast.LENGTH_SHORT).show()
             }
-        }
+        }}
         dialog.setCancelable(true)
         dialog.setContentView(view)
         dialog.show()

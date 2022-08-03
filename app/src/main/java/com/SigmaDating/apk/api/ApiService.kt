@@ -23,7 +23,6 @@ interface ApiService {
     @POST("users/forgotpassword")
     suspend fun forgotpass(@Body jsonObject: JsonObject): Response<Forgotpassword>
 
-
     @POST("twilio/sendotp")
     suspend fun user_login_phone(@Body jsonObject: JsonObject): Response<Loginmodel>
 
@@ -36,16 +35,17 @@ interface ApiService {
     @POST("users/changepass")
     suspend fun change_password(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+    @POST("users/deleteaccount")
+    suspend fun User_delete_account(@Body jsonObject: JsonObject): Response<Loginmodel>
+
     @GET("common/listschoolscommunity")
     suspend fun listSchoolFeternity(): Response<SchoolCommunityResponse>
 
     @GET("common/{id}")
     suspend fun get_user_bids(@Path("id") id: String): Response<home_model>
 
-
     @POST("users/uploadphoto")
     suspend fun upload_images(@Body jsonObject: JsonObject): Response<Loginmodel>
-
 
     @POST("users/deletephoto")
     suspend fun delete_images(@Body jsonObject: JsonObject): Response<Loginmodel>
@@ -55,7 +55,6 @@ interface ApiService {
 
     @POST("users/editprofile")
     suspend fun Update_profile(@Body jsonObject: JsonObject): Response<Loginmodel>
-
 
     @POST("dating/doswipe")
     suspend fun get_profile_swipe_details(@Body jsonObject: JsonObject): Response<Loginmodel>

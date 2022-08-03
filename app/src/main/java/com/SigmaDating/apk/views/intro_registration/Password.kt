@@ -63,25 +63,25 @@ class Password : Fragment() , TextWatcher {
         create_password?.setOnClickListener {
 
             if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                editText_password.error = "Password Length Must be of 6-8"
+                editText_password.error = "Password Length Must be of 8-15"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
-                    "Password Length Must be of 6-8"
+                    "Password Length Must be of 8-15"
                 )
             } else if (!AppUtils.isValid_password(editText_password_confirm.text.toString())) {
-                editText_password_confirm.error = "Password Length Must be of 6-8"
+                editText_password_confirm.error = "Password Length Must be of 8-15"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
-                    "Password Length Must be of 6-8"
+                    "Password Length Must be of 8-15"
                 )
             }else if (!editText_password_confirm.text.toString().equals(editText_password.text.toString())) {
-                editText_password_confirm.error = "Password does not Match"
+                editText_password_confirm.error = "Password Does Not Match"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
-                    "Password does not Match"
+                    "Password Does Not Match"
                 )
             } else {
                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(

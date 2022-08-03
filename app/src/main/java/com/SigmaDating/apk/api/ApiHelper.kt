@@ -22,6 +22,7 @@ interface ApiHelper {
 
     suspend fun get_login_user_data(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun change_password(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun User_delete_account(jsonObject: JsonObject):Response<Loginmodel>
 
     suspend fun getSchoolFeternityList():Response<SchoolCommunityResponse>
 

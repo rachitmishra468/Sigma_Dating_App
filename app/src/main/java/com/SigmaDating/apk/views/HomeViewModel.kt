@@ -146,6 +146,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun User_delete_account(id: String, password: String) =
+        viewModelScope.launch {
+            change_password.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("id", id)
+            jsonObject.addProperty("password", password)
+            Log.d("TAG@123", "-- " + jsonObject.toString())
+            mainRepository.User_delete_account(jsonObject).let {
+                if (it.isSuccessful) {
+                    change_password.postValue(Resource.success(it.body()))
+                } else {
+                    change_password.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+
+
 
     fun User_change_password(id: String, password: String, password_confirm: String) =
         viewModelScope.launch {
