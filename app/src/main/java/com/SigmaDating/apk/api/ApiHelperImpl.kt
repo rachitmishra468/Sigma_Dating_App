@@ -63,6 +63,11 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun get_user_bids(id: String): Response<home_model> =
         apiService.get_user_bids(id)
+
+    override suspend fun report_user(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.report_user(jsonObject)
+    override suspend fun block_user(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.block_user(jsonObject)
     //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
 
 

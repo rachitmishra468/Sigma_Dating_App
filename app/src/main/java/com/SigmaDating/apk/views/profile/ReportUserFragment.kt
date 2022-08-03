@@ -22,6 +22,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.apk.adapters.UserReportInterestAdapter
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentReportUserBinding
 import com.bumptech.glide.Glide
@@ -30,6 +31,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.demoapp.other.Status
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,8 +63,12 @@ class ReportUserFragment : Fragment() {
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
-    lateinit var tvCounter:TextView
+    lateinit var tv_report_to_user: TextView
+    lateinit var tv_block: TextView
+
+    lateinit var tvCounter: TextView
     private val args: ReportUserFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -87,9 +93,12 @@ class ReportUserFragment : Fragment() {
         _binding = FragmentReportUserBinding.inflate(inflater, container, false)
         edit_profile = _binding!!.root.findViewById(R.id.edit_profile)
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
-        tvCounter= _binding!!.root.findViewById(R.id.tvCounter)
+        tvCounter = _binding!!.root.findViewById(R.id.tvCounter)
+        tv_report_to_user = _binding!!.root.findViewById(R.id.tv_report_to_user)
+        tv_block = _binding!!.root.findViewById(R.id.tv_block)
         //_binding.
         footer_transition()
+
         edit_profile.setOnClickListener {
             (activity as Home).onBackPressed()
         }
@@ -110,7 +119,7 @@ class ReportUserFragment : Fragment() {
         userID = getArguments()?.getString("user_id")
         _binding!!.grideReportFg.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("user_id",userID)
+            bundle.putString("user_id", userID)
             findNavController().navigate(
                 R.id.action_FirstFragment_to_SecondFragment,
                 bundle,
@@ -118,6 +127,7 @@ class ReportUserFragment : Fragment() {
                 null
             )
         }
+
         userID = getArguments()?.getString("user_id")
         if (userID == null) {
             userID = (activity as Home).sharedPreferencesStorage.getString(
@@ -130,9 +140,50 @@ class ReportUserFragment : Fragment() {
             )
         }
 
+        tv_report_to_user.setOnClickListener {
+            subscribe_report_block_user()
+            val jsonObject = JsonObject()
+            Log.d(
+                "TAG@123",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty(
+                "user_id",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty("profile_id", userID)
+            jsonObject.addProperty("reason", "")
+            Log.d(
+                "TAG@123",
+                jsonObject.toString()
+            )
+            (activity as Home).homeviewmodel.report_user(jsonObject)
+        }
+        tv_block.setOnClickListener {
+            subscribe_report_block_user()
+            val jsonObject = JsonObject()
+            Log.d(
+                "TAG@123",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty(
+                "user_id",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty("profile_id", userID)
+            Log.d(
+                "TAG@123",
+                jsonObject.toString()
+            )
+            (activity as Home).homeviewmodel.block_user(jsonObject)
+        }
+
+
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
             subscribe_User_details()
+
+
         }
         return _binding!!.root
     }
@@ -155,6 +206,7 @@ class ReportUserFragment : Fragment() {
 
     }
 
+
     fun subscribe_User_details() {
         (activity as Home?)?.homeviewmodel?.get_secound_feb_data?.observe(
             viewLifecycleOwner,
@@ -171,7 +223,7 @@ class ReportUserFragment : Fragment() {
                                     it.tvLocation.setText(res?.user.location)
                                 }
                                 interestsList = ArrayList<String>()
-                              //  interestsList = res.user.interests.split(",") as ArrayList<String>
+                                //  interestsList = res.user.interests.split(",") as ArrayList<String>
                                 val interest = res.user.interests.split(",").toTypedArray()
                                 val dd = interest.toList()
 
@@ -189,6 +241,34 @@ class ReportUserFragment : Fragment() {
                     }
                     Status.ERROR -> {
 
+                    }
+                }
+            })
+    }
+
+
+    fun subscribe_report_block_user() {
+        (activity as Home?)?.homeviewmodel?.report_block_user?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                Toast.makeText(requireContext(), ""+res.message, Toast.LENGTH_LONG).show()
+                                (activity as Home).onBackPressed()
+                            } else {
+                                Toast.makeText(requireContext(), ""+res!!.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                        Log.d("TAG@123", "LOADING is null")
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
                     }
                 }
             })
@@ -218,15 +298,15 @@ class ReportUserFragment : Fragment() {
         chip.isCheckable = false
         chip.isClickable = true
 
-       /* chip.isChecked = interestsList.contains(label)
-        chip.setBackgroundColor(
-            if (interestsList.contains(label)) {
-                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
-            } else {
-                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
-            }
-        )
-        chip.chipCornerRadius = 1.0F*/
+        /* chip.isChecked = interestsList.contains(label)
+         chip.setBackgroundColor(
+             if (interestsList.contains(label)) {
+                 ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
+             } else {
+                 ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
+             }
+         )
+         chip.chipCornerRadius = 1.0F*/
 
         return chip
 
@@ -276,7 +356,7 @@ class ReportUserFragment : Fragment() {
         }
 
         match_list.setOnClickListener {
-             findNavController().navigate(R.id.action_reportUserFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_reportUserFragment_to_SecondFragment)
         }
         sigma_list.setOnClickListener {
             findNavController().navigate(R.id.action_reportUserFragment_to_FirstFragment)

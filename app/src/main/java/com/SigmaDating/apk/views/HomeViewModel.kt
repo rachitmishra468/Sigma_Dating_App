@@ -22,6 +22,8 @@ class HomeViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferencesStorage
 ) : ViewModel() {
 
+
+    val report_block_user: MutableLiveData<Resource<Loginmodel>>
     val setting_update_details: MutableLiveData<Resource<Loginmodel>>
     val profile_swipe: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
@@ -35,6 +37,7 @@ class HomeViewModel @Inject constructor(
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
+        report_block_user=MutableLiveData<Resource<Loginmodel>>()
         profile_swipe=MutableLiveData<Resource<Loginmodel>>()
         get_UserReportdata=MutableLiveData<Resource<Loginmodel>>()
         setting_update_details= MutableLiveData<Resource<Loginmodel>>()
@@ -53,6 +56,28 @@ class HomeViewModel @Inject constructor(
         val two = async { get_Login_User_bids(id) }
     }
 
+
+    fun report_user(jsonObject:JsonObject) = viewModelScope.launch {
+        report_block_user.postValue(Resource.loading(null))
+        mainRepository.report_user(jsonObject).let {
+            if (it.isSuccessful) {
+                report_block_user.postValue(Resource.success(it.body()))
+            } else {
+                report_block_user.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun block_user(jsonObject:JsonObject) = viewModelScope.launch {
+        report_block_user.postValue(Resource.loading(null))
+        mainRepository.block_user(jsonObject).let {
+            if (it.isSuccessful) {
+                report_block_user.postValue(Resource.success(it.body()))
+            } else {
+                report_block_user.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
 
 
     fun profile_swipe_details(jsonObject:JsonObject) = viewModelScope.launch {

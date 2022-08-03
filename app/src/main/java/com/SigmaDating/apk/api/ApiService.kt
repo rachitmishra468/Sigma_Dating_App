@@ -50,6 +50,12 @@ interface ApiService {
     @POST("users/deletephoto")
     suspend fun delete_images(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+    @POST("dating/reportuser")
+    suspend fun report_user(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("dating/blockuser")
+    suspend fun block_user(@Body jsonObject: JsonObject): Response<Loginmodel>
+
     @POST("users/editsettings")
     suspend fun get_setting_update_details(@Body jsonObject: JsonObject): Response<Loginmodel>
 
