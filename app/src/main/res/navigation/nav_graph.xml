@@ -58,6 +58,10 @@
         <action
             android:id="@+id/action_FirstFragment_to_notification"
             app:destination="@id/all_Activitys" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_Full_Screen_Fragment"
+            app:destination="@id/fullScreenImageFragment" />
     </fragment>
 
 
@@ -241,6 +245,19 @@
         android:name="com.SigmaDating.apk.views.settings.ContactUs"
         android:label="ContactUs"
         tools:layout="@layout/fragment_contact_us"/>
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="com.SigmaDating.apk.views.userdashboard.FullScreenImageFragment"
+        android:label="fragment_full_screen_image"
+        tools:layout="@layout/fragment_full_screen_image" >
+
+        <argument
+            android:name="full_image"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+
+    </fragment>
 
 
 </navigation>

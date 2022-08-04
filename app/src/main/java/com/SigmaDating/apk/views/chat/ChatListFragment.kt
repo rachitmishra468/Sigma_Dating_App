@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.apk.adapters.ChatList_Adapter
 import com.SigmaDating.apk.model.EditProfiledata
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.databinding.FragmentChatListBinding
 import com.google.android.gms.common.data.DataHolder
 
@@ -140,6 +141,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
 
         chatIcon.setOnClickListener {
+            AppUtils.animateImageview(chatIcon)
             // findNavController().navigate(R.id.action_FirstFragment_to_chat)
         }
 

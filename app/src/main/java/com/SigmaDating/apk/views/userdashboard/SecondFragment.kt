@@ -60,6 +60,7 @@ class SecondFragment : Fragment() {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         footer_transition()
         _binding?.editProfile?.setOnClickListener {
+
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
         _binding?.settingIcon?.setOnClickListener {
@@ -209,6 +210,7 @@ class SecondFragment : Fragment() {
         }
 
         match_list.setOnClickListener {
+            AppUtils.animateImageview(match_list)
             // findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
         sigma_list.setOnClickListener {

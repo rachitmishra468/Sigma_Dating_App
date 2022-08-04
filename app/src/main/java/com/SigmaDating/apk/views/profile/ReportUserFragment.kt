@@ -8,10 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -63,8 +60,8 @@ class ReportUserFragment : Fragment() {
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
-    lateinit var tv_report_to_user: TextView
-    lateinit var tv_block: TextView
+    lateinit var tv_report_to_user: Button
+    lateinit var tv_block: Button
 
     lateinit var tvCounter: TextView
     private val args: ReportUserFragmentArgs by navArgs()
