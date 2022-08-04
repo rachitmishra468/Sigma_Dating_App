@@ -4,6 +4,7 @@
     <string name="email_text">Email</string>
     <string name="fraternity_text">Fraternity</string>
     <string name="sorority_text">Sorority</string>
+    <string name="independent_text">Independent</string>
     <string name="sign_in">SIGN IN</string>
     <string name="email_error">Invalid email address</string>
     <string name="phone_text">Phone Number</string>
@@ -43,18 +44,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="internetdisconnect">internet not connected</string>
-
-
     <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
-
-
     <string name="facebook_app_id">833040661414380</string>
     <string name="fb_login_protocol_scheme">fb833040661414380</string>
     <string name="facebook_client_token">45b0c477021194b4b5d95bde259fcc58</string>
-
     <string name="term_and_condition">I agree with the <u>Terms and Conditions</u> <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
-    <!--856275008761-pr04ias0a1j3pqo9gataltbneq1savj9.apps.googleusercontent.com-->
-
     <string name="password_strength_weak">Your Password is Weak</string>
     <string name="password_strength_medium">Your Password is Medium</string>
     <string name="password_strength_strong">Your Password is Strong</string>

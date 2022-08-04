@@ -9,4 +9,9 @@
         <item>10.0</item>
         <item>80.0</item>
     </array>
+
+    <string-array name="Country_code">
+        <item>+1 USA</item>
+        <item>+91 India</item>
+    </string-array>
 </resources>

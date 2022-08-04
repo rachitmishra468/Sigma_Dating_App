@@ -5,11 +5,16 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -25,6 +30,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.airbnb.lottie.LottieAnimationView
+import com.example.demoapp.other.Constants
 import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormat
 import java.text.ParseException
@@ -57,7 +63,7 @@ object AppUtils {
         dialog?.getWindow()?.setDimAmount(0f);
         dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
         dialog = builder.create()
-        (dialog as AlertDialog?)?.setCancelable(false)
+        (dialog as AlertDialog?)?.setCancelable(true)
         val groupcreate: LottieAnimationView =
             view.findViewById<View>(R.id.email) as LottieAnimationView
         groupcreate.setAnimation(R.raw.loader)
@@ -377,6 +383,27 @@ object AppUtils {
             age--
         }
         return age
+    }
+
+
+     fun customTextView(view: TextView,context: Context) {
+        val spanTxt = SpannableStringBuilder(
+            "I agree with the "
+        )
+        spanTxt.append("Terms and Conditions")
+        spanTxt.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                try {
+                    val i = Intent(Intent.ACTION_VIEW)
+                    i.data = Uri.parse(Constants.terms_con)
+                    context.startActivity(i)
+
+                } catch (e: Exception) {
+                }
+            }
+        }, spanTxt.length - "Terms and Conditions".length, spanTxt.length, 0)
+        view.movementMethod = LinkMovementMethod.getInstance()
+        view.setText(spanTxt, TextView.BufferType.SPANNABLE)
     }
 
 

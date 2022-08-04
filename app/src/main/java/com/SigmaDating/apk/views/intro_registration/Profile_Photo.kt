@@ -8,6 +8,7 @@ import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -41,6 +42,16 @@ import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import android.widget.TextView.BufferType
+
+import android.widget.Toast
+
+import android.text.style.ForegroundColorSpan
+
+import android.text.SpannableStringBuilder
+
+import android.widget.TextView
+import com.example.demoapp.other.Constants
 
 
 private const val ARG_PARAM1 = "param1"
@@ -157,19 +168,7 @@ class Profile_Photo : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val ss = SpannableString(resources.getString(R.string.term_and_condition))
-        val span2: ClickableSpan = object : ClickableSpan() {
-            override fun onClick(textView: View) {
-                // term n conditions links opens
-                Log.d("TAG@123","clicked")
-            }
-        }
-        //ss.setSpan(span1, 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(span2, 18, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        text_termncon?.let {
-            it.text = ss
-            it.movementMethod = LinkMovementMethod.getInstance()
-        }
+        text_termncon?.let { AppUtils.customTextView(it,requireContext()) }
 
     }
 
@@ -375,4 +374,6 @@ class Profile_Photo : Fragment() {
                 }
             })
     }
+
+
 }

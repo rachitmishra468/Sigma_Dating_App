@@ -458,10 +458,6 @@ class SettingsFragment : Fragment() {
             editText_password.visibility=View.GONE
             editText_password_confirm.hint="Enter Password"
         } 
-
-
-
-
         btnClose.setOnClickListener {
             if (delete) {
                 if (AppUtils.isValid_password(editText_password_confirm.text.toString(),)

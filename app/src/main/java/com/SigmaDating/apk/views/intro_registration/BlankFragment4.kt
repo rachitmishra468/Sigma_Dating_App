@@ -37,6 +37,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
     private var continueSchool: Button? = null
     private var Socority_button: Button? = null
     private var fraternity_button: Button? = null
+    private var independent:Button?=null
     lateinit var fraternity_Spinner: EditText
     private var schoolAct_spinner: EditText? = null
     var fraternitiesList: List<UniversityList>? = null
@@ -58,6 +59,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         schoolAct_spinner = about_school_binding?.root?.findViewById(R.id.schoolAct_spinner)
         fraternity_Spinner = about_school_binding?.root?.findViewById(R.id.et_type)!!
         Socority_button = about_school_binding?.root?.findViewById(R.id.Socority_button)
+        independent= about_school_binding?.root?.findViewById(R.id.independent)
         fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)
         fraternity_button!!.isSelected=true
         fraternity_button!!.hint="Select Fraternity"
@@ -66,7 +68,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = schoolListCopy
-                openSchoolSearchDialog(AppConstants.School)
+                openSchoolSearchDialog(AppConstants.School,"School / University")
                 true
             } else false
         }
@@ -75,24 +77,32 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
-                openSchoolSearchDialog(AppConstants.Fraternity)
+                openSchoolSearchDialog(AppConstants.Fraternity, "Fraternity / Sorority ")
                 true
             } else false
         }
 
 
         continueSchool?.setOnClickListener {
-            schoolAct_spinner.let {
-                if (it!!.text.isEmpty() or it.text.equals("")) {
+
+                if (schoolAct_spinner!!.text.isEmpty()) {
                     Toast.makeText(
                         requireActivity(),
-                        "Select School/University Name",
+                        "Select School/University",
                         Toast.LENGTH_LONG
-                    )
-                } else {
+                    ).show()
+                }
+                else if(fraternity_Spinner!!.text.isEmpty()){
+                    Toast.makeText(
+                        requireActivity(),
+                        "Select Fraternity/Sorority ",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }else {
                     (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
                 }
-            }
+
         }
 
 
@@ -109,7 +119,9 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                // schoolAct_spinner!!.isSelected=false
                 //fraternity_button!!.isSelected=true
 
-
+            fraternity_Spinner.visibility=View.VISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.white))
 
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
@@ -130,6 +142,10 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                 fraternity_Spinner.setText("Select Sorority")
             }
 
+            fraternity_Spinner.visibility=View.VISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.white))
+
             fraternity_Spinner?.hint = "Select Sorority"
             Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
@@ -140,16 +156,33 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)
         }
 
+        independent?.setOnClickListener {
+
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.community,
+                "Independent"
+            )
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+            fraternity_Spinner.visibility=View.INVISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.black))
+        }
+
 
         return about_school_binding?.root
     }
 
 
-    fun openSchoolSearchDialog(stringtype: String) {
+    fun openSchoolSearchDialog(stringtype: String, title :String) {
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
         searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
+        var title_layout=dialog.findViewById<TextView>(R.id.title_layout)
+        title_layout.text=title
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),

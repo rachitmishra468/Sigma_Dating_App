@@ -26,7 +26,6 @@
         app:layout_constraintEnd_toEndOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
-
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -86,13 +85,13 @@
             android:layout_width="0dp"
             style="@style/QText"
             android:layout_height="40dp"
-            android:layout_weight=".5"
+            android:layout_weight=".33"
             android:background="@drawable/white_radius_bg"
             android:text="@string/fraternity_text"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
 
 
         <Button
@@ -101,13 +100,28 @@
             style="@style/QText"
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
-            android:layout_weight=".5"
+            android:layout_weight=".33"
             android:background="@drawable/gray_circle_radius_bg"
             android:text="@string/sorority_text"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
+
+
+        <Button
+            android:id="@+id/independent"
+            android:layout_width="0dp"
+            style="@style/QText"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:layout_weight=".33"
+            android:background="@drawable/gray_circle_radius_bg"
+            android:text="@string/independent_text"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
     </LinearLayout>
 
 
@@ -124,8 +138,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="30dp" />
-
-
 
     <EditText
         android:id="@+id/et_type"

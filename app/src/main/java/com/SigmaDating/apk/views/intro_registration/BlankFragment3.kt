@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.hbb20.CountryCodePicker
 import com.SigmaDating.R
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
@@ -42,7 +39,7 @@ class BlankFragment3 : Fragment() {
     lateinit var editbirthday: TextView
     private var ss: String? = null
     lateinit var email_id: EditText
-    lateinit var country_spinner: CountryCodePicker
+    lateinit var country_spinner: Spinner
     lateinit var constraint_f1: ConstraintLayout
     lateinit var edit_text_phone: EditText
     private var binding: AboutBirthdayBinding? = null
@@ -58,6 +55,19 @@ class BlankFragment3 : Fragment() {
         constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
         editbirthday = binding!!.root.findViewById<TextView>(R.id.edit_text_birthday)
         edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)
+
+        val Country_code = resources.getStringArray(R.array.Country_code)
+
+        // access the spinner
+        if (country_spinner != null) {
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item, Country_code
+            )
+            country_spinner.adapter = adapter
+        }
+
+
 
         editbirthday.setOnClickListener {
             date_picker()
@@ -102,8 +112,7 @@ class BlankFragment3 : Fragment() {
 
 
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.phone,
-                        country_spinner.selectedCountryCodeWithPlus + "" + edit_text_phone.text.toString()
+                        AppConstants.phone, "+1" + edit_text_phone.text.toString()
                     )
 
                     val
@@ -123,16 +132,6 @@ class BlankFragment3 : Fragment() {
     }
 
 
-    fun onCountryPickerClick_fag(view: View?) {
-        country_spinner.setOnCountryChangeListener(CountryCodePicker.OnCountryChangeListener {
-            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                AppConstants.USER_COUNTRY_CODE,
-                country_spinner.getSelectedCountryCodeWithPlus()
-            )
-        })
-    }
-
-
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -145,8 +144,7 @@ class BlankFragment3 : Fragment() {
     }
 
 
-
-    fun date_picker(){
+    fun date_picker() {
         // Get instance of calendar
         // mCalendar will be set to current/today's date
         val mCalendar = Calendar.getInstance()
@@ -166,16 +164,16 @@ class BlankFragment3 : Fragment() {
 
         val minDay = 1
         val minMonth = 1
-        val minYear = Calendar.getInstance().get(Calendar.YEAR)-30;
-        mCalendar.set(minYear, minMonth-1, minDay)
+        val minYear = Calendar.getInstance().get(Calendar.YEAR) - 30;
+        mCalendar.set(minYear, minMonth - 1, minDay)
         mDialog.datePicker.minDate = mCalendar.timeInMillis
 
         // Changing mCalendar date from current to
         // some random MAX day 20/08/2021 20 Aug 2021
         val maxDay = 31
         val maxMonth = 12
-        val maxYear = Calendar.getInstance().get(Calendar.YEAR)-18;
-        mCalendar.set(maxYear, maxMonth-1, maxDay)
+        val maxYear = Calendar.getInstance().get(Calendar.YEAR) - 18;
+        mCalendar.set(maxYear, maxMonth - 1, maxDay)
         mDialog.datePicker.maxDate = mCalendar.timeInMillis
 
         // Display the calendar dialog
