@@ -183,7 +183,9 @@ class Login_Activity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_forgot, null)
         val btnSubmit = view.findViewById<Button>(R.id.button_forgot_submit)
         val editTextEmail = view.findViewById<EditText>(R.id.editText_forgot_email)
+
         btnSubmit.setOnClickListener {
+            AppUtils.hideSoftKeyboard(this, view.findViewById(R.id.cardd))
             if (AppUtils.isValidEmail(editTextEmail.text.toString())) {
                 sharedPreferencesStorage.setValue(AppConstants.email, editTextEmail.text.toString())
                 forgotPasswordCall(dialog)
@@ -201,9 +203,6 @@ class Login_Activity : AppCompatActivity() {
 
         dialog.setCancelable(true)
         dialog.setContentView(view)
-
-
-
         dialog.show()
 
     }

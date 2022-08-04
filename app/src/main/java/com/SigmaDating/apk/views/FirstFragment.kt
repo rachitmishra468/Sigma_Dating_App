@@ -24,6 +24,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import com.SigmaDating.apk.views.Home.Companion.get_settingpage_data
 import com.SigmaDating.apk.views.Home.Companion.notifications_count
@@ -197,13 +198,16 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
         chatIcon.setOnClickListener {
+            AppUtils.animateImageview(chatIcon)
             findNavController().navigate(R.id.action_FirstFragment_to_chat)
         }
 
         match_list.setOnClickListener {
+            AppUtils.animateImageview(match_list)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
         sigma_list.setOnClickListener {
+            AppUtils.animateImageview(sigma_list)
             //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
         (activity as Home).clearBackStack()

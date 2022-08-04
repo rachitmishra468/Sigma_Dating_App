@@ -363,12 +363,7 @@
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:drawableTint="@color/blue"
-            android:text="lorem ipsum user description
-        lorem ipsum user description
-        lorem ipsum user
-        description lorem ipsum user description lorem
-        ipsum user description lorem ipsum ipsumipsu   ipsum ipsumipsumip
-        sumipsum mipsumipsumuser description"
+            android:text=""
             android:paddingLeft="20dp"
             android:layout_marginTop="12dp"
             android:textColor="@color/black"

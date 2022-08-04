@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Adapter
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -257,6 +258,12 @@ object AppUtils {
         }
     }
 
+
+    fun animateImageview(view:ImageView) {
+        view.animate().scaleX(0.7f).setDuration(100).withEndAction {
+            view.animate().scaleX(1f).scaleY(1f)
+        }
+    }
     fun setCustomDate(inputdate: String): String? {
         var newformateddate = ""
         val toformatstr = "MMM dd, yyyy | hh:mm aa"

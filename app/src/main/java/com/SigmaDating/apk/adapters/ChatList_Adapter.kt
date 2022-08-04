@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
@@ -22,9 +23,11 @@ class ChatList_Adapter(var context: Context,private var listener: OnCategoryClic
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
-
+var textname:TextView
         init {
             image = itemView.findViewById(R.id.image)
+            textname=itemView.findViewById(R.id.chat_text_name)
+
         }
 
     }
@@ -35,7 +38,7 @@ class ChatList_Adapter(var context: Context,private var listener: OnCategoryClic
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         // Inflate the custom layout
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.chat_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_list_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -43,7 +46,7 @@ class ChatList_Adapter(var context: Context,private var listener: OnCategoryClic
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         // Get the data model based on position
-        var data = dataList[position]
+        val data = dataList[position]
 
         // Set item views based on your views and data model
         Glide.with(context).load(data.icon).into(holder.image);
@@ -51,8 +54,14 @@ class ChatList_Adapter(var context: Context,private var listener: OnCategoryClic
         holder.image.setOnClickListener {
             listener!!.onCategoryClick(data);
         }
+        holder.textname.text=data.text
+
     }
 
     //  total count of items in the list
     override fun getItemCount() = dataList.size
+    fun updateList(temp: MutableList<EditProfiledata>) {
+dataList=temp
+        notifyDataSetChanged()
+    }
 }

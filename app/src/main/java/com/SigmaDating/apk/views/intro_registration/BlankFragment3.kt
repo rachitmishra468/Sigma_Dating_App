@@ -106,7 +106,8 @@ class BlankFragment3 : Fragment() {
                         country_spinner.selectedCountryCodeWithPlus + "" + edit_text_phone.text.toString()
                     )
 
-                    val ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
+                    val
+                            ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
                     Log.d("TAG@123", ee.toString())
                     (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
 

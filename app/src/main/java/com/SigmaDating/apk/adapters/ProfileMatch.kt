@@ -3,20 +3,18 @@ package com.SigmaDating.apk.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.widget.BaseAdapter
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.views.OnSwipeTouchListener
 import com.bumptech.glide.Glide
-import java.util.ArrayList
 
 class ProfileMatch(private val courseData: ArrayList<Bids>, private val context: Context, var listener: OnCategoryClickListener
 ) : BaseAdapter() {
@@ -42,6 +40,9 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             v = LayoutInflater.from(parent.context).inflate(R.layout.profile_match_layout, parent, false)
 
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
+     //   var idIV_actiontyp=(v.findViewById<ImageView>(R.id.idIV_actiontype))
+
+
         mageview.apply {
             transitionName = courseData[position].upload_image
         }
@@ -50,6 +51,11 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
+               /* CoroutineScope(Dispatchers.Main).launch {
+                    idIV_actiontyp.visibility = View.VISIBLE
+                    delay(1000)
+                    idIV_actiontyp.visibility = View.GONE
+                }*/
                 super.onSwipeLeft()
 
                 listener.onCategoryClick(
@@ -92,7 +98,10 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
         }
 
         (v.findViewById<View>(R.id.star_view) as ImageView).setOnClickListener {
-           // val extras = FragmentNavigatorExtras(mageview )
+           /* (v.findViewById<View>(R.id.star_view) as ImageView).animate().scaleX(0.7f).setDuration(100).withEndAction {
+                fab.animate().scaleX(1f).scaleY(1f)
+            }*/
+            // val extras = FragmentNavigatorExtras(mageview )
             listener.onCategoryClick(
 
                 courseData[position],2,null

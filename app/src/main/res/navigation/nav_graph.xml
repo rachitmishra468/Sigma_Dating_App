@@ -223,7 +223,7 @@
 
         <action
             android:id="@+id/action_reportUserFragment_to_userChatFragment"
-            app:destination="@id/SecondFragment" >
+            app:destination="@id/chatListFragment" >
         </action>
 
         <action

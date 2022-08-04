@@ -217,11 +217,13 @@ class ReportUserFragment : Fragment() {
                             if (res?.status == true) {
                                 Log.d("TAG@123", "USER_REPORT " + it.data?.user.toString())
                                 _binding?.let {
-                                    it.TextName.setText(res?.user.first_name + res?.user.last_name)
-                                    it.textAge.setText(res?.user.location)
-                                    it.tvUniversity.setText(res?.user.university)
-                                    it.tvLocation.setText(res?.user.location)
+                                    it.TextName.setText(res.user.first_name + res.user.last_name)
+                                    it.textAge.setText(res.user.location)
+                                    it.tvUniversity.setText(res.user.university)
+                                    it.tvLocation.setText(res.user.location)
+                                    it.tvDescription.setText(res.user.about)
                                 }
+                                res?.user.apply {  }
                                 interestsList = ArrayList<String>()
                                 //  interestsList = res.user.interests.split(",") as ArrayList<String>
                                 val interest = res.user.interests.split(",").toTypedArray()
@@ -347,18 +349,21 @@ class ReportUserFragment : Fragment() {
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
 
-        match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_solid))
+        match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_disable))
         chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))
         sigma_list.setImageDrawable(resources.getDrawable(R.drawable.sigma_disable))
 
         chatIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_reportUserFragment_to_userChatFragment)
-        }
+            AppUtils.animateImageview(chatIcon)
+                findNavController().navigate(R.id.action_reportUserFragment_to_userChatFragment)
 
+        }
         match_list.setOnClickListener {
+            AppUtils.animateImageview(match_list)
             findNavController().navigate(R.id.action_reportUserFragment_to_SecondFragment)
         }
         sigma_list.setOnClickListener {
+            AppUtils.animateImageview(sigma_list)
             findNavController().navigate(R.id.action_reportUserFragment_to_FirstFragment)
         }
 
