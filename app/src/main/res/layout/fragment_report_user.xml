@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="8dp"
     android:background="@color/browser_actions_bg_grey"
     android:weightSum="10"
     tools:context=".apk.views.profile.ReportUserFragment"
@@ -25,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
+        android:padding="8dp"
         android:clipToPadding="false"
         android:orientation="vertical">
 

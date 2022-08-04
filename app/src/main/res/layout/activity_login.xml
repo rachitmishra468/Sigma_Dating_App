@@ -221,12 +221,11 @@
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal">
 
-                            <com.hbb20.CountryCodePicker
+                            <Spinner
                                 android:id="@+id/ccp"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".20"
-                                android:onClick="onCountryPickerClick"
+                                android:layout_weight=".40"
                                 android:background="@android:color/transparent"
                                 android:padding="5dp" />
 
@@ -241,7 +240,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="54dp"
                                 android:layout_marginLeft="6dp"
-                                android:layout_weight=".80"
+                                android:layout_weight=".60"
                                 android:drawablePadding="10dp"
                                 android:hint="@string/phone_xx"
                                 android:inputType="number"

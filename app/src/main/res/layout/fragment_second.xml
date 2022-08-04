@@ -13,10 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:cardMaxElevation="6dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="false">
 
 
         <LinearLayout
@@ -99,9 +98,10 @@
 
                         <ImageView
                             android:id="@+id/notification_Icon"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:padding="10dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="5dp"
+                            android:background="@drawable/white_circle"
                             android:src="@drawable/notifications_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -152,6 +152,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom|center"
+                        android:layout_margin="5dp"
                         android:gravity="bottom|center">
 
                         <de.hdodenhof.circleimageview.CircleImageView

@@ -16,8 +16,6 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.storage.AppConstants.PHONE_LOGIN
 import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import com.SigmaDating.apk.utilities.AppUtils
-import com.hbb20.CountryCodePicker
-import com.hbb20.CountryCodePicker.OnCountryChangeListener
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.SingleObserver
 import javax.inject.Inject
@@ -72,7 +70,7 @@ class Login_Activity : AppCompatActivity() {
     lateinit var email_button: Button
     lateinit var phone_number_button: Button
     lateinit var button_login_email_phone_both: Button
-    lateinit var country_spinner: CountryCodePicker
+    lateinit var country_spinner: Spinner
     lateinit var activity_main: ConstraintLayout
     lateinit var editText_email: EditText
     lateinit var editText_password: EditText
@@ -222,6 +220,16 @@ class Login_Activity : AppCompatActivity() {
         phone_number_layout = findViewById(R.id.phone_number_layout)
         emailLayoutLayout = findViewById(R.id.emailLayoutLayout)
         country_spinner = findViewById(R.id.ccp)
+        val Country_code = resources.getStringArray(R.array.Country_code)
+
+        // access the spinner
+        if (country_spinner != null) {
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item, Country_code
+            )
+            country_spinner.adapter = adapter
+        }
         activity_main = findViewById(R.id.activity_main)
         editText_email = findViewById(R.id.editText_email)
         editText_password = findViewById(R.id.editText_password)
@@ -238,14 +246,7 @@ class Login_Activity : AppCompatActivity() {
     }
 
 
-    fun onCountryPickerClick(view: View?) {
-        country_spinner.setOnCountryChangeListener(OnCountryChangeListener {
-            sharedPreferencesStorage.setValue(
-                AppConstants.USER_COUNTRY_CODE,
-                country_spinner.getSelectedCountryCodeWithPlus()
-            )
-        })
-    }
+
 
     fun email_button_click(view: View) {
         email_button.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
@@ -301,15 +302,9 @@ class Login_Activity : AppCompatActivity() {
 
                     sharedPreferencesStorage.setValue(
                         AppConstants.USER_COUNTRY_CODE,
-                        country_spinner.selectedCountryCodeWithPlus
+                       "+1"
                     )
 
-                    Log.d(
-                        "TAG@123", sharedPreferencesStorage.setValue(
-                            AppConstants.USER_COUNTRY_CODE,
-                            country_spinner.selectedCountryCodeWithPlus
-                        ).toString()
-                    )
                     sharedPreferencesStorage.setValue(
                         AppConstants.isSocialLogin,
                         false
@@ -404,7 +399,7 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.showLoader(this)
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
 
