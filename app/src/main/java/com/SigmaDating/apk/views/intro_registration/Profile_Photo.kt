@@ -88,7 +88,6 @@ class Profile_Photo : Fragment() {
     ): View? {
 
         var view = inflater.inflate(R.layout.fragment_profile__photo, container, false)
-
         profile_continue = view.findViewById(R.id.profile_continue)
         img_choose_dummy = view.findViewById(R.id.img_choose_dummy)
         tc_check = view.findViewById(R.id.tc_check)

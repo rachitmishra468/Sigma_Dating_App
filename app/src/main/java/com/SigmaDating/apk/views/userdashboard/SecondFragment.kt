@@ -69,6 +69,9 @@ class SecondFragment : Fragment() {
         _binding?.movetonotification?.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
+        _binding?.profileImg?.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
         return binding.root
 
     }
