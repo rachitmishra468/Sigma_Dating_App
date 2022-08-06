@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.views.profile
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -112,7 +113,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                openSchoolSearchDialog(AppConstants.School,schoolList as List<UniversityList>)
+                openSchoolSearchDialog(AppConstants.School, schoolList as List<UniversityList>)
                 true
             } else false
         }
@@ -121,7 +122,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
-                openSchoolSearchDialog(AppConstants.Fraternity,fraternitiesList as List<UniversityList>)
+                openSchoolSearchDialog(
+                    AppConstants.Fraternity,
+                    fraternitiesList as List<UniversityList>
+                )
                 true
             } else false
         }
@@ -141,15 +145,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
-
-
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
+
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
         searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
-        val titleText=dialog.findViewById<TextView>(R.id.title_layout)
-        val searchVieww=dialog.findViewById<SearchView>(R.id.search_view)
+        val titleText = dialog.findViewById<TextView>(R.id.title_layout)
+        val searchVieww = dialog.findViewById<SearchView>(R.id.search_view)
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),
@@ -157,18 +161,17 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         )
         schoolAdapter = SchoolAdapter(this, stringtype)
         searchRecyclerView!!.adapter = schoolAdapter
-        schoolAdapter.addData(passDataList!!)
+        schoolAdapter.addData(passDataList)
         schoolAdapter.notifyDataSetChanged()
         val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
         schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
 
-        if (stringtype.equals(AppConstants.School)){
-            titleText.text="School / University"
-            searchVieww.queryHint="Search School/University"
-        }
-        else{
-titleText.text="Sorority/Fraternity"
-            searchVieww.queryHint="Search Sorority/Fraternity "
+        if (stringtype.equals(AppConstants.School)) {
+            titleText.text = "School / University"
+            searchVieww.queryHint = "Search School/University"
+        } else {
+            titleText.text = "Sorority/Fraternity"
+            searchVieww.queryHint = "Search Sorority/Fraternity "
         }
         dialog.show()
     }
@@ -199,7 +202,8 @@ titleText.text="Sorority/Fraternity"
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
                             } catch (e: Exception) {
                             }
                         } else {
@@ -315,7 +319,8 @@ titleText.text="Sorority/Fraternity"
                                     schoolList = ArrayList<UniversityList>()
                                     schoolList = it1.data.universityList
                                     fraternitiesList = ArrayList<UniversityList>()
-                                    fraternitiesList = it1.data.fraternitiesList + it1.data.sororitiesList
+                                    fraternitiesList =
+                                        it1.data.fraternitiesList + it1.data.sororitiesList
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
                                     // setAdapterData()
@@ -343,7 +348,6 @@ titleText.text="Sorority/Fraternity"
     }
 
 
-
     fun subscribe_Login_User_details() {
 
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
@@ -365,32 +369,35 @@ titleText.text="Sorority/Fraternity"
                                 res.user.university.let {
                                     university = it
                                     schoolAct_spinner!!.setText(university)
-                                }?: run {
+                                } ?: run {
                                     university = ""
                                 }
                                 res.user.community.let {
                                     community = it
                                     fraternity_Spinner.setText(community)
-                                }?: run {
+                                } ?: run {
                                     university = ""
                                 }
                                 res.user.about.let {
                                     about = it
                                     _binding?.userAbout?.setText(about)
-                                }?: run {
+                                } ?: run {
                                     about = ""
                                     _binding?.userAbout?.setText(about)
                                 }
-                                if(res.user.interests.contains(",")){
-                                    interestsList = res.user.interests.split(",") as ArrayList<String>
-                                }
-                                else{
+                                if (res.user.interests.contains(",")) {
+                                    interestsList =
+                                        res.user.interests.split(",") as ArrayList<String>
+                                } else {
                                     interestsList.add(res.user.interests)
                                 }
 
 
                             } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception subscribe_Login_User_details ${e.message}")
+                                Log.d(
+                                    "TAG@123",
+                                    "Exception subscribe_Login_User_details ${e.message}"
+                                )
 
                             }
 
@@ -613,6 +620,7 @@ titleText.text="Sorority/Fraternity"
         schoolAdapter.filter.filter(p0)
         return false
     }
+
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
@@ -622,6 +630,7 @@ titleText.text="Sorority/Fraternity"
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
+
     override fun onItClick(position: UniversityList, stringtype: String) {
         var clickItemData = position.name
         if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {
