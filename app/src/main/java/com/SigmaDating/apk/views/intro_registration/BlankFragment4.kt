@@ -14,13 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
-import com.SigmaDating.apk.adapters.CommunityAdapter
 import com.SigmaDating.apk.adapters.SchoolAdapter
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.databinding.FragmentSchoolInputBinding
-import com.example.demoapp.other.Constants
 import com.example.demoapp.other.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +45,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
     lateinit var commonDataList: ArrayList<String>
     private lateinit var schoolAdapter: SchoolAdapter
     lateinit var dialog: Dialog
+    private val mLastClickTime: Long = 0
     var searchRecyclerView: RecyclerView? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +67,8 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = schoolListCopy
+
+
                 openSchoolSearchDialog(AppConstants.School,"School / University")
                 true
             } else false

@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.adapters
 
+import android.R.string
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,8 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.communityModel.UniversityList
-import com.bumptech.glide.Glide
+
 
 open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener, var stringtype: String)  : RecyclerView.Adapter<SchoolAdapter.DataViewHolder>(), Filterable {
 
@@ -77,17 +77,20 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
                 val charString = constraint?.toString() ?: ""
                 if (charString.isEmpty()) photosListFiltered =  ArrayList() else {
                     val filteredList = ArrayList<UniversityList>()
-                 /*   for ( i in photosList ){
+                /*    for ( i in photosList ){
+
+
                         if (i.name.toUpperCase().trim().contains(constraint.toString().toUpperCase().trim())) {
                             filteredList.add(i);
                         }
+
+
                     }
-                    photosListFiltered=filteredList
-*/
+                    photosListFiltered=filteredList*/
 
                     photosList
                         .filter {
-                            (it.name.contains(constraint!!.substring(0, 1).toUpperCase() + constraint.substring(1)))
+                            (it.name.contains(constraint!!.substring(0, constraint.length).toUpperCase() + constraint.substring(1)))
 
                         }
                         .forEach { filteredList.add(it) }
