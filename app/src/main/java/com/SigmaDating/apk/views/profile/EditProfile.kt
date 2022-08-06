@@ -310,7 +310,6 @@ titleText.text="Sorority/Fraternity"
                         // AppUtils.hideLoader()
                         it.data.let { it1 ->
                             if (it1?.status == true) {
-
                                 try {
                                     Log.d("TAG@123", it.toString())
                                     schoolList = ArrayList<UniversityList>()
@@ -319,8 +318,6 @@ titleText.text="Sorority/Fraternity"
                                     fraternitiesList = it1.data.fraternitiesList + it1.data.sororitiesList
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
-
-
                                     // setAdapterData()
                                     setupChipGroupDynamically(interest!!)
 
@@ -359,7 +356,7 @@ titleText.text="Sorority/Fraternity"
                                 dataList.clear()
                                 interestsList = ArrayList()
                                 interestsList.clear()
-                                Log.d("TAG@123", "1311" + it.toString())
+                                Log.d("TAG@123", "1311" + it.data.toString())
                                 if (!res.user.photos.isNullOrEmpty()) {
                                     dataList = res.user.photos
                                 }
@@ -384,7 +381,12 @@ titleText.text="Sorority/Fraternity"
                                     about = ""
                                     _binding?.userAbout?.setText(about)
                                 }
-                                interestsList = res.user.interests.split(",") as ArrayList<String>
+                                if(res.user.interests.contains(",")){
+                                    interestsList = res.user.interests.split(",") as ArrayList<String>
+                                }
+                                else{
+                                    interestsList.add(res.user.interests)
+                                }
 
 
                             } catch (e: Exception) {

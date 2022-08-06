@@ -73,6 +73,7 @@ class Profile_Photo : Fragment() {
     private var text_termncon:TextView?=null
     lateinit var constraint_f1: ConstraintLayout
     lateinit var bitmap_string: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -192,7 +193,7 @@ class Profile_Photo : Fragment() {
         mUri = if (Build.VERSION.SDK_INT >= 24) {
             FileProvider.getUriForFile(
                 requireActivity(),
-                "com.sigmadatingapp.fileprovider",
+                "com.SigmaDating.apk.fileprovider",
                 capturedImage
             )
         } else {

@@ -47,7 +47,10 @@ import android.widget.RadioButton
 import androidx.annotation.IdRes
 
 import android.widget.RadioGroup
+import com.SigmaDating.apk.utilities.PhoneTextWatcher
 import retrofit2.http.DELETE
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 
 
 class SettingsFragment : Fragment() {
@@ -74,7 +77,6 @@ class SettingsFragment : Fragment() {
                 bundle.putString("Hadder_text", link?.title)
                 findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
-
         }
         _binding.privacyText.setOnClickListener {
             var link = Home.get_settingpage_data("privacy-preferences")
@@ -132,10 +134,7 @@ class SettingsFragment : Fragment() {
                 findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
             }
         }
-
-
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,7 +169,6 @@ class SettingsFragment : Fragment() {
 
         _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
             Log.d("TAG@123", value.toString())
-            //  _binding.textView11.text = "${values[0].toInt()}-${values[1].toInt()} miles"
             _binding.textView11.text = "$value miles"
             distance = value.toString()
         }
@@ -325,7 +323,7 @@ class SettingsFragment : Fragment() {
                             // _binding.seekBarAge.setValues(20F, 25F)
 
                             if (it.data?.user?.distance?.isEmpty() == false) {
-                                if (it.data.user.distance.toFloat() > 25) {
+                                if (it.data.user.distance.toFloat() >= 25) {
                                     _binding.seekBar.setValue(it.data.user.distance.toFloat())
                                 }
                                 _binding.textView11.setText(it.data.user.distance + " miles")
@@ -440,27 +438,25 @@ class SettingsFragment : Fragment() {
     }
 
 
-
-
     fun Update_password(delete: Boolean) {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.update_password_sheet_dialog, null)
         val current_password = view.findViewById<EditText>(R.id.current_password)
-        val textView=view.findViewById<TextView>(R.id.textView5)
+        val textView = view.findViewById<TextView>(R.id.textView5)
         val editText_password = view.findViewById<EditText>(R.id.editText_password)
         val editText_password_confirm = view.findViewById<EditText>(R.id.editText_password_confirm)
         val btnClose = view.findViewById<Button>(R.id.create_password)
-        val hint= view.findViewById<TextView>(R.id.hint)
+        val hint = view.findViewById<TextView>(R.id.hint)
         if (delete) {
             hint.setText("")
             textView.setText("Delete Account")
             btnClose.setText("Confirm")
-            editText_password.visibility=View.GONE
-            editText_password_confirm.hint="Enter Password"
-        } 
+            editText_password.visibility = View.GONE
+            editText_password_confirm.hint = "Enter Password"
+        }
         btnClose.setOnClickListener {
             if (delete) {
-                if (AppUtils.isValid_password(editText_password_confirm.text.toString(),)
+                if (AppUtils.isValid_password(editText_password_confirm.text.toString())
                 ) {
 
                     if (AppUtils.isValid_password(editText_password_confirm.text.toString())) {
@@ -475,37 +471,45 @@ class SettingsFragment : Fragment() {
 
                 } else {
 
-                    Toast.makeText(context, "Please Enter Valid Password", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Please Enter Valid Password", Toast.LENGTH_SHORT)
+                        .show()
                 }
-                
-                
-            }
-            else{
-            if (AppUtils.isValid_password_match(
-                    editText_password.text.toString(),
-                    editText_password_confirm.text.toString()
-                )
-            ) {
 
-                if (AppUtils.isValid_password(editText_password.text.toString())) {
-                    subscribe_change_password(dialog)
-                    (activity as Home).homeviewmodel.User_change_password(
-                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+
+            } else {
+                if (AppUtils.isValid_password_match(
                         editText_password.text.toString(),
                         editText_password_confirm.text.toString()
                     )
+                ) {
+
+                    if (AppUtils.isValid_password(editText_password.text.toString())) {
+                        subscribe_change_password(dialog)
+                        (activity as Home).homeviewmodel.User_change_password(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+                            editText_password.text.toString(),
+                            editText_password_confirm.text.toString()
+                        )
+                    } else {
+                        editText_password.setError("Please Enter Valid Password")
+                    }
+
                 } else {
-                    editText_password.setError("Please Enter Valid Password")
+
+                    Toast.makeText(context, "Password Does Not Match", Toast.LENGTH_SHORT).show()
                 }
-
-            } else {
-
-                Toast.makeText(context, "Password Does Not Match", Toast.LENGTH_SHORT).show()
             }
-        }}
+        }
         dialog.setCancelable(true)
         dialog.setContentView(view)
         dialog.show()
+    }
+
+
+    fun setEditTextMaxLength(editText: EditText, length: Int) {
+        val FilterArray = arrayOfNulls<InputFilter>(1)
+        FilterArray[0] = LengthFilter(length)
+        editText.filters = FilterArray
     }
 
 
@@ -517,6 +521,11 @@ class SettingsFragment : Fragment() {
         val current_value = view.findViewById<EditText>(R.id.editText_password)
         val update_value = view.findViewById<Button>(R.id.update_value)
         val update_current = view.findViewById<Button>(R.id.update_current)
+
+        if (phone) {
+            setEditTextMaxLength(current_value, 12)
+            current_value.addTextChangedListener(PhoneTextWatcher(current_value))
+        }
 
         title_text.setText(
             if (phone) {
@@ -545,11 +554,17 @@ class SettingsFragment : Fragment() {
             if (!current_value.text.toString().isEmpty()) {
                 subscribe_change_password(dialog)
                 var key = if (phone) {
-                    (activity as Home).homeviewmodel.update_phone_location(
-                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
-                        "phone", current_value.text.toString()
+                    val jsonObject = JsonObject()
+                    jsonObject.addProperty(
+                        "user_id",
+                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
-                } else {
+                    jsonObject.addProperty("phone", "+1"+current_value.text.toString())
+                    (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
+                    _binding.phoneNumberText.text = "+1"+current_value.text.toString()
+                    dialog.dismiss()
+                }
+                else {
                     val jsonObject = JsonObject()
                     Log.d(
                         "TAG@123",

@@ -3,10 +3,6 @@ package com.SigmaDating.apk.views.intro_registration
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -19,6 +15,13 @@ import java.text.SimpleDateFormat
 import java.time.Year
 import java.util.*
 import javax.xml.datatype.DatatypeConstants.MONTHS
+import android.telephony.PhoneNumberUtils
+
+import android.text.Editable
+
+import android.text.TextWatcher
+import android.view.*
+import com.SigmaDating.apk.utilities.PhoneTextWatcher
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -56,6 +59,8 @@ class BlankFragment3 : Fragment() {
         editbirthday = binding!!.root.findViewById<TextView>(R.id.edit_text_birthday)
         edit_text_phone = binding!!.root.findViewById(R.id.edit_text_phone)
 
+
+        edit_text_phone.addTextChangedListener(PhoneTextWatcher(edit_text_phone))
         val Country_code = resources.getStringArray(R.array.Country_code)
 
         // access the spinner

@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
@@ -26,8 +27,9 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.airbnb.lottie.LottieAnimationView
 import com.example.demoapp.other.Constants
@@ -36,8 +38,12 @@ import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
+import android.content.DialogInterface
+
+import android.webkit.WebView
+import android.webkit.WebViewClient
 
 
 object AppUtils {
@@ -63,7 +69,7 @@ object AppUtils {
         dialog?.getWindow()?.setDimAmount(0f);
         dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
         dialog = builder.create()
-        (dialog as AlertDialog?)?.setCancelable(true)
+        (dialog as AlertDialog?)?.setCancelable(false)
         val groupcreate: LottieAnimationView =
             view.findViewById<View>(R.id.email) as LottieAnimationView
         groupcreate.setAnimation(R.raw.loader)
@@ -84,13 +90,14 @@ object AppUtils {
 
 
     fun isValid_password(password: String?): Boolean {
-
-        if (password != null) {
-            return (password.length > 5)
-        }
-
-        return false
+        val pattern: Pattern
+        val matcher: Matcher
+        val PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,15})"
+        pattern = Pattern.compile(PASSWORD_PATTERN)
+        matcher = pattern.matcher(password)
+        return matcher.matches()
     }
+
 
 
     fun isValid_password_match(new_password: String?, confirm_password: String): Boolean {
@@ -107,7 +114,7 @@ object AppUtils {
         if (number?.matches(".*[0-9].*".toRegex()) == false) {
             return false
         }
-        if (number?.length != 10) {
+        if (number?.length != 12) {
             return false
         }
         return true
@@ -386,7 +393,7 @@ object AppUtils {
     }
 
 
-     fun customTextView(view: TextView,context: Context) {
+     fun customTextView(view: TextView, view_fab:Context) {
         val spanTxt = SpannableStringBuilder(
             "I agree with the "
         )
@@ -394,11 +401,11 @@ object AppUtils {
         spanTxt.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
                 try {
-                    val i = Intent(Intent.ACTION_VIEW)
-                    i.data = Uri.parse(Constants.terms_con)
-                    context.startActivity(i)
 
+                    open_web(view_fab)
                 } catch (e: Exception) {
+                    Log.d("TAG@123","Terms and Conditions"+e.message)
+
                 }
             }
         }, spanTxt.length - "Terms and Conditions".length, spanTxt.length, 0)
@@ -406,6 +413,23 @@ object AppUtils {
         view.setText(spanTxt, TextView.BufferType.SPANNABLE)
     }
 
+    fun open_web(context: Context){
+        val alert = AlertDialog.Builder(context)
+        alert.setTitle(Constants.terms_con_hadder)
+        val wv = WebView(context)
+        wv.loadUrl(Constants.terms_con)
+        wv.setWebViewClient(object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
+                view.loadUrl(url!!)
+                return true
+            }
+        })
+        alert.setView(wv)
+        alert.setNegativeButton(
+            "Close"
+        ) { dialog, id -> dialog.dismiss() }
+        alert.show()
+    }
 
 
 }
