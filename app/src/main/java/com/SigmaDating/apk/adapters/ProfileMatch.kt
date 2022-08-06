@@ -3,6 +3,7 @@ package com.SigmaDating.apk.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.views.OnSwipeTouchListener
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.*
+import kotlin.concurrent.thread
 
 class ProfileMatch(private val courseData: ArrayList<Bids>, private val context: Context, var listener: OnCategoryClickListener
 ) : BaseAdapter() {
@@ -40,7 +43,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             v = LayoutInflater.from(parent.context).inflate(R.layout.profile_match_layout, parent, false)
 
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
-     //   var idIV_actiontyp=(v.findViewById<ImageView>(R.id.idIV_actiontype))
+        var idIV_actiontyp=(v.findViewById<ImageView>(R.id.img_hide))
 
 
         mageview.apply {
@@ -72,14 +75,26 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             @SuppressLint("ClickableViewAccessibility")
             override fun onSwipeUp() {
                 super.onSwipeUp()
-                listener.onCategoryClick(
-                    courseData[position],3,null,mageview
+                idIV_actiontyp.visibility=View.VISIBLE
+
+                Handler().postDelayed(
+                    java.lang.Runnable {
+                        idIV_actiontyp.setVisibility(View.GONE)
+
+                        listener.onCategoryClick(
+                            courseData[position],3,null,mageview
+                        )
+                                       },
+                    400
                 )
+
             }
             override fun onSwipeDown() {
                 super.onSwipeDown()
 
+
             }
+
         })
 
 

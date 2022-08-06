@@ -77,7 +77,14 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
-                openSchoolSearchDialog(AppConstants.Fraternity, "Fraternity / Sorority ")
+
+                if (fraternity_button!!.isSelected){
+                    openSchoolSearchDialog(AppConstants.Fraternity, "Fraternity")
+                }
+              else if (Socority_button!!.isSelected){
+                    openSchoolSearchDialog(AppConstants.Sorority, "Sorority ")
+                }
+
                 true
             } else false
         }
@@ -184,6 +191,19 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         var title_layout=dialog.findViewById<TextView>(R.id.title_layout)
         title_layout.text=title
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
+        val searchVieww=dialog.findViewById<SearchView>(R.id.search_view)
+
+
+        if (stringtype.equals(AppConstants.School)){
+
+            searchVieww.queryHint="Search School/University"
+        }
+        else if (stringtype.equals(AppConstants.Sorority)){
+            searchVieww.queryHint="Search Sorority "
+        }
+        else if (stringtype.equals(AppConstants.Fraternity)){
+            searchVieww.queryHint="Search Fraternity "
+        }
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL, false
@@ -281,10 +301,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             )
         } else {
             schoolAct_spinner!!.setText(clickItemData)
-            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                AppConstants.university,
-                position.name
-            )
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(AppConstants.university, position.name)
         }
 
         if (dialog != null || dialog.isShowing) {

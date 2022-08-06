@@ -142,10 +142,14 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
+
+
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
         searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
+        val titleText=dialog.findViewById<TextView>(R.id.title_layout)
+        val searchVieww=dialog.findViewById<SearchView>(R.id.search_view)
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),
@@ -157,6 +161,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         schoolAdapter.notifyDataSetChanged()
         val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
         schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
+
+        if (stringtype.equals(AppConstants.School)){
+            titleText.text="School / University"
+            searchVieww.queryHint="Search School/University"
+        }
+        else{
+titleText.text="Sorority/Fraternity"
+            searchVieww.queryHint="Search Sorority/Fraternity "
+        }
         dialog.show()
     }
 

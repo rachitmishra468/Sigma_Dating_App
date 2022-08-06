@@ -62,7 +62,7 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
 
     fun addData(list: List<UniversityList>) {
         photosList = list as ArrayList<UniversityList>
-       // photosListFiltered = photosList
+        photosListFiltered = photosList
         notifyDataSetChanged()
     }
     interface OnItemClickListener {
@@ -72,23 +72,26 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
+
+
                 val charString = constraint?.toString() ?: ""
                 if (charString.isEmpty()) photosListFiltered =  ArrayList() else {
                     val filteredList = ArrayList<UniversityList>()
-                    for ( i in photosList ){
+                 /*   for ( i in photosList ){
                         if (i.name.toUpperCase().trim().contains(constraint.toString().toUpperCase().trim())) {
                             filteredList.add(i);
                         }
                     }
                     photosListFiltered=filteredList
+*/
 
-                   /* photosList
+                    photosList
                         .filter {
-                            (it.name.contains(constraint!!))
+                            (it.name.contains(constraint!!.substring(0, 1).toUpperCase() + constraint.substring(1)))
 
                         }
                         .forEach { filteredList.add(it) }
-                    photosListFiltered = filteredList*/
+                    photosListFiltered = filteredList
 
                     Log.e("performFiltering: t1: ", filteredList.size.toString())
 
@@ -98,11 +101,10 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
 
-                photosListFiltered = if (results?.values == null)
-                    ArrayList()
+                photosListFiltered = if (results?.values == null) ArrayList()
                 else
-                    results.values as ArrayList<UniversityList>
-                notifyDataSetChanged()
+                    results.values as  ArrayList<UniversityList>
+                    notifyDataSetChanged()
 
                 Log.e("performFiltering: t2 ", "called" + photosListFiltered.size)
 

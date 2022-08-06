@@ -69,8 +69,8 @@
         <!-- Gets rid of the search icon when the SearchView is expanded -->
         <item name="searchHintIcon">@null</item>
         <!-- The hint text that appears when the user has not typed anything -->
-        <item name="queryHint">@string/search_schools</item>
-        <item name="android:queryHint">@string/search_schools</item>
+       <!-- <item name="queryHint">@string/search_schools</item>
+        <item name="android:queryHint">@string/search_schools</item>-->
         <item name="android:background">@drawable/login_field_border_bg</item>
         <!--        <item name="closeIcon">@drawable/ic_clo</item>-->
         <item name="android:textColor">@color/purple_200</item>
