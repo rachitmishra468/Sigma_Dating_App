@@ -11,7 +11,7 @@
     </array>
 
     <string-array name="Country_code">
-        <item>+1 USA</item>
-        <item>+91 India</item>
+        <item>+1</item>
+        <item>+91</item>
     </string-array>
 </resources>

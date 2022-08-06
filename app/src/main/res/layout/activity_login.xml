@@ -225,7 +225,7 @@
                                 android:id="@+id/ccp"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight=".40"
+                                android:layout_weight=".20"
                                 android:background="@android:color/transparent"
                                 android:padding="5dp" />
 
@@ -240,11 +240,11 @@
                                 android:layout_width="0dp"
                                 android:layout_height="54dp"
                                 android:layout_marginLeft="6dp"
-                                android:layout_weight=".60"
+                                android:layout_weight=".80"
                                 android:drawablePadding="10dp"
                                 android:hint="@string/phone_xx"
                                 android:inputType="number"
-                                android:maxLength="10"
+                                android:maxLength="12"
                                 android:letterSpacing="0.10"
                                 android:textColorHint="@color/hint_text_color"
                                 android:textSize="18sp" />

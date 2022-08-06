@@ -25,6 +25,7 @@ import java.util.*
 import com.facebook.FacebookException
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
+import com.SigmaDating.apk.utilities.PhoneTextWatcher
 import com.facebook.login.LoginResult
 
 
@@ -233,6 +234,7 @@ class Login_Activity : AppCompatActivity() {
         editText_email = findViewById(R.id.editText_email)
         editText_password = findViewById(R.id.editText_password)
         edittext_phone_no = findViewById(R.id.edittext_phone_no)
+        edittext_phone_no.addTextChangedListener(PhoneTextWatcher(edittext_phone_no))
         mLoginButton = findViewById(R.id.login_button);
         textforgot = findViewById(R.id.textView2)
         editText_otp = findViewById(R.id.editText_otp)
@@ -316,7 +318,7 @@ class Login_Activity : AppCompatActivity() {
                     return
                 }
                 if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                    editText_password.error = "Password Length Must be of 5-8"
+                    editText_password.error = "Invalid Password "
                     return
                 }
                 sharedPreferencesStorage.setValue(

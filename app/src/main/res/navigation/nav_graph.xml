@@ -131,6 +131,10 @@
         <action
             android:id="@+id/action_Profile_Photo_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_Profile_frag_to_ContactUs"
+            app:destination="@id/contactUs" />
     </fragment>
     <fragment
         android:id="@+id/chatListFragment"

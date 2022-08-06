@@ -63,18 +63,18 @@ class Password : Fragment() , TextWatcher {
         create_password?.setOnClickListener {
 
             if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                editText_password.error = "Password Length Must be of 8-15"
+                editText_password.error = "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
-                    "Password Length Must be of 8-15"
+                    "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 )
             } else if (!AppUtils.isValid_password(editText_password_confirm.text.toString())) {
-                editText_password_confirm.error = "Password Length Must be of 8-15"
+                editText_password_confirm.error = "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
-                    "Password Length Must be of 8-15"
+                    "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 )
             }else if (!editText_password_confirm.text.toString().equals(editText_password.text.toString())) {
                 editText_password_confirm.error = "Password Does Not Match"
