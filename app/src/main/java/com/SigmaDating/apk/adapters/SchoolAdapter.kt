@@ -69,10 +69,8 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
                     filteredList.addAll(photosList);
                 } else {
                     var filterPattern = constraint.toString().toLowerCase().trim();
-
-
                     photosList.filter {
-                        (it.name.toLowerCase().substring(0,constraint.length).contains(filterPattern))
+                        (it.name.toLowerCase().startsWith(filterPattern))
 
                     }.forEach { filteredList.add(it) }
 
@@ -81,7 +79,7 @@ open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener
 
                 }
 
-                var results = FilterResults()
+                val results = FilterResults()
                 results.values = filteredList;
 
                 return results;

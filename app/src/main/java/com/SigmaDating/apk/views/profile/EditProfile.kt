@@ -147,6 +147,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     @SuppressLint("NotifyDataSetChanged")
     private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
+
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
 
@@ -174,6 +175,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             searchVieww.queryHint = "Search Sorority/Fraternity "
         }
         dialog.show()
+        schoolAct_spinner!!.isEnabled=false
+        fraternity_Spinner.isEnabled=false
+        dialog.setOnDismissListener {
+            schoolAct_spinner!!.isEnabled=true
+            fraternity_Spinner.isEnabled=true
+        }
     }
 
     companion object {

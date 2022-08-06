@@ -185,6 +185,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
 
     fun openSchoolSearchDialog(stringtype: String, title :String) {
+
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
@@ -216,6 +217,15 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
         schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
         dialog.show()
+
+        schoolAct_spinner!!.isEnabled=false
+        fraternity_Spinner.isEnabled=false
+        dialog.setOnDismissListener {
+            schoolAct_spinner!!.isEnabled=true
+            fraternity_Spinner.isEnabled=true
+            // your code after dissmiss dialog
+        }
+
 
     }
 
@@ -299,6 +309,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.community,
                 position.name
+
             )
         } else {
             schoolAct_spinner!!.setText(clickItemData)
@@ -307,6 +318,8 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
         if (dialog != null || dialog.isShowing) {
             dialog.dismiss()
+            schoolAct_spinner!!.isEnabled=true
+            fraternity_Spinner.isEnabled=true
         }
 
     }
