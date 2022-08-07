@@ -23,9 +23,9 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val report_block_user: MutableLiveData<Resource<Loginmodel>>
+    lateinit var report_block_user: MutableLiveData<Resource<Loginmodel>>
     val setting_update_details: MutableLiveData<Resource<Loginmodel>>
-    val profile_swipe: MutableLiveData<Resource<Loginmodel>>
+    lateinit var profile_swipe: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
     val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
     val get_UserReportdata: MutableLiveData<Resource<Loginmodel>>
@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         report_block_user=MutableLiveData<Resource<Loginmodel>>()
-        profile_swipe=MutableLiveData<Resource<Loginmodel>>()
+       // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
         get_UserReportdata=MutableLiveData<Resource<Loginmodel>>()
         setting_update_details= MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()

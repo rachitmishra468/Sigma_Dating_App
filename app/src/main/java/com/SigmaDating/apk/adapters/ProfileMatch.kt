@@ -45,7 +45,6 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
         var idIV_actiontyp=(v.findViewById<ImageView>(R.id.img_hide))
 
-
         mageview.apply {
             transitionName = courseData[position].upload_image
         }
@@ -54,11 +53,6 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
-               /* CoroutineScope(Dispatchers.Main).launch {
-                    idIV_actiontyp.visibility = View.VISIBLE
-                    delay(1000)
-                    idIV_actiontyp.visibility = View.GONE
-                }*/
                 super.onSwipeLeft()
 
                 listener.onCategoryClick(
@@ -97,14 +91,9 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
         })
 
+        (v.findViewById<View>(R.id.tv_username) as TextView).setText(courseData[position].first_name)
 
-
-
-
-
-
-        (v.findViewById<View>(R.id.tv_username) as TextView).setText(courseData[position].first_name
-        +""+courseData[position].last_name)
+        (v.findViewById<View>(R.id.tv_university) as TextView).setText(courseData[position].first_name)
 
         (v.findViewById<View>(R.id.bright_img) as ImageView).setOnClickListener {
             listener.onCategoryClick(

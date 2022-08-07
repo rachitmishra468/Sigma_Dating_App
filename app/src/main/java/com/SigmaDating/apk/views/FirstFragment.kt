@@ -16,12 +16,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
+import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
@@ -32,9 +34,14 @@ import com.SigmaDating.apk.views.Home.Companion.pages
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
 
@@ -62,9 +69,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
-
-
-
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
                 )
@@ -109,9 +113,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         footer_transition()
         subscribe_Login_User_details()
         subscribe_bids()
-        subscribe_swipe()
         return binding.root
 
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,6 +153,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
             override fun onCardExitTop(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitTop")
+
                 if (dataObject is Bids) {
                     idUserConnected = (dataObject as Bids).id
                     /* if(courseModalArrayList?.contains(dataObject) == true){
@@ -291,13 +299,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
                                 Log.d("TAG@123", "Exception" + it.data?.message)
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception" + e.message.toString())
                             }
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
 
@@ -340,7 +348,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Log.d("TAG@123", "Exception" + e.message.toString())
                             }
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
 
@@ -392,7 +400,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                             }
 
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
@@ -418,6 +426,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         jsonObject.addProperty("profile_id", id)
         jsonObject.addProperty(key, "yes")
         Log.d("TAG@123", jsonObject.toString())
+        (activity as Home).homeviewmodel.profile_swipe=MutableLiveData<Resource<Loginmodel>>()
+        subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }
 

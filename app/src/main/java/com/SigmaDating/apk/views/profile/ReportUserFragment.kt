@@ -12,12 +12,14 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.apk.adapters.UserReportInterestAdapter
+import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
@@ -25,7 +27,9 @@ import com.SigmaDating.databinding.FragmentReportUserBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.JsonObject
@@ -138,25 +142,12 @@ class ReportUserFragment : Fragment() {
         }
 
         tv_report_to_user.setOnClickListener {
-            subscribe_report_block_user()
-            val jsonObject = JsonObject()
-            Log.d(
-                "TAG@123",
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-            )
-            jsonObject.addProperty(
-                "user_id",
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-            )
-            jsonObject.addProperty("profile_id", userID)
-            jsonObject.addProperty("reason", "")
-            Log.d(
-                "TAG@123",
-                jsonObject.toString()
-            )
-            (activity as Home).homeviewmodel.report_user(jsonObject)
+
+            Update_password(userID!!)
+
         }
         tv_block.setOnClickListener {
+            (activity as Home).homeviewmodel.report_block_user= MutableLiveData<Resource<Loginmodel>>()
             subscribe_report_block_user()
             val jsonObject = JsonObject()
             Log.d(
@@ -214,13 +205,25 @@ class ReportUserFragment : Fragment() {
                             if (res?.status == true) {
                                 Log.d("TAG@123", "USER_REPORT " + it.data?.user.toString())
                                 _binding?.let {
-                                    it.TextName.setText(res.user.first_name + res.user.last_name)
+                                    it.TextName.setText(res.user.first_name + " " + res.user.last_name)
                                     it.textAge.setText(res.user.location)
                                     it.tvUniversity.setText(res.user.university)
                                     it.tvLocation.setText(res.user.location)
                                     it.tvDescription.setText(res.user.about)
+                                    it.universityText.setText(res.user.university)
+                                    it.textAge.setText("" + res?.user.dob?.let {
+                                        AppUtils.Age_finder(
+                                            it
+                                        )
+                                    })
                                 }
-                                res?.user.apply {  }
+                                res.user.apply { }
+                                it.data?.user?.upload_image?.let {
+                                    Glide.with(AppReseources.getAppContext()!!).load(it)
+                                        .error(R.drawable.profile_img)
+                                        .into(_binding!!.idImgView);
+                                }
+
                                 interestsList = ArrayList<String>()
                                 //  interestsList = res.user.interests.split(",") as ArrayList<String>
                                 val interest = res.user.interests.split(",").toTypedArray()
@@ -255,10 +258,18 @@ class ReportUserFragment : Fragment() {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
-                                Toast.makeText(requireContext(), ""+res.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "" + res.message,
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 (activity as Home).onBackPressed()
                             } else {
-                                Toast.makeText(requireContext(), ""+res!!.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "" + res!!.message,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     }
@@ -296,17 +307,6 @@ class ReportUserFragment : Fragment() {
         chip.isChipIconVisible = false
         chip.isCheckable = false
         chip.isClickable = true
-
-        /* chip.isChecked = interestsList.contains(label)
-         chip.setBackgroundColor(
-             if (interestsList.contains(label)) {
-                 ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
-             } else {
-                 ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
-             }
-         )
-         chip.chipCornerRadius = 1.0F*/
-
         return chip
 
     }
@@ -352,7 +352,7 @@ class ReportUserFragment : Fragment() {
 
         chatIcon.setOnClickListener {
             AppUtils.animateImageview(chatIcon)
-                findNavController().navigate(R.id.action_reportUserFragment_to_userChatFragment)
+            findNavController().navigate(R.id.action_reportUserFragment_to_userChatFragment)
 
         }
         match_list.setOnClickListener {
@@ -365,5 +365,43 @@ class ReportUserFragment : Fragment() {
         }
 
     }
+
+
+    fun Update_password(profile: String) {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.report_user_popup, null)
+        var editText_password = view.findViewById<EditText>(R.id.editText_password)
+        var btnClose = view.findViewById<Button>(R.id.create_password)
+
+        btnClose.setOnClickListener {
+            if (editText_password.text.isEmpty()) {
+                editText_password.error = "Enter Your Reason.."
+            } else {
+                (activity as Home).homeviewmodel.report_block_user= MutableLiveData<Resource<Loginmodel>>()
+                subscribe_report_block_user()
+                val jsonObject = JsonObject()
+                Log.d(
+                    "TAG@123",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty("profile_id", profile)
+                jsonObject.addProperty("reason", editText_password.text.toString())
+                Log.d(
+                    "TAG@123",
+                    jsonObject.toString()
+                )
+                (activity as Home).homeviewmodel.report_user(jsonObject)
+                dialog.dismiss()
+            }
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
 
 }

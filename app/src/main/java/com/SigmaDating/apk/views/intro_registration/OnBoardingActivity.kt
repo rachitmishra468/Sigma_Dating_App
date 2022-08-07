@@ -25,6 +25,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class OnBoardingActivity : AppCompatActivity() {
         mViewPager.setOnTouchListener(null)
         img_back = findViewById<ImageView>(R.id.img_back)
         pageIndicator = findViewById(R.id.pageIndicator)
-        pageIndicator.isClickable=false
+        pageIndicator.isClickable = false
         mViewPager.adapter = OnBoardingViewPagerAdapter(this, this)
         mViewPager.setUserInputEnabled(false);
         mViewPager.offscreenPageLimit = 1
@@ -51,8 +52,11 @@ class OnBoardingActivity : AppCompatActivity() {
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {}
             override fun onPageScrollStateChanged(arg0: Int) {}
         })
-       // TabLayoutMediator(pageIndicator, mViewPager) { _, _ -> }.attach()
-
+        TabLayoutMediator(
+            pageIndicator, mViewPager
+        ) { tab: TabLayout.Tab, position: Int ->
+            tab.view.isClickable = false
+        }.attach()
 
         img_back?.setOnClickListener {
             if (getItem() == 0) {

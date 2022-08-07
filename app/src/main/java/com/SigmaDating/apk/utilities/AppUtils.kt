@@ -44,12 +44,12 @@ import android.content.DialogInterface
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import java.lang.Math.abs
 
 
 object AppUtils {
 
     private var dialog: Dialog? = null
-
 
 
     fun hideLoader() {
@@ -61,22 +61,23 @@ object AppUtils {
     }
 
     fun showLoader(context: Context?) {
-        context?.javaClass?.name?.let { Log.d("TAG@123", it) }
-        val builder = AlertDialog.Builder(context, R.style.NewDialog)
-        val inflater = LayoutInflater.from(context)
-        val view: View = inflater.inflate(R.layout.custom_loader, null, false)
-        builder.setView(view)
-        dialog?.getWindow()?.setDimAmount(0f);
-        dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
-        dialog = builder.create()
-        (dialog as AlertDialog?)?.setCancelable(false)
-        val groupcreate: LottieAnimationView =
-            view.findViewById<View>(R.id.email) as LottieAnimationView
-        groupcreate.setAnimation(R.raw.loader)
-        groupcreate.playAnimation()
-        (dialog as AlertDialog?)?.getWindow()!!
-            .setBackgroundDrawableResource(R.color.hint_text_color)
-        (dialog as AlertDialog?)?.show()
+            context?.javaClass?.name?.let { Log.d("TAG@123", it) }
+            val builder = AlertDialog.Builder(context, R.style.NewDialog)
+            val inflater = LayoutInflater.from(context)
+            val view: View = inflater.inflate(R.layout.custom_loader, null, false)
+            builder.setView(view)
+            dialog?.getWindow()?.setDimAmount(0f);
+            dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
+            dialog = builder.create()
+            (dialog as AlertDialog?)?.setCancelable(false)
+            val groupcreate: LottieAnimationView =
+                view.findViewById<View>(R.id.email) as LottieAnimationView
+            groupcreate.setAnimation(R.raw.loader)
+            groupcreate.playAnimation()
+            (dialog as AlertDialog?)?.getWindow()!!
+                .setBackgroundDrawableResource(R.color.hint_text_color)
+            (dialog as AlertDialog?)?.show()
+
     }
 
     fun isValidEmail(email: String?): Boolean {
@@ -97,7 +98,6 @@ object AppUtils {
         matcher = pattern.matcher(password)
         return matcher.matches()
     }
-
 
 
     fun isValid_password_match(new_password: String?, confirm_password: String): Boolean {
@@ -272,11 +272,12 @@ object AppUtils {
     }
 
 
-    fun animateImageview(view:ImageView) {
+    fun animateImageview(view: ImageView) {
         view.animate().scaleX(0.7f).setDuration(100).withEndAction {
             view.animate().scaleX(1f).scaleY(1f)
         }
     }
+
     fun setCustomDate(inputdate: String): String? {
         var newformateddate = ""
         val toformatstr = "MMM dd, yyyy | hh:mm aa"
@@ -393,7 +394,7 @@ object AppUtils {
     }
 
 
-     fun customTextView(view: TextView, view_fab:Context) {
+    fun customTextView(view: TextView, view_fab: Context) {
         val spanTxt = SpannableStringBuilder(
             "I agree with the "
         )
@@ -404,7 +405,7 @@ object AppUtils {
 
                     open_web(view_fab)
                 } catch (e: Exception) {
-                    Log.d("TAG@123","Terms and Conditions"+e.message)
+                    Log.d("TAG@123", "Terms and Conditions" + e.message)
 
                 }
             }
@@ -413,7 +414,7 @@ object AppUtils {
         view.setText(spanTxt, TextView.BufferType.SPANNABLE)
     }
 
-    fun open_web(context: Context){
+    fun open_web(context: Context) {
         val alert = AlertDialog.Builder(context)
         alert.setTitle(Constants.terms_con_hadder)
         val wv = WebView(context)
@@ -431,5 +432,27 @@ object AppUtils {
         alert.show()
     }
 
+
+    fun Age_finder(dob: String): String {
+        try {
+            val maxDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            val maxMonth = Calendar.getInstance().get(Calendar.MONTH)
+            val maxYear = Calendar.getInstance().get(Calendar.YEAR)
+            val currentDate = dob
+            val finalDate = "$maxMonth/$maxDay/$maxYear"
+            val date1: Date
+            val date2: Date
+            val dates = SimpleDateFormat("MM/dd/yyyy")
+            date1 = dates.parse(currentDate)
+            date2 = dates.parse(finalDate)
+            val difference: Long = abs(date1.time - date2.time)
+            val differenceDates = difference / (24 * 60 * 60 * 1000)
+            Log.d("TAH@123", "Age : " + abs(differenceDates / 365).toString())
+            return abs(differenceDates / 365).toString()
+        } catch (e: Exception) {
+            Log.d("TAH@123", "Age Exception: " + e.message)
+            return ""
+        }
+    }
 
 }

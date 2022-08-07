@@ -49,6 +49,10 @@ public class AppConstants {
     public static final String location="location";
     public static final String password="password";
 
+
+    public static final String latitude="latitude";
+    public static final String longitude="longitude";
+
     public static final String phone="phone";
     public static final String university="university";
     public static final String community="Community";

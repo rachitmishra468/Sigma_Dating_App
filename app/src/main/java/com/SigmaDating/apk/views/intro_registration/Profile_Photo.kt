@@ -1,15 +1,22 @@
 package com.SigmaDating.apk.views.intro_registration
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -51,7 +58,16 @@ import android.text.style.ForegroundColorSpan
 import android.text.SpannableStringBuilder
 
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import com.SigmaDating.apk.AppReseources
 import com.example.demoapp.other.Constants
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -59,6 +75,10 @@ private const val ARG_PARAM2 = "param2"
 
 class Profile_Photo : Fragment() {
 
+    private val permissionId = 2
+    var latitude = ""
+    var longitude = ""
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
     //Our constants
     private val OPERATION_CAPTURE_PHOTO = 1
     private val OPERATION_CHOOSE_PHOTO = 2
@@ -128,6 +148,9 @@ class Profile_Photo : Fragment() {
         }
 
         Register()
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        getLocation()
+
         return view;
     }
 
@@ -375,5 +398,80 @@ class Profile_Photo : Fragment() {
             })
     }
 
+
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    val location: Location? = task.result
+                    if (location != null) {
+                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                        val list: List<Address> =
+                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(200)
+                            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                AppConstants.latitude,
+                                "${list[0].latitude}"
+                            )
+                            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                AppConstants.longitude,
+                                "${list[0].longitude}"
+                            )
+
+                            Log.d("TAG@123","Location :- ${list[0].latitude} , ${list[0].longitude}")
+
+
+                        }
+
+
+                    }
+                }
+
+            } else {
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            permissionId
+        )
+    }
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
 
 }

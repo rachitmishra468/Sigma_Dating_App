@@ -16,17 +16,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class User_Register @Inject constructor(private val mainRepository: MainRepository, private val sharedPreferencesStorage: SharedPreferencesStorage) : ViewModel() {
+class User_Register @Inject constructor(
+    private val mainRepository: MainRepository,
+    private val sharedPreferencesStorage: SharedPreferencesStorage
+) : ViewModel() {
 
     var registration: MutableLiveData<Resource<Loginmodel>>? = null
-    var school_dataResponse : MutableLiveData<Resource<SchoolCommunityResponse>>?= null
+    var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>? = null
+
     init {
-        registration= MutableLiveData<Resource<Loginmodel>>()
-        school_dataResponse= MutableLiveData<Resource<SchoolCommunityResponse>>()
-       // Register()
+        registration = MutableLiveData<Resource<Loginmodel>>()
+        school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
+        // Register()
     }
 
-    fun Register(bitmap:String) = viewModelScope.launch {
+    fun Register(bitmap: String) = viewModelScope.launch {
         registration?.postValue(Resource.loading(null))
 
         val jsonObject = JsonObject()
@@ -51,7 +55,7 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
         jsonObject.addProperty(
             "phone",
             sharedPreferencesStorage.getString(AppConstants.phone)
-            )
+        )
 
 
         jsonObject.addProperty(
@@ -60,17 +64,34 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
         )
         jsonObject.addProperty("dob", sharedPreferencesStorage.getString(AppConstants.Dob))
         jsonObject.addProperty("gender", sharedPreferencesStorage.getString(AppConstants.gender))
-        jsonObject.addProperty("university", sharedPreferencesStorage.getString(AppConstants.university))
-        jsonObject.addProperty("community", sharedPreferencesStorage.getString(AppConstants.community))
+        jsonObject.addProperty(
+            "university",
+            sharedPreferencesStorage.getString(AppConstants.university)
+        )
+        jsonObject.addProperty(
+            "community",
+            sharedPreferencesStorage.getString(AppConstants.community)
+        )
         jsonObject.addProperty("interests", "")
-        jsonObject.addProperty("interested_in", "")
+        jsonObject.addProperty(
+            "interested_in",
+            sharedPreferencesStorage.getString(AppConstants.interested_in)
+        )
         jsonObject.addProperty("facebookId", "")
         jsonObject.addProperty("appleId", "")
+        jsonObject.addProperty(
+            "latitude",
+            sharedPreferencesStorage.getString(AppConstants.latitude)
+        )
+        jsonObject.addProperty(
+            "longitude",
+            sharedPreferencesStorage.getString(AppConstants.longitude)
+        )
         jsonObject.addProperty("isSocialLogin", "")
         jsonObject.addProperty("upload_image", bitmap)
         jsonObject.addProperty("device_token", "")
         jsonObject.addProperty("device_type", "Android")
-        Log.d("TAG@123", "414"+jsonObject.toString())
+        Log.d("TAG@123", "registration data : " + jsonObject.toString())
         mainRepository.user_register(jsonObject).let {
             if (it.isSuccessful) {
                 registration?.postValue(Resource.success(it.body()))
@@ -81,14 +102,12 @@ class User_Register @Inject constructor(private val mainRepository: MainReposito
     }
 
 
-
-
-    fun getSchoolingData()  = viewModelScope.launch {
+    fun getSchoolingData() = viewModelScope.launch {
         school_dataResponse?.postValue(Resource.loading(null))
         mainRepository.ListSchoolFeternity().let {
-            if (it.isSuccessful){
+            if (it.isSuccessful) {
                 school_dataResponse?.postValue(Resource.success(it.body()))
-            }else{
+            } else {
                 school_dataResponse?.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }

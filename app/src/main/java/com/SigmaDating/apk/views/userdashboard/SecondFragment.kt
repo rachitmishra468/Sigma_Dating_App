@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
+import com.SigmaDating.apk.views.FirstFragmentDirections
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentSecondBinding
 import com.bumptech.glide.Glide
@@ -51,6 +53,7 @@ class SecondFragment : Fragment() {
     lateinit var sigma_list: ImageView
     private var userID: String? = null
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +62,17 @@ class SecondFragment : Fragment() {
         Log.d("TAG@123", " SecondFragment onCreateView")
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         footer_transition()
+        userID = getArguments()?.getString("user_id")
+        if (userID == null) {
+            userID = (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        }
+        if (userID != null) {
+            (activity as Home).homeviewmodel.get_secound_feb_User_details(
+                userID!!
+            )
+        }
         _binding?.editProfile?.setOnClickListener {
 
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
@@ -71,6 +85,17 @@ class SecondFragment : Fragment() {
         }
         _binding?.profileImg?.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_chat)
+        }
+
+        _binding?.comments?.setOnClickListener {
+            val bundle = Bundle()
+             bundle.putString("user_id",userID)
+             findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
+
+
+
+
+
         }
         return binding.root
 
@@ -96,17 +121,6 @@ class SecondFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d("TAG@123", " onResume")
-        userID = getArguments()?.getString("user_id")
-        if (userID == null) {
-            userID = (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        }
-        if (userID != null) {
-            (activity as Home).homeviewmodel.get_secound_feb_User_details(
-                userID!!
-            )
-        }
 
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
@@ -159,8 +173,9 @@ class SecondFragment : Fragment() {
                         if (res?.status == true) {
                             Log.d("TAG@123", "111 " + it.data?.user.toString())
                             _binding?.let {
-                                it.nameText.setText(res?.user.first_name + res?.user.last_name)
-                                it.addresText.setText(res?.user.location)
+                                it.nameText.setText(res?.user.first_name +" "+ res.user.last_name)
+                                it.addresText.setText(res?.user.university)
+                                it.ageText.setText(""+res?.user.dob?.let{AppUtils.Age_finder(it)})
                             }
 
                             it.data?.user?.upload_image?.let {
