@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
@@ -26,11 +27,12 @@ class Edit_Profile_Adapter(var context: Context,var listener : OnCategoryClickLi
         var image: ImageView
         var camera_img:ImageView
         var delete_img:ImageView
-
+var progressBar:ProgressBar
         init {
             image = itemView.findViewById(R.id.image_profile)
             camera_img= itemView.findViewById(R.id.camera_img)
             delete_img= itemView.findViewById(R.id.delete_img)
+            progressBar=itemView.findViewById(R.id.progress_bar)
         }
 
     }
@@ -57,13 +59,15 @@ class Edit_Profile_Adapter(var context: Context,var listener : OnCategoryClickLi
             holder.camera_img.visibility=View.VISIBLE
             holder.image.visibility=View.INVISIBLE
             holder.delete_img.visibility=View.INVISIBLE
-
+holder.progressBar.visibility=View.GONE
         }
         else{
             holder.camera_img.visibility=View.GONE
             holder.image.visibility=View.VISIBLE
             holder.delete_img.visibility=View.VISIBLE
+            holder.progressBar.visibility=View.VISIBLE
             Glide.with(context).load(data).into(holder.image);
+
         }
 
 

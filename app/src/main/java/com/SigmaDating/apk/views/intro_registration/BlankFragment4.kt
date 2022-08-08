@@ -162,6 +162,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             schoolList = ArrayList<UniversityList>()
             schoolList = sororitiesList
             schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)
+
         }
 
         independent?.setOnClickListener {
@@ -280,6 +281,9 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
     companion object {
 
+
+
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             BlankFragment4().apply {
@@ -300,6 +304,10 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         schoolAdapter.filter.filter(p0)
 
         return false
+
+
+
+
     }
 
     override fun onItClick(position: UniversityList, stringtype: String) {

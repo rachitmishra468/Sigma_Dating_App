@@ -6,17 +6,19 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,8 +38,10 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.views.Home
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 
 private const val ARG_PARAM1 = "param1"
@@ -64,9 +68,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var university: String? = null
     var community: String? = null
     var about: String? = null
+
     // var interests: String? = null
-
-
+    private var mUri: Uri? = null
+    private val OPERATION_CAPTURE_PHOTO = 1
     private lateinit var schoolAdapter: SchoolAdapter
     lateinit var dialog: Dialog
     var searchRecyclerView: RecyclerView? = null
@@ -175,11 +180,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             searchVieww.queryHint = "Search Sorority/Fraternity "
         }
         dialog.show()
-        schoolAct_spinner!!.isEnabled=false
-        fraternity_Spinner.isEnabled=false
+        schoolAct_spinner!!.isEnabled = false
+        fraternity_Spinner.isEnabled = false
         dialog.setOnDismissListener {
-            schoolAct_spinner!!.isEnabled=true
-            fraternity_Spinner.isEnabled=true
+            schoolAct_spinner!!.isEnabled = true
+            fraternity_Spinner.isEnabled = true
         }
     }
 
@@ -439,8 +444,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
         if (boolean) {
-
-            openGallery()
+            popup()
+            // openGallery()
 
 
         } else {
@@ -454,6 +459,57 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             )
         }
 
+    }
+
+    private fun popup() {
+        val view = layoutInflater.inflate(R.layout.selectcamera_gallery_layout, null)
+        val dialog = activity?.let { BottomSheetDialog(requireActivity(), R.style.DialogStyle) }!!
+        dialog.setContentView(view)
+        dialog.show()
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.attributes = lp
+        dialog.window!!.attributes.windowAnimations = R.style.DialogStyle
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+        val button_camera = dialog.findViewById<ImageView>(R.id.button_camera)
+        val button_gallery = dialog.findViewById<ImageView>(R.id.button_gallery)
+
+
+        button_camera?.setOnClickListener {
+            dialog.dismiss()
+            capturePhoto()
+        }
+        button_gallery?.setOnClickListener {
+            dialog.dismiss()
+            openGallery()
+
+        }
+
+
+    }
+
+    private fun capturePhoto() {
+        val capturedImage = File(requireActivity().externalCacheDir, "My_Captured_Photo.jpg")
+        if (capturedImage.exists()) {
+            capturedImage.delete()
+        }
+        capturedImage.createNewFile()
+        mUri = if (Build.VERSION.SDK_INT >= 24) {
+            FileProvider.getUriForFile(
+                requireActivity(),
+                "com.SigmaDating.apk.fileprovider",
+                capturedImage
+            )
+        } else {
+            Uri.fromFile(capturedImage)
+        }
+
+        val intent = Intent("android.media.action.IMAGE_CAPTURE")
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
+        startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
     }
 
     private fun openGallery() {
@@ -471,6 +527,22 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
+
+            OPERATION_CAPTURE_PHOTO ->
+                if (resultCode == Activity.RESULT_OK) {
+                    val bitmap = BitmapFactory.decodeStream(
+                        requireActivity().getContentResolver().openInputStream(mUri!!)
+                    )
+
+                    //imageProfile!!.setImageBitmap(bitmap)
+                    //val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
+                 //   var bitmapl: Bitmap = drawable.getBitmap()
+                  Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+                    convertBitmapToBase64(bitmap)
+
+
+                }
+
 
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
@@ -506,10 +578,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             val b = baos.toByteArray()
             encoded = Base64.encodeToString(b, Base64.DEFAULT)
             (activity as Home).homeviewmodel.User_upload_images(
-                (activity as Home).sharedPreferencesStorage.getString(
-                    AppConstants.USER_ID
-                ), "data:image/png;base64," + encoded
-            )
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID), "data:image/png;base64," + encoded)
 
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()
@@ -658,6 +727,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         if (dialog != null || dialog.isShowing) {
             dialog.dismiss()
+            schoolAct_spinner!!.isEnabled = true
+            fraternity_Spinner.isEnabled = true
         }
     }
 }
