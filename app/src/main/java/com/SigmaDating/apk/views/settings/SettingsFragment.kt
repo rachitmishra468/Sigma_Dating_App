@@ -50,8 +50,10 @@ import com.SigmaDating.apk.utilities.PhoneTextWatcher
 import retrofit2.http.DELETE
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import androidx.lifecycle.MutableLiveData
+import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.databinding.FragmentSettingsBinding
-
+import com.example.demoapp.other.Resource
 
 class SettingsFragment : Fragment() {
 
@@ -182,6 +184,9 @@ class SettingsFragment : Fragment() {
         }
 
         _binding.updateSetting.setOnClickListener {
+
+            (activity as Home).homeviewmodel.setting_update_details= MutableLiveData<Resource<Loginmodel>>()
+            subscribe_setting_update_details()
             val jsonObject = JsonObject()
             Log.d(
                 "TAG@123",
@@ -220,9 +225,6 @@ class SettingsFragment : Fragment() {
             Update_password(true);
         }
         subscribe_Login_User_details()
-
-        subscribe_setting_update_details()
-
         (activity as Home).homeviewmodel.get_Login_User_details(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
@@ -317,10 +319,13 @@ class SettingsFragment : Fragment() {
                                     "Women" -> _binding.rbWomen.setChecked(true);
                                     "Men" -> _binding.rbMen.setChecked(true);
                                     "Other" -> _binding.rbMore.setChecked(true);
+                                    "WOMEN" -> _binding.rbWomen.setChecked(true);
+                                    "MEN" -> _binding.rbMen.setChecked(true);
+                                    "OTHER" -> _binding.rbMore.setChecked(true);
+
                                 }
                             }
 
-                            // _binding.seekBarAge.setValues(20F, 25F)
 
                             if (it.data?.user?.distance?.isEmpty() == false) {
                                 if (it.data.user.distance.toFloat() >= 25) {
@@ -466,24 +471,22 @@ class SettingsFragment : Fragment() {
                             editText_password_confirm.text.toString(),
                         )
                     } else {
-                        editText_password_confirm.setError("Please Enter Valid Password")
+                        editText_password_confirm.setError("Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character")
                     }
 
                 } else {
-
-                    Toast.makeText(context, "Please Enter Valid Password", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character", Toast.LENGTH_SHORT)
                         .show()
                 }
 
 
             } else {
-                if (AppUtils.isValid_password_match(
-                        editText_password.text.toString(),
-                        editText_password_confirm.text.toString()
-                    )
-                ) {
-
-                    if (AppUtils.isValid_password(editText_password.text.toString())) {
+                if (AppUtils.isValid_password(editText_password.text.toString())) {
+                    if ( AppUtils.isValid_password_match(
+                            editText_password.text.toString(),
+                            editText_password_confirm.text.toString()
+                        )
+                    ) {
                         subscribe_change_password(dialog)
                         (activity as Home).homeviewmodel.User_change_password(
                             (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
@@ -491,12 +494,12 @@ class SettingsFragment : Fragment() {
                             editText_password_confirm.text.toString()
                         )
                     } else {
-                        editText_password.setError("Please Enter Valid Password")
+                        editText_password_confirm.error="Password Does Not Match"
                     }
 
                 } else {
+                    editText_password.error="Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
 
-                    Toast.makeText(context, "Password Does Not Match", Toast.LENGTH_SHORT).show()
                 }
             }
         }

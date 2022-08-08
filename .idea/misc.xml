@@ -48,7 +48,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_blank.xml" value="0.20416666666666666" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.11328125" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_contact_us.xml" value="0.12" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_gender.xml" value="0.12894736842105264" />
@@ -159,7 +159,6 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/profile_match_layout.xml" value="0.16145833333333334" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/school_list_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/search_dialog_school.xml" value="0.17447916666666666" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/update_photo.xml" value="0.14666666666666667" />
       </map>
     </option>
   </component>

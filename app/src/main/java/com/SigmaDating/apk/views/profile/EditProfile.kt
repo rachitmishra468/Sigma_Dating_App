@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +32,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.apk.adapters.Edit_Profile_Adapter
 import com.SigmaDating.apk.adapters.SchoolAdapter
+import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.databinding.FragmentEditProfileBinding
 import com.SigmaDating.apk.model.communityModel.Interest
 import com.SigmaDating.apk.model.communityModel.UniversityList
@@ -38,11 +40,14 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.views.Home
+import com.SigmaDating.model.SchoolCommunityResponse
+import com.example.demoapp.other.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -104,6 +109,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             (activity as Home).onBackPressed()
         }
         _binding?.done?.setOnClickListener {
+            (activity as Home).homeviewmodel.update_profile= MutableLiveData<Resource<Loginmodel>>()
+            subscribe_edit_profile()
             var t = interestsList.joinToString(",")
             university?.let { it1 ->
                 community?.let { it2 ->
@@ -138,7 +145,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 true
             } else false
         }
-
+        (activity as Home).homeviewmodel.school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
+        (activity as Home).homeviewmodel.get_user_edit_user=MutableLiveData<Resource<Loginmodel>>()
         (activity as Home).homeviewmodel.get_edit_page_data(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
@@ -202,9 +210,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         super.onDestroy()
         _binding = null
     }
-
-
     fun subscribe_edit_profile() {
+
         (activity as Home?)?.homeviewmodel?.update_profile?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -212,8 +219,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+
+                                Update_edit_Profile_info()
                             } catch (e: Exception) {
                             }
                         } else {
@@ -245,15 +253,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         if (res?.status == true) {
 
                             try {
-
-
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                     .show()
-                                (activity as Home).homeviewmodel.get_Login_User_details(
-                                    (activity as Home).sharedPreferencesStorage.getString(
-                                        AppConstants.USER_ID
-                                    )
-                                )
+                                Update_edit_Profile_info()
                             } catch (e: Exception) {
                             }
 
@@ -267,7 +269,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     AppUtils.showLoader(requireContext())
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })
@@ -284,14 +286,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Log.d("TAG@123", "1311" + it.data.toString())
-                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                    .show()
-                                (activity as Home).homeviewmodel.get_Login_User_details(
-                                    (activity as Home).sharedPreferencesStorage.getString(
-                                        AppConstants.USER_ID
-                                    )
-                                )
+                                AppUtils.hideLoader()
+                                Log.d("TAG@123", "upload Images : " + it.data.toString())
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                                Update_edit_Profile_info()
+
                             } catch (e: Exception) {
                             }
 
@@ -305,7 +304,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     AppUtils.showLoader(requireContext())
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })
@@ -315,7 +314,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
     fun schoolListResponse() {
-
         (activity as Home?)?.homeviewmodel?.school_dataResponse?.observe(
             requireActivity(),
             Observer {
@@ -334,19 +332,19 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
                                     // setAdapterData()
-                                    setupChipGroupDynamically(interest!!)
 
+                                    Update_edit_Profile_info()
 
                                 } catch (e: Exception) {
                                     Log.d("TAG@123", "Exception schoolListResponse ${e.message}")
                                 }
                             } else {
-
+                                Log.d("TAG@123", "Exception status == falsh")
                             }
                         }
                     }
                     Status.LOADING -> {
-                        AppUtils.showLoader(context)
+                        AppUtils.showLoader(requireContext())
                     }
                     Status.ERROR -> {
                         AppUtils.hideLoader()
@@ -359,11 +357,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
     fun subscribe_Login_User_details() {
-
-        (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
+        (activity as Home?)?.homeviewmodel?.get_user_edit_user?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -371,12 +367,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                 dataList.clear()
                                 interestsList = ArrayList()
                                 interestsList.clear()
-                                Log.d("TAG@123", "1311" + it.data.toString())
+                                Log.d("TAG@123", "Login_User_details : " + it.data?.user.toString())
                                 if (!res.user.photos.isNullOrEmpty()) {
                                     dataList = res.user.photos
                                 }
                                 set_Adapterdata()
-
                                 res.user.university.let {
                                     university = it
                                     schoolAct_spinner!!.setText(university)
@@ -402,6 +397,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                 } else {
                                     interestsList.add(res.user.interests)
                                 }
+                                setupChipGroupDynamically(interest!!)
+
                             } catch (e: Exception) {
                                 Log.d(
                                     "TAG@123",
@@ -420,7 +417,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
                 }
                 Status.ERROR -> {
-                    AppUtils.hideLoader()
+
                 }
             }
         })
@@ -439,13 +436,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     override fun onCategoryClick(position: Int, boolean: Boolean) {
         if (boolean) {
-            openGallery()
             popup()
-            // openGallery()
-
-
         } else {
-
+            (activity as Home).homeviewmodel.delete_images = MutableLiveData<Resource<Loginmodel>>()
+            subscribe_delete_images()
             (activity as Home).homeviewmodel.User_delete_images(
                 (activity as Home).sharedPreferencesStorage.getString(
                     AppConstants.USER_ID
@@ -480,7 +474,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         button_gallery?.setOnClickListener {
             dialog.dismiss()
             openGallery()
-
         }
 
 
@@ -528,17 +521,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     val bitmap = BitmapFactory.decodeStream(
                         requireActivity().getContentResolver().openInputStream(mUri!!)
                     )
-
-                    //imageProfile!!.setImageBitmap(bitmap)
-                    //val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
-                 //   var bitmapl: Bitmap = drawable.getBitmap()
-                  Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+                  Bitmap.createScaledBitmap(bitmap, 150, 150, true);
                     convertBitmapToBase64(bitmap)
-
-
                 }
-
-
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
 
@@ -564,24 +549,22 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     fun convertBitmapToBase64(bm: Bitmap) {
         val progressDialog = ProgressDialog(context)
         progressDialog.setTitle("")
-        progressDialog.setMessage("please wait ...")
+        progressDialog.setMessage("Please wait ...")
         progressDialog.show()
+        (activity as Home).homeviewmodel.upload_images = MutableLiveData<Resource<Loginmodel>>()
+        subscribe_upload_images()
         doAsync {
             var encoded = ""
             val baos = ByteArrayOutputStream()
-            bm.compress(Bitmap.CompressFormat.PNG, 0, baos)
+            bm.compress(Bitmap.CompressFormat.PNG, 50, baos)
             val b = baos.toByteArray()
             encoded = Base64.encodeToString(b, Base64.DEFAULT)
-            (activity as Home).homeviewmodel.User_upload_images(
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID), "data:image/png;base64," + encoded)
-
+            (activity as Home).homeviewmodel.User_upload_images((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID), "data:image/png;base64," + encoded)
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()
-
-
         }
-    }
 
+    }
 
     private fun setupChipGroupDynamically(list: List<Interest>) {
         try {
@@ -669,10 +652,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
             schoolListResponse()
-            subscribe_Login_User_details()
-            subscribe_edit_profile()
-            subscribe_upload_images()
-            subscribe_delete_images()
+
+
         }
 
     }
@@ -697,6 +678,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             schoolAct_spinner!!.isEnabled = true
             fraternity_Spinner.isEnabled = true
         }
+    }
+
+
+    fun Update_edit_Profile_info(){
+        (activity as Home).homeviewmodel.get_user_edit_user=MutableLiveData<Resource<Loginmodel>>()
+        subscribe_Login_User_details()
+        (activity as Home).homeviewmodel.get_Edit_User_details(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            ))
     }
 }
 

@@ -211,11 +211,17 @@ class ReportUserFragment : Fragment() {
                                     it.tvLocation.setText(res.user.location)
                                     it.tvDescription.setText(res.user.about)
                                     it.universityText.setText(res.user.university)
-                                    it.textAge.setText("" + res?.user.dob?.let {
-                                        AppUtils.Age_finder(
-                                            it
-                                        )
-                                    })
+                                    if(res.user.greekletter.length>0) {
+                                        it.reportGreek.text = res.user.greekletter
+                                        it.reportGreek.visibility=View.VISIBLE
+                                    }
+                                    else{
+                                        it.reportGreek.visibility=View.GONE
+                                    }
+
+
+                                    it.textAge.setText("" + res?.user.age)
+
                                 }
                                 res.user.apply { }
                                 it.data?.user?.upload_image?.let {

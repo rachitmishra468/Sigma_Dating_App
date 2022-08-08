@@ -31,6 +31,7 @@ import com.SigmaDating.databinding.FragmentSecondBinding
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Status
 import kotlinx.coroutines.*
+import org.w3c.dom.Text
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -51,6 +52,7 @@ class SecondFragment : Fragment() {
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
+    lateinit var greekLatter:TextView
     private var userID: String? = null
 
 
@@ -175,8 +177,19 @@ class SecondFragment : Fragment() {
                             _binding?.let {
                                 it.nameText.setText(res?.user.first_name +" "+ res.user.last_name)
                                 it.addresText.setText(res?.user.university)
-                                it.ageText.setText(""+res?.user.dob?.let{AppUtils.Age_finder(it)})
+                                it.ageText.setText(""+res?.user.age)
+
                             }
+
+                            if(it.data!!.user.greekletter.length>0) {
+                                greekLatter.text = it.data.user.greekletter
+                                greekLatter.visibility=View.VISIBLE
+                            }
+                            else{
+                                greekLatter.visibility=View.GONE
+                            }
+
+
 
                             it.data?.user?.upload_image?.let {
                                 Glide.with(AppReseources.getAppContext()!!).load(it)
@@ -218,6 +231,7 @@ class SecondFragment : Fragment() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
+        greekLatter= binding.root.findViewById(R.id.greek_latter)
 
         match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_solid))
         chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))

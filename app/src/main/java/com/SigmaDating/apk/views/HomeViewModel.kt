@@ -24,30 +24,26 @@ class HomeViewModel @Inject constructor(
 
 
     lateinit var report_block_user: MutableLiveData<Resource<Loginmodel>>
-    val setting_update_details: MutableLiveData<Resource<Loginmodel>>
+   lateinit var  setting_update_details: MutableLiveData<Resource<Loginmodel>>
     lateinit var profile_swipe: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
+    lateinit var get_user_edit_user: MutableLiveData<Resource<Loginmodel>>
     val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
     val get_UserReportdata: MutableLiveData<Resource<Loginmodel>>
     val change_password: MutableLiveData<Resource<Loginmodel>>
-    val upload_images: MutableLiveData<Resource<Loginmodel>>
-    val delete_images: MutableLiveData<Resource<Loginmodel>>
-    val school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
-    val update_profile: MutableLiveData<Resource<Loginmodel>>
+    lateinit var upload_images: MutableLiveData<Resource<Loginmodel>>
+    lateinit var delete_images: MutableLiveData<Resource<Loginmodel>>
+    lateinit var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
+    lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
         report_block_user=MutableLiveData<Resource<Loginmodel>>()
        // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
         get_UserReportdata=MutableLiveData<Resource<Loginmodel>>()
-        setting_update_details= MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
         get_secound_feb_data= MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
-        upload_images = MutableLiveData<Resource<Loginmodel>>()
-        delete_images = MutableLiveData<Resource<Loginmodel>>()
-        school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
-        update_profile = MutableLiveData<Resource<Loginmodel>>()
          user_bids = MutableLiveData<Resource<home_model>>()
     }
 
@@ -119,6 +115,22 @@ class HomeViewModel @Inject constructor(
             } else {
                 Log.d("TAG@123", "get_Login_User_bids  isSuccessful false")
                 user_bids.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+    fun get_Edit_User_details(id: String) = viewModelScope.launch {
+        get_user_edit_user.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        Log.d("TAG@123", id)
+        jsonObject.addProperty("user_id", id)
+        Log.d("TAG@123", "22 : -" + jsonObject.toString())
+        mainRepository.get_login_user_data(jsonObject).let {
+            if (it.isSuccessful) {
+                get_user_edit_user.postValue(Resource.success(it.body()))
+            } else {
+                get_user_edit_user.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }
@@ -211,8 +223,6 @@ class HomeViewModel @Inject constructor(
 
     fun get_edit_page_data(id: String) {
         val one = async { getSchoolingData() }
-        val two = async { get_Login_User_details(id) }
-
     }
 
     fun Update_edit_page_data(
@@ -222,7 +232,8 @@ class HomeViewModel @Inject constructor(
         interests: String,
         about: String
     ) {
-        val one = async { update_profile(id, university, community, interests, about) }
+        val one = async {
+            update_profile(id, university, community, interests, about) }
        // val two = async { get_Login_User_details(id) }
 
 
@@ -297,7 +308,7 @@ class HomeViewModel @Inject constructor(
         mainRepository.Update_profile(jsonObject).let {
             if (it.isSuccessful) {
                 update_profile.postValue(Resource.success(it.body()))
-                get_Login_User_details(id)
+
             } else {
                 update_profile.postValue(Resource.error(it.errorBody().toString(), null))
             }

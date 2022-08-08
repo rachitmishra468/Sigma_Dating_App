@@ -20,6 +20,8 @@ data class User(
     val latitude:String,
     val longitude:String,
     val interested_in:String,
+    val greekletter:String,
+    val age:String,
     var photos:ArrayList<String> = arrayListOf()
 
 

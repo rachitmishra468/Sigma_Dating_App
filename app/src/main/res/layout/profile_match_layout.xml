@@ -67,6 +67,7 @@
 
 
                     <TextView
+                        android:id="@+id/age_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -117,6 +118,7 @@
 
 
                 <TextView
+                    android:id="@+id/greek_latter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -145,6 +147,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
+
 
                 <LinearLayout
                     android:id="@+id/container"
@@ -185,11 +190,28 @@
                                 android:visibility="invisible"
                                 android:src="@drawable/heart_solid" />
 
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:visibility="invisible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
 
                 </LinearLayout>
+
+
 
 
                 <LinearLayout

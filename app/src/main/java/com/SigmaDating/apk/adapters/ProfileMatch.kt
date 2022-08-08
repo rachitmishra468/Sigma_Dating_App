@@ -2,6 +2,7 @@ package com.SigmaDating.apk.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.FragmentNavigator
@@ -16,7 +18,12 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.views.OnSwipeTouchListener
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.coroutines.*
+import org.w3c.dom.Text
 import kotlin.concurrent.thread
 
 class ProfileMatch(private val courseData: ArrayList<Bids>, private val context: Context, var listener: OnCategoryClickListener
@@ -44,12 +51,41 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
         var idIV_actiontyp=(v.findViewById<ImageView>(R.id.img_hide))
+        var progressBar = (v.findViewById<ProgressBar>(R.id.progress_bar))
+        var greek_latter=(v.findViewById<TextView>(R.id.greek_latter))
 
         mageview.apply {
             transitionName = courseData[position].upload_image
         }
 
-        Glide.with(context).load(courseData[position].upload_image).into(mageview);
+        progressBar.visibility = View.VISIBLE
+        Glide.with(context).load(courseData[position].upload_image).listener(object : RequestListener<Drawable> {
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                progressBar.visibility = View.GONE
+                return false;
+            }
+
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                progressBar.visibility = View.GONE
+                return false;
+            }
+
+        }).into(mageview);
+
+
+
+
 
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
@@ -91,9 +127,18 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
 
         })
 
-        (v.findViewById<View>(R.id.tv_username) as TextView).setText(courseData[position].first_name)
+        if (courseData[position].greekletter.length>0){
+            greek_latter.visibility=View.VISIBLE
+            greek_latter.text=courseData[position].greekletter
+        }
+        else{
+            greek_latter.visibility=View.GONE
+        }
 
-        (v.findViewById<View>(R.id.tv_university) as TextView).setText(courseData[position].first_name)
+        (v.findViewById<View>(R.id.tv_username) as TextView).setText(courseData[position].first_name)
+        (v.findViewById<View>(R.id.age_text) as TextView).setText(courseData[position].age)
+
+        (v.findViewById<View>(R.id.tv_university) as TextView).setText(courseData[position].university)
 
         (v.findViewById<View>(R.id.bright_img) as ImageView).setOnClickListener {
             listener.onCategoryClick(

@@ -70,21 +70,23 @@
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
 
 
+
         <Button
             android:id="@+id/done"
             style="@style/QText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center_horizontal"
-            android:text="Done"
-            android:textAllCaps="false"
+            android:layout_height="32dp"
+            android:background="@drawable/border_line_radius"
+            android:gravity="center"
+            android:text="Update"
             android:textColor="@color/blue"
-            android:textSize="20sp"
+            android:textSize="11sp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.786"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
 
         <TextView
             android:id="@+id/profile_photo"

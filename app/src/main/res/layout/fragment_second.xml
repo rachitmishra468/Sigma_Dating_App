@@ -171,6 +171,7 @@
                             app:tint="@color/hint_text_color"></de.hdodenhof.circleimageview.CircleImageView>
 
                         <TextView
+                            android:id="@+id/greek_latter"
                             android:layout_width="75dp"
                             android:layout_height="28dp"
                             android:layout_alignParentEnd="true"
