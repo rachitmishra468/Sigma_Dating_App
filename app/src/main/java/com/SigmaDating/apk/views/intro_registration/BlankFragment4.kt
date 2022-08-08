@@ -17,6 +17,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.adapters.SchoolAdapter
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.databinding.FragmentSchoolInputBinding
 import com.example.demoapp.other.Status
@@ -65,10 +66,9 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
+                AppUtils.showLoader(requireActivity())
                 schoolList = ArrayList<UniversityList>()
                 schoolList = schoolListCopy
-
-
                 openSchoolSearchDialog(AppConstants.School,"School / University")
                 true
             } else false
@@ -108,7 +108,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                     ).show()
 
                 }else {
-                    (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+                    (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
                 }
 
         }
@@ -218,13 +218,13 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
         schoolAdapter.registerAdapterDataObserver(emptyDataObserver)
         dialog.show()
-
+        AppUtils.hideLoader()
         schoolAct_spinner!!.isEnabled=false
         fraternity_Spinner.isEnabled=false
         dialog.setOnDismissListener {
             schoolAct_spinner!!.isEnabled=true
             fraternity_Spinner.isEnabled=true
-            // your code after dissmiss dialog
+
         }
 
 

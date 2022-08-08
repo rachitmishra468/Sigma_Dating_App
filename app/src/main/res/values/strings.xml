@@ -27,7 +27,7 @@
     <string name="signup_text">SIGN UP</string>
     <string name="sign_in_text">OR SIGN IN WITH</string>
     <string name="continue_text">CONTINUE</string>
-    <string name="tell_us">Tell us a little\nabout yourself</string>
+    <string name="tell_us">Tell us a little\nabout yourself.</string>
     <string name="tell_us_school">Tell us about\n your school</string>
     <string name="title_activity_on_boarding">OnBoardingActivity</string>
     <string name="dummy_button">Dummy Button</string>

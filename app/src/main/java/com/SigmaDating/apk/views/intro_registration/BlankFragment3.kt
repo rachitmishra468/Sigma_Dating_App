@@ -123,7 +123,7 @@ class BlankFragment3 : Fragment() {
                     val
                             ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
                     Log.d("TAG@123", ee.toString())
-                    (activity as OnBoardingActivity?)?.setCurrentItem(3, true)
+                    (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
 
                 }
 
@@ -160,7 +160,6 @@ class BlankFragment3 : Fragment() {
             mCalendar[Calendar.YEAR] = mYear
             mCalendar[Calendar.MONTH] = mMonth
             mCalendar[Calendar.DAY_OF_MONTH] = mDay
-            //val myFormat = "dd/MM/yyyy"
             val myFormat = "MM/dd/yyyy"
             val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
             editbirthday.text = sdf.format(mCalendar.time)
@@ -175,8 +174,8 @@ class BlankFragment3 : Fragment() {
 
         // Changing mCalendar date from current to
         // some random MAX day 20/08/2021 20 Aug 2021
-        val maxDay = 31
-        val maxMonth = 12
+        val maxDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)  //31
+        val maxMonth = Calendar.getInstance().get(Calendar.MONTH)  //12
         val maxYear = Calendar.getInstance().get(Calendar.YEAR) - 18;
         mCalendar.set(maxYear, maxMonth - 1, maxDay)
         mDialog.datePicker.maxDate = mCalendar.timeInMillis

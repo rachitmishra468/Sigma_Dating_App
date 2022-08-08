@@ -19,24 +19,28 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            1 -> BlankFragment2.newInstance(
+            1 -> GenderFragment.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            2 -> BlankFragment3.newInstance(
+            2 -> BlankFragment2.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
+            3 -> BlankFragment3.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
 
-            3 -> BlankFragment4.newInstance(
+            4 -> BlankFragment4.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            4 -> Password.newInstance(
+            5 -> Password.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            5 -> Profile_Photo.newInstance(
+            6 -> Profile_Photo.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
@@ -48,7 +52,7 @@ class OnBoardingViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 6
+        return 7
     }
 
 }

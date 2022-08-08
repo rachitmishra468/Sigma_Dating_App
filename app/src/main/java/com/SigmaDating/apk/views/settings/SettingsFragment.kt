@@ -29,7 +29,6 @@ import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
-import com.SigmaDating.databinding.FragmentSettingsBinding
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
@@ -51,6 +50,7 @@ import com.SigmaDating.apk.utilities.PhoneTextWatcher
 import retrofit2.http.DELETE
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import com.SigmaDating.databinding.FragmentSettingsBinding
 
 
 class SettingsFragment : Fragment() {
@@ -612,8 +612,7 @@ class SettingsFragment : Fragment() {
                             delay(500)
                             latitude = "${list[0].latitude}"
                             longitude = "${list[0].longitude}"
-                            // tvCountryName.text = "Country Name\n${list[0].countryName}"
-                            // tvLocality.text = "Locality\n${list[0].locality}"
+
                             location_text = "${list[0].locality}"
                         }
 

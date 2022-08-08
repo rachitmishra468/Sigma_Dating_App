@@ -38,6 +38,10 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.views.Home
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
@@ -135,13 +139,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             } else false
         }
 
-        schoolListResponse()
-        subscribe_Login_User_details()
-        subscribe_edit_profile()
-        subscribe_upload_images()
-        subscribe_delete_images()
-
-
         (activity as Home).homeviewmodel.get_edit_page_data(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
@@ -198,6 +195,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 }
             }
     }
+
 
 
     override fun onDestroy() {
@@ -323,7 +321,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             Observer {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        // AppUtils.hideLoader()
+                         AppUtils.hideLoader()
                         it.data.let { it1 ->
                             if (it1?.status == true) {
                                 try {
@@ -348,10 +346,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         }
                     }
                     Status.LOADING -> {
-                        //AppUtils.showLoader(requireActivity())
+                        AppUtils.showLoader(context)
                     }
                     Status.ERROR -> {
-
+                        AppUtils.hideLoader()
                     }
                 }
             })
@@ -365,6 +363,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -403,8 +402,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                 } else {
                                     interestsList.add(res.user.interests)
                                 }
-
-
                             } catch (e: Exception) {
                                 Log.d(
                                     "TAG@123",
@@ -423,7 +420,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })
@@ -441,9 +438,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     override fun onCategoryClick(position: Int, boolean: Boolean) {
-
-
         if (boolean) {
+            openGallery()
             popup()
             // openGallery()
 
@@ -451,7 +447,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         } else {
 
             (activity as Home).homeviewmodel.User_delete_images(
-
                 (activity as Home).sharedPreferencesStorage.getString(
                     AppConstants.USER_ID
                 ), dataList.get(position)
@@ -586,35 +581,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         }
     }
-    /* private fun setAdapterData() {
-
-         try {
-             val schoolAdapter = AppReseources.getAppContext()?.let {
-                 CommunityAdapter(
-                     it,
-                     schoolList!! as ArrayList<UniversityList>
-                 )
-             }
-             schoolAct_spinner?.adapter = schoolAdapter
-             schoolAdapter?.notifyDataSetChanged()
-             schoolAct_spinner?.setSelection(index(schoolAct_spinner!!, university))
-
-
-             val adapter = AppReseources.getAppContext()?.let {
-                 CommunityAdapter(
-                     it,
-                     fraternitiesList!! as ArrayList<UniversityList>
-                 )
-             }
-             fraternity_Spinner.adapter = adapter
-             adapter?.notifyDataSetChanged()
-             fraternity_Spinner.setSelection(index(fraternity_Spinner, community))
-         } catch (e: Exception) {
-
-             Log.d("TAG@123", "Ex -:" + e.message.toString())
-         }
-
-     }*/
 
 
     private fun setupChipGroupDynamically(list: List<Interest>) {
@@ -700,6 +666,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(100)
+            schoolListResponse()
+            subscribe_Login_User_details()
+            subscribe_edit_profile()
+            subscribe_upload_images()
+            subscribe_delete_images()
+        }
+
     }
 
     override fun onStop() {
@@ -712,17 +687,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         if (stringtype.equals(AppConstants.Fraternity) || stringtype.equals(AppConstants.Sorority)) {
             fraternity_Spinner!!.setText(clickItemData)
             community = clickItemData
-            /*  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                  AppConstants.community,
-                  position.name
-              )*/
         } else {
             schoolAct_spinner!!.setText(clickItemData)
             university = clickItemData
-            /*(activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                AppConstants.university,
-                position.name
-            )*/
         }
 
         if (dialog != null || dialog.isShowing) {
