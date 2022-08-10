@@ -68,8 +68,6 @@ class SettingsFragment : Fragment() {
     var latitude = ""
     var longitude = ""
     var interested_in = ""
-
-
     fun Call_links() {
         val bundle = Bundle()
         _binding.licencesText.setOnClickListener {

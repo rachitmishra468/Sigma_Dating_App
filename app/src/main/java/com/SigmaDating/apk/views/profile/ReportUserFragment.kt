@@ -118,6 +118,12 @@ class ReportUserFragment : Fragment() {
         }
 
         userID = getArguments()?.getString("user_id")
+
+
+        if(userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
+            tv_report_to_user.visibility=View.GONE
+            tv_block.visibility=View.GONE
+        }
         _binding!!.grideReportFg.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("user_id", userID)

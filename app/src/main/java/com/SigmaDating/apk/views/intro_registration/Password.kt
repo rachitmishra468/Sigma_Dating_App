@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
+import com.SigmaDating.apk.other.LocationService
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.PasswordStrength
@@ -22,18 +23,17 @@ import com.SigmaDating.apk.utilities.PasswordStrength
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class Password : Fragment() , TextWatcher {
+class Password : Fragment(), TextWatcher {
 
     private var param1: String? = null
     private var param2: String? = null
 
     lateinit var editText_password: EditText
-    lateinit var strengthView:TextView
+    lateinit var strengthView: TextView
 
-    lateinit var progressBar:ProgressBar
+    lateinit var progressBar: ProgressBar
     lateinit var editText_password_confirm: EditText
-    lateinit var constraint_f1:ConstraintLayout
-
+    lateinit var constraint_f1: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,28 +55,32 @@ class Password : Fragment() , TextWatcher {
         editText_password = view.findViewById(R.id.editText_password)
         editText_password.addTextChangedListener(this)
         editText_password_confirm = view.findViewById(R.id.editText_password_confirm)
-        constraint_f1= view.findViewById(R.id.constraint_f1)
+        constraint_f1 = view.findViewById(R.id.constraint_f1)
         create_password = view.findViewById(R.id.create_password)
-         progressBar = view.findViewById(R.id.progressBar) as ProgressBar
-       strengthView = view.findViewById(R.id.password_strength) as TextView
-
+        progressBar = view.findViewById(R.id.progressBar) as ProgressBar
+        strengthView = view.findViewById(R.id.password_strength) as TextView
+        LocationService.get_location(requireActivity())
         create_password?.setOnClickListener {
 
             if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                editText_password.error = "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+                editText_password.error =
+                    "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
                     "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 )
             } else if (!AppUtils.isValid_password(editText_password_confirm.text.toString())) {
-                editText_password_confirm.error = "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+                editText_password_confirm.error =
+                    "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
                     constraint_f1,
                     "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
                 )
-            }else if (!editText_password_confirm.text.toString().equals(editText_password.text.toString())) {
+            } else if (!editText_password_confirm.text.toString()
+                    .equals(editText_password.text.toString())
+            ) {
                 editText_password_confirm.error = "Password Does Not Match"
                 AppUtils.showErrorSnackBar(
                     requireContext(),
@@ -121,7 +125,6 @@ class Password : Fragment() , TextWatcher {
     }
 
 
-
     private fun updatePasswordStrengthView(password: String) {
 
 
@@ -138,7 +141,10 @@ class Password : Fragment() , TextWatcher {
         strengthView.text = str.getText(AppReseources.getAppContext()!!)
         strengthView.setTextColor(str.color)
 
-        progressBar.progressDrawable.setColorFilter(str.color, android.graphics.PorterDuff.Mode.SRC_IN)
+        progressBar.progressDrawable.setColorFilter(
+            str.color,
+            android.graphics.PorterDuff.Mode.SRC_IN
+        )
         if (str.getText(AppReseources.getAppContext()!!) == "Weak") {
             progressBar.progress = 25
         } else if (str.getText(AppReseources.getAppContext()!!) == "Medium") {

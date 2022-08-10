@@ -112,7 +112,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
         footer_transition()
         subscribe_Login_User_details()
-        subscribe_bids()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(500)
+            subscribe_bids()
+        }
+
+
         return binding.root
 
     }
@@ -156,9 +162,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                 if (dataObject is Bids) {
                     idUserConnected = (dataObject as Bids).id
-                    /* if(courseModalArrayList?.contains(dataObject) == true){
-                         courseModalArrayList?.remove(dataObject)
-                     }*/
                     Log.d("TAG@123", "idUserConnected " + idUserConnected)
                     swipe_update(idUserConnected, "superlike")
                 }
@@ -170,19 +173,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
         })
 
-    }
-
-
-    fun play_animation() {
-        Handler().postDelayed(
-            {
-
-                binding.heartLoading.visibility = View.GONE
-                binding.brokenHeart.visibility = View.GONE
-
-            },
-            1500
-        )
     }
 
 
@@ -230,14 +220,26 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
         when (count) {
             1 -> {
-                val bundle = Bundle()
-                bundle.putString("user_id", position?.id)
-                val extrass = FragmentNavigatorExtras(imageView to position!!.upload_image)
-                val action = FirstFragmentDirections.actionFirstFragmentToReportUserFragment(
-                    userImage = position.upload_image,
-                    userId = position.id
-                )
-                findNavController().navigate(action, extrass)
+                extras?.let {
+                    val bundle = Bundle()
+                    bundle.putString("user_id", position?.id)
+                    findNavController().navigate(
+                        R.id.action_FirstFragment_to_reportUserFragment,
+                        bundle,
+                        null,
+                        extras
+                    )
+                } ?: run {
+                    val bundle = Bundle()
+                    bundle.putString("user_id", position?.id)
+                    findNavController().navigate(
+                        R.id.action_FirstFragment_to_reportUserFragment,
+                        bundle,
+                        null,
+                        null
+                    )
+
+                }
             }
             2 -> cardViewChanger?.throwRight()
             3 -> cardViewChanger?.throwTop()
@@ -369,6 +371,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
 
@@ -406,9 +409,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })

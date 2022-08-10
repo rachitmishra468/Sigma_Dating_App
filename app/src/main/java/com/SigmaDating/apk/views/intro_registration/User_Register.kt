@@ -59,8 +59,7 @@ class User_Register @Inject constructor(
 
 
         jsonObject.addProperty(
-            "location",
-            sharedPreferencesStorage.getString(AppConstants.location)
+            "location", sharedPreferencesStorage.getString(AppConstants.location)
         )
         jsonObject.addProperty("dob", sharedPreferencesStorage.getString(AppConstants.Dob))
         jsonObject.addProperty("gender", sharedPreferencesStorage.getString(AppConstants.gender))

@@ -60,6 +60,7 @@ import android.text.SpannableStringBuilder
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.SigmaDating.apk.AppReseources
+import com.SigmaDating.apk.other.LocationService
 import com.example.demoapp.other.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -75,10 +76,7 @@ private const val ARG_PARAM2 = "param2"
 
 class Profile_Photo : Fragment() {
 
-    private val permissionId = 2
-    var latitude = ""
-    var longitude = ""
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
     //Our constants
     private val OPERATION_CAPTURE_PHOTO = 1
     private val OPERATION_CHOOSE_PHOTO = 2
@@ -148,9 +146,7 @@ class Profile_Photo : Fragment() {
         }
 
         Register()
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
-        getLocation()
-
+        LocationService.get_location(requireActivity())
         return view;
     }
 
@@ -170,8 +166,6 @@ class Profile_Photo : Fragment() {
         dialog.setCanceledOnTouchOutside(true)
         val button_camera = dialog.findViewById<ImageView>(R.id.button_camera)
         val button_gallery = dialog.findViewById<ImageView>(R.id.button_gallery)
-
-
         button_camera?.setOnClickListener {
             dialog.dismiss()
             capturePhoto()
@@ -257,12 +251,12 @@ class Profile_Photo : Fragment() {
     fun convertBitmapToBase64(bm: Bitmap) {
         val progressDialog = ProgressDialog(context)
         progressDialog.setTitle("")
-        progressDialog.setMessage("please wait ...")
+        progressDialog.setMessage("Please wait ...")
         progressDialog.show()
         doAsync {
             var encoded = ""
             val baos = ByteArrayOutputStream()
-            bm.compress(Bitmap.CompressFormat.PNG, 0, baos)
+            bm.compress(Bitmap.CompressFormat.PNG, 50, baos)
             val b = baos.toByteArray()
             encoded = "data:image/png;base64,"+Base64.encodeToString(b, Base64.DEFAULT)
             bitmap_string=encoded
@@ -331,7 +325,7 @@ class Profile_Photo : Fragment() {
                     imageProfile!!.setImageBitmap(bitmap)
                     val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
                     var bitmapl: Bitmap = drawable.getBitmap()
-                    bitmapl = Bitmap.createScaledBitmap(bitmapl, 460, 460, true);
+                    bitmapl = Bitmap.createScaledBitmap(bitmapl, 250, 250, true);
                     convertBitmapToBase64(bitmapl)
 
 
@@ -345,16 +339,13 @@ class Profile_Photo : Fragment() {
                                 data.data
                             )
                             imageProfile?.setImageBitmap(bitmap)
-                           Bitmap.createScaledBitmap(bitmap, 350, 350, true);
+                           Bitmap.createScaledBitmap(bitmap, 250, 250, true);
                             convertBitmapToBase64(bitmap)
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
                     }
-                       /* if (Build.VERSION.SDK_INT >= 19) {
-                            handleImageOnKitkat(data)
-                        }*/
-
+                      
                 }
         }
     }
@@ -396,82 +387,6 @@ class Profile_Photo : Fragment() {
                     }
                 }
             })
-    }
-
-
-    @SuppressLint("MissingPermission", "SetTextI18n")
-    private fun getLocation() {
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-
-                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
-                    val location: Location? = task.result
-                    if (location != null) {
-                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
-                        val list: List<Address> =
-                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(200)
-                            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                AppConstants.latitude,
-                                "${list[0].latitude}"
-                            )
-                            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                AppConstants.longitude,
-                                "${list[0].longitude}"
-                            )
-
-                            Log.d("TAG@123","Location :- ${list[0].latitude} , ${list[0].longitude}")
-
-
-                        }
-
-
-                    }
-                }
-
-            } else {
-                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
-                    .show()
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            permissionId
-        )
-    }
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
-    }
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
     }
 
 }

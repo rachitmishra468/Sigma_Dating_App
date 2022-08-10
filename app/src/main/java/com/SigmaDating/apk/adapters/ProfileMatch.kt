@@ -17,6 +17,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.views.OnSwipeTouchListener
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -50,9 +51,11 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             v = LayoutInflater.from(parent.context).inflate(R.layout.profile_match_layout, parent, false)
 
        var mageview= (v.findViewById<View>(R.id.idIVCourse) as ImageView)
-        var idIV_actiontyp=(v.findViewById<ImageView>(R.id.img_hide))
+        var idIV_actiontyp=(v.findViewById<LottieAnimationView>(R.id.img_hide))
         var progressBar = (v.findViewById<ProgressBar>(R.id.progress_bar))
         var greek_latter=(v.findViewById<TextView>(R.id.greek_latter))
+        var broken_heart=(v.findViewById<LottieAnimationView>(R.id.broken_heart))
+        var heart_loading=(v.findViewById<LottieAnimationView>(R.id.heart_loading))
 
         mageview.apply {
             transitionName = courseData[position].upload_image
@@ -90,23 +93,51 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
+                broken_heart.setVisibility(View.VISIBLE)
+                broken_heart.playAnimation()
+                Handler().postDelayed(
+                    java.lang.Runnable {
+                        broken_heart.setVisibility(View.GONE)
 
-                listener.onCategoryClick(
-                    courseData[position],5,null, mageview
+                        listener.onCategoryClick(
+                            courseData[position],5,null, mageview
+                        )
+                    },
+                    1200
                 )
+
+
+
+
+
 
             }
             override fun onSwipeRight() {
                 super.onSwipeRight()
-                listener.onCategoryClick(
-                    courseData[position],2,null,mageview
+
+                heart_loading.setVisibility(View.VISIBLE)
+                heart_loading.playAnimation()
+                Handler().postDelayed(
+                    java.lang.Runnable {
+                        heart_loading.setVisibility(View.GONE)
+
+                        listener.onCategoryClick(
+                            courseData[position],2,null,mageview
+                        )
+                    },
+                    1200
                 )
+
+
+
+
             }
             @SuppressLint("ClickableViewAccessibility")
             override fun onSwipeUp() {
                 super.onSwipeUp()
-                idIV_actiontyp.visibility=View.VISIBLE
 
+                idIV_actiontyp.setVisibility(View.VISIBLE)
+                idIV_actiontyp.playAnimation()
                 Handler().postDelayed(
                     java.lang.Runnable {
                         idIV_actiontyp.setVisibility(View.GONE)
@@ -114,15 +145,12 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
                         listener.onCategoryClick(
                             courseData[position],3,null,mageview
                         )
-                                       },
-                    400
+                    },
+                    1200
                 )
-
             }
             override fun onSwipeDown() {
                 super.onSwipeDown()
-
-
             }
 
         })
@@ -175,13 +203,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             ,mageview)
         }
 
-        (v.findViewById<View>(R.id.idIVCourse) as ImageView).setOnClickListener {
-
-        }
-
-
-
-
+        (v.findViewById<View>(R.id.idIVCourse) as ImageView).setOnClickListener {}
         return v
     }
 }
