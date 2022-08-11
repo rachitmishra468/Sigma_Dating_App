@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/rootContainer_intrest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:isScrollContainer="true"
+        app:singleSelection="false"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="5">
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/title_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:includeFontPadding="false"
+            android:text="Search Interests"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rootContainer_intrest"
+            />
+
+
+    <Button
+        android:id="@+id/done_interset"
+        style="@style/QText"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="@drawable/border_line_radius"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:text="Done "
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:textColor="@color/blue"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/title_layout"
+        app:layout_constraintTop_toBottomOf="@+id/title_layout"/>
+
+
+
+    <include
+            android:id="@+id/search_interests_layout"
+            layout="@layout/item_search_photos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/done_interset" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_school"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            tools:listitem="@layout/school_list_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_interests_layout"/>
+
+        <include
+            android:id="@+id/empty_data_parent"
+            layout="@layout/item_empty_dataset"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_interests_layout"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

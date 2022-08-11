@@ -32,6 +32,7 @@ import com.google.android.material.chip.ChipGroup
 import com.SigmaDating.R
 import com.SigmaDating.apk.AppReseources
 import com.SigmaDating.apk.adapters.Edit_Profile_Adapter
+import com.SigmaDating.apk.adapters.InterestAdapter
 import com.SigmaDating.apk.adapters.SchoolAdapter
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.databinding.FragmentEditProfileBinding
@@ -59,7 +60,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
-    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener {
+    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener,InterestAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -73,8 +74,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var schoolList: List<UniversityList>? = null
     var interest: List<Interest>? = null
     lateinit var fraternity_Spinner: EditText
+    lateinit var interests_text:TextView
     private var schoolAct_spinner: EditText? = null
     lateinit var rootContainer: ChipGroup
+    lateinit var rootContainer_intrest:ChipGroup
+
     var university: String? = null
     var community: String? = null
     var about: String? = null
@@ -83,6 +87,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     private var mUri: Uri? = null
     private val OPERATION_CAPTURE_PHOTO = 1
     private lateinit var schoolAdapter: SchoolAdapter
+    private lateinit var intrestAdapter: InterestAdapter
     lateinit var dialog: Dialog
     var searchRecyclerView: RecyclerView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +110,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)
         fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
+        interests_text= _binding?.root?.findViewById(R.id.interests_text)!!
         _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
         _binding?.imageView2?.setOnClickListener {
             (activity as Home).onBackPressed()
@@ -136,6 +142,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             } else false
         }
 
+        interests_text.setOnClickListener {
+            openinterestsSearchDialog(AppConstants.School, interest as List<Interest>)
+        }
+
+
         fraternity_Spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
@@ -161,10 +172,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     @SuppressLint("NotifyDataSetChanged")
     private fun openSchoolSearchDialog(stringtype: String, passDataList: List<UniversityList>) {
-
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
-
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
         searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
         val titleText = dialog.findViewById<TextView>(R.id.title_layout)
@@ -197,6 +206,49 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         }
     }
 
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun openinterestsSearchDialog(stringtype: String, passDataList: List<Interest>) {
+        dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
+        dialog.setContentView(R.layout.open_interests)
+        dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
+        searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
+        val titleText = dialog.findViewById<TextView>(R.id.title_layout)
+        val searchVieww = dialog.findViewById<SearchView>(R.id.search_view)
+        val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
+        val done_interset= dialog.findViewById<Button>(R.id.done_interset)
+        rootContainer_intrest=dialog.findViewById<ChipGroup>(R.id.rootContainer_intrest)
+        setupChipGroupDynamically(interestsList!!,rootContainer_intrest,true)
+        searchRecyclerView!!.layoutManager = GridLayoutManager(requireContext(), 2)
+        intrestAdapter = InterestAdapter(this, stringtype)
+        searchRecyclerView!!.adapter = intrestAdapter
+        intrestAdapter.addData(passDataList)
+        intrestAdapter.notifyDataSetChanged()
+        val emptyDataObserver = EmptyDataObserver(searchRecyclerView, empty_dataparent)
+        intrestAdapter.registerAdapterDataObserver(emptyDataObserver)
+        titleText.text = "Search Interests"
+        searchVieww.queryHint = "Search Interests"
+        dialog.show()
+        schoolAct_spinner!!.isEnabled = false
+        fraternity_Spinner.isEnabled = false
+        done_interset.setOnClickListener {
+
+            if (dialog != null || dialog.isShowing) {
+                dialog.dismiss()
+                schoolAct_spinner!!.isEnabled = true
+                fraternity_Spinner.isEnabled = true
+            }
+            setupChipGroupDynamically(interestsList!!,rootContainer,false)
+        }
+
+        dialog.setOnDismissListener {
+            schoolAct_spinner!!.isEnabled = true
+            fraternity_Spinner.isEnabled = true
+            setupChipGroupDynamically(interestsList!!,rootContainer,false)
+        }
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -207,8 +259,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 }
             }
     }
-
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -408,7 +458,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     } else {
                                         interestsList.add(res.user.interests)
                                     }
-                                    setupChipGroupDynamically(interest!!)
+                                    setupChipGroupDynamically(interestsList!!,rootContainer,false)
 
                                 } catch (e: Exception) {
                                     Log.d(
@@ -603,18 +653,23 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     }
 
-    private fun setupChipGroupDynamically(list: List<Interest>) {
+    private fun setupChipGroupDynamically(list: List<String>, rootContainer:ChipGroup ,flag:Boolean) {
+        if(list.size>0){
         try {
             rootContainer.removeAllViews()
             for (i in list.indices) {
-                rootContainer.addView(createChip(list.get(i).interest, i))
+                Log.d("TAG@123", "ChipGroup : "+list.get(i))
+                if(list.get(i).length>0){
+                    rootContainer.addView(createChip(list.get(i), i,flag))
+                }
+
             }
         } catch (e: Exception) {
-        }
+        }}
     }
 
     @SuppressLint("ResourceType")
-    private fun createChip(label: String, index: Int): Chip {
+    private fun createChip(label: String, index: Int, flag: Boolean): Chip {
 
         val chip = Chip(requireContext(), null)
         chip.layoutParams = LinearLayout.LayoutParams(
@@ -623,21 +678,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         )
 
         chip.text = label
-
-        chip.isCloseIconVisible = false
-        chip.isChipIconVisible = true
-        chip.isCheckable = true
-        chip.isClickable = true
-
-        chip.isChecked = interestsList.contains(label)
-        /*chip.setChipBackgroundColorResource(
-            if (interestsList.contains(label)){
-                (R.drawable.border_line_radius)
-            } else {
-                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
-            })
-*/
-
 
         chip.setBackgroundColor(
             if (interestsList.contains(label)) {
@@ -649,47 +689,53 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
         chip.chipCornerRadius = 1.0F
-        chip.setOnClickListener {
-            Log.d("TAG@123", interestsList.toString())
-            if (chip.isChecked) {
-                if (!interestsList.contains(label)) {
-                    interestsList.add(label)
-                    chip.setBackgroundColor(
-                        ContextCompat.getColor(
-                            AppReseources.getAppContext()!!,
-                            R.color.light_blue_900
-                        )
-                    )
-                }
 
-            } else {
-                if (interestsList.contains(label)) {
-                    interestsList.remove(label)
-                    chip.setBackgroundColor(
-                        ContextCompat.getColor(
-                            AppReseources.getAppContext()!!,
-                            R.color.teal_200
-                        )
-                    )
+        if(flag){
+            chip.isCloseIconVisible = true
+            chip.isChipIconVisible = true
+            chip.isCheckable = true
+            chip.isClickable = true
 
+
+            chip.setOnCloseIconClickListener {
+                Log.d("TAG@123", interestsList.toString())
+                    if (interestsList.contains(label)) {
+                        interestsList.remove(label)
+                        setupChipGroupDynamically(interestsList!!,rootContainer_intrest, true)
                 }
+                Log.d("TAG@123", interestsList.toString())
+
             }
-            Log.d("TAG@123", interestsList.toString())
+        }
+        else{
+            chip.isCloseIconVisible = false
+            chip.isChipIconVisible = false
+            chip.isCheckable = false
+            chip.isClickable = false
+        }
 
-        }
-        chip.setOnCloseIconClickListener {
-        }
         return chip
 
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
-        schoolAdapter.filter.filter(p0)
+        if(this::schoolAdapter.isInitialized){
+            schoolAdapter.filter.filter(p0)
+        }
+        if(this::intrestAdapter.isInitialized){
+            intrestAdapter.filter.filter(p0)
+        }
+
         return false
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {
-        schoolAdapter.filter.filter(p0)
+        if(this::schoolAdapter.isInitialized){
+            schoolAdapter.filter.filter(p0)
+        }
+        if(this::intrestAdapter.isInitialized){
+            intrestAdapter.filter.filter(p0)
+        }
         return false
     }
 
@@ -699,8 +745,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
             schoolListResponse()
-
-
         }
 
     }
@@ -737,6 +781,29 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 AppConstants.USER_ID
             )
         )
+    }
+
+    override fun onIntrestClick(position: Interest, stringtype: String) {
+        //interestsList
+
+
+        var clickItemData = position.interest
+          if(interestsList.size<=6){
+              if(interestsList.contains(clickItemData)==false){
+                  interestsList.add(clickItemData)
+                  setupChipGroupDynamically(interestsList!!,rootContainer_intrest,true)
+              }else{
+                  Toast.makeText(requireContext(), "Already added", Toast.LENGTH_LONG)
+                      .show()
+              }
+          }
+        else{
+              Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
+                  .show()
+
+        }
+
+
     }
 }
 
