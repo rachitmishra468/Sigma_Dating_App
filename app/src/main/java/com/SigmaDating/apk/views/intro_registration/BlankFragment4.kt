@@ -45,6 +45,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
     var schoolListCopy: List<UniversityList>? = null
     lateinit var commonDataList: ArrayList<String>
     private lateinit var schoolAdapter: SchoolAdapter
+    var flag:Boolean=true;
     lateinit var dialog: Dialog
     private val mLastClickTime: Long = 0
     var searchRecyclerView: RecyclerView? = null
@@ -66,6 +67,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
+
                 AppUtils.showLoader(requireActivity())
                 schoolList = ArrayList<UniversityList>()
                 schoolList = schoolListCopy
@@ -76,6 +78,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
         fraternity_Spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
+                flag=true
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
 
@@ -100,7 +103,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                else if(fraternity_Spinner!!.text.isEmpty()){
+                else if(fraternity_Spinner!!.text.isEmpty()&& flag){
                     Toast.makeText(
                         requireActivity(),
                         "Select Fraternity/Sorority ",
@@ -115,8 +118,10 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
 
         fraternity_button?.setOnClickListener {
+            flag=true;
             if (!fraternity_button!!.isSelected){
-                fraternity_Spinner.setText("Select Fraternity")
+                fraternity_Spinner?.setText("")
+                fraternity_Spinner?.hint = "Select Fraternity"
                 fraternity_button!!.isSelected=true
                 Socority_button!!.isSelected=false
             }
@@ -144,10 +149,12 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         }
 
         Socority_button?.setOnClickListener {
+            flag=true;
             if (!Socority_button!!.isSelected){
                 fraternity_button!!.isSelected=false
                 Socority_button!!.isSelected=true
-                fraternity_Spinner.setText("Select Sorority")
+                fraternity_Spinner?.setText("")
+                fraternity_Spinner?.hint = "Select Sorority"
             }
 
             fraternity_Spinner.visibility=View.VISIBLE
@@ -167,6 +174,8 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
 
         independent?.setOnClickListener {
 
+            flag=false;
+            fraternity_Spinner.setText("")
             (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.community,
                 "Independent"

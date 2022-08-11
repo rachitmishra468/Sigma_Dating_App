@@ -300,7 +300,9 @@ class ReportUserFragment : Fragment() {
         try {
             rootContainer.removeAllViews()
             for (i in list.indices) {
-                rootContainer.addView(createChip(list.get(i), i))
+                if(list.get(i).length>0){
+                    rootContainer.addView(createChip(list.get(i), i))
+                }
             }
         } catch (e: Exception) {
             System.out.println(e.message)
