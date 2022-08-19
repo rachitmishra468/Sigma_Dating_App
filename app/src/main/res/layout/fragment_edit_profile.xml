@@ -266,6 +266,68 @@
             tools:layout_editor_absoluteY="196dp"
             />
 
+        <LinearLayout
+            android:id="@+id/linearr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12sp"
+            android:background="@drawable/gray_circle_radius_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintTop_toBottomOf="@+id/sorority_text"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            tools:layout_editor_absoluteX="137dp">
+
+            <Button
+                android:id="@+id/fraternity_button"
+                android:layout_width="0dp"
+                style="@style/QText"
+                android:layout_height="40dp"
+                android:layout_weight=".33"
+                android:background="@drawable/white_radius_bg"
+                android:text="@string/fraternity_text"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="11sp" />
+
+
+            <Button
+                android:id="@+id/Socority_button"
+                android:layout_width="0dp"
+                style="@style/QText"
+                android:layout_height="40dp"
+                android:layout_marginLeft="12dp"
+                android:layout_weight=".33"
+                android:background="@drawable/gray_circle_radius_bg"
+                android:text="@string/sorority_text"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+
+            <Button
+                android:id="@+id/independent"
+                android:layout_width="0dp"
+                style="@style/QText"
+                android:layout_height="40dp"
+                android:layout_marginLeft="12dp"
+                android:layout_weight=".33"
+                android:background="@drawable/gray_circle_radius_bg"
+                android:text="@string/independent_text"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+
+
+
         <EditText
             android:id="@+id/et_type"
             android:layout_width="0dp"
@@ -273,10 +335,11 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
             android:textSize="16sp"
+            android:visibility="visible"
             android:hint="Sorority/Fraternity"
             android:background="@drawable/login_field_border_bg"
             style="@android:style/Widget.Holo.Light.Spinner"
-            app:layout_constraintTop_toBottomOf="@+id/sorority_text"
+            app:layout_constraintTop_toBottomOf="@+id/linearr"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintStart_toEndOf="@+id/guideline_left"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
