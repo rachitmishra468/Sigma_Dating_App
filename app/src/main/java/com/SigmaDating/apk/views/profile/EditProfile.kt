@@ -42,6 +42,7 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.views.Home
+import com.SigmaDating.apk.views.intro_registration.OnBoardingActivity
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.example.demoapp.other.Resource
 import kotlinx.coroutines.CoroutineScope
@@ -78,7 +79,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     private var schoolAct_spinner: EditText? = null
     lateinit var rootContainer: ChipGroup
     lateinit var rootContainer_intrest:ChipGroup
-
+    var sororitiesList: List<UniversityList>? = null
     var university: String? = null
     var community: String? = null
     var about: String? = null
@@ -90,6 +91,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     private lateinit var intrestAdapter: InterestAdapter
     lateinit var dialog: Dialog
     var searchRecyclerView: RecyclerView? = null
+    private var Socority_button: Button? = null
+    private var fraternity_button: Button? = null
+    private var independent:Button?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -107,6 +112,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     ): View? {
 
         _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
+        Socority_button = _binding?.root?.findViewById(R.id.Socority_button)
+        independent= _binding?.root?.findViewById(R.id.independent)
+        fraternity_button = _binding?.root?.findViewById(R.id.fraternity_button)
+        fraternity_button!!.isSelected=true
+        fraternity_button!!.hint="Select Fraternity"
         schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)
         fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
@@ -135,6 +145,75 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         }
 
 
+        fraternity_button?.setOnClickListener {
+            if (!fraternity_button!!.isSelected){
+                fraternity_Spinner.setText("Select Fraternity")
+                fraternity_button!!.isSelected=true
+                Socority_button!!.isSelected=false
+            }
+            else{
+
+            }
+            fraternity_Spinner?.hint = "Select Fraternity"
+            // schoolAct_spinner!!.isSelected=false
+            //fraternity_button!!.isSelected=true
+
+            fraternity_Spinner.visibility=View.VISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.white))
+
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
+            Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
+
+            schoolList = ArrayList<UniversityList>()
+            schoolList = fraternitiesList
+            schoolAdapter = SchoolAdapter(this, AppConstants.Fraternity)
+
+
+        }
+
+
+        Socority_button?.setOnClickListener {
+            if (!Socority_button!!.isSelected){
+                fraternity_button!!.isSelected=false
+                Socority_button!!.isSelected=true
+                fraternity_Spinner.setText("Select Sorority")
+            }
+
+            fraternity_Spinner.visibility=View.VISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.white))
+
+            fraternity_Spinner?.hint = "Select Sorority"
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            Socority_button?.setTextColor(this.resources.getColor(R.color.black))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+            schoolList = ArrayList<UniversityList>()
+            schoolList = sororitiesList
+            schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)
+
+        }
+
+
+        independent?.setOnClickListener {
+
+            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.community,
+                "Independent"
+            )
+            Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+            Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
+            fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+            fraternity_Spinner.visibility=View.INVISIBLE
+            independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+            independent?.setTextColor(this.resources.getColor(R.color.black))
+        }
+
+
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 openSchoolSearchDialog(AppConstants.School, schoolList as List<UniversityList>)
@@ -151,10 +230,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
-                openSchoolSearchDialog(
-                    AppConstants.Fraternity,
-                    fraternitiesList as List<UniversityList>
-                )
+                if (fraternity_button!!.isSelected){
+                    openSchoolSearchDialog(AppConstants.Fraternity, fraternitiesList as List<UniversityList>
+                    )
+                }
+                else if (Socority_button!!.isSelected){
+                    openSchoolSearchDialog(AppConstants.Fraternity, sororitiesList as List<UniversityList>
+                    )
+                }
+
+
                 true
             } else false
         }
@@ -383,8 +468,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     schoolList = ArrayList<UniversityList>()
                                     schoolList = it1.data.universityList
                                     fraternitiesList = ArrayList<UniversityList>()
-                                    fraternitiesList =
-                                        it1.data.fraternitiesList + it1.data.sororitiesList
+                                    fraternitiesList = it1.data.fraternitiesList
+
+                                    sororitiesList = ArrayList<UniversityList>()
+                                    sororitiesList = it1.data.sororitiesList
                                     interest = ArrayList<Interest>()
                                     interest = it1.data.interestList
                                     // setAdapterData()
