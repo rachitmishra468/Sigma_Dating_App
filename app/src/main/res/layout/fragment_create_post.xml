@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.SigmaDating.apk.utilities.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_with_opecity"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="center"
+        tools:context=".apk.views.settings.SettingsFragment">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="24dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="24dp" />
+
+
+        <ImageView
+            android:id="@+id/back_post"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toTopOf="@+id/guideline_top" />
+
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            style="@style/QText"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:text="New Post"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.45"
+            app:layout_constraintStart_toEndOf="@+id/back_post"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
+
+
+        <Button
+            android:id="@+id/done"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/border_line_radius"
+            android:gravity="center"
+            android:text="POST"
+            android:textColor="@color/blue"
+            android:textSize="11sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.786"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/update_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            app:cardCornerRadius="2dp"
+            android:layout_marginTop="30dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/back_post">
+
+
+            <ImageView
+                android:id="@+id/image_profile"
+                android:layout_width="200dp"
+                android:layout_height="250dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+        <EditText
+            android:id="@+id/post_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_field_border_bg"
+            android:drawablePadding="10dp"
+            android:hint="Post Title"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:maxLines="2"
+            android:minLines="2"
+            android:paddingTop="15dp"
+            android:maxLength="150"
+            android:paddingBottom="15dp"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/update_image_view" />
+
+        <EditText
+            android:id="@+id/post_discription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_field_border_bg"
+            android:drawablePadding="10dp"
+            android:hint="Caption"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:minLines="5"
+            android:paddingTop="15dp"
+            android:maxLength="150"
+            android:paddingBottom="15dp"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/post_title" />
+
+
+        <View
+            android:id="@+id/v4"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_discription" />
+
+
+        <TextView
+            android:id="@+id/interests_text"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="left|center"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/light_text_color"
+            android:layout_marginLeft="24sp"
+            android:layout_marginRight="24sp"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:text="Tag People"
+            app:layout_constraintTop_toBottomOf="@+id/v4"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            tools:layout_editor_absoluteX="137dp"
+            tools:layout_editor_absoluteY="196dp"
+            />
+
+
+
+        <View
+            android:id="@+id/v5"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/interests_text" />
+
+
+        <TextView
+            android:id="@+id/tag_location"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="left|center"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/light_text_color"
+            android:layout_marginLeft="24sp"
+            android:layout_marginRight="24sp"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:text="Add Location"
+            app:layout_constraintTop_toBottomOf="@+id/v5"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            tools:layout_editor_absoluteX="137dp"
+            tools:layout_editor_absoluteY="196dp"
+            />
+
+        <View
+            android:id="@+id/v6"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tag_location" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.SigmaDating.apk.utilities.BounceScrollView>

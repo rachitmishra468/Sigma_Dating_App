@@ -79,6 +79,12 @@ class SecondFragment : Fragment() {
 
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
+        _binding?.fab?.setOnClickListener {
+
+            findNavController().navigate(R.id.action_SecondFragment_to_createpost)
+        }
+
+
         _binding?.settingIcon?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_settings)
         }
