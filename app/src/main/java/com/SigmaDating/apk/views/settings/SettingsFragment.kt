@@ -316,10 +316,10 @@ class SettingsFragment : Fragment() {
                                 when (interested_in) {
                                     "Women" -> _binding.rbWomen.setChecked(true);
                                     "Men" -> _binding.rbMen.setChecked(true);
-                                    "Other" -> _binding.rbMore.setChecked(true);
                                     "WOMEN" -> _binding.rbWomen.setChecked(true);
                                     "MEN" -> _binding.rbMen.setChecked(true);
-                                    "OTHER" -> _binding.rbMore.setChecked(true);
+                                    "BOTH" -> _binding.rbMore.setChecked(true);
+                                    "Both" -> _binding.rbMore.setChecked(true);
 
                                 }
                             }

@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import com.SigmaDating.apk.api.ApiHelper
 import com.SigmaDating.apk.model.Forgotpassword
 import com.SigmaDating.apk.model.home_model
+import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import retrofit2.Response
 import javax.inject.Inject
@@ -68,6 +69,20 @@ class ApiHelperImpl @Inject constructor(
         apiService.report_user(jsonObject)
     override suspend fun block_user(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.block_user(jsonObject)
+
+    override suspend fun create_post(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.create_post(jsonObject)
+
+    override suspend fun deletepost(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.deletepost(jsonObject)
+
+    override suspend fun showmyposts(jsonObject: JsonObject): Response<post> =
+        apiService.showmyposts(jsonObject)
+
+
+
+
+
     //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
 
 

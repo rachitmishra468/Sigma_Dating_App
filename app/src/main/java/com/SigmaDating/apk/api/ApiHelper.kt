@@ -4,6 +4,7 @@ import com.SigmaDating.apk.model.Loginmodel
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Forgotpassword
 import com.SigmaDating.apk.model.home_model
+import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import retrofit2.Response
 
@@ -32,6 +33,10 @@ interface ApiHelper {
     suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun Update_profile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun get_user_bids(jsonObject: String):Response<home_model>
+    suspend fun create_post(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun deletepost(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun showmyposts(jsonObject: JsonObject):Response<post>
+
 //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
 
 

@@ -5,6 +5,7 @@ import com.SigmaDating.apk.model.Loginmodel
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Forgotpassword
 import com.SigmaDating.apk.model.home_model
+import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import retrofit2.Response
 import retrofit2.http.*
@@ -64,6 +65,16 @@ interface ApiService {
 
     @POST("dating/doswipe")
     suspend fun get_profile_swipe_details(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("post/save")
+    suspend fun create_post(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("post/deletepost")
+    suspend fun deletepost(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("post/showmyposts")
+    suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>
+
 
     /* @POST("users/view")
      suspend fun getUserDashboard(@Body jsonObject: JsonObject): Response<UserDashboardModel>*/

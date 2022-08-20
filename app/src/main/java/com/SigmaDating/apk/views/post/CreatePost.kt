@@ -19,15 +19,24 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentCreatePostBinding
 import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -36,7 +45,7 @@ import java.io.IOException
 
 class CreatePost : Fragment() {
 
-    private var _binding: FragmentCreatePostBinding?=null
+    private var _binding: FragmentCreatePostBinding? = null
     private val binding get() = _binding!!
     private var mUri: Uri? = null
     private val OPERATION_CHOOSE_PHOTO = 2
@@ -61,24 +70,50 @@ class CreatePost : Fragment() {
         }
 
         _binding?.done?.setOnClickListener {
-            if(_binding?.postTitle?.text.toString().equals("")){
-                _binding?.postTitle?.error="Enter Post Title.."
-            }
-            else if(_binding?.postDiscription?.text.toString().equals("")){
-                _binding?.postDiscription?.error="Enter Post Caption.."
-            }
-            else if(encoded.equals("")){
-                Toast.makeText(requireContext(),"Add Image", Toast.LENGTH_LONG)
+            if (_binding?.postTitle?.text.toString().equals("")) {
+                _binding?.postTitle?.error = "Enter Post Title.."
+            } else if (_binding?.postDiscription?.text.toString().equals("")) {
+                _binding?.postDiscription?.error = "Enter Post Caption.."
+            } else if (encoded.equals("")) {
+                Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
-            }
-            else{
+            } else {
+                (activity as Home).homeviewmodel.create_post= MutableLiveData<Resource<Loginmodel>>()
+                subscribe_create_post()
+                val jsonObject = JsonObject()
+                Log.d(
+                    "TAG@123",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
 
-
+                jsonObject.addProperty("title", _binding?.postTitle?.text.toString())
+                jsonObject.addProperty("description", _binding?.postDiscription?.text.toString())
+                jsonObject.addProperty("location", "")
+                jsonObject.addProperty("media", encoded)
+                jsonObject.addProperty("isPrivate", true)
+                (activity as Home).homeviewmodel.create_post(jsonObject)
             }
 
         }
 
         return binding.root
+    }
+
+
+
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
     private fun popup() {
@@ -170,9 +205,8 @@ class CreatePost : Fragment() {
                         rotationMatrix,
                         true
                     )
-
-                   Bitmap.createScaledBitmap(rotatedBitmap, 80, 90, true);
                     _binding?.imageProfile?.setImageBitmap(rotatedBitmap)
+                    Bitmap.createScaledBitmap(rotatedBitmap, 80, 90, true);
                     convertBitmapToBase64(rotatedBitmap, true)
                 }
             OPERATION_CHOOSE_PHOTO ->
@@ -198,13 +232,18 @@ class CreatePost : Fragment() {
     }
 
 
+
+
+
+
+
     fun convertBitmapToBase64(bm: Bitmap, flag: Boolean) {
         val progressDialog = ProgressDialog(context)
         progressDialog.setTitle("")
         progressDialog.setMessage("Please wait ...")
         progressDialog.show()
         (activity as Home).homeviewmodel.upload_images = MutableLiveData<Resource<Loginmodel>>()
-       // subscribe_upload_images()
+        // subscribe_upload_images()
         doAsync {
 
             val baos = ByteArrayOutputStream()
@@ -216,15 +255,46 @@ class CreatePost : Fragment() {
 
             val b = baos.toByteArray()
             encoded = Base64.encodeToString(b, Base64.DEFAULT)
-         /*   (activity as Home).homeviewmodel.User_upload_images(
-                (activity as Home).sharedPreferencesStorage.getString(
-                    AppConstants.USER_ID
-                ), "data:image/png;base64," + encoded
-            )*/
+            /*   (activity as Home).homeviewmodel.User_upload_images(
+                   (activity as Home).sharedPreferencesStorage.getString(
+                       AppConstants.USER_ID
+                   ), "data:image/png;base64," + encoded
+               )*/
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()
         }
 
+    }
+
+
+
+    fun subscribe_create_post() {
+        (activity as Home?)?.homeviewmodel?.create_post?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                Log.d("TAG@123", "111 " + res.message)
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                Log.d("TAG@123", "111 " + res?.message)
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
     }
 
 

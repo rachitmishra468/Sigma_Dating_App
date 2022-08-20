@@ -29,6 +29,10 @@ class MainRepository @Inject constructor(
     suspend fun delete_images(jsonObject: JsonObject)=apiHelper.delete_images(jsonObject)
     suspend fun Update_profile(jsonObject: JsonObject)=apiHelper.Update_profile(jsonObject)
     suspend fun get_user_bids(id: String)= apiHelper.get_user_bids(id)
+    suspend fun create_post(jsonObject: JsonObject)=apiHelper.create_post(jsonObject)
+    suspend fun deletepost(jsonObject: JsonObject)=apiHelper.deletepost(jsonObject)
+
+    suspend fun showmyposts(jsonObject: JsonObject)=apiHelper.showmyposts(jsonObject)
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)
 
 }
