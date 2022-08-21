@@ -361,7 +361,7 @@
                 android:paddingTop="3dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="3dp"
-                android:text="Other"
+                android:text="Both"
                 android:textColor="@drawable/text_selector_default"
                 android:textSize="14sp"
                 android:textStyle="bold" />

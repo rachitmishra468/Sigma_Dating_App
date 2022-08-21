@@ -8,6 +8,7 @@ import com.SigmaDating.apk.model.home_model
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Loginmodel
+import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.apk.repository.MainRepository
 import com.SigmaDating.apk.storage.SharedPreferencesStorage
@@ -35,6 +36,9 @@ class HomeViewModel @Inject constructor(
     lateinit var delete_images: MutableLiveData<Resource<Loginmodel>>
     lateinit var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
     lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
+    lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
+    lateinit var delete_post: MutableLiveData<Resource<Loginmodel>>
+    lateinit var All_post: MutableLiveData<Resource<post>>
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
@@ -50,6 +54,41 @@ class HomeViewModel @Inject constructor(
     fun get_home_feb_data(id: String){
         val one = async {  get_Login_User_details(id) }
         val two = async { get_Login_User_bids(id) }
+    }
+
+
+    fun getAllPost(jsonObject:JsonObject) = viewModelScope.launch {
+        All_post.postValue(Resource.loading(null))
+        mainRepository.showmyposts(jsonObject).let {
+            if (it.isSuccessful) {
+                All_post.postValue(Resource.success(it.body()))
+            } else {
+                All_post.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun create_post(jsonObject:JsonObject) = viewModelScope.launch {
+        create_post.postValue(Resource.loading(null))
+        mainRepository.create_post(jsonObject).let {
+            if (it.isSuccessful) {
+                create_post.postValue(Resource.success(it.body()))
+            } else {
+                create_post.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+
+    fun deletepost(jsonObject:JsonObject) = viewModelScope.launch {
+        delete_post.postValue(Resource.loading(null))
+        mainRepository.deletepost(jsonObject).let {
+            if (it.isSuccessful) {
+                delete_post.postValue(Resource.success(it.body()))
+            } else {
+                delete_post.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
     }
 
 
