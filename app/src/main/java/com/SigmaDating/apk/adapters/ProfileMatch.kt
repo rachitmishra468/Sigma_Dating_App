@@ -93,7 +93,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
-                broken_heart.setVisibility(View.VISIBLE)
+               /* broken_heart.setVisibility(View.VISIBLE)
                 broken_heart.playAnimation()
                 Handler().postDelayed(
                     java.lang.Runnable {
@@ -104,9 +104,12 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
                         )
                     },
                     1200
+                )*/
+
+
+                listener.onCategoryClick(
+                    courseData[position],5,null, mageview
                 )
-
-
 
 
 
@@ -115,7 +118,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             override fun onSwipeRight() {
                 super.onSwipeRight()
 
-                heart_loading.setVisibility(View.VISIBLE)
+               /* heart_loading.setVisibility(View.VISIBLE)
                 heart_loading.playAnimation()
                 Handler().postDelayed(
                     java.lang.Runnable {
@@ -126,9 +129,11 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
                         )
                     },
                     1200
+                )*/
+
+                listener.onCategoryClick(
+                    courseData[position],2,null,mageview
                 )
-
-
 
 
             }
@@ -136,7 +141,7 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
             override fun onSwipeUp() {
                 super.onSwipeUp()
 
-                idIV_actiontyp.setVisibility(View.VISIBLE)
+               /* idIV_actiontyp.setVisibility(View.VISIBLE)
                 idIV_actiontyp.playAnimation()
                 Handler().postDelayed(
                     java.lang.Runnable {
@@ -147,6 +152,10 @@ class ProfileMatch(private val courseData: ArrayList<Bids>, private val context:
                         )
                     },
                     1200
+                )*/
+
+                listener.onCategoryClick(
+                    courseData[position],3,null,mageview
                 )
             }
             override fun onSwipeDown() {

@@ -100,6 +100,7 @@ class Home : AppCompatActivity() {
     companion object {
         lateinit var pages: ArrayList<Pages>
         var notifications_count: String="0"
+        var current_user_profile: String=""
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
                 var page = pages.get(i)

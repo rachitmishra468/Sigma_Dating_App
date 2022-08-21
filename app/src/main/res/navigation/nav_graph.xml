@@ -65,7 +65,9 @@
         <action
             android:id="@+id/action_SecondFragment_to_Full_Screen_Fragment"
             app:destination="@id/fullScreenImageFragment" />
-
+        <action
+            android:id="@+id/action_SecondFragment_to_postlist"
+            app:destination="@id/postList" />
 
         <action
             android:id="@+id/action_SecondFragment_to_Report_feb"
@@ -273,7 +275,32 @@
     <fragment
         android:id="@+id/createPost"
         android:name="com.SigmaDating.apk.views.post.CreatePost"
-        android:label="CreatePost" />
+        android:label="CreatePost" >
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/postList"
+        android:name="com.SigmaDating.apk.views.post.PostList"
+        android:label="PostList" >
+
+        <action
+            android:id="@+id/action_FirstFragment_to_chat"
+            app:destination="@id/chatListFragment" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+
+            <action
+                android:id="@+id/action_FirstFragment_to_notification"
+                app:destination="@id/notificationSettingsFragment" />
+        </action>
+    </fragment>
 
 
 </navigation>

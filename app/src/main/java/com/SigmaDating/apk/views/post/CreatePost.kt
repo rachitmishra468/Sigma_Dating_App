@@ -1,5 +1,7 @@
 package com.SigmaDating.apk.views.post
 
+import android.Manifest
+import android.R.attr
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
@@ -18,11 +20,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.storage.AppConstants
@@ -41,16 +45,40 @@ import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import android.R.attr.description
+import android.content.ContentUris
+import android.content.Context
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.os.Environment
+import android.provider.DocumentsContract
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
+import okhttp3.RequestBody
+import okhttp3.MultipartBody
+import java.io.FileOutputStream
+import java.lang.Exception
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.SigmaDating.apk.AppReseources
+import com.SigmaDating.apk.utilities.FileUtils
 
 
 class CreatePost : Fragment() {
-
+    private val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     private var _binding: FragmentCreatePostBinding? = null
     private val binding get() = _binding!!
     private var mUri: Uri? = null
     private val OPERATION_CHOOSE_PHOTO = 2
     private val OPERATION_CAPTURE_PHOTO = 1
     var encoded = ""
+    lateinit var file : File
+    lateinit var selectedImage:Uri
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,12 +89,14 @@ class CreatePost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+
         _binding?.backPost?.setOnClickListener {
             (activity as Home).onBackPressed()
         }
 
         _binding?.imageProfile?.setOnClickListener {
-            popup()
+            checkGallerypermission()
+
         }
 
         _binding?.done?.setOnClickListener {
@@ -74,28 +104,28 @@ class CreatePost : Fragment() {
                 _binding?.postTitle?.error = "Enter Post Title.."
             } else if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption.."
-            } else if (encoded.equals("")) {
+            } /*else if (encoded.equals("")) {
                 Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
-            } else {
+            }*/ else {
                 (activity as Home).homeviewmodel.create_post= MutableLiveData<Resource<Loginmodel>>()
                 subscribe_create_post()
-                val jsonObject = JsonObject()
+
                 Log.d(
                     "TAG@123",
                     (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                 )
-                jsonObject.addProperty(
-                    "user_id",
-                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-                )
 
-                jsonObject.addProperty("title", _binding?.postTitle?.text.toString())
-                jsonObject.addProperty("description", _binding?.postDiscription?.text.toString())
-                jsonObject.addProperty("location", "")
-                jsonObject.addProperty("media", encoded)
-                jsonObject.addProperty("isPrivate", true)
-                (activity as Home).homeviewmodel.create_post(jsonObject)
+                val map: HashMap<String, String> = HashMap()
+                map.put("title",_binding?.postTitle?.text.toString())
+                map.put("user_id",(activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
+                map.put("description",_binding?.postDiscription?.text.toString())
+                map.put("location", "")
+                getContext()?.getContentResolver()?.getType(selectedImage)?.let { it1 ->
+                    (activity as Home).homeviewmodel.create_post(file,map,
+                        it1
+                    )
+                }
             }
 
         }
@@ -104,6 +134,21 @@ class CreatePost : Fragment() {
     }
 
 
+    private fun checkGallerypermission() {
+        if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(activity!!,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity!!,
+                permissions,
+                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            popup()
+        }
+    }
 
 
     override fun onResume() {
@@ -147,15 +192,15 @@ class CreatePost : Fragment() {
 
 
     private fun capturePhoto() {
-        val capturedImage = File(requireActivity().externalCacheDir, "My_Captured_Photo.jpg")
+        val capturedImage = File(requireActivity().externalCacheDir, "MyPhoto.jpg")
         if (capturedImage.exists()) {
             capturedImage.delete()
         }
         capturedImage.createNewFile()
-        mUri = if (Build.VERSION.SDK_INT >= 24) {
+        selectedImage = if (Build.VERSION.SDK_INT >= 24) {
             FileProvider.getUriForFile(
-                requireActivity(),
-                "com.SigmaDating.apk.fileprovider",
+                AppReseources.getAppContext()!!,
+                AppReseources.getAppContext()!!.getPackageName().toString() + ".provider",
                 capturedImage
             )
         } else {
@@ -163,13 +208,16 @@ class CreatePost : Fragment() {
         }
 
         val intent = Intent("android.media.action.IMAGE_CAPTURE")
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImage)
         startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
+
     }
 
     private fun openGallery() {
         Intent(Intent.ACTION_GET_CONTENT).also { intent ->
             intent.type = "image/*"
+          /*  val mimeTypes = arrayOf("image/jpg", "image/png","image/gif")
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)*/
             activity?.packageManager?.let {
                 intent.resolveActivity(it)?.also {
                     startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
@@ -179,39 +227,64 @@ class CreatePost : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d("TAG@123","resultCode :"+resultCode)
         when (requestCode) {
 
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
+                    val file_t = File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg")
+                    selectedImage  = FileProvider.getUriForFile(
+                        AppReseources.getAppContext()!!,
+                        AppReseources.getAppContext()!!.getApplicationContext().getPackageName().toString() + ".provider",
+                        file_t
+                    )
+                    Log.d("TAG@123","URI :"+selectedImage)
+                    file = bitmapToFile(FileUtils(requireContext()).getPath(selectedImage))
                     val bitmap = BitmapFactory.decodeStream(
-                        requireActivity().getContentResolver().openInputStream(mUri!!)
+                        requireActivity().getContentResolver().openInputStream(selectedImage!!)
                     )
+                    _binding?.imageProfile?.setImageBitmap(bitmap)
 
-                    val rotationMatrix = Matrix()
-                    if (bitmap.getWidth() >= bitmap.getHeight()) {
-                        rotationMatrix.setRotate((-90).toFloat())
-                    } else {
-                        rotationMatrix.setRotate((0).toFloat())
-                    }
 
-                    val rotatedBitmap = Bitmap.createBitmap(
-                        bitmap,
-                        0,
-                        0,
-                        bitmap.getWidth(),
-                        bitmap.getHeight(),
-                        rotationMatrix,
-                        true
-                    )
-                    _binding?.imageProfile?.setImageBitmap(rotatedBitmap)
-                    Bitmap.createScaledBitmap(rotatedBitmap, 80, 90, true);
-                    convertBitmapToBase64(rotatedBitmap, true)
+                    /*  val bitmap = BitmapFactory.decodeStream(
+                          requireActivity().getContentResolver().openInputStream(mUri!!)
+                      )
+
+                      val rotationMatrix = Matrix()
+                      if (bitmap.getWidth() >= bitmap.getHeight()) {
+                          rotationMatrix.setRotate((-90).toFloat())
+                      } else {
+                          rotationMatrix.setRotate((0).toFloat())
+                      }
+
+                      val rotatedBitmap = Bitmap.createBitmap(
+                          bitmap,
+                          0,
+                          0,
+                          bitmap.getWidth(),
+                          bitmap.getHeight(),
+                          rotationMatrix,
+                          true
+                      )
+                      _binding?.imageProfile?.setImageBitmap(rotatedBitmap)
+                      Bitmap.createScaledBitmap(rotatedBitmap, 80, 90, true);
+                      convertBitmapToBase64(rotatedBitmap, true)*/
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
+                    selectedImage = data!!.data!!
+                    file = bitmapToFile(getRealPathFromURI(requireContext(),selectedImage))
 
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        requireActivity().contentResolver,
+                        data.data
+                    )
+                    _binding?.imageProfile?.setImageBitmap(bitmap)
+
+/*
                     if (data != null) {
                         try {
                             val bitmap = MediaStore.Images.Media.getBitmap(
@@ -225,6 +298,7 @@ class CreatePost : Fragment() {
                             e.printStackTrace()
                         }
                     }
+*/
 
 
                 }
@@ -255,11 +329,7 @@ class CreatePost : Fragment() {
 
             val b = baos.toByteArray()
             encoded = Base64.encodeToString(b, Base64.DEFAULT)
-            /*   (activity as Home).homeviewmodel.User_upload_images(
-                   (activity as Home).sharedPreferencesStorage.getString(
-                       AppConstants.USER_ID
-                   ), "data:image/png;base64," + encoded
-               )*/
+            encoded = "data:image/png;base64,"+ encoded
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()
         }
@@ -297,5 +367,115 @@ class CreatePost : Fragment() {
             })
     }
 
+
+
+
+    fun bitmapToFile(filepath: String?): File { // File name like "image.png"
+
+        //create a file to write bitmap data
+        var file: File? = null
+        return try {
+            file = File(filepath)
+            val scaledBitmap = BitmapFactory.decodeFile(file.path)
+            val bytes = ByteArrayOutputStream()
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, bytes)
+            val bitmapdata = bytes.toByteArray()
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception){
+
+            return file!!
+        }
+    }
+
+
+    fun getRealPathFromURI(uri: Uri?): String {
+        var path = ""
+        if (AppReseources.getAppContext()!!.getContentResolver() != null) {
+            val cursor: Cursor? = AppReseources.getAppContext()!!.getContentResolver().query(uri!!, null, null, null, null)
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME)
+                path = cursor.getString(idx)
+                cursor.close()
+            }
+        }
+        return path
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    fun getRealPathFromURI(context: Context, uri: Uri): String? {
+        val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+
+        // DocumentProvider
+        if (isKitKatorAbove && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).toTypedArray()
+                val type = split[0]
+                if ("primary".equals(type, ignoreCase = true)) {
+                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+                }
+
+            } else if (isDownloadsDocument(uri)) {
+                val id = DocumentsContract.getDocumentId(uri)
+                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                return getDataColumn(context, contentUri, null, null)
+            } else if (isMediaDocument(uri)) {
+                val docId = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":".toRegex()).toTypedArray()
+                val type = split[0]
+                var contentUri: Uri? = null
+                if ("image" == type) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else if ("video" == type) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else if ("audio" == type) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                }
+                val selection = "_id=?"
+                val selectionArgs = arrayOf(split[1])
+                return getDataColumn(context, contentUri, selection, selectionArgs)
+            }
+        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+            return getDataColumn(context, uri, null, null)
+        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+            return uri.path
+        }
+        return null
+    }
+
+    fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+        var cursor: Cursor? = null
+        val column = MediaStore.Images.ImageColumns._ID
+        val projection = arrayOf(column)
+        try {
+            cursor = context.getContentResolver().query(uri!!, projection, selection, selectionArgs,null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val column_index: Int = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(column_index)
+            }
+        } finally {
+            if (cursor != null) cursor.close()
+        }
+        return null
+    }
+
+    fun isExternalStorageDocument(uri: Uri): Boolean {
+        return "com.android.externalstorage.documents" == uri.authority
+    }
+
+    fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+    fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
 
 }

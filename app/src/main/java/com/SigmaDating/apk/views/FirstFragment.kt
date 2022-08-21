@@ -137,6 +137,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     idUserConnected = (dataObject as Bids).id
                     Log.d("TAG@123", "idUserConnected " + idUserConnected)
                     swipe_update(idUserConnected, "dislike")
+                    Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -146,6 +147,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     idUserConnected = (dataObject as Bids).id
                     Log.d("TAG@123", "idUserConnected " + idUserConnected)
                     swipe_update(idUserConnected, "like")
+                    Toast.makeText(requireContext(), "Like", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -164,6 +166,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     idUserConnected = (dataObject as Bids).id
                     Log.d("TAG@123", "idUserConnected " + idUserConnected)
                     swipe_update(idUserConnected, "superlike")
+                    Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -301,14 +304,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
+                               // Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
                                 Log.d("TAG@123", "Exception" + it.data?.message)
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception" + e.message.toString())
                             }
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
-                                .show()
+                          //  Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
                         }
 
                     }
@@ -382,7 +384,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     .error(R.drawable.profile_img)
                                     .into(editProfile);
 
-
+                                Home.current_user_profile= it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
                                     Glide.with(requireContext()).load(
