@@ -14,7 +14,13 @@ import com.SigmaDating.apk.repository.MainRepository
 import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okhttp3.MultipartBody
+
 import org.jetbrains.anko.custom.async
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,9 +74,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun create_post(jsonObject:JsonObject) = viewModelScope.launch {
+    fun create_post(file:File,jsonObject:HashMap<String,String>,type:String) = viewModelScope.launch {
+
+        Log.d("Tag@123","images path : "+file.absolutePath)
+        Log.d("Tag@123","other data : "+jsonObject)
+        Log.d("Tag@123","Type : "+type)
+        val requestBody = RequestBody.create(type.toMediaTypeOrNull(),file)
+        val image: MultipartBody.Part = MultipartBody.Part.createFormData("media", file.name, requestBody)
+
         create_post.postValue(Resource.loading(null))
-        mainRepository.create_post(jsonObject).let {
+        mainRepository.create_post(jsonObject.get("user_id")!!,jsonObject.get("title")!!,jsonObject.get("description")!!
+            ,image).let {
             if (it.isSuccessful) {
                 create_post.postValue(Resource.success(it.body()))
             } else {

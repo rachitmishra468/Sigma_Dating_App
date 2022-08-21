@@ -7,8 +7,21 @@ import com.SigmaDating.apk.model.Forgotpassword
 import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
+import retrofit2.http.PartMap
+
+import okhttp3.ResponseBody
+import retrofit2.Call
+
+import retrofit2.http.POST
+
+import retrofit2.http.Multipart
+
+
+
 
 interface ApiService {
 
@@ -66,8 +79,8 @@ interface ApiService {
     @POST("dating/doswipe")
     suspend fun get_profile_swipe_details(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-    @POST("post/save")
-    suspend fun create_post(@Body jsonObject: JsonObject): Response<Loginmodel>
+    /*@POST("post/save")
+    suspend fun create_post(@Body jsonObject: JsonObject): Response<Loginmodel>*/
 
     @POST("post/deletepost")
     suspend fun deletepost(@Body jsonObject: JsonObject): Response<Loginmodel>
@@ -76,6 +89,19 @@ interface ApiService {
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>
 
 
-    /* @POST("users/view")
-     suspend fun getUserDashboard(@Body jsonObject: JsonObject): Response<UserDashboardModel>*/
+
+
+
+
+    @Multipart
+    @POST("post/save")
+    suspend fun create_post( @Part("user_id") user_id: String,
+                          @Part("title") title: String, @Part("description") description: String,
+                          @Part file: MultipartBody.Part?
+    ) : Response<Loginmodel>
+    
+    
+    
+    
+
 }

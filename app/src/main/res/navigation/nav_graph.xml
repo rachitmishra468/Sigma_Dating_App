@@ -295,6 +295,10 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" >
+
+            <action
+                android:id="@+id/action_FirstFragment_to_notification"
+                app:destination="@id/notificationSettingsFragment" />
         </action>
     </fragment>
 

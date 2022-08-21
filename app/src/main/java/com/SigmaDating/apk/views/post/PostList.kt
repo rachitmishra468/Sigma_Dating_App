@@ -27,9 +27,11 @@ import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentCreatePostBinding
 import com.SigmaDating.databinding.FragmentPostListBinding
+import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.gson.JsonObject
+import de.hdodenhof.circleimageview.CircleImageView
 
 class PostList : Fragment() {
 
@@ -38,7 +40,7 @@ class PostList : Fragment() {
     lateinit var chatIcon: ImageView
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
-    lateinit var greekLatter: TextView
+    lateinit var user_profile_photo: CircleImageView
     private lateinit var photoAdapter: PostAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +120,20 @@ class PostList : Fragment() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
-       // greekLatter= binding.root.findViewById(R.id.greek_latter)
+        user_profile_photo= binding.root.findViewById(R.id.user_profile_photo)
+        Home.notifications_count.let {
+            _binding?.tvCounter?.text=it
+        }
+        Home.current_user_profile.let {
+            Glide.with(requireContext()).load(it)
+                .error(R.drawable.profile_img)
+                .into(user_profile_photo);
+        }
+
+        _binding?.movetonotification?.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_notification)
+        }
+
 
         match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_disable))
         chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))
