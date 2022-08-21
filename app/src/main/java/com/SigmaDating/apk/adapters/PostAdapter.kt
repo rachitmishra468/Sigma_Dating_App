@@ -6,22 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.EditProfiledata
-import com.SigmaDating.apk.views.FirstFragmentDirections
+import com.SigmaDating.apk.model.Postdata
+import com.SigmaDating.apk.model.post
 import com.SigmaDating.apk.views.userdashboard.SecondFragmentDirections
+import com.bumptech.glide.Glide
+import de.hdodenhof.circleimageview.CircleImageView
 
+class PostAdapter(var context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
-class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {
+    var dataList = emptyList<Postdata>()
 
-    var dataList = emptyList<String>()
-
-    internal fun setDataList(dataList: List<String>) {
+    internal fun setDataList(dataList: List<Postdata>) {
         this.dataList = dataList
     }
 
@@ -29,9 +30,15 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
+        var title:TextView
+        var discription:TextView
+        var profile_img: CircleImageView
 
         init {
-            image = itemView.findViewById(R.id.image)
+            profile_img= itemView.findViewById(R.id.profile_post_img)
+            image = itemView.findViewById(R.id.post_img)
+            title= itemView.findViewById(R.id.post_title)
+            discription= itemView.findViewById(R.id.dis_title)
         }
 
     }
@@ -40,7 +47,7 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         // Inflate the custom layout
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.app_item, parent, false)
+        var view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
         return ViewHolder(view)
     }
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -49,18 +56,13 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
 
         // Get the data model based on position
         var data = dataList[position]
-        holder.image.apply {
-            transitionName = data.trim()
-        }
-        // Set item views based on your views and data model
-        Glide.with(context).load(data.trim()).into(holder.image);
 
+        // Set item views based on your views and data model
+        Glide.with(context).load(data.media).into(holder.image);
+        holder.title.text=data.title
+        holder.discription.text=data.description
         holder.image.setOnClickListener {
-            val extrass = FragmentNavigatorExtras(holder.image to data.trim())
-            val action = SecondFragmentDirections.actionSecondFragmentToPostlist(
-               // fullImage =data.trim()
-            )
-            holder.image.findNavController().navigate(action,extrass)
+
         }
 
     }

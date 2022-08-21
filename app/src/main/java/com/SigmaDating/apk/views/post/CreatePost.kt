@@ -18,11 +18,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.storage.AppConstants
@@ -51,6 +53,7 @@ class CreatePost : Fragment() {
     private val OPERATION_CHOOSE_PHOTO = 2
     private val OPERATION_CAPTURE_PHOTO = 1
     var encoded = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,6 +64,7 @@ class CreatePost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+
         _binding?.backPost?.setOnClickListener {
             (activity as Home).onBackPressed()
         }
@@ -255,11 +259,7 @@ class CreatePost : Fragment() {
 
             val b = baos.toByteArray()
             encoded = Base64.encodeToString(b, Base64.DEFAULT)
-            /*   (activity as Home).homeviewmodel.User_upload_images(
-                   (activity as Home).sharedPreferencesStorage.getString(
-                       AppConstants.USER_ID
-                   ), "data:image/png;base64," + encoded
-               )*/
+            encoded = "data:image/png;base64,"+ encoded
             Log.d("TAG@123", "  images  --------- " + encoded)
             progressDialog.dismiss()
         }
