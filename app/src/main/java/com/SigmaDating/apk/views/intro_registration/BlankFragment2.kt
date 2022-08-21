@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.SigmaDating.R
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +81,8 @@ class BlankFragment2 : Fragment() {
     }
 
     companion object {
+
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
