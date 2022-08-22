@@ -54,7 +54,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_gender.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_password.xml" value="0.14" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_post_list.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_post_list.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_profile__photo.xml" value="0.14" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_report_user.xml" value="0.16" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_school_input.xml" value="0.15" />
@@ -149,6 +149,7 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/activity_login.xml" value="0.11458333333333333" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/app_item.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/chat_list_item.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_create_post.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_edit_profile.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/layout/fragment_password.xml" value="0.11458333333333333" />

@@ -89,15 +89,22 @@ class CreatePost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+_binding?.let {
+   it.backPost.setOnClickListener {
+       (activity as Home).onBackPressed()
+   }
 
-        _binding?.backPost?.setOnClickListener {
-            (activity as Home).onBackPressed()
-        }
+    it.imageProfile?.setOnClickListener {
+        checkGallerypermission()
 
-        _binding?.imageProfile?.setOnClickListener {
-            checkGallerypermission()
+    }
 
-        }
+    it.interestsText.setOnClickListener {
+
+    }
+
+}
+
 
         _binding?.done?.setOnClickListener {
             if (_binding?.postTitle?.text.toString().equals("")) {
