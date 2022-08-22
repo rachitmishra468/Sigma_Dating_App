@@ -25,6 +25,7 @@
         android:theme="@style/Theme.SigmaDatingApp"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         android:screenOrientation="portrait"
+        android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning"  >
         <activity
             android:name="com.SigmaDating.apk.views.intro_registration.OnBoardingActivity"

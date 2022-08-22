@@ -67,6 +67,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 import android.R.attr.data
+import android.annotation.SuppressLint
 import android.webkit.MimeTypeMap
 
 import android.content.ContentResolver
@@ -131,8 +132,7 @@ _binding?.let {
                 Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
             }*/ else {
-                (activity as Home).homeviewmodel.create_post =
-                    MutableLiveData<Resource<Loginmodel>>()
+                (activity as Home).homeviewmodel.create_post = MutableLiveData<Resource<Loginmodel>>()
                 subscribe_create_post()
 
                 Log.d(
@@ -148,12 +148,9 @@ _binding?.let {
                 )
                 map.put("description", _binding?.postDiscription?.text.toString())
                 map.put("location", "")
-                getContext()?.getContentResolver()?.getType(selectedImage)?.let { it1 ->
-                    (activity as Home).homeviewmodel.create_post(
-                        file, map,
-                        it1
-                    )
-                }
+
+                (activity as Home).homeviewmodel.create_post(file, map)
+
             }
 
         }
@@ -301,11 +298,28 @@ _binding?.let {
                     val uriPathHelper = URIPathHelper()
                     val filePath = uriPathHelper.getPath(requireContext(), selectedImage)
                     Log.d("TAG@123", "FILEPATH :" + filePath)
+                  //  file= File(selectedImage.path)
+                    file=bitmapToFile(getRealPathFromURI(selectedImage))!!;
                     _binding?.imageProfile?.setImageURI(selectedImage)
                     Log.d("TAG@123", "URI :" + selectedImage)
+                    Log.d("TAG@123", "PATH :" + selectedImage.path)
                     Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
                 }
         }
+    }
+
+
+    fun getPathFromURI(contentUri: Uri?): String? {
+        var res: String? = null
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor =
+            requireActivity().getContentResolver().query(contentUri!!, proj, null, null, null)!!
+        if (cursor.moveToFirst()) {
+            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            res = cursor.getString(column_index)
+        }
+        cursor.close()
+        return res
     }
 
 
@@ -369,7 +383,7 @@ _binding?.let {
             )
             if (cursor != null) {
                 cursor.moveToFirst()
-                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                val idx = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
                 path = cursor.getString(idx)
                 cursor.close()
             }

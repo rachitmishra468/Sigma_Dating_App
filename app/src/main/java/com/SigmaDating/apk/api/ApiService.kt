@@ -88,15 +88,10 @@ interface ApiService {
     @POST("post/showmyposts")
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>
 
-
-
-
-
-
     @Multipart
     @POST("post/save")
-    suspend fun create_post( @Part("user_id") user_id: String,
-                          @Part("title") title: String, @Part("description") description: String,
+    suspend fun create_post( @Part("user_id") user_id: RequestBody,
+                          @Part("title") title: RequestBody, @Part("description") description: RequestBody,
                           @Part file: MultipartBody.Part?
     ) : Response<Loginmodel>
     
