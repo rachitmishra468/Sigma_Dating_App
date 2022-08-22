@@ -7,6 +7,7 @@ import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 
@@ -34,7 +35,7 @@ interface ApiHelper {
     suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun Update_profile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun get_user_bids(jsonObject: String):Response<home_model>
-    suspend fun create_post(user_id:String,title:String,discription:String,file: MultipartBody.Part):Response<Loginmodel>
+    suspend fun create_post(user_id:RequestBody,title:RequestBody,discription:RequestBody,file: MultipartBody.Part):Response<Loginmodel>
     suspend fun deletepost(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun showmyposts(jsonObject: JsonObject):Response<post>
 

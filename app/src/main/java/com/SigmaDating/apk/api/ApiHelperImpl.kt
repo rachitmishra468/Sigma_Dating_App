@@ -9,6 +9,7 @@ import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -71,7 +72,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun block_user(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.block_user(jsonObject)
 
-    override suspend fun create_post(user_id:String,title:String,discription:String,file: MultipartBody.Part): Response<Loginmodel> =
+    override suspend fun create_post(user_id:RequestBody,title:RequestBody,discription:RequestBody,file: MultipartBody.Part): Response<Loginmodel> =
         apiService.create_post(user_id,title,discription,file)
 
     override suspend fun deletepost(jsonObject: JsonObject): Response<Loginmodel> =
