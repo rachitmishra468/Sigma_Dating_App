@@ -293,13 +293,10 @@ _binding?.let {
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
                     selectedImage = data!!.data!!
-                    file= File(selectedImage.path)
-                   // file=bitmapToFile(getRealPathFromURI(selectedImage))!!;
-                    val uriPathHelper = URIPathHelper()
-                    val filePath = uriPathHelper.getPath(requireContext(), selectedImage)
+                    val filePath = URIPathHelper().getPath(requireContext(), selectedImage)
+                    file= File(filePath)
                     Log.d("TAG@123", "FILEPATH :" + filePath)
-                  //  file= File(selectedImage.path)
-                    file=bitmapToFile(getRealPathFromURI(selectedImage))!!;
+                    Log.d("TAG@123", "FILE  PATH :" + file.absolutePath)
                     _binding?.imageProfile?.setImageURI(selectedImage)
                     Log.d("TAG@123", "URI :" + selectedImage)
                     Log.d("TAG@123", "PATH :" + selectedImage.path)
