@@ -72,6 +72,7 @@ import android.webkit.MimeTypeMap
 import android.content.ContentResolver
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.SigmaDating.apk.utilities.FileUtils
+import com.SigmaDating.apk.utilities.URIPathHelper
 
 
 class CreatePost : Fragment() {
@@ -297,6 +298,9 @@ _binding?.let {
                     selectedImage = data!!.data!!
                     file= File(selectedImage.path)
                    // file=bitmapToFile(getRealPathFromURI(selectedImage))!!;
+                    val uriPathHelper = URIPathHelper()
+                    val filePath = uriPathHelper.getPath(requireContext(), selectedImage)
+                    Log.d("TAG@123", "FILEPATH :" + filePath)
                     _binding?.imageProfile?.setImageURI(selectedImage)
                     Log.d("TAG@123", "URI :" + selectedImage)
                     Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
