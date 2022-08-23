@@ -172,7 +172,7 @@
 
 
         <TextView
-            android:id="@+id/interests_text"
+            android:id="@+id/tag_user"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="left|center"
@@ -201,7 +201,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/interests_text" />
+            app:layout_constraintTop_toBottomOf="@id/tag_user" />
 
 
         <TextView

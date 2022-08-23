@@ -12,6 +12,7 @@ import com.SigmaDating.apk.model.Match_bids
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.apk.repository.MainRepository
+import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -100,6 +101,10 @@ class HomeViewModel @Inject constructor(
     fun create_post(file:File,jsonObject:HashMap<String,String>) = viewModelScope.launch {
         Log.d("TAG@123","images path : "+file.absolutePath)
         Log.d("TAG@123","other data : "+jsonObject)
+        Log.d(
+            "TAG@123","tag_users : "+ jsonObject.get("tag_users")!!
+        )
+
         val profileImage: RequestBody = RequestBody.create(
             "image/*".toMediaTypeOrNull(),
             file
@@ -113,9 +118,10 @@ class HomeViewModel @Inject constructor(
 
         val id: RequestBody = jsonObject.get("user_id")!!.toRequestBody("text/plain".toMediaType())
         val title: RequestBody = jsonObject.get("title")!!.toRequestBody("text/plain".toMediaType())
+        val tag_users: RequestBody = jsonObject.get("tag_users")!!.toRequestBody("text/plain".toMediaType())
         val description: RequestBody = jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
         create_post.postValue(Resource.loading(null))
-        mainRepository.create_post(id,title,description
+        mainRepository.create_post(id,title,description,tag_users
             ,profileImageBody).let {
             if (it.isSuccessful) {
                 create_post.postValue(Resource.success(it.body()))

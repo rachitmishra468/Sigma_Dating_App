@@ -68,24 +68,36 @@ import java.util.*
 import kotlin.collections.HashMap
 import android.R.attr.data
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.webkit.MimeTypeMap
 
 import android.content.ContentResolver
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.widget.SearchView
 import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.SigmaDating.apk.adapters.SchoolAdapter
+import com.SigmaDating.apk.adapters.User_Tag_Adapter
+import com.SigmaDating.apk.model.Match_bids
+import com.SigmaDating.apk.model.User_bids_list
+import com.SigmaDating.apk.model.communityModel.UniversityList
+import com.SigmaDating.apk.utilities.EmptyDataObserver
 import com.SigmaDating.apk.utilities.FileUtils
 import com.SigmaDating.apk.utilities.URIPathHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-class CreatePost : Fragment() {
+class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     val CAMERA_REQUEST_CODE = 102
     private val permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
+    lateinit var user_tag_id: ArrayList<String>
+    lateinit var dialog: Dialog
     private var _binding: FragmentCreatePostBinding? = null
     private val binding get() = _binding!!
     private var mUri: Uri? = null
@@ -93,6 +105,7 @@ class CreatePost : Fragment() {
     lateinit var file: File
     lateinit var selectedImage: Uri
     var currentPhotoPath: String? = null
+    private var dataList = mutableListOf<User_bids_list>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,18 +117,28 @@ class CreatePost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+        user_tag_id = ArrayList()
+        (activity as Home).homeviewmodel.all_match_bids = MutableLiveData<Resource<Match_bids>>()
+        subscribe_bids_list()
+        (activity as Home).homeviewmodel.get_user_match_bids(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
+
         _binding?.let {
             it.backPost.setOnClickListener {
                 (activity as Home).onBackPressed()
             }
 
-            it.imageProfile?.setOnClickListener {
+            it.imageProfile.setOnClickListener {
                 checkGallerypermission()
-
             }
 
-            it.interestsText.setOnClickListener {
-
+            it.tagUser.setOnClickListener {
+                if (!dataList.isNullOrEmpty()) {
+                    openUserTagDialog( dataList)
+                }
             }
 
         }
@@ -147,6 +170,8 @@ class CreatePost : Fragment() {
                 )
                 map.put("description", _binding?.postDiscription?.text.toString())
                 map.put("location", "")
+                map.put("tag_users",user_tag_id.joinToString(","))
+
 
                 (activity as Home).homeviewmodel.create_post(file, map)
 
@@ -316,7 +341,8 @@ class CreatePost : Fragment() {
                             if (res?.status == true) {
                                 Log.d("TAG@123", "111 " + res.message)
                                 show_dilog(res.message)
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
                             } else {
                                 Log.d("TAG@123", "111 " + res?.message)
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -335,10 +361,7 @@ class CreatePost : Fragment() {
     }
 
 
-
-
-
-    fun show_dilog(mes:String){
+    fun show_dilog(mes: String) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.app_name)
         builder.setIcon(R.mipmap.ic_launcher)
@@ -347,17 +370,81 @@ class CreatePost : Fragment() {
         builder.background = ColorDrawable(
             Color.parseColor("#FFFFFF")
         )
-        builder.setPositiveButton("Yes"){ dialog,which->
+        builder.setPositiveButton("Yes") { dialog, which ->
             _binding?.postTitle?.setText("")
             _binding?.postDiscription?.setText("")
             _binding?.imageProfile?.setImageResource(R.drawable.icon_camera);
         }
-        builder.setNegativeButton("No"){dialog,which->
+        builder.setNegativeButton("No") { dialog, which ->
             (activity as Home).onBackPressed()
         }
         builder.setCancelable(false)
         val dialog = builder.create()
         dialog.show()
     }
+
+
+    fun subscribe_bids_list() {
+        (activity as Home?)?.homeviewmodel?.all_match_bids?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                dataList = res.data as ArrayList<User_bids_list>
+                                // setAdapterListData(res.data as ArrayList<User_bids_list>)
+                            } else {
+
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun openUserTagDialog( passDataList: List<User_bids_list>) {
+        dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
+        dialog.setContentView(R.layout.user_tag_sheet)
+        var searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_user_tag)
+        val titleText = dialog.findViewById<TextView>(R.id.title_layout)
+        titleText.setText("Tag People")
+        searchRecyclerView!!.layoutManager = LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.VERTICAL, false
+        )
+
+        var schoolAdapter = User_Tag_Adapter(requireContext(), this)
+        searchRecyclerView!!.adapter = schoolAdapter
+        schoolAdapter.setDataList(passDataList)
+        schoolAdapter.notifyDataSetChanged()
+        dialog.show()
+        /* schoolAct_spinner!!.isEnabled = false
+         fraternity_Spinner.isEnabled = false
+         dialog.setOnDismissListener {
+             schoolAct_spinner!!.isEnabled = true
+             fraternity_Spinner.isEnabled = true
+         }*/
+    }
+
+    override fun onCategoryClick(position: User_bids_list) {
+        if (!user_tag_id.contains(position.id)) {
+            position.tag_add=true
+            user_tag_id.add(position.id)
+            Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(requireContext(), "Already Tag", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
 }

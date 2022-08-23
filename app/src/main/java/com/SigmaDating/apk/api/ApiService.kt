@@ -87,6 +87,7 @@ interface ApiService {
     @POST("post/save")
     suspend fun create_post( @Part("user_id") user_id: RequestBody,
                           @Part("title") title: RequestBody, @Part("description") description: RequestBody,
+                             @Part("tag_users") tag_users: RequestBody,
                           @Part file: MultipartBody.Part?
     ) : Response<Loginmodel>
 

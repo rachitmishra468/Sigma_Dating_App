@@ -540,8 +540,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         _binding?.userAbout?.setText(about)
                                     }
                                     if (res.user.interests.contains(",")) {
-                                        interestsList =
-                                            res.user.interests.split(",") as ArrayList<String>
+                                        interestsList = res.user.interests.split(",") as ArrayList<String>
                                     } else {
                                         interestsList.add(res.user.interests)
                                     }

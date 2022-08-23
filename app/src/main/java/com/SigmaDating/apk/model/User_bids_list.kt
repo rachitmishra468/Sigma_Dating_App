@@ -22,7 +22,8 @@ data class User_bids_list(
     val longitude:String,
     val interested_in:String,
     val greekletter:String,
-    val age:String
+    val age:String,
+    var tag_add:Boolean=false
 
 
 )
