@@ -1,12 +1,9 @@
 package com.example.demoapp.api
 
 import com.SigmaDating.apk.api.ApiService
-import com.SigmaDating.apk.model.Loginmodel
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.api.ApiHelper
-import com.SigmaDating.apk.model.Forgotpassword
-import com.SigmaDating.apk.model.home_model
-import com.SigmaDating.apk.model.post
+import com.SigmaDating.apk.model.*
 import com.SigmaDating.model.SchoolCommunityResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -82,6 +79,8 @@ class ApiHelperImpl @Inject constructor(
         apiService.showmyposts(jsonObject)
 
 
+    override suspend fun get_user_match_bids(id: String): Response<Match_bids> =
+        apiService.get_user_match_bids(id)
 
 
 

@@ -8,6 +8,7 @@ import com.SigmaDating.apk.model.home_model
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
 import com.SigmaDating.apk.model.Loginmodel
+import com.SigmaDating.apk.model.Match_bids
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.apk.repository.MainRepository
@@ -51,6 +52,7 @@ class HomeViewModel @Inject constructor(
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var delete_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var All_post: MutableLiveData<Resource<post>>
+    lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
@@ -66,6 +68,21 @@ class HomeViewModel @Inject constructor(
     fun get_home_feb_data(id: String){
         val one = async {  get_Login_User_details(id) }
         val two = async { get_Login_User_bids(id) }
+    }
+
+
+
+
+
+    fun get_user_match_bids(id:String) = viewModelScope.launch {
+        all_match_bids.postValue(Resource.loading(null))
+        mainRepository.get_user_match_bids(id).let {
+            if (it.isSuccessful) {
+                all_match_bids.postValue(Resource.success(it.body()))
+            } else {
+                all_match_bids.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
     }
 
 

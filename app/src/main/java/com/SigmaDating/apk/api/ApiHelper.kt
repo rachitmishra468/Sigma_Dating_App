@@ -1,10 +1,7 @@
 package com.SigmaDating.apk.api
 
-import com.SigmaDating.apk.model.Loginmodel
+import com.SigmaDating.apk.model.*
 import com.google.gson.JsonObject
-import com.SigmaDating.apk.model.Forgotpassword
-import com.SigmaDating.apk.model.home_model
-import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -38,6 +35,9 @@ interface ApiHelper {
     suspend fun create_post(user_id:RequestBody,title:RequestBody,discription:RequestBody,file: MultipartBody.Part):Response<Loginmodel>
     suspend fun deletepost(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun showmyposts(jsonObject: JsonObject):Response<post>
+    suspend fun get_user_match_bids(jsonObject: String):Response<Match_bids>
+
+
 
 //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
 

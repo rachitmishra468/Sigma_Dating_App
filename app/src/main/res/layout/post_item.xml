@@ -57,6 +57,19 @@
             tools:ignore="MissingConstraints"></ImageView>
 
 
+        <ProgressBar
+            android:id="@+id/progress_post"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_post_img"

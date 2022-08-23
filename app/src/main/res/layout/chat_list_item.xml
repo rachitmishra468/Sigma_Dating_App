@@ -54,6 +54,7 @@
                 android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/univercity_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -61,6 +62,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/date_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".25"

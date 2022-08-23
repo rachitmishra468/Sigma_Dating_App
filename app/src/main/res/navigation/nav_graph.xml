@@ -276,6 +276,17 @@
         android:id="@+id/createPost"
         android:name="com.SigmaDating.apk.views.post.CreatePost"
         android:label="CreatePost" >
+        <argument
+            android:name="user_image"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="user_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
 
 
     </fragment>
@@ -283,6 +294,19 @@
         android:id="@+id/postList"
         android:name="com.SigmaDating.apk.views.post.PostList"
         android:label="PostList" >
+
+        <argument
+            android:name="user_image"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="user_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+
 
         <action
             android:id="@+id/action_FirstFragment_to_chat"

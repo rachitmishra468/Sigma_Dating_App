@@ -1,5 +1,7 @@
 package com.SigmaDating.apk.views.post
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -30,6 +32,7 @@ import com.SigmaDating.databinding.FragmentPostListBinding
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -41,6 +44,7 @@ class PostList : Fragment() {
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
     lateinit var user_profile_photo: CircleImageView
+    private var userID: String? = null
     private lateinit var photoAdapter: PostAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,15 +60,14 @@ class PostList : Fragment() {
         (activity as Home).homeviewmodel.All_post= MutableLiveData<Resource<post>>()
         subscribe_create_post()
         val jsonObject = JsonObject()
-        Log.d(
-            "TAG@123",
-            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-        )
-        jsonObject.addProperty(
-            "user_id",
-            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-        )
-
+        userID = getArguments()?.getString("user_id")
+        if (userID == null) {
+            userID = (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        }
+        Log.d("TAG@123", userID+"")
+        jsonObject.addProperty("user_id", userID)
         (activity as Home).homeviewmodel.getAllPost(jsonObject)
         return binding.root
     }
@@ -152,6 +155,8 @@ class PostList : Fragment() {
         }
 
     }
+
+
 
 
 }

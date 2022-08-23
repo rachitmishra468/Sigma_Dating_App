@@ -1,8 +1,6 @@
-package com.example.bridegroomed.model
+package com.SigmaDating.apk.model
 
-import com.SigmaDating.apk.model.Postdata
-
-data class User(
+data class User_bids_list(
     val id:String,
     val email: String,
     val last_name: String,
@@ -24,10 +22,7 @@ data class User(
     val longitude:String,
     val interested_in:String,
     val greekletter:String,
-    val age:String,
-    var photos:ArrayList<String> = arrayListOf()
+    val age:String
 
 
-
-    )
-
+)

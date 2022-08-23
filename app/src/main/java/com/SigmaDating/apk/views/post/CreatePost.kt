@@ -71,14 +71,15 @@ import android.annotation.SuppressLint
 import android.webkit.MimeTypeMap
 
 import android.content.ContentResolver
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.core.app.ActivityCompat.startActivityForResult
 import com.SigmaDating.apk.utilities.FileUtils
 import com.SigmaDating.apk.utilities.URIPathHelper
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class CreatePost : Fragment() {
-
-    val CAMERA_PERM_CODE = 101
     val CAMERA_REQUEST_CODE = 102
     private val permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -89,12 +90,9 @@ class CreatePost : Fragment() {
     private val binding get() = _binding!!
     private var mUri: Uri? = null
     private val OPERATION_CHOOSE_PHOTO = 2
-    private val OPERATION_CAPTURE_PHOTO = 102
-    var encoded = ""
     lateinit var file: File
     lateinit var selectedImage: Uri
     var currentPhotoPath: String? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,21 +104,21 @@ class CreatePost : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
-_binding?.let {
-   it.backPost.setOnClickListener {
-       (activity as Home).onBackPressed()
-   }
+        _binding?.let {
+            it.backPost.setOnClickListener {
+                (activity as Home).onBackPressed()
+            }
 
-    it.imageProfile?.setOnClickListener {
-        checkGallerypermission()
+            it.imageProfile?.setOnClickListener {
+                checkGallerypermission()
 
-    }
+            }
 
-    it.interestsText.setOnClickListener {
+            it.interestsText.setOnClickListener {
 
-    }
+            }
 
-}
+        }
 
 
         _binding?.done?.setOnClickListener {
@@ -128,11 +126,12 @@ _binding?.let {
                 _binding?.postTitle?.error = "Enter Post Title.."
             } else if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption.."
-            } /*else if (encoded.equals("")) {
+            } else if (!file.isFile) {
                 Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
-            }*/ else {
-                (activity as Home).homeviewmodel.create_post = MutableLiveData<Resource<Loginmodel>>()
+            } else {
+                (activity as Home).homeviewmodel.create_post =
+                    MutableLiveData<Resource<Loginmodel>>()
                 subscribe_create_post()
 
                 Log.d(
@@ -237,7 +236,7 @@ _binding?.let {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 val photoURI = FileProvider.getUriForFile(
-                    requireContext()       ,             "com.SigmaDating.apk.provider",
+                    requireContext(), "com.SigmaDating.apk.provider",
                     photoFile
                 )
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -285,7 +284,7 @@ _binding?.let {
                 if (resultCode == Activity.RESULT_OK) {
                     file = File(currentPhotoPath)
                     _binding?.imageProfile?.setImageURI(Uri.fromFile(file))
-                    selectedImage=Uri.fromFile(file)
+                    selectedImage = Uri.fromFile(file)
                     Log.d("TAG@123", "URI :" + selectedImage)
                     Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
 
@@ -294,7 +293,7 @@ _binding?.let {
                 if (resultCode == Activity.RESULT_OK) {
                     selectedImage = data!!.data!!
                     val filePath = URIPathHelper().getPath(requireContext(), selectedImage)
-                    file= File(filePath)
+                    file = File(filePath)
                     Log.d("TAG@123", "FILEPATH :" + filePath)
                     Log.d("TAG@123", "FILE  PATH :" + file.absolutePath)
                     _binding?.imageProfile?.setImageURI(selectedImage)
@@ -303,20 +302,6 @@ _binding?.let {
                     Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
                 }
         }
-    }
-
-
-    fun getPathFromURI(contentUri: Uri?): String? {
-        var res: String? = null
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor =
-            requireActivity().getContentResolver().query(contentUri!!, proj, null, null, null)!!
-        if (cursor.moveToFirst()) {
-            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            res = cursor.getString(column_index)
-        }
-        cursor.close()
-        return res
     }
 
 
@@ -330,8 +315,8 @@ _binding?.let {
                         it.data.let { res ->
                             if (res?.status == true) {
                                 Log.d("TAG@123", "111 " + res.message)
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+                                show_dilog(res.message)
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
                             } else {
                                 Log.d("TAG@123", "111 " + res?.message)
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
@@ -350,43 +335,29 @@ _binding?.let {
     }
 
 
-    fun bitmapToFile(filepath: String?): File? { // File name like "image.png"
 
-        //create a file to write bitmap data
-        var file: File? = null
-        return try {
-            file = File(filepath)
-            val scaledBitmap = BitmapFactory.decodeFile(file.path)
-            val bytes = ByteArrayOutputStream()
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, bytes)
-            val bitmapdata = bytes.toByteArray()
-            val fos = FileOutputStream(file)
-            fos.write(bitmapdata)
-            fos.flush()
-            fos.close()
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            file // it will return null
+
+
+    fun show_dilog(mes:String){
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(R.string.app_name)
+        builder.setIcon(R.mipmap.ic_launcher)
+
+        builder.setMessage("Are you want to Create More Post.")
+        builder.background = ColorDrawable(
+            Color.parseColor("#FFFFFF")
+        )
+        builder.setPositiveButton("Yes"){ dialog,which->
+            _binding?.postTitle?.setText("")
+            _binding?.postDiscription?.setText("")
+            _binding?.imageProfile?.setImageResource(R.drawable.icon_camera);
         }
-    }
-
-
-    fun getRealPathFromURI(uri: Uri?): String? {
-        var path = ""
-        if (requireContext().contentResolver != null) {
-            val cursor = requireContext().contentResolver.query(
-                uri!!, null, null, null, null
-            )
-            if (cursor != null) {
-                cursor.moveToFirst()
-                val idx = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
-                path = cursor.getString(idx)
-                cursor.close()
-            }
+        builder.setNegativeButton("No"){dialog,which->
+            (activity as Home).onBackPressed()
         }
-        return path
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
     }
-
 
 }

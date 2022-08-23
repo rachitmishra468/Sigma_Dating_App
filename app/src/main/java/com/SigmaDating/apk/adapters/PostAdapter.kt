@@ -1,11 +1,13 @@
 package com.SigmaDating.apk.adapters
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
@@ -16,6 +18,10 @@ import com.SigmaDating.apk.model.Postdata
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.apk.views.userdashboard.SecondFragmentDirections
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PostAdapter(var context: Context) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
@@ -33,12 +39,14 @@ class PostAdapter(var context: Context) : RecyclerView.Adapter<PostAdapter.ViewH
         var title:TextView
         var discription:TextView
         var profile_img: CircleImageView
+        var progressBar: ProgressBar
 
         init {
             profile_img= itemView.findViewById(R.id.profile_post_img)
             image = itemView.findViewById(R.id.post_img)
             title= itemView.findViewById(R.id.post_title)
             discription= itemView.findViewById(R.id.dis_title)
+            progressBar = itemView.findViewById(R.id.progress_post)
         }
 
     }
@@ -58,9 +66,33 @@ class PostAdapter(var context: Context) : RecyclerView.Adapter<PostAdapter.ViewH
         var data = dataList[position]
 
         // Set item views based on your views and data model
-        Glide.with(context).load(data.media).into(holder.image);
+       // Glide.with(context).load(data.media).into(holder.image);
         holder.title.text=data.title
         holder.discription.text=data.description
+        Glide.with(context).load(data.media).listener(object : RequestListener<Drawable> {
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                holder.progressBar.visibility = View.GONE
+                return false;
+            }
+
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                holder.progressBar.visibility = View.GONE
+                return false;
+            }
+
+        }).into(holder.image);
+
         holder.image.setOnClickListener {
 
         }

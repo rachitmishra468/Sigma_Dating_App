@@ -22,6 +22,7 @@ import com.SigmaDating.apk.adapters.Profile_Adapter
 
 
 import com.SigmaDating.apk.model.EditProfiledata
+import com.SigmaDating.apk.model.Postdata
 import com.SigmaDating.apk.model.home_model
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
@@ -45,7 +46,7 @@ class SecondFragment : Fragment() {
     private var _binding: FragmentSecondBinding? = null
     private lateinit var photoAdapter: Profile_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
-    private var dataListuser = mutableListOf<String>()
+    private var dataListuser = listOf<Postdata>()
 
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
@@ -76,11 +77,14 @@ class SecondFragment : Fragment() {
             )
         }
         _binding?.editProfile?.setOnClickListener {
-
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
-        _binding?.fab?.setOnClickListener {
 
+
+        if(!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
+            _binding?.fab?.visibility=View.GONE
+        }
+        _binding?.fab?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_createpost)
         }
 
@@ -100,11 +104,10 @@ class SecondFragment : Fragment() {
              bundle.putString("user_id",userID)
              findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
 
-
-
-
-
         }
+
+
+
         return binding.root
 
     }
@@ -164,7 +167,7 @@ class SecondFragment : Fragment() {
 
     }
 
-    fun setAdapterListData(dataListuser: ArrayList<String>) {
+    fun setAdapterListData(dataListuser: ArrayList<Postdata>) {
         _binding?.recyclerView?.layoutManager = GridLayoutManager(AppReseources.getAppContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
@@ -202,12 +205,12 @@ class SecondFragment : Fragment() {
                                     .error(R.drawable.profile_img)
                                     .into(_binding!!.logoDetail);
                             }
-                            dataListuser.clear()
-                            if (!res.user.photos.isNullOrEmpty()) {
-                                dataListuser = res.user.photos
+                           // dataListuser.clear()
+                            if (!res.posts.isNullOrEmpty()) {
+                                dataListuser = res.posts
+                                setAdapterListData(dataListuser as ArrayList<Postdata>)
                             }
 
-                            setAdapterListData(dataListuser as ArrayList<String>)
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                 .show()

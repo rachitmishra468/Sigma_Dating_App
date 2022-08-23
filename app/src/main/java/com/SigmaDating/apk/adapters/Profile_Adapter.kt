@@ -2,6 +2,7 @@ package com.SigmaDating.apk.adapters
 
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +10,21 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.EditProfiledata
+import com.SigmaDating.apk.model.Postdata
 import com.SigmaDating.apk.views.FirstFragmentDirections
 import com.SigmaDating.apk.views.userdashboard.SecondFragmentDirections
 
 
 class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {
 
-    var dataList = emptyList<String>()
+    var dataList = emptyList<Postdata>()
 
-    internal fun setDataList(dataList: List<String>) {
+    internal fun setDataList(dataList: List<Postdata>) {
         this.dataList = dataList
     }
 
@@ -47,20 +50,16 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
     // Involves populating data into the item through holder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        // Get the data model based on position
         var data = dataList[position]
         holder.image.apply {
-            transitionName = data.trim()
+            transitionName = data.media
         }
-        // Set item views based on your views and data model
-        Glide.with(context).load(data.trim()).into(holder.image);
+        Glide.with(context).load(data.media).into(holder.image);
 
         holder.image.setOnClickListener {
-            val extrass = FragmentNavigatorExtras(holder.image to data.trim())
-            val action = SecondFragmentDirections.actionSecondFragmentToPostlist(
-               // fullImage =data.trim()
-            )
-            holder.image.findNavController().navigate(action,extrass)
+            val bundle = Bundle()
+            bundle.putString("user_id",data.user_id)
+            holder.image.findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
         }
 
     }

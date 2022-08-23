@@ -1,21 +1,31 @@
 package com.SigmaDating.apk.views.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.apk.adapters.ChatList_Adapter
-import com.SigmaDating.apk.model.EditProfiledata
+import com.SigmaDating.apk.adapters.PostAdapter
+import com.SigmaDating.apk.model.*
+import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
+import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentChatListBinding
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.google.android.gms.common.data.DataHolder
 
 
@@ -33,7 +43,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
     private lateinit var chatlistAdapter: ChatList_Adapter
-    private var dataList = mutableListOf<EditProfiledata>()
+    private var dataList = mutableListOf<User_bids_list>()
     private var chat_list_recycler: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +61,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
+        chatlistAdapter = ChatList_Adapter(requireContext(), this)
         footer_transition()
         _binding!!.movetoedit.setOnClickListener {
             findNavController().navigate(R.id.action_chatListFragment_to_editprofile)
@@ -63,59 +74,29 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         }
         chat_list_recycler = binding.root.findViewById(R.id.chatlist_recyclerView)
         chat_list_recycler?.layoutManager = GridLayoutManager(requireContext(), 1)
-        chatlistAdapter = ChatList_Adapter(requireContext(), this)
+       // chatlistAdapter = ChatList_Adapter(requireContext(), this)
         _binding!!.editTextTextSearch.addTextChangedListener {
 
             filter(it.toString())
         }
 
-        //add data
-        for (i in 1..10) {
-            dataList.add(
-                EditProfiledata(
-                    "https://thumbs.dreamstime.com/b/african-american-woman-talking-mobile-phone-black-people-50437769.jpg",
-                    "test demo"
-                )
-            )
-            dataList.add(
-                EditProfiledata(
-                    "https://thumbs.dreamstime.com/b/beautiful-young-woman-maine-usa-close-up-portrait-native-108644385.jpg",
-                    "lorem ipsum"
-                )
-            )
-            dataList.add(
-                EditProfiledata(
-                    "https://thumbs.dreamstime.com/b/beauty-black-skin-woman-african-ethnic-female-face-young-african-american-model-long-afro-hair-smiling-model-isolated-163819588.jpg",
-                    "demo lorem test"
-                )
-            )
-            dataList.add(
-                EditProfiledata(
-                    "https://thumbs.dreamstime.com/b/african-american-woman-praying-african-american-woman-praying-god-seeking-prayer-213590092.jpg",
-                    "dummy data"
-                )
-            )
+
+        (activity as Home).homeviewmodel.all_match_bids= MutableLiveData<Resource<Match_bids>>()
+        subscribe_create_post()
+        (activity as Home).homeviewmodel.get_user_match_bids( (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
 
 
-        }
-
-        chat_list_recycler?.adapter = chatlistAdapter
-        chatlistAdapter.setDataList(dataList)
-        chatlistAdapter.notifyDataSetChanged()
 
         return binding.root;
     }
 
     fun filter(text: String?) {
-        val temp: MutableList<EditProfiledata> = ArrayList()
+        val temp: MutableList<User_bids_list> = ArrayList()
         for (d in dataList) {
-            //or use .equal(text) with you want equal match
-            //use .toLowerCase() for better matches
-            if (d.text.contains(text.toString())) {
+            if ((d.first_name+" "+d.last_name).lowercase().startsWith(text?.lowercase().toString())) {
                 temp.add(d)
             }
         }
-        //update recyclerview
         chatlistAdapter.updateList(temp)
     }
 
@@ -155,9 +136,59 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     }
 
 
-    override fun onCategoryClick(position: EditProfiledata) {
+    override fun onCategoryClick(position: User_bids_list) {
         Navigation.findNavController(binding.root)
             .navigate(R.id.action_chatListFragment_to_userChatFragment);
+    }
+
+    fun subscribe_create_post() {
+        (activity as Home?)?.homeviewmodel?.all_match_bids?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                dataList=res.data as ArrayList<User_bids_list>
+                                setAdapterListData(res.data as ArrayList<User_bids_list>)
+                            } else {
+
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
+
+
+
+    fun setAdapterListData(dataListuser: ArrayList<User_bids_list>) {
+        chat_list_recycler?.layoutManager =  LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.VERTICAL, false
+        )
+
+        chat_list_recycler?.adapter = chatlistAdapter
+        chatlistAdapter.setDataList(dataListuser)
+        Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
 
 }
