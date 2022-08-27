@@ -58,23 +58,11 @@ class PostList : Fragment(),PostAdapter.OnItemClickListener {
     ): View? {
         _binding= FragmentPostListBinding.inflate(inflater, container, false)
         footer_transition()
-        (activity as Home).homeviewmodel.All_post= MutableLiveData<Resource<post>>()
-        (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
 
-        subscribe_create_post()
 
         // delete post observer method
-        deletePostObserverResponse()
-        val jsonObject = JsonObject()
-        userID = getArguments()?.getString("user_id")
-        if (userID == null) {
-            userID = (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        }
-        Log.d("TAG@123", userID+"")
-        jsonObject.addProperty("user_id", userID)
-        (activity as Home).homeviewmodel.getAllPost(jsonObject)
+
+        get_postdata()
         return binding.root
     }
 
@@ -143,9 +131,7 @@ fun getUserisSame():Boolean{
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-
-                       // Toast.makeText(requireContext(),it.message, Toast.LENGTH_LONG).show()
-                     subscribe_create_post()
+                        get_postdata()
                     }
                     Status.LOADING -> {
                         AppUtils.showLoader(requireContext())
@@ -161,6 +147,8 @@ fun getUserisSame():Boolean{
         val jsonObject = JsonObject()
 
         Log.d("TAG@123", position.id+"")
+        (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
+        deletePostObserverResponse()
         jsonObject.addProperty("id", position.id)
         (activity as Home).homeviewmodel.deletepost(jsonObject)
     }
@@ -202,6 +190,19 @@ fun getUserisSame():Boolean{
     }
 
 
-
+fun get_postdata(){
+    (activity as Home).homeviewmodel.All_post= MutableLiveData<Resource<post>>()
+    subscribe_create_post()
+    val jsonObject = JsonObject()
+    userID = getArguments()?.getString("user_id")
+    if (userID == null) {
+        userID = (activity as Home).sharedPreferencesStorage.getString(
+            AppConstants.USER_ID
+        )
+    }
+    Log.d("TAG@123", userID+"")
+    jsonObject.addProperty("user_id", userID)
+    (activity as Home).homeviewmodel.getAllPost(jsonObject)
+}
 
 }

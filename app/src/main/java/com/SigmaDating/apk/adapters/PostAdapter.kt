@@ -29,6 +29,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
 
     var dataList = emptyList<Postdata>()
     internal fun setDataList(dataList: List<Postdata>) {
+        this.dataList=ArrayList<Postdata>()
         this.dataList = dataList
         notifyDataSetChanged()
     }
