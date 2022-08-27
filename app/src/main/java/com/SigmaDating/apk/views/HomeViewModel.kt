@@ -4,12 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.SigmaDating.apk.model.home_model
+import com.SigmaDating.apk.model.*
 import com.example.demoapp.other.Resource
 import com.google.gson.JsonObject
-import com.SigmaDating.apk.model.Loginmodel
-import com.SigmaDating.apk.model.Match_bids
-import com.SigmaDating.apk.model.post
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.apk.repository.MainRepository
 import com.SigmaDating.apk.storage.AppConstants
@@ -51,7 +48,7 @@ class HomeViewModel @Inject constructor(
     lateinit var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
     lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
-    lateinit var delete_post: MutableLiveData<Resource<Loginmodel>>
+    lateinit var delete_post: MutableLiveData<Resource<delelepost>>
     lateinit var All_post: MutableLiveData<Resource<post>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     val user_bids: MutableLiveData<Resource<home_model>>

@@ -211,9 +211,13 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             searchVieww.queryHint="Search School/University"
         }
         else if (stringtype.equals(AppConstants.Sorority)){
+            schoolList= ArrayList<UniversityList>()
+            schoolList=sororitiesList
             searchVieww.queryHint="Search Sorority "
         }
         else if (stringtype.equals(AppConstants.Fraternity)){
+            schoolList= ArrayList<UniversityList>()
+            schoolList=fraternitiesList
             searchVieww.queryHint="Search Fraternity "
         }
         searchRecyclerView!!.layoutManager = LinearLayoutManager(

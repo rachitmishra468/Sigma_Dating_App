@@ -19,9 +19,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +27,6 @@ import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.storage.AppConstants
-import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentCreatePostBinding
 import com.example.demoapp.other.Resource
@@ -39,7 +35,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
@@ -74,7 +69,12 @@ import android.webkit.MimeTypeMap
 import android.content.ContentResolver
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.widget.SearchView
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
+import android.text.InputType
+import android.widget.*
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -83,10 +83,11 @@ import com.SigmaDating.apk.adapters.User_Tag_Adapter
 import com.SigmaDating.apk.model.Match_bids
 import com.SigmaDating.apk.model.User_bids_list
 import com.SigmaDating.apk.model.communityModel.UniversityList
-import com.SigmaDating.apk.utilities.EmptyDataObserver
-import com.SigmaDating.apk.utilities.FileUtils
-import com.SigmaDating.apk.utilities.URIPathHelper
+import com.SigmaDating.apk.utilities.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.delay as delay
 
 
 class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
@@ -96,13 +97,19 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
+
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private val permissionId = 2
+    var location_text = ""
+    var latitude = ""
+    var longitude = ""
     lateinit var user_tag_id: ArrayList<String>
     lateinit var dialog: Dialog
     private var _binding: FragmentCreatePostBinding? = null
     private val binding get() = _binding!!
     private var mUri: Uri? = null
     private val OPERATION_CHOOSE_PHOTO = 2
-    lateinit var file: File
+     var file: File?=null
     lateinit var selectedImage: Uri
     var currentPhotoPath: String? = null
     private var dataList = mutableListOf<User_bids_list>()
@@ -118,6 +125,13 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         user_tag_id = ArrayList()
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        CoroutineScope(Dispatchers.IO).launch {
+            getLocation()
+        }
+
+
         (activity as Home).homeviewmodel.all_match_bids = MutableLiveData<Resource<Match_bids>>()
         subscribe_bids_list()
         (activity as Home).homeviewmodel.get_user_match_bids(
@@ -140,7 +154,9 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                     openUserTagDialog( dataList)
                 }
             }
-
+            it.tagLocation.setOnClickListener {
+                Update_phone_location()
+            }
         }
 
 
@@ -149,7 +165,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 _binding?.postTitle?.error = "Enter Post Title.."
             } else if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption.."
-            } else if (!file.isFile) {
+            } else if (file==null) {
                 Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
             } else {
@@ -169,11 +185,11 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                     (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                 )
                 map.put("description", _binding?.postDiscription?.text.toString())
-                map.put("location", "")
+                map.put("location", location_text)
                 map.put("tag_users",user_tag_id.joinToString(","))
 
 
-                (activity as Home).homeviewmodel.create_post(file, map)
+                (activity as Home).homeviewmodel.create_post(file!!, map)
 
             }
 
@@ -183,23 +199,61 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     }
 
 
+    fun Update_phone_location() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.update_phone_location, null)
+
+        val title_text = view.findViewById<TextView>(R.id.textView5)
+        val current_value = view.findViewById<EditText>(R.id.editText_password)
+        val update_value = view.findViewById<Button>(R.id.update_value)
+        val update_current = view.findViewById<Button>(R.id.update_current)
+        title_text.setText("Update Location With Post Code.")
+        current_value.setHint("Enter Location With Post Code.")
+        current_value.inputType= InputType.TYPE_CLASS_TEXT
+        update_current.setOnClickListener {
+            _binding?.let {
+               it.textUpdateLocation.visibility=View.VISIBLE
+                it.textUpdateLocation.text=location_text
+            }
+            //_binding?.tagLocation?.text = location_text
+            dialog.dismiss()
+        }
+        update_value.setOnClickListener {
+            if (!current_value.text.toString().isEmpty()) {
+                location_text=current_value.text.toString()
+                _binding?.let {
+                    it.textUpdateLocation.visibility=View.VISIBLE
+                    it.textUpdateLocation.text=current_value.text
+                }
+                    dialog.dismiss()
+            } else {
+                current_value.setError("Please Enter valid Location.. ")
+            }
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+
+
     private fun checkGallerypermission() {
         if (ContextCompat.checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
             != PackageManager.PERMISSION_GRANTED
             || ContextCompat.checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.CAMERA
             )
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 permissions,
                 AppConstants.STORAGE_PERMISSION_REQUEST_CODE
             )
@@ -217,6 +271,42 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     override fun onStop() {
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private suspend fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    val location: Location? = task.result
+                    if (location != null) {
+
+                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+
+                        val list: List<Address> =
+                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(500)
+                            latitude = "${list[0].latitude}"
+                            longitude = "${list[0].longitude}"
+
+                            location_text = "${list[0].locality}"
+                            //_binding?.tagLocation?.text= location_text
+                        }
+
+
+                    }
+                }
+
+            } else {
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            requestPermissions()
+        }
     }
 
     private fun popup() {
@@ -320,7 +410,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                     val filePath = URIPathHelper().getPath(requireContext(), selectedImage)
                     file = File(filePath)
                     Log.d("TAG@123", "FILEPATH :" + filePath)
-                    Log.d("TAG@123", "FILE  PATH :" + file.absolutePath)
+                    Log.d("TAG@123", "FILE  PATH :" + file!!.absolutePath)
                     _binding?.imageProfile?.setImageURI(selectedImage)
                     Log.d("TAG@123", "URI :" + selectedImage)
                     Log.d("TAG@123", "PATH :" + selectedImage.path)
@@ -416,6 +506,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.user_tag_sheet)
         var searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_user_tag)
+        var doneBtn=dialog.findViewById<Button>(R.id.text_done)
         val titleText = dialog.findViewById<TextView>(R.id.title_layout)
         titleText.setText("Tag People")
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
@@ -428,6 +519,9 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         schoolAdapter.setDataList(passDataList)
         schoolAdapter.notifyDataSetChanged()
         dialog.show()
+        if (dialog.isShowing ){
+            doneBtn.setOnClickListener { dialog.dismiss() }
+        }
         /* schoolAct_spinner!!.isEnabled = false
          fraternity_Spinner.isEnabled = false
          dialog.setOnDismissListener {
@@ -445,6 +539,52 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             Toast.makeText(requireContext(), "Already Tag", Toast.LENGTH_LONG).show()
         }
     }
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
 
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            permissionId
+        )
+    }
 
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionId) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    getLocation()
+                }
+            }
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
 }

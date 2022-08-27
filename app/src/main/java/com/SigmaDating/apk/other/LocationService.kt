@@ -52,7 +52,7 @@ companion object {
 
 
                         CoroutineScope(Dispatchers.Main).launch {
-                            delay(200)
+                            delay(1000)
                             (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                 AppConstants.latitude,
                                 "${list[0].latitude}"
@@ -109,7 +109,7 @@ companion object {
     }
     private fun isLocationEnabled(requireContext:FragmentActivity): Boolean {
         val locationManager: LocationManager =
-            requireContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            AppReseources.getAppContext()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )

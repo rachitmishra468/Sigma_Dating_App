@@ -78,7 +78,7 @@ interface ApiService {
 
 
     @POST("post/deletepost")
-    suspend fun deletepost(@Body jsonObject: JsonObject): Response<Loginmodel>
+    suspend fun deletepost(@Body jsonObject: JsonObject): Response<delelepost>
 
     @POST("post/showmyposts")
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>

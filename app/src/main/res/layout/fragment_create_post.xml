@@ -221,7 +221,15 @@
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp"
             />
+<TextView
+    android:id="@+id/text_update_location"
+    android:layout_width="0dp"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+    app:layout_constraintTop_toBottomOf="@+id/tag_location"
 
+    android:layout_height="wrap_content"/>
         <View
             android:id="@+id/v6"
             android:layout_width="match_parent"
@@ -232,7 +240,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tag_location" />
+            app:layout_constraintTop_toBottomOf="@id/text_update_location" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

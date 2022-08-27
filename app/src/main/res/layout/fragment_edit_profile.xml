@@ -287,7 +287,7 @@
                 style="@style/QText"
                 android:layout_height="40dp"
                 android:layout_weight=".33"
-                android:background="@drawable/white_radius_bg"
+                android:background="@drawable/gray_circle_radius_bg"
                 android:text="@string/fraternity_text"
                 android:textStyle="bold"
                 android:textAllCaps="false"

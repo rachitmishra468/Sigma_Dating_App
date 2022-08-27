@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.apk.adapters.ChatList_Adapter
-import com.SigmaDating.apk.adapters.PostAdapter
 import com.SigmaDating.apk.model.*
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils

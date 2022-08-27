@@ -72,7 +72,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun create_post(user_id:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody, file: MultipartBody.Part): Response<Loginmodel> =
         apiService.create_post(user_id,title,discription,tag_users,file)
 
-    override suspend fun deletepost(jsonObject: JsonObject): Response<Loginmodel> =
+    override suspend fun deletepost(jsonObject: JsonObject): Response<delelepost> =
         apiService.deletepost(jsonObject)
 
     override suspend fun showmyposts(jsonObject: JsonObject): Response<post> =

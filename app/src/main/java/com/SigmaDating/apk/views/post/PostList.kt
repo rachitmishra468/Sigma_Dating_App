@@ -23,6 +23,7 @@ import com.SigmaDating.apk.adapters.PostAdapter
 import com.SigmaDating.apk.adapters.Profile_Adapter
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.model.Postdata
+import com.SigmaDating.apk.model.delelepost
 import com.SigmaDating.apk.model.post
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
@@ -36,7 +37,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 
-class PostList : Fragment() {
+class PostList : Fragment(),PostAdapter.OnItemClickListener {
 
     private var _binding: FragmentPostListBinding?=null
     private val binding get() = _binding!!
@@ -58,7 +59,12 @@ class PostList : Fragment() {
         _binding= FragmentPostListBinding.inflate(inflater, container, false)
         footer_transition()
         (activity as Home).homeviewmodel.All_post= MutableLiveData<Resource<post>>()
+        (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
+
         subscribe_create_post()
+
+        // delete post observer method
+        deletePostObserverResponse()
         val jsonObject = JsonObject()
         userID = getArguments()?.getString("user_id")
         if (userID == null) {
@@ -82,28 +88,39 @@ class PostList : Fragment() {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    fun setAdapterListData(dataListuser: ArrayList<Postdata>) {
-        _binding?.postRecyclerview?.layoutManager =  LinearLayoutManager(
-            requireActivity(),
+    fun setAdapterListData( booleantype: Boolean ,dataListuser: ArrayList<Postdata>) {
+        _binding?.postRecyclerview?.layoutManager =  LinearLayoutManager(requireActivity(),
             LinearLayoutManager.VERTICAL, false
         )
-        photoAdapter = PostAdapter(requireContext())
+        photoAdapter = PostAdapter(booleantype,this,requireContext())
         _binding?.postRecyclerview?.adapter = photoAdapter
         photoAdapter.setDataList(dataListuser)
+        photoAdapter.notifyDataSetChanged()
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
 
+fun getUserisSame():Boolean{
+    return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
 
+}
     fun subscribe_create_post() {
         (activity as Home?)?.homeviewmodel?.All_post?.observe(
             viewLifecycleOwner,
-            Observer {
+            Observer { it ->
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
-                               setAdapterListData(res.data as ArrayList<Postdata>)
+
+                                if ( !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
+                                    setAdapterListData(false,res.data as ArrayList<Postdata>)
+                                }
+                                else{
+                                    setAdapterListData(true,res.data as ArrayList<Postdata>)
+
+                                }
+
                             } else {
 
                             }
@@ -119,6 +136,34 @@ class PostList : Fragment() {
             })
     }
 
+    fun deletePostObserverResponse(){
+        (activity as Home?)?.homeviewmodel?.delete_post?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+
+                       // Toast.makeText(requireContext(),it.message, Toast.LENGTH_LONG).show()
+                     subscribe_create_post()
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+    }
+    override fun onDelete(position: Postdata) {
+
+        val jsonObject = JsonObject()
+
+        Log.d("TAG@123", position.id+"")
+        jsonObject.addProperty("id", position.id)
+        (activity as Home).homeviewmodel.deletepost(jsonObject)
+    }
     fun footer_transition() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
