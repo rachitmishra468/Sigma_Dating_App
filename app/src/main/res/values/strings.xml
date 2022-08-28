@@ -53,6 +53,7 @@
     <string name="password_strength_medium">Your Password is Medium</string>
     <string name="password_strength_strong">Your Password is Strong</string>
     <string name="password_strength_very_strong">Your Password is Very Strong</string>
-
+    <string name="new_message">New message</string>
+    <string name="message_send_error">An error has occurred. Tap for more info.</string>
 
 </resources>

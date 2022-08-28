@@ -72,7 +72,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
                 )
-
+        (activity as Home).homeviewmodel.get_User_token(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
     }
 
     override fun onCreateView(
@@ -89,9 +93,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         tvCounter = binding.root.findViewById(R.id.tvCounter)
         editProfile.setOnClickListener {
             val bundle = Bundle()
-            userId = (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
+            userId = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
             bundle.putString("user_id", userId)
             findNavController().navigate(
                 R.id.action_FirstFragment_to_SecondFragment,
@@ -109,7 +111,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.USER_ID
             )
         )
-
         footer_transition()
         subscribe_Login_User_details()
 
@@ -367,6 +368,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         })
 
     }
+
+
+
+
+
 
 
     fun subscribe_Login_User_details() {

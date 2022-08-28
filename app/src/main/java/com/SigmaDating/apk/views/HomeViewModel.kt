@@ -51,6 +51,7 @@ class HomeViewModel @Inject constructor(
     lateinit var delete_post: MutableLiveData<Resource<delelepost>>
     lateinit var All_post: MutableLiveData<Resource<post>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
+    lateinit var ctrateToken_data:MutableLiveData<Resource<Token_data>>
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
@@ -69,7 +70,21 @@ class HomeViewModel @Inject constructor(
     }
 
 
+    fun get_User_token(id:String)= viewModelScope.launch {
+        ctrateToken_data.postValue(Resource.loading(null))
+        mainRepository.ctrateToken(id).let {
+            if (it.isSuccessful) {
+                ctrateToken_data.postValue(Resource.success(it.body()))
+                Resource.success(it.body()).data.let {
+                        Home.mCurrent_user_token=it!!.token
 
+                }}else {
+                ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+
+
+        }
+    }
 
 
     fun get_user_match_bids(id:String) = viewModelScope.launch {

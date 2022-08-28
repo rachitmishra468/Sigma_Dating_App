@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/bg_msg_left.xml" value="0.13914473684210527" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/bg_reactions_outgoing.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/bg_spinner.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/border_drwable.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/border_line_radius.xml" value="0.2203125" />
@@ -16,11 +17,15 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/gender_enable.xml" value="0.13778501628664494" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/gender_selector_drawable.xml" value="0.1111111111111111" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/gray_circle_radius_bg.xml" value="0.13541666666666666" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_attach.xml" value="0.13914473684210527" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_avatar.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.2046875" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_camera_24.xml" value="0.13778501628664494" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.13541666666666666" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_perm_identity_24.xml" value="0.15833333333333333" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_failed_message.xml" value="0.13914473684210527" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_send_message.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/interested_in_unselect.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/login_field_border_bg.xml" value="0.165234375" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/match_image_bg.xml" value="0.13914473684210527" />
@@ -74,6 +79,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/post_item.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/profile_match_layout.xml" value="0.13" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/report_user_popup.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/row_message_item_outgoing.xml" value="0.2" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/school_list_item.xml" value="0.10164473684210526" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/search_dialog_school.xml" value="0.11758957654723128" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/selectcamera_gallery_layout.xml" value="0.15" />
@@ -82,6 +88,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_password_sheet_dialog.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_phone_location.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_photo.xml" value="0.1" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/user_chat_fragment.xml" value="0.13" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/user_tag_item_data.xml" value="0.1006578947368421" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/user_tag_sheet.xml" value="0.11085526315789473" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.17945205479452056" />

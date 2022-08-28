@@ -9,6 +9,7 @@ data class User(
     val active: String,
     val user_type:String,
     val dob: String,
+    val orgType:String,
     val first_name: String,
     val gender: String,
     val about:String,

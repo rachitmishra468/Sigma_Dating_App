@@ -56,7 +56,7 @@
         android:layout_gravity="center"
         app:civ_border_color="@color/white"
         app:civ_border_width="2dp"
-        android:src="@drawable/app_logo"
+        android:src="@drawable/dummy_imf"
         android:layout_height="48dp"/>
     <TextView
         android:layout_width="0dp"
@@ -75,87 +75,93 @@
         android:src="@drawable/ic_baseline_error_outline_24"
         android:layout_height="28dp"/>
 </LinearLayout>
-
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:id="@+id/user_chatscreen_recycler"
-        android:layout_height="wrap_content"
-        tools:listitem="@layout/layout_chat_left"
-        tools:itemCount="4"
-        app:layout_constraintStart_toStartOf="@id/guideline9"
-        app:layout_constraintEnd_toEndOf="@id/guideline10"
-        app:layout_constraintTop_toBottomOf="@id/linear_head" />
-
-    <View
-        android:id="@+id/view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e0e0e0"
-        app:layout_constraintBottom_toTopOf="@+id/layout_gchat_chatbox"
-        tools:ignore="NotSibling" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        app:layout_constraintStart_toEndOf="@+id/linear_head"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<LinearLayout
-    android:layout_width="0dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintRight_toRightOf="@id/guideline10"
-    app:layout_constraintEnd_toEndOf="@id/guideline10"
-    android:weightSum="1"
-    android:layout_marginBottom="16dp"
-    app:layout_constraintStart_toStartOf="@id/guideline9"
-    android:layout_height="wrap_content">
-    <RelativeLayout
-        android:id="@+id/layout_gchat_chatbox"
-        android:layout_width="0dp"
-        android:layout_weight=".85"
-        android:layout_height="50dp"
-        android:background="@drawable/border_drwable"
-        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messageList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/messageInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:stackFromEnd="true"
+            tools:listitem="@layout/row_message_item_outgoing" />
 
-
-        <EditText
-            android:id="@+id/edit_gchat_message"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/messageInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/button_gchat_send"
-            android:background="@android:color/transparent"
-            android:hint="Enter Message"
-            android:inputType="text"
-            android:maxLines="6"
-            android:paddingLeft="6dp"
-            tools:ignore="Autofill" />
+            android:layout_height="wrap_content"
+            android:background="@color/gray_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/messageList">
 
-        <ImageView
-            android:id="@+id/button_gchat_send"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:foregroundGravity="center"
-            android:src="@drawable/ic_baseline_camera_alt_24"
-            android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/typingIndicator"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="user00 is typing" />
 
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight=".15"
-        android:gravity="center"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/send_img"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="4dp"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_baseline_send_24"
-            android:textColor="@color/colorPrimary"
-            android:layout_alignParentRight="true" />
+            <ImageButton
+                android:id="@+id/messageAttachmentButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="9dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_attach"
+                app:layout_constraintBottom_toBottomOf="@+id/messageInputHolder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/messageInputHolder"
+                app:tint="@color/colorPrimary" />
 
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/messageInputHolder"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="17dp"
+                android:layout_marginBottom="17dp"
+                android:hint="@string/new_message"
+                app:boxBackgroundColor="@color/white"
+                app:endIconDrawable="@drawable/ic_send_message"
+                app:endIconMode="custom"
+                app:endIconTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/messageAttachmentButton"
+                app:layout_constraintTop_toBottomOf="@+id/typingIndicator"
+                app:layout_goneMarginTop="17dp">
 
-</LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/messageInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

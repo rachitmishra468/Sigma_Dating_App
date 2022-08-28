@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.SigmaDating.apk"
-        minSdk 16
+        minSdk 19
         targetSdk 31
         versionCode 1
         versionName "1.0.0.1"
@@ -22,11 +22,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [usesCleartextTraffic:"false"]
+            manifestPlaceholders = [usesCleartextTraffic: "false"]
         }
-        debug{
+        debug {
             minifyEnabled false
-            manifestPlaceholders = [usesCleartextTraffic:"true"]
+            manifestPlaceholders = [usesCleartextTraffic: "true"]
         }
     }
     compileOptions {
@@ -62,7 +62,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'com.ncornette.cache:okcache-control:1.1.1'
 
-   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     //hilt
@@ -96,9 +96,9 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-   // kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    // kapt 'com.github.bumptech.glide:compiler:4.12.0'
     //Country Spinner
-   // implementation 'com.hbb20:ccp:2.6.0'
+    // implementation 'com.hbb20:ccp:2.6.0'
 
     //Facebook
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
@@ -110,7 +110,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
-   // implementation 'com.google.firebase:firebase-analytics-ktx'
+
+//twilio
+    implementation "com.twilio:conversations-android:1.4.1"
+    // implementation 'com.google.firebase:firebase-analytics-ktx'
 // twilio SDK
-   // implementation "com.twilio:chat-android:6.0.0"
+    // implementation "com.twilio:chat-android:6.0.0"
 }

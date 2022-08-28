@@ -83,6 +83,8 @@ class ApiHelperImpl @Inject constructor(
         apiService.get_user_match_bids(id)
 
 
+    override suspend fun ctrateToken(jsonObject: String): Response<Token_data> =
+        apiService.ctrateToken(jsonObject)
 
     //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
 

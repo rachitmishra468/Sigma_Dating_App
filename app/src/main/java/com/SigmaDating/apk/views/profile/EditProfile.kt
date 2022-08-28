@@ -158,6 +158,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
             fraternity_Spinner.visibility=View.VISIBLE
+
             independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.white))
 
@@ -203,7 +204,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 AppConstants.community,
                 "Independent"
             )
-            community="Independent"
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
@@ -528,36 +528,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     }
                                     res.user.community.let {
                                         community = it
-                                        for (item in fraternitiesList!!){
-                                            if (item.name.equals(it,false)){
-                                                fraternity_Spinner.setText(community)
-                                                fraternity_button!!.isSelected=true
-                                                fraternity_button?.setTextColor(this.resources.getColor(R.color.black))
-                                                fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
-                                                Log.d("TAG@123","soro")
-
-                                            }
-
-                                        }
-
-                                        for ( item in sororitiesList!!){
-                                            if (item.name.equals(it,false)){
-
-                                                fraternity_Spinner.setText(community)
-                                                Socority_button!!.isSelected=true
-                                                Socority_button?.setTextColor(this.resources.getColor(R.color.black))
-                                                Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
-                                                Log.d("TAG@123","soro")
-                                            }
-
-                                        }
-                                        if (it.equals("Independent")){
-                                            Log.d("TAG@123","independ")
-                                            community="Independent"
-                                            fraternity_Spinner.visibility=View.INVISIBLE
-                                            independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
-                                            independent?.setTextColor(this.resources.getColor(R.color.black))
-                                        }
+                                        fraternity_Spinner.setText(community)
                                     } ?: run {
                                         university = ""
                                     }
