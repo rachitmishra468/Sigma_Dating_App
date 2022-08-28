@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.SigmaDating.apk.views.Home;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.twilio.conversations.Attributes;
 import com.twilio.conversations.CallbackListener;
 import com.twilio.conversations.Conversation;
 import com.twilio.conversations.ConversationListener;
@@ -23,101 +25,77 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
-interface AccessTokenListener {
-    void receivedAccessToken(@Nullable String token, @Nullable Exception exception);
-}
-
-
 public class QuickstartConversationsManager {
 
-    public MutableLiveData<Integer> mutableLiveData=new MutableLiveData<>();
+    public MutableLiveData<Integer> mutableLiveData = new MutableLiveData<>();
 
-    private final static String DEFAULT_CONVERSATION_NAME = "general_1234";
+    private final static String DEFAULT_CONVERSATION_NAME = Home.Companion.getMatch_id();
 
     final private ArrayList<Message> messages = new ArrayList<>();
 
     private ConversationsClient conversationsClient;
 
-    private Conversation conversation;
-
-    private String tokenURL = "";
-
-    private class TokenResponse {
-        String token;
-    }
+    private Conversation mconversation;
 
 
     void initializeWithAccessToken(final Context context, final String token) {
+        mutableLiveData.postValue(5);
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().setCommandTimeout(90000).createProperties();
         ConversationsClient.create(context, token, props, mConversationsClientCallback);
+        Log.d("TAG@123", "DEFAULT_CONVERSATION_NAME : " + DEFAULT_CONVERSATION_NAME);
     }
 
-    private void retrieveToken(AccessTokenListener listener) {
-        OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url(tokenURL)
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            String responseBody = "";
-            if (response != null && response.body() != null) {
-                responseBody = response.body().string();
-            }
-            Log.d("TAG@123", "Response from server: " + responseBody);
-            Gson gson = new Gson();
-            TokenResponse tokenResponse = gson.fromJson(responseBody, TokenResponse.class);
-            String accessToken = tokenResponse.token;
-            Log.d("TAG@123", "Retrieved access token from server: " + accessToken);
-            listener.receivedAccessToken(accessToken, null);
+    void sendMessage(String messageBody, JsonObject user) {
+        if (mconversation != null) {
+            String messageUuid = UUID.randomUUID().toString();
+            mconversation.prepareMessage()
+                    .setBody(messageBody)
+                    .setAttributes(new Attributes(String.valueOf(user)))
+                    .build()
+                    .send(new CallbackListener<Message>() {
+                        @Override
+                        public void onSuccess(Message result) {
+                            Log.d("TAG@123", "message send call back");
+                            mutableLiveData.postValue(2);
+                        }
+                    });
 
-        } catch (IOException ex) {
-            Log.e("TAG@123", ex.getLocalizedMessage(), ex);
-            listener.receivedAccessToken(null, ex);
-        }
-    }
-
-    void sendMessage(String messageBody) {
-        if (conversation != null) {
-            Message.Options options = Message.options().withBody(messageBody);
-            Log.d("TAG@123", "Message created");
-            conversation.sendMessage(options, new CallbackListener<Message>() {
-                @Override
-                public void onSuccess(Message message) {
-                    mutableLiveData.postValue(2);
-                   /* if (conversationsManagerListener != null) {
-                        conversationsManagerListener.messageSentCallback();
-                    }*/
-                }
-            });
         } else {
             Log.d("TAG@123", "conversation is null");
 
         }
     }
 
-
     private void loadChannels() {
         if (conversationsClient == null || conversationsClient.getMyConversations() == null) {
             return;
         }
-        conversationsClient.getConversation(DEFAULT_CONVERSATION_NAME, new CallbackListener<Conversation>() {
+        List<Conversation> con = conversationsClient.getMyConversations();
+        String name=DEFAULT_CONVERSATION_NAME;
+        if(con.size()>0){
+            name=con.get(0).getSid();
+            Log.d("TAG@123", "con " + con.get(0).getFriendlyName());
+            Log.d("TAG@123", "con " + con.get(0).getSid());
+        }
+
+        conversationsClient.getConversation(name, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
                 if (conversation != null) {
-                    if (conversation.getStatus() == Conversation.ConversationStatus.JOINED
-                            || conversation.getStatus() == Conversation.ConversationStatus.NOT_PARTICIPATING) {
+                    if (conversation.getStatus() == Conversation.ConversationStatus.JOINED || conversation.getStatus() == Conversation.ConversationStatus.NOT_PARTICIPATING) {
                         Log.d("TAG@123", "Already Exists in Conversation: " + DEFAULT_CONVERSATION_NAME);
-                        QuickstartConversationsManager.this.conversation = conversation;
-                        QuickstartConversationsManager.this.conversation.addListener(mDefaultConversationListener);
+                        QuickstartConversationsManager.this.mconversation = conversation;
+                        QuickstartConversationsManager.this.mconversation.addListener(mDefaultConversationListener);
                         QuickstartConversationsManager.this.loadPreviousMessages(conversation);
                     } else {
-                        Log.d("TAG@123", "Joining Conversation: " + DEFAULT_CONVERSATION_NAME);
+                        Log.d("TAG@123", "loadChannels Joining Conversation : " + DEFAULT_CONVERSATION_NAME);
                         joinConversation(conversation);
                     }
                 }
@@ -125,7 +103,7 @@ public class QuickstartConversationsManager {
 
             @Override
             public void onError(ErrorInfo errorInfo) {
-                Log.e("TAG@123", "Error retrieving conversation: " + errorInfo.getMessage());
+                Log.e("TAG@123", "Error retrieving conversation: " + errorInfo.getMessage() + " Error code : " + errorInfo.getCode());
                 createConversation();
             }
 
@@ -133,8 +111,6 @@ public class QuickstartConversationsManager {
     }
 
     private void createConversation() {
-        Log.d("TAG@123", "Creating Conversation: " + DEFAULT_CONVERSATION_NAME);
-
         conversationsClient.createConversation(DEFAULT_CONVERSATION_NAME,
                 new CallbackListener<Conversation>() {
                     @Override
@@ -150,23 +126,24 @@ public class QuickstartConversationsManager {
                         Log.e("TAG@123", "Error creating conversation: " + errorInfo.getMessage());
                     }
                 });
+
     }
 
 
     private void joinConversation(final Conversation conversation) {
         Log.d("TAG@123", "Joining Conversation: " + conversation.getUniqueName());
         if (conversation.getStatus() == Conversation.ConversationStatus.JOINED) {
-            QuickstartConversationsManager.this.conversation = conversation;
+            QuickstartConversationsManager.this.mconversation = conversation;
             Log.d("TAG@123", "Already joined default conversation");
-            QuickstartConversationsManager.this.conversation.addListener(mDefaultConversationListener);
+            QuickstartConversationsManager.this.mconversation.addListener(mDefaultConversationListener);
             return;
         }
         conversation.join(new StatusListener() {
             @Override
             public void onSuccess() {
-                QuickstartConversationsManager.this.conversation = conversation;
+                QuickstartConversationsManager.this.mconversation = conversation;
                 Log.d("TAG@123", "Joined default conversation");
-                QuickstartConversationsManager.this.conversation.addListener(mDefaultConversationListener);
+                QuickstartConversationsManager.this.mconversation.addListener(mDefaultConversationListener);
                 QuickstartConversationsManager.this.loadPreviousMessages(conversation);
             }
 
@@ -200,6 +177,8 @@ public class QuickstartConversationsManager {
                 @Override
                 public void onConversationUpdated(Conversation conversation, Conversation.UpdateReason updateReason) {
                     Log.d("TAG@123", "onConversationUpdated");
+                    mutableLiveData.postValue(4);
+
                 }
 
                 @Override
@@ -224,6 +203,9 @@ public class QuickstartConversationsManager {
 
                 @Override
                 public void onUserSubscribed(User user) {
+                    Log.d("TAG@123", "User getFriendlyName : " + user.getFriendlyName());
+                    Log.d("TAG@123", "User getIdentity : " + user.getIdentity());
+                    Log.d("TAG@123", "User getAttributes" + user.getAttributes().toString());
                     Log.d("TAG@123", "onUserSubscribed");
                 }
 
@@ -235,7 +217,6 @@ public class QuickstartConversationsManager {
                 @Override
                 public void onClientSynchronization(ConversationsClient.SynchronizationStatus synchronizationStatus) {
                     Log.d("TAG@123", "onClientSynchronization");
-
                     if (synchronizationStatus == ConversationsClient.SynchronizationStatus.COMPLETED) {
                         loadChannels();
                     }
@@ -325,7 +306,7 @@ public class QuickstartConversationsManager {
 
         @Override
         public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {
-            Log.d("TAG@123", "Message updated: " + message.getMessageBody());
+            Log.d("TAG@123", "Message updated: " + message.getBody());
         }
 
         @Override

@@ -73,7 +73,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
                 )
-        (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
+       /* (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
         val jsonObject = JsonObject()
         jsonObject.addProperty(
             "identity",
@@ -84,7 +84,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         (activity as Home).homeviewmodel.get_User_token(
             jsonObject
 
-        )
+        )*/
     }
 
     override fun onCreateView(

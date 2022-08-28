@@ -12,6 +12,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.Match_bids
 import com.SigmaDating.apk.model.User_bids_list
+import com.SigmaDating.apk.views.Home
 
 class ChatList_Adapter(var context: Context, private var listener: OnCategoryClickListener) :
     RecyclerView.Adapter<ChatList_Adapter.ViewHolder>() {
@@ -63,6 +64,7 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
         Glide.with(context).load(data.upload_image).into(holder.image);
 
         holder.image.setOnClickListener {
+            Home.match_id=data.match_id
             listener!!.onCategoryClick(data);
         }
         holder.textname.text = data.first_name + " " + data.last_name

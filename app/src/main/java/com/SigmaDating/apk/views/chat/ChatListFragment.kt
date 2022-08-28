@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -23,9 +24,11 @@ import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentChatListBinding
+import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.gms.common.data.DataHolder
+import com.google.gson.JsonObject
 
 
 private const val ARG_PARAM1 = "param1"
@@ -136,8 +139,15 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
 
     override fun onCategoryClick(position: User_bids_list) {
-        Navigation.findNavController(binding.root)
-            .navigate(R.id.action_chatListFragment_to_userChatFragment);
+        (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("identity",
+            position.match_id)
+        (activity as Home).homeviewmodel.get_User_token(
+            jsonObject
+        )
+        subscribe_Login_User_details()
+
     }
 
     fun subscribe_create_post() {
@@ -184,10 +194,31 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             requireActivity(),
             LinearLayoutManager.VERTICAL, false
         )
-
         chat_list_recycler?.adapter = chatlistAdapter
         chatlistAdapter.setDataList(dataListuser)
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
+
+
+    fun subscribe_Login_User_details() {
+        (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_chatListFragment_to_userChatFragment);
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
+                }
+                Status.ERROR -> {
+                    AppUtils.hideLoader()
+                }
+            }
+        })
+
+
+    }
+
 
 }
