@@ -615,6 +615,8 @@ class SettingsFragment : Fragment() {
                             longitude = "${list[0].longitude}"
 
                             location_text = "${list[0].locality}"
+                            Log.d("TAG@123","location name"+location_text)
+
                         }
 
 
@@ -622,8 +624,7 @@ class SettingsFragment : Fragment() {
                 }
 
             } else {
-                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG).show()
             }
         } else {
             requestPermissions()

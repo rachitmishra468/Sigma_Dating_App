@@ -293,6 +293,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                             longitude = "${list[0].longitude}"
 
                             location_text = "${list[0].locality}"
+                            Log.d("TAG@123","location name"+location_text)
                             //_binding?.tagLocation?.text= location_text
                         }
 

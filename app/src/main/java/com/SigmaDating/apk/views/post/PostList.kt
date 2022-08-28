@@ -143,14 +143,8 @@ fun getUserisSame():Boolean{
             })
     }
     override fun onDelete(position: Postdata) {
+        alertDeletepopup(position)
 
-        val jsonObject = JsonObject()
-
-        Log.d("TAG@123", position.id+"")
-        (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
-        deletePostObserverResponse()
-        jsonObject.addProperty("id", position.id)
-        (activity as Home).homeviewmodel.deletepost(jsonObject)
     }
     fun footer_transition() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
@@ -204,5 +198,32 @@ fun get_postdata(){
     jsonObject.addProperty("user_id", userID)
     (activity as Home).homeviewmodel.getAllPost(jsonObject)
 }
+    fun alertDeletepopup(position: Postdata) {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(R.string.app_name)
+        builder.setIcon(R.mipmap.ic_launcher)
+
+        builder.setMessage("Are you want to Delete this Post.")
+        builder.background = ColorDrawable(
+            Color.parseColor("#FFFFFF")
+        )
+        builder.setPositiveButton("Yes") { dialog, which ->
+
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", position.id+"")
+            (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
+            deletePostObserverResponse()
+            jsonObject.addProperty("id", position.id)
+            (activity as Home).homeviewmodel.deletepost(jsonObject)
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+
 
 }
