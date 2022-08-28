@@ -1,14 +1,14 @@
 package com.SigmaDating.apk.views.chat
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,9 +21,9 @@ import com.twilio.conversations.Message
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-class UserChatFragment : Fragment(), QuickstartConversationsManagerListener {
+
+class UserChatFragment : Fragment() {
     var chat_settings_img: ImageView? = null
 
     private var recyclerView: RecyclerView? = null
@@ -35,7 +35,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManagerListener {
     private var mTextInputLayout: TextInputLayout? = null
 
 
-   private val quickstartConversationsManager = QuickstartConversationsManager()
+    private val quickstartConversationsManager = QuickstartConversationsManager()
 
 
     override fun onCreateView(
@@ -44,13 +44,14 @@ class UserChatFragment : Fragment(), QuickstartConversationsManagerListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.user_chat_fragment, container, false)
-        quickstartConversationsManager.setListener(this)
         recyclerView = view.findViewById(R.id.messageList)
         writeMessageEditText = view.findViewById(R.id.messageInput)
 
         mTextInputLayout?.setEndIconOnClickListener {
+
             val messageBody = writeMessageEditText?.text.toString()
             if (messageBody.length > 0) {
+                Log.d("TAG@123","EndIconOnClickListener : "+messageBody)
                 quickstartConversationsManager.sendMessage(messageBody)
             }
         }
@@ -71,66 +72,77 @@ class UserChatFragment : Fragment(), QuickstartConversationsManagerListener {
             Home.mCurrent_user_token
         )
 
-
+//
+        subscribe_lisner_images()
         return view;
     }
 
+    fun subscribe_lisner_images() {
+       quickstartConversationsManager.mutableLiveData?.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                1 -> {
+                    Log.d("TAG@123","notifyDataSetChanged : "+1)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        messagesAdapter!!.notifyDataSetChanged()
+                    }
+                }
+               2 -> {
+                   Log.d("TAG@123","notifyDataSetChanged : "+2)
+                   GlobalScope.launch(Dispatchers.Main) {
+                       writeMessageEditText!!.setText("")
+                   }
+                }
+                3-> {
+                    Log.d("TAG@123","notifyDataSetChanged : "+3)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        messagesAdapter!!.notifyDataSetChanged()
+                    }
+                }
+            }
+        })
 
- /*   override fun receivedNewMessage() {
-        lifecycle.coroutineScope.launch(Dispatchers.Main) {
-            messagesAdapter!!.notifyDataSetChanged()
-        }
+
     }
 
-    override fun messageSentCallback() {
-        lifecycle.coroutineScope.launch(Dispatchers.Main) {
-            writeMessageEditText!!.setText("")
-        }
-    }
-
-    override fun reloadMessages() {
-        lifecycle.coroutineScope.launch(Dispatchers.Main) {
-            messagesAdapter!!.notifyDataSetChanged()
-        }
-    }*/
 
 
     internal class MessagesAdapter(var quickstartConversationsManager: QuickstartConversationsManager) :
         RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
-        class ViewHolder(val messageTextView: TextView) : RecyclerView.ViewHolder(
-            messageTextView
-        )
+
+        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+          //  var image: ImageView
+            var textname: TextView
+           // var univercity_name: TextView
+           // var date_text:TextView
+
+            init {
+               // image = itemView.findViewById(R.id.image)
+                textname = itemView.findViewById(R.id.message_body)
+               // univercity_name = itemView.findViewById(R.id.univercity_name)
+               // date_text= itemView.findViewById(R.id.date_text)
+
+            }
+
+        }
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
         ): ViewHolder {
-            val messageTextView = LayoutInflater.from(parent.context)
+            val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.row_message_item_outgoing, parent, false) as TextView
-            return ViewHolder(messageTextView)
+            return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             var message: Message = quickstartConversationsManager.getMessages().get(position)
             var messageText = String.format("%s: %s", message.author, message.messageBody)
-            //  holder.messageTextView.text = messageText
+              holder.textname.text = messageText
         }
 
         override fun getItemCount(): Int {
             return quickstartConversationsManager.getMessages().size
         }
-    }
-
-    override fun receivedNewMessage() {
-        TODO("Not yet implemented")
-    }
-
-    override fun messageSentCallback() {
-        TODO("Not yet implemented")
-    }
-
-    override fun reloadMessages() {
-        TODO("Not yet implemented")
     }
 
 

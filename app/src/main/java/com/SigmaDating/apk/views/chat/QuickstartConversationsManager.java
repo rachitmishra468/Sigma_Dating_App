@@ -3,6 +3,8 @@ package com.SigmaDating.apk.views.chat;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.SigmaDating.apk.views.Home;
 import com.google.gson.Gson;
 import com.twilio.conversations.CallbackListener;
@@ -26,33 +28,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-interface QuickstartConversationsManagerListener {
-    void receivedNewMessage();
-    void messageSentCallback();
-    void reloadMessages();
-}
 
 interface AccessTokenListener {
     void receivedAccessToken(@Nullable String token, @Nullable Exception exception);
 }
 
 
- public class QuickstartConversationsManager {
+public class QuickstartConversationsManager {
 
-
-
+    public MutableLiveData<Integer> mutableLiveData=new MutableLiveData<>();
 
     private final static String DEFAULT_CONVERSATION_NAME = "general_1234";
-
-
 
     final private ArrayList<Message> messages = new ArrayList<>();
 
     private ConversationsClient conversationsClient;
 
     private Conversation conversation;
-
-    private QuickstartConversationsManagerListener conversationsManagerListener;
 
     private String tokenURL = "";
 
@@ -79,14 +71,13 @@ interface AccessTokenListener {
             }
             Log.d("TAG@123", "Response from server: " + responseBody);
             Gson gson = new Gson();
-            TokenResponse tokenResponse = gson.fromJson(responseBody,TokenResponse.class);
+            TokenResponse tokenResponse = gson.fromJson(responseBody, TokenResponse.class);
             String accessToken = tokenResponse.token;
             Log.d("TAG@123", "Retrieved access token from server: " + accessToken);
             listener.receivedAccessToken(accessToken, null);
 
-        }
-        catch (IOException ex) {
-            Log.e("TAG@123", ex.getLocalizedMessage(),ex);
+        } catch (IOException ex) {
+            Log.e("TAG@123", ex.getLocalizedMessage(), ex);
             listener.receivedAccessToken(null, ex);
         }
     }
@@ -94,17 +85,18 @@ interface AccessTokenListener {
     void sendMessage(String messageBody) {
         if (conversation != null) {
             Message.Options options = Message.options().withBody(messageBody);
-            Log.d("TAG@123","Message created");
+            Log.d("TAG@123", "Message created");
             conversation.sendMessage(options, new CallbackListener<Message>() {
                 @Override
                 public void onSuccess(Message message) {
-                    if (conversationsManagerListener != null) {
+                    mutableLiveData.postValue(2);
+                   /* if (conversationsManagerListener != null) {
                         conversationsManagerListener.messageSentCallback();
-                    }
+                    }*/
                 }
             });
-        }else {
-            Log.d("TAG@123","conversation is null");
+        } else {
+            Log.d("TAG@123", "conversation is null");
 
         }
     }
@@ -164,7 +156,6 @@ interface AccessTokenListener {
     private void joinConversation(final Conversation conversation) {
         Log.d("TAG@123", "Joining Conversation: " + conversation.getUniqueName());
         if (conversation.getStatus() == Conversation.ConversationStatus.JOINED) {
-
             QuickstartConversationsManager.this.conversation = conversation;
             Log.d("TAG@123", "Already joined default conversation");
             QuickstartConversationsManager.this.conversation.addListener(mDefaultConversationListener);
@@ -192,9 +183,8 @@ interface AccessTokenListener {
                     @Override
                     public void onSuccess(List<Message> result) {
                         messages.addAll(result);
-                        if (conversationsManagerListener != null) {
-                            conversationsManagerListener.reloadMessages();
-                        }
+                        mutableLiveData.postValue(3);
+
                     }
                 });
     }
@@ -329,9 +319,8 @@ interface AccessTokenListener {
         public void onMessageAdded(final Message message) {
             Log.d("TAG@123", "Message added");
             messages.add(message);
-            if (conversationsManagerListener != null) {
-                conversationsManagerListener.receivedNewMessage();
-            }
+            mutableLiveData.postValue(1);
+
         }
 
         @Override
@@ -379,8 +368,6 @@ interface AccessTokenListener {
         return messages;
     }
 
-    public void setListener(QuickstartConversationsManagerListener listener)  {
-        this.conversationsManagerListener = listener;
-    }
+
 }
 

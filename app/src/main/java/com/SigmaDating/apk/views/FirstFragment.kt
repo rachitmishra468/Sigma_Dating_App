@@ -25,6 +25,7 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.model.Bids
 import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.model.Pages
+import com.SigmaDating.apk.model.Token_data
 import com.SigmaDating.apk.storage.AppConstants
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
@@ -72,10 +73,17 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
                 )
-        (activity as Home).homeviewmodel.get_User_token(
+        (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "identity",
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
             )
+        )
+        (activity as Home).homeviewmodel.get_User_token(
+            jsonObject
+
         )
     }
 

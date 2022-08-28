@@ -66,12 +66,11 @@
         android:visibility="visible"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/message_background"
-        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/message_avatar"
         app:layout_constraintTop_toTopOf="@+id/message_background"
         app:layout_goneMarginStart="8dp"
         tools:maxLength="300"
-        tools:text="@tools:sample/lorem/random"
         tools:visibility="visible" />
 
     <View

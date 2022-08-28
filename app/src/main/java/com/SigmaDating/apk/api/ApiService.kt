@@ -99,5 +99,5 @@ interface ApiService {
 
 
     @POST("twilio/accesstoken")
-    suspend fun ctrateToken(@Body jsonObject: String): Response<Token_data>
+    suspend fun ctrateToken(@Body jsonObject: JsonObject): Response<Token_data>
 }

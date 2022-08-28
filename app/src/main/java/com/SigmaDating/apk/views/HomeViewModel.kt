@@ -25,9 +25,6 @@ import java.io.File
 import javax.inject.Inject
 
 
-
-
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val mainRepository: MainRepository,
@@ -36,7 +33,7 @@ class HomeViewModel @Inject constructor(
 
 
     lateinit var report_block_user: MutableLiveData<Resource<Loginmodel>>
-   lateinit var  setting_update_details: MutableLiveData<Resource<Loginmodel>>
+    lateinit var setting_update_details: MutableLiveData<Resource<Loginmodel>>
     lateinit var profile_swipe: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
     lateinit var get_user_edit_user: MutableLiveData<Resource<Loginmodel>>
@@ -51,43 +48,49 @@ class HomeViewModel @Inject constructor(
     lateinit var delete_post: MutableLiveData<Resource<delelepost>>
     lateinit var All_post: MutableLiveData<Resource<post>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
-    lateinit var ctrateToken_data:MutableLiveData<Resource<Token_data>>
+    lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
     val user_bids: MutableLiveData<Resource<home_model>>
 
     init {
-        report_block_user=MutableLiveData<Resource<Loginmodel>>()
-       // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
-        get_UserReportdata=MutableLiveData<Resource<Loginmodel>>()
+        report_block_user = MutableLiveData<Resource<Loginmodel>>()
+        // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
+        get_UserReportdata = MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
-        get_secound_feb_data= MutableLiveData<Resource<Loginmodel>>()
+        get_secound_feb_data = MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
-         user_bids = MutableLiveData<Resource<home_model>>()
+        user_bids = MutableLiveData<Resource<home_model>>()
+        // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
     }
 
-    fun get_home_feb_data(id: String){
-        val one = async {  get_Login_User_details(id) }
+    fun get_home_feb_data(id: String) {
+        val one = async { get_Login_User_details(id) }
         val two = async { get_Login_User_bids(id) }
     }
 
 
-    fun get_User_token(id:String)= viewModelScope.launch {
+    fun get_User_token(id: JsonObject) = viewModelScope.launch {
+        Log.d("TAG@123", "get user token call")
         ctrateToken_data.postValue(Resource.loading(null))
         mainRepository.ctrateToken(id).let {
             if (it.isSuccessful) {
+
                 ctrateToken_data.postValue(Resource.success(it.body()))
                 Resource.success(it.body()).data.let {
-                        Home.mCurrent_user_token=it!!.token
+                    Home.mCurrent_user_token = it?.token.toString()
+                    Log.d("TAG@123",  "Token : "+Home.mCurrent_user_token)
 
-                }}else {
-                ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))
                 }
+            } else {
+                Log.d("TAG@123", "error in get token call ")
+                ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))
+            }
 
 
         }
     }
 
 
-    fun get_user_match_bids(id:String) = viewModelScope.launch {
+    fun get_user_match_bids(id: String) = viewModelScope.launch {
         all_match_bids.postValue(Resource.loading(null))
         mainRepository.get_user_match_bids(id).let {
             if (it.isSuccessful) {
@@ -99,7 +102,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getAllPost(jsonObject:JsonObject) = viewModelScope.launch {
+    fun getAllPost(jsonObject: JsonObject) = viewModelScope.launch {
         All_post.postValue(Resource.loading(null))
         mainRepository.showmyposts(jsonObject).let {
             if (it.isSuccessful) {
@@ -110,11 +113,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun create_post(file:File,jsonObject:HashMap<String,String>) = viewModelScope.launch {
-        Log.d("TAG@123","images path : "+file.absolutePath)
-        Log.d("TAG@123","other data : "+jsonObject)
+    fun create_post(file: File, jsonObject: HashMap<String, String>) = viewModelScope.launch {
+        Log.d("TAG@123", "images path : " + file.absolutePath)
+        Log.d("TAG@123", "other data : " + jsonObject)
         Log.d(
-            "TAG@123","tag_users : "+ jsonObject.get("tag_users")!!
+            "TAG@123", "tag_users : " + jsonObject.get("tag_users")!!
         )
 
         val profileImage: RequestBody = RequestBody.create(
@@ -130,11 +133,14 @@ class HomeViewModel @Inject constructor(
 
         val id: RequestBody = jsonObject.get("user_id")!!.toRequestBody("text/plain".toMediaType())
         val title: RequestBody = jsonObject.get("title")!!.toRequestBody("text/plain".toMediaType())
-        val tag_users: RequestBody = jsonObject.get("tag_users")!!.toRequestBody("text/plain".toMediaType())
-        val description: RequestBody = jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
+        val tag_users: RequestBody =
+            jsonObject.get("tag_users")!!.toRequestBody("text/plain".toMediaType())
+        val description: RequestBody =
+            jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
         create_post.postValue(Resource.loading(null))
-        mainRepository.create_post(id,title,description,tag_users
-            ,profileImageBody).let {
+        mainRepository.create_post(
+            id, title, description, tag_users, profileImageBody
+        ).let {
             if (it.isSuccessful) {
                 create_post.postValue(Resource.success(it.body()))
             } else {
@@ -144,7 +150,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun deletepost(jsonObject:JsonObject) = viewModelScope.launch {
+    fun deletepost(jsonObject: JsonObject) = viewModelScope.launch {
         delete_post.postValue(Resource.loading(null))
         mainRepository.deletepost(jsonObject).let {
             if (it.isSuccessful) {
@@ -156,7 +162,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun report_user(jsonObject:JsonObject) = viewModelScope.launch {
+    fun report_user(jsonObject: JsonObject) = viewModelScope.launch {
         report_block_user.postValue(Resource.loading(null))
         mainRepository.report_user(jsonObject).let {
             if (it.isSuccessful) {
@@ -167,7 +173,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun block_user(jsonObject:JsonObject) = viewModelScope.launch {
+    fun block_user(jsonObject: JsonObject) = viewModelScope.launch {
         report_block_user.postValue(Resource.loading(null))
         mainRepository.block_user(jsonObject).let {
             if (it.isSuccessful) {
@@ -179,7 +185,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun profile_swipe_details(jsonObject:JsonObject) = viewModelScope.launch {
+    fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
         profile_swipe.postValue(Resource.loading(null))
         mainRepository.get_profile_swipe_details(jsonObject).let {
             if (it.isSuccessful) {
@@ -191,10 +197,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
-
-
-    fun get_setting_update_details(jsonObject:JsonObject) = viewModelScope.launch {
+    fun get_setting_update_details(jsonObject: JsonObject) = viewModelScope.launch {
         setting_update_details.postValue(Resource.loading(null))
         mainRepository.get_setting_update_details(jsonObject).let {
             if (it.isSuccessful) {
@@ -206,9 +209,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
-
-    fun get_Login_User_bids(id: String)= viewModelScope.launch {
+    fun get_Login_User_bids(id: String) = viewModelScope.launch {
         user_bids.postValue(Resource.loading(null))
         Log.d("TAG@123", "get_Login_User_bids")
         mainRepository.get_user_bids(id).let {
@@ -253,7 +254,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
 
     fun get_secound_feb_User_details(id: String) = GlobalScope.launch {
@@ -304,7 +304,6 @@ class HomeViewModel @Inject constructor(
         }
 
 
-
     fun User_change_password(id: String, password: String, password_confirm: String) =
         viewModelScope.launch {
             change_password.postValue(Resource.loading(null))
@@ -336,12 +335,12 @@ class HomeViewModel @Inject constructor(
         about: String
     ) {
         val one = async {
-            update_profile(id, university, community, interests, about) }
-       // val two = async { get_Login_User_details(id) }
+            update_profile(id, university, community, interests, about)
+        }
+        // val two = async { get_Login_User_details(id) }
 
 
     }
-
 
 
     fun User_upload_images(id: String, img: String) = viewModelScope.launch {
@@ -419,18 +418,17 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     fun update_phone_location(
         id: String,
         key: String,
         vlaue: String,
 
-    ) = viewModelScope.launch {
+        ) = viewModelScope.launch {
         update_profile.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
 
         jsonObject.addProperty("user_id", id)
-        jsonObject.addProperty(key,vlaue)
+        jsonObject.addProperty(key, vlaue)
 
 
         Log.d("TAG@123", "done Update" + jsonObject.toString())
