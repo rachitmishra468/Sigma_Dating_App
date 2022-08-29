@@ -86,6 +86,13 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun ctrateToken(jsonObject: JsonObject): Response<Token_data> =
         apiService.ctrateToken(jsonObject)
 
+    override suspend fun getallcomment(jsonObject: JsonObject): Response<Comment_model> =
+        apiService.getallcomment(jsonObject)
+
+    override suspend fun sent_comment(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.sent_comment(jsonObject)
+
+
     //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
 
 

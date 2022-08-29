@@ -36,10 +36,11 @@ class MainRepository @Inject constructor(
     suspend fun deletepost(jsonObject: JsonObject)=apiHelper.deletepost(jsonObject)
 
     suspend fun showmyposts(jsonObject: JsonObject)=apiHelper.showmyposts(jsonObject)
-
+    suspend fun getallcomment(jsonObject: JsonObject)=apiHelper.getallcomment(jsonObject)
     suspend fun get_user_match_bids(id: String)= apiHelper.get_user_match_bids(id)
     suspend fun ctrateToken(id: JsonObject)= apiHelper.ctrateToken(id)
 
+    suspend fun sentcomment(jsonObject: JsonObject)=apiHelper.sent_comment(jsonObject)
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)
 
 }

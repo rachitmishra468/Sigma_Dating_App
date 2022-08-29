@@ -92,21 +92,28 @@
         </de.hdodenhof.circleimageview.CircleImageView>
 
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/img_hide"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:visibility="visible"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            app:lottie_autoPlay="false"
-            android:src="@drawable/heart_disable"
+            android:src="@drawable/white_heart"
             android:layout_marginRight="1dp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
             app:layout_constraintTop_toTopOf="@+id/guideline_top"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/super_like" />
+           />
+
+
+        <ImageView
+            android:id="@+id/comment_img"
+            android:layout_width="50dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@+id/img_hide"
+            android:src="@drawable/comment_icon"
+            android:layout_height="46dp"/>
 
 
         <LinearLayout

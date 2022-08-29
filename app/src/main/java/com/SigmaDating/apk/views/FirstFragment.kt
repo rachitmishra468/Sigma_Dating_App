@@ -1,7 +1,11 @@
 package com.SigmaDating.apk.views
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.provider.Settings
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -14,7 +18,9 @@ import com.SigmaDating.apk.adapters.ProfileMatch
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -37,6 +43,9 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
@@ -67,25 +76,59 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var tvCounter: TextView
 
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // FCM SDK (and your app) can post notifications.
+        } else {
+            // TODO: Inform user that that your app will not show notifications.
+        }
+    }
+
+
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= 33) {
+
+        }
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
                 Disclaimer()
                 )
-       /* (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
-        val jsonObject = JsonObject()
-        jsonObject.addProperty(
-            "identity",
-            (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        )
-        (activity as Home).homeviewmodel.get_User_token(
-            jsonObject
 
-        )*/
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG@123", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+
+            Log.d("TAG@123", token)
+            Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+        })
+
+
+        get_device_id()
     }
+
+    fun get_device_id(){
+        val id: String = Settings.Secure.getString(requireActivity().getContentResolver(), Settings.Secure.ANDROID_ID)
+        Log.d("TAG@123", "devices id : "+id)
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
