@@ -47,6 +47,8 @@ class HomeViewModel @Inject constructor(
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var delete_post: MutableLiveData<Resource<delelepost>>
     lateinit var All_post: MutableLiveData<Resource<post>>
+    lateinit var sent_comment: MutableLiveData<Resource<Loginmodel>>
+    lateinit var All_comment: MutableLiveData<Resource<Comment_model>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
     val user_bids: MutableLiveData<Resource<home_model>>
@@ -101,6 +103,28 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    fun sent_comment(jsonObject: JsonObject) = viewModelScope.launch {
+        sent_comment.postValue(Resource.loading(null))
+        mainRepository.sentcomment(jsonObject).let {
+            if (it.isSuccessful) {
+                sent_comment.postValue(Resource.success(it.body()))
+            } else {
+                sent_comment.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun getAllComment(jsonObject: JsonObject) = viewModelScope.launch {
+        All_comment.postValue(Resource.loading(null))
+        mainRepository.getallcomment(jsonObject).let {
+            if (it.isSuccessful) {
+                All_comment.postValue(Resource.success(it.body()))
+            } else {
+                All_comment.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
 
     fun getAllPost(jsonObject: JsonObject) = viewModelScope.launch {
         All_post.postValue(Resource.loading(null))

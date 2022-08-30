@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    android:layout_margin="8dp"
+    android:padding="2dp"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/fr"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/comment_user_profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="top|center_horizontal"
+            android:src="@drawable/fb_icon">
+
+        </de.hdodenhof.circleimageview.CircleImageView>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/commentuser_name"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:text="Joe andrwer"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/comment_comment"
+            android:layout_width="wrap_content"
+            android:text="lorem ipsum"
+            android:layout_marginTop="4dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

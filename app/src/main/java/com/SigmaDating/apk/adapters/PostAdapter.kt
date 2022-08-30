@@ -36,7 +36,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
 
     // Provide a direct reference to each of the views with data items
     interface OnItemClickListener {
-        fun onDelete(position: Postdata)
+        fun onDelete(position: Postdata,flag:Boolean)
     }
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
@@ -45,6 +45,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
         var profile_img: CircleImageView
         var progressBar: ProgressBar
         var postDelet:ImageView
+        var comment_img:ImageView
 
         init {
             profile_img= itemView.findViewById(R.id.profile_post_img)
@@ -52,7 +53,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
             title= itemView.findViewById(R.id.post_title)
             discription= itemView.findViewById(R.id.dis_title)
             progressBar = itemView.findViewById(R.id.progress_post)
-
+            comment_img= itemView.findViewById(R.id.comment_img)
             postDelet=itemView.findViewById(R.id.post_delete_img)
         }
 
@@ -77,6 +78,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
        // Glide.with(context).load(data.media).into(holder.image);
         holder.title.text=data.title
         holder.discription.text=data.description
+        Glide.with(context).load(data.upload_image).into(holder.profile_img);
         Glide.with(context).load(data.media).listener(object : RequestListener<Drawable> {
             override fun onResourceReady(
                 resource: Drawable?,
@@ -101,16 +103,18 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
 
         }).into(holder.image);
 
-        holder.image.setOnClickListener {
-
+        holder.comment_img.setOnClickListener {
+            listener.onDelete(data,true)
         }
+
+
         if (!booleantype){
             holder.postDelet.visibility=View.GONE
         }
         else{
             holder.postDelet.visibility=View.VISIBLE
         }
-        holder.postDelet.setOnClickListener { listener.onDelete(data) }
+        holder.postDelet.setOnClickListener { listener.onDelete(data,false) }
 
     }
 

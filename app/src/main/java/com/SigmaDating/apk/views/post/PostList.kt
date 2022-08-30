@@ -37,9 +37,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 
-class PostList : Fragment(),PostAdapter.OnItemClickListener {
+class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
-    private var _binding: FragmentPostListBinding?=null
+    private var _binding: FragmentPostListBinding? = null
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
     lateinit var match_list: ImageView
@@ -56,12 +56,8 @@ class PostList : Fragment(),PostAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding= FragmentPostListBinding.inflate(inflater, container, false)
+        _binding = FragmentPostListBinding.inflate(inflater, container, false)
         footer_transition()
-
-
-        // delete post observer method
-
         get_postdata()
         return binding.root
     }
@@ -76,21 +72,23 @@ class PostList : Fragment(),PostAdapter.OnItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    fun setAdapterListData( booleantype: Boolean ,dataListuser: ArrayList<Postdata>) {
-        _binding?.postRecyclerview?.layoutManager =  LinearLayoutManager(requireActivity(),
+    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>) {
+        _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(
+            requireActivity(),
             LinearLayoutManager.VERTICAL, false
         )
-        photoAdapter = PostAdapter(booleantype,this,requireContext())
+        photoAdapter = PostAdapter(booleantype, this, requireContext())
         _binding?.postRecyclerview?.adapter = photoAdapter
         photoAdapter.setDataList(dataListuser)
         photoAdapter.notifyDataSetChanged()
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
 
-fun getUserisSame():Boolean{
-    return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
+    fun getUserisSame(): Boolean {
+        return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
 
-}
+    }
+
     fun subscribe_create_post() {
         (activity as Home?)?.homeviewmodel?.All_post?.observe(
             viewLifecycleOwner,
@@ -101,11 +99,15 @@ fun getUserisSame():Boolean{
                         it.data.let { res ->
                             if (res?.status == true) {
 
-                                if ( !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
-                                    setAdapterListData(false,res.data as ArrayList<Postdata>)
-                                }
-                                else{
-                                    setAdapterListData(true,res.data as ArrayList<Postdata>)
+                                if (!userID.equals(
+                                        (activity as Home).sharedPreferencesStorage.getString(
+                                            AppConstants.USER_ID
+                                        )
+                                    )
+                                ) {
+                                    setAdapterListData(false, res.data as ArrayList<Postdata>)
+                                } else {
+                                    setAdapterListData(true, res.data as ArrayList<Postdata>)
 
                                 }
 
@@ -124,7 +126,7 @@ fun getUserisSame():Boolean{
             })
     }
 
-    fun deletePostObserverResponse(){
+    fun deletePostObserverResponse() {
         (activity as Home?)?.homeviewmodel?.delete_post?.observe(
             viewLifecycleOwner,
             Observer {
@@ -142,17 +144,31 @@ fun getUserisSame():Boolean{
                 }
             })
     }
-    override fun onDelete(position: Postdata) {
-        alertDeletepopup(position)
+
+    override fun onDelete(position: Postdata,flag:Boolean) {
+        if(flag){
+            val bundle = Bundle()
+            bundle.putString("post_id",position.id)
+            bundle.putString("user_name",position.first_name+" "+position.last_name)
+            bundle.putString("user_img",position.upload_image)
+            bundle.putString("comment_title",position.title)
+            bundle.putString("media",position.media)
+            findNavController().navigate(R.id.action_FirstFragment_to_comment,bundle)
+        }
+        else{
+            alertDeletepopup(position)
+        }
+
 
     }
+
     fun footer_transition() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
-        user_profile_photo= binding.root.findViewById(R.id.user_profile_photo)
+        user_profile_photo = binding.root.findViewById(R.id.user_profile_photo)
         Home.notifications_count.let {
-            _binding?.tvCounter?.text=it
+            _binding?.tvCounter?.text = it
         }
         Home.current_user_profile.let {
             Glide.with(requireContext()).load(it)
@@ -184,20 +200,21 @@ fun getUserisSame():Boolean{
     }
 
 
-fun get_postdata(){
-    (activity as Home).homeviewmodel.All_post= MutableLiveData<Resource<post>>()
-    subscribe_create_post()
-    val jsonObject = JsonObject()
-    userID = getArguments()?.getString("user_id")
-    if (userID == null) {
-        userID = (activity as Home).sharedPreferencesStorage.getString(
-            AppConstants.USER_ID
-        )
+    fun get_postdata() {
+        (activity as Home).homeviewmodel.All_post = MutableLiveData<Resource<post>>()
+        subscribe_create_post()
+        val jsonObject = JsonObject()
+        userID = getArguments()?.getString("user_id")
+        if (userID == null) {
+            userID = (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        }
+        Log.d("TAG@123", userID + "")
+        jsonObject.addProperty("user_id", userID)
+        (activity as Home).homeviewmodel.getAllPost(jsonObject)
     }
-    Log.d("TAG@123", userID+"")
-    jsonObject.addProperty("user_id", userID)
-    (activity as Home).homeviewmodel.getAllPost(jsonObject)
-}
+
     fun alertDeletepopup(position: Postdata) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.app_name)
@@ -210,8 +227,8 @@ fun get_postdata(){
         builder.setPositiveButton("Yes") { dialog, which ->
 
             val jsonObject = JsonObject()
-            Log.d("TAG@123", position.id+"")
-            (activity as Home).homeviewmodel.delete_post= MutableLiveData<Resource<delelepost>>()
+            Log.d("TAG@123", position.id + "")
+            (activity as Home).homeviewmodel.delete_post = MutableLiveData<Resource<delelepost>>()
             deletePostObserverResponse()
             jsonObject.addProperty("id", position.id)
             (activity as Home).homeviewmodel.deletepost(jsonObject)
@@ -223,7 +240,6 @@ fun get_postdata(){
         val dialog = builder.create()
         dialog.show()
     }
-
 
 
 }

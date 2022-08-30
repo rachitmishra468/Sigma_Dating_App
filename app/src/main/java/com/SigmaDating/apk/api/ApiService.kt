@@ -100,4 +100,12 @@ interface ApiService {
 
     @POST("twilio/accesstoken")
     suspend fun ctrateToken(@Body jsonObject: JsonObject): Response<Token_data>
+
+
+    @POST("post/getpostcomments")
+    suspend fun getallcomment(@Body jsonObject: JsonObject): Response<Comment_model>
+
+    @POST("post/savecomment")
+    suspend fun sent_comment(@Body jsonObject: JsonObject): Response<Loginmodel>
+
 }

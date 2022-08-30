@@ -328,6 +328,10 @@
             app:destination="@id/chatListFragment" />
 
         <action
+            android:id="@+id/action_FirstFragment_to_comment"
+            app:destination="@id/comment_post" />
+
+        <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
 
@@ -339,6 +343,44 @@
                 android:id="@+id/action_FirstFragment_to_notification"
                 app:destination="@id/notificationSettingsFragment" />
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/comment_post"
+        android:name="com.SigmaDating.apk.views.post.Comment_post"
+        android:label="Comment_post" >
+
+        <argument
+            android:name="post_id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+
+        <argument
+            android:name="user_name"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="user_img"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="comment_title"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="media"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+
     </fragment>
 
 
