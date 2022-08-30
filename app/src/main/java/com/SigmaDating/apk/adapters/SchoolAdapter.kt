@@ -9,9 +9,8 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.communityModel.UniversityList
-import com.bumptech.glide.Glide
+
 
 open class SchoolAdapter(private var listener: SchoolAdapter.OnItemClickListener, var stringtype: String)  : RecyclerView.Adapter<SchoolAdapter.DataViewHolder>(), Filterable {
 

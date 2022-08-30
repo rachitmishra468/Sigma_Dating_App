@@ -88,6 +88,36 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
 
     }
+    fun subscribe_save_post_like() {
+        (activity as Home?)?.homeviewmodel?.like_post?.observe(
+            viewLifecycleOwner,
+            Observer { it ->
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                Log.d("TAG@123",res.message)
+                                Toast.makeText(requireContext(),res.message,Toast.LENGTH_SHORT).show()
+                            }else{
+                                if (res != null) {
+                                    Log.d("TAG@123",res.message)
+                                    Toast.makeText(requireContext(),res.message,Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+
+                    }
+                    Status.ERROR -> {
+
+                    }
+                }
+            })
+    }
+
 
     fun subscribe_create_post() {
         (activity as Home?)?.homeviewmodel?.All_post?.observe(
@@ -145,19 +175,26 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             })
     }
 
-    override fun onDelete(position: Postdata,flag:Boolean) {
-        if(flag){
-            val bundle = Bundle()
-            bundle.putString("post_id",position.id)
-            bundle.putString("user_name",position.first_name+" "+position.last_name)
-            bundle.putString("user_img",position.upload_image)
-            bundle.putString("comment_title",position.title)
-            bundle.putString("media",position.media)
-            findNavController().navigate(R.id.action_FirstFragment_to_comment,bundle)
+    override fun onDelete(position: Postdata,flag:Int) {
+        when(flag){
+            1->{
+                val bundle = Bundle()
+                bundle.putString("post_id",position.id)
+                bundle.putString("user_name",position.first_name+" "+position.last_name)
+                bundle.putString("user_img",position.upload_image)
+                bundle.putString("comment_title",position.title)
+                bundle.putString("media",position.media)
+                findNavController().navigate(R.id.action_FirstFragment_to_comment,bundle)
+            }
+            2->{
+                save_post_like(position.id)
+            }
+            3->{
+                alertDeletepopup(position)
+
+            }
         }
-        else{
-            alertDeletepopup(position)
-        }
+
 
 
     }
@@ -215,11 +252,19 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as Home).homeviewmodel.getAllPost(jsonObject)
     }
 
+    fun save_post_like(post_id:String) {
+        (activity as Home).homeviewmodel.like_post = MutableLiveData<Resource<Loginmodel>>()
+        subscribe_save_post_like()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("user_id", userID)
+        jsonObject.addProperty("post_id", post_id)
+        (activity as Home).homeviewmodel.save_like_post_data(jsonObject)
+    }
+
     fun alertDeletepopup(position: Postdata) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.app_name)
         builder.setIcon(R.mipmap.ic_launcher)
-
         builder.setMessage("Are you want to Delete this Post.")
         builder.background = ColorDrawable(
             Color.parseColor("#FFFFFF")

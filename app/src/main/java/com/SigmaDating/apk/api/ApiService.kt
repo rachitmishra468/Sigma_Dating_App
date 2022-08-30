@@ -108,4 +108,14 @@ interface ApiService {
     @POST("post/savecomment")
     suspend fun sent_comment(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+
+    @POST("post/likepost")
+    suspend fun save_like_post_data(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
+    @GET("notification/index/{user_id}")
+    suspend fun get_notification(@Path("user_id") id: String): Response<Notification_model>
+
+    @POST("notification/deletenotification")
+    suspend fun deletenotification(@Body jsonObject: JsonObject): Response<Loginmodel>
 }

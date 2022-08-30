@@ -39,8 +39,9 @@ interface ApiHelper {
     suspend fun get_user_match_bids(jsonObject: String):Response<Match_bids>
     suspend fun ctrateToken(jsonObject: JsonObject):Response<Token_data>
     suspend fun sent_comment(jsonObject: JsonObject):Response<Loginmodel>
-
-
+    suspend fun save_like_post_data(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun get_notification(jsonObject: String):Response<Notification_model>
+    suspend fun deletenotification(jsonObject: JsonObject):Response<Loginmodel>
 
 //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
 

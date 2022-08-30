@@ -47,6 +47,9 @@ class HomeViewModel @Inject constructor(
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var delete_post: MutableLiveData<Resource<delelepost>>
     lateinit var All_post: MutableLiveData<Resource<post>>
+    lateinit var like_post: MutableLiveData<Resource<Loginmodel>>
+    lateinit var notification_list: MutableLiveData<Resource<Notification_model>>
+    lateinit var deletenotification: MutableLiveData<Resource<Loginmodel>>
     lateinit var sent_comment: MutableLiveData<Resource<Loginmodel>>
     lateinit var All_comment: MutableLiveData<Resource<Comment_model>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
@@ -99,6 +102,38 @@ class HomeViewModel @Inject constructor(
                 all_match_bids.postValue(Resource.success(it.body()))
             } else {
                 all_match_bids.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+    fun get_notification_list(jsonObject: String) = viewModelScope.launch {
+        notification_list.postValue(Resource.loading(null))
+        mainRepository.get_notification(jsonObject).let {
+            if (it.isSuccessful) {
+                notification_list.postValue(Resource.success(it.body()))
+            } else {
+                notification_list.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun user_deletenotification(jsonObject: JsonObject) = viewModelScope.launch {
+        deletenotification.postValue(Resource.loading(null))
+        mainRepository.deletenotification(jsonObject).let {
+            if (it.isSuccessful) {
+                deletenotification.postValue(Resource.success(it.body()))
+            } else {
+                deletenotification.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+    }
+
+    fun save_like_post_data(jsonObject: JsonObject) = viewModelScope.launch {
+        like_post.postValue(Resource.loading(null))
+        mainRepository.save_like_post_data(jsonObject).let {
+            if (it.isSuccessful) {
+                like_post.postValue(Resource.success(it.body()))
+            } else {
+                like_post.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
     }

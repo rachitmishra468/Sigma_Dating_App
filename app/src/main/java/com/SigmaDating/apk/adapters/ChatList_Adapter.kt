@@ -9,8 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.EditProfiledata
-import com.SigmaDating.apk.model.Match_bids
 import com.SigmaDating.apk.model.User_bids_list
 import com.SigmaDating.apk.views.Home
 

@@ -34,9 +34,8 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
         notifyDataSetChanged()
     }
 
-    // Provide a direct reference to each of the views with data items
     interface OnItemClickListener {
-        fun onDelete(position: Postdata,flag:Boolean)
+        fun onDelete(position: Postdata,flag:Int)
     }
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
@@ -46,6 +45,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
         var progressBar: ProgressBar
         var postDelet:ImageView
         var comment_img:ImageView
+        var img_like :ImageView
 
         init {
             profile_img= itemView.findViewById(R.id.profile_post_img)
@@ -55,30 +55,29 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
             progressBar = itemView.findViewById(R.id.progress_post)
             comment_img= itemView.findViewById(R.id.comment_img)
             postDelet=itemView.findViewById(R.id.post_delete_img)
+            img_like=itemView.findViewById(R.id.img_like)
         }
 
     }
 
-    // Usually involves inflating a layout from XML and returning the holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        // Inflate the custom layout
         var view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
         return ViewHolder(view)
     }
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    // Involves populating data into the item through holder
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        // Get the data model based on position
         val data = dataList[position]
-
-
-        // Set item views based on your views and data model
-       // Glide.with(context).load(data.media).into(holder.image);
         holder.title.text=data.title
         holder.discription.text=data.description
         Glide.with(context).load(data.upload_image).into(holder.profile_img);
+        if(data.like){
+            holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.heart_solid))
+        }else{
+            holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.white_heart))
+        }
+
+
         Glide.with(context).load(data.media).listener(object : RequestListener<Drawable> {
             override fun onResourceReady(
                 resource: Drawable?,
@@ -103,8 +102,15 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
 
         }).into(holder.image);
 
+
+        holder.img_like.setOnClickListener {
+            holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.heart_solid))
+            data.like=true
+            listener.onDelete(data,2)
+        }
+
         holder.comment_img.setOnClickListener {
-            listener.onDelete(data,true)
+            listener.onDelete(data,1)
         }
 
 
@@ -114,7 +120,7 @@ class PostAdapter( var booleantype: Boolean,private var listener: PostAdapter.On
         else{
             holder.postDelet.visibility=View.VISIBLE
         }
-        holder.postDelet.setOnClickListener { listener.onDelete(data,false) }
+        holder.postDelet.setOnClickListener { listener.onDelete(data,3) }
 
     }
 
