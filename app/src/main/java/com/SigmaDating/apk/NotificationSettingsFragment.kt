@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.SigmaDating.databinding.NotificationSettingFragmentBinding
+import com.bumptech.glide.Glide
 
 
 class NotificationSettingsFragment  :Fragment(){
@@ -15,6 +17,16 @@ class NotificationSettingsFragment  :Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        // val view= inflater.inflate(R.layout.notification_setting_fragment, container, false)
         _binding = NotificationSettingFragmentBinding.inflate(inflater, container, false)
+
+      val   username =  getArguments()?.getString("user_id")
+        if (username!=null) {
+            _binding.texttitle.text=username
+        }
+       val  imagedata = getArguments()?.getString("user_image")
+        imagedata?.let {
+            Glide.with(requireActivity()).load(it).into(_binding.imgheader as ImageView)
+        }
+
         return binding.root;
     }
 

@@ -204,10 +204,25 @@
         android:id="@+id/userChatFragment"
         android:name="com.SigmaDating.apk.views.chat.UserChatFragment"
         android:label="UserChatFragment" >
+
+        <argument
+            android:name="user_name"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="user_image"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
         <action
             android:id="@+id/action_userChatFragment_to_notificationSettingsFragment"
             app:destination="@id/notificationSettingsFragment" />
     </fragment>
+
+
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.SigmaDating.apk.NotificationSettingsFragment"

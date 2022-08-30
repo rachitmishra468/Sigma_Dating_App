@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/message_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/ic_avatar"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +118,7 @@
         android:layout_height="14dp"
         android:layout_marginEnd="10dp"
         android:indeterminateTint="@color/light_text_color"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/attachment_info"
         app:layout_constraintEnd_toStartOf="@+id/attachment_failed"
         app:layout_constraintStart_toStartOf="@+id/attachment_file_name"

@@ -1,5 +1,6 @@
 package com.SigmaDating.apk.views.chat
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,15 +15,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import com.twilio.conversations.Message
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class UserChatFragment : Fragment() {
@@ -36,10 +41,14 @@ class UserChatFragment : Fragment() {
 
     private var mTextInputLayout: TextInputLayout? = null
     lateinit var  layoutManager:LinearLayoutManager
-
+ var headerImg:CircleImageView?=null
+    private var userChatname:TextView?=null
 
     private val quickstartConversationsManager = QuickstartConversationsManager()
-
+    private var username:String?=null
+    private var imagedata:String?=null
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +59,19 @@ class UserChatFragment : Fragment() {
         recyclerView = view.findViewById(R.id.messageList)
         writeMessageEditText = view.findViewById(R.id.messageInput)
         mTextInputLayout = view.findViewById(R.id.messageInputHolder)
+        headerImg=view.findViewById(R.id.header_img)
+        userChatname=view.findViewById<TextView>(R.id.chat_user_name)
+       // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
+
+         username =  getArguments()?.getString("user_name")
+        if (username!=null) {
+            userChatname?.text = username
+        }
+         imagedata = getArguments()?.getString("user_image")
+        imagedata?.let {
+            Glide.with(requireActivity()).load(it).into(headerImg as ImageView)
+        }
+
 
         mTextInputLayout?.setEndIconOnClickListener {
             Log.d("TAG@123", "EndIconOnClickListener : ")
@@ -66,14 +88,17 @@ class UserChatFragment : Fragment() {
         }
         chat_settings_img = view.findViewById(R.id.chat_settings)
         chat_settings_img?.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("user_id", username)
+            bundle.putString("user_image",imagedata)
             Navigation.findNavController(view)
-                .navigate(R.id.action_userChatFragment_to_notificationSettingsFragment);
+                .navigate(R.id.action_userChatFragment_to_notificationSettingsFragment,bundle,null,null);
         }
 
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         recyclerView!!.layoutManager = layoutManager
-        messagesAdapter = MessagesAdapter(quickstartConversationsManager)
+        messagesAdapter = MessagesAdapter(requireContext(),quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
 
         quickstartConversationsManager.initializeWithAccessToken(
@@ -129,17 +154,21 @@ class UserChatFragment : Fragment() {
     }
 
 
-    internal class MessagesAdapter(var quickstartConversationsManager: QuickstartConversationsManager) :
+    internal class MessagesAdapter(var context: Context,var quickstartConversationsManager: QuickstartConversationsManager) :
         RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             var textname: TextView
+            var imageAvatar:ImageView
+
+
             // var univercity_name: TextView
             // var date_text:TextView
 
             init {
                 // image = itemView.findViewById(R.id.image)
                 textname = itemView.findViewById(R.id.message_body)
+                imageAvatar=itemView.findViewById(R.id.message_avatar)
                 // univercity_name = itemView.findViewById(R.id.univercity_name)
                 // date_text= itemView.findViewById(R.id.date_text)
 
@@ -163,11 +192,23 @@ class UserChatFragment : Fragment() {
             Log.d("TAG@123", "attributes : "+message.attributes)
             var messageText = String.format("%s: %s", message.author, message.body)
             holder.textname.text = messageText
+
+            // Set user img type
+            val imgURl= (context as Home).sharedPreferencesStorage.getString(
+                AppConstants.upload_image
+            )
+            Glide.with(context).load(imgURl).into(holder.imageAvatar);
+
+
+
         }
 
         override fun getItemCount(): Int {
             return quickstartConversationsManager.getMessages().size
         }
+       /* override fun getItemViewType(position: Int): Int {
+            return quickstartConversationsManager.getMessages().
+        }*/
     }
 
 

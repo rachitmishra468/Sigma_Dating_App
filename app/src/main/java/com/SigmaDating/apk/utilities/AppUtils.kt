@@ -5,51 +5,48 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.ConnectivityManager
-import android.net.Uri
-import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Base64.DEFAULT
+import android.util.Base64.encodeToString
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
 import com.SigmaDating.apk.model.communityModel.UniversityList
 import com.airbnb.lottie.LottieAnimationView
 import com.example.demoapp.other.Constants
 import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayOutputStream
+import java.lang.Math.abs
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import android.content.DialogInterface
-
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import java.lang.Math.abs
 
 
 object AppUtils {
 
     private var dialog: Dialog? = null
+
 
 
     fun hideLoader() {

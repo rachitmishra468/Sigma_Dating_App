@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -21,14 +20,14 @@ import com.SigmaDating.R
 import com.SigmaDating.apk.adapters.ChatList_Adapter
 import com.SigmaDating.apk.model.*
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.Home
 import com.SigmaDating.databinding.FragmentChatListBinding
-import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
-import com.google.android.gms.common.data.DataHolder
 import com.google.gson.JsonObject
+import javax.inject.Inject
 
 
 private const val ARG_PARAM1 = "param1"
@@ -47,7 +46,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     private lateinit var chatlistAdapter: ChatList_Adapter
     private var dataList = mutableListOf<User_bids_list>()
     private var chat_list_recycler: RecyclerView? = null
-
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -146,7 +146,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         (activity as Home).homeviewmodel.get_User_token(
             jsonObject
         )
-        subscribe_Login_User_details()
+        subscribe_Login_User_details(position)
 
     }
 
@@ -200,13 +200,18 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     }
 
 
-    fun subscribe_Login_User_details() {
+    fun subscribe_Login_User_details(position: User_bids_list) {
         (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
+                    val bundle = Bundle()
+                    bundle.putString("user_name", position?.first_name+" "+position.last_name)
+                    bundle.putString("user_image",position.upload_image)
                     Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_chatListFragment_to_userChatFragment);
+                        .navigate(R.id.action_chatListFragment_to_userChatFragment, bundle,
+                            null,
+                            null);
                 }
                 Status.LOADING -> {
                     AppUtils.showLoader(requireContext())

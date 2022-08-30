@@ -25,11 +25,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:maxWidth="200dp"
             android:text="demo Text"
             android:textColor="#FFFBFB"
-            android:textSize="17sp"
-            android:layout_marginRight="10dp" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/msg_time"

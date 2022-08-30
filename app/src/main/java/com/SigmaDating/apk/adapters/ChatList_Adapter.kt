@@ -63,7 +63,7 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
         // Set item views based on your views and data model
         Glide.with(context).load(data.upload_image).into(holder.image);
 
-        holder.image.setOnClickListener {
+        holder.itemView.setOnClickListener {
             Home.match_id=data.match_id
             listener!!.onCategoryClick(data);
         }

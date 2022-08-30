@@ -27,6 +27,7 @@ import com.SigmaDating.apk.model.Loginmodel
 import com.SigmaDating.apk.model.Pages
 import com.SigmaDating.apk.model.Token_data
 import com.SigmaDating.apk.storage.AppConstants
+import com.SigmaDating.apk.storage.SharedPreferencesStorage
 import com.SigmaDating.apk.utilities.AppUtils
 import com.SigmaDating.apk.views.CardManager.CardViewChanger
 import com.SigmaDating.apk.views.Home.Companion.get_settingpage_data
@@ -43,6 +44,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
@@ -66,7 +68,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var credentials_card: ConstraintLayout
     lateinit var tvCounter: TextView
 
-
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
@@ -397,7 +400,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Glide.with(requireContext()).load(it.data?.user?.upload_image)
                                     .error(R.drawable.profile_img)
                                     .into(editProfile);
-
+                                sharedPreferencesStorage.setValue(
+                                    AppConstants.upload_image,
+                                    it.data?.user?.upload_image
+                                )
                                 Home.current_user_profile= it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
