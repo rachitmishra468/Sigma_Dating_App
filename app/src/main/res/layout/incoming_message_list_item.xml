@@ -23,7 +23,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/ic_avatar"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/message_header"
         tools:visibility="visible" />
@@ -33,9 +33,9 @@
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
-        android:background="@color/bel_grey_text"
+        android:background="@color/blue"
         app:layout_constraintBottom_toBottomOf="@+id/message_footer"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/message_background_barrier"
         app:layout_constraintTop_toTopOf="@+id/message_avatar" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -53,10 +53,10 @@
         android:id="@+id/message_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:autoLink="web"
-        android:gravity="right"
         android:singleLine="false"
         android:text="message.body"
         android:textColor="@color/white"
@@ -65,6 +65,8 @@
         android:visibility="visible"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/message_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/message_avatar"
         app:layout_constraintTop_toTopOf="@+id/message_background"
         app:layout_goneMarginStart="8dp"
         tools:maxLength="300"
@@ -156,9 +158,8 @@
 
     <TextView
         android:id="@+id/message_date"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
         android:singleLine="true"
@@ -179,7 +180,6 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_sent_message"
         app:layout_constraintBottom_toBottomOf="@id/message_date"
-        app:layout_constraintEnd_toEndOf="@+id/message_background"
         app:layout_constraintStart_toEndOf="@id/message_date"
         app:layout_constraintTop_toTopOf="@id/message_date"
         app:tint="@color/light_text_color"
@@ -195,8 +195,9 @@
 
     <TextView
         android:id="@+id/message_send_error"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="left"
         android:layout_marginTop="4dp"
         android:text="@string/message_send_error"
         android:visibility="visible"

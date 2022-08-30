@@ -27,6 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -75,6 +76,7 @@ class UserChatFragment : Fragment() {
 
         mTextInputLayout?.setEndIconOnClickListener {
             Log.d("TAG@123", "EndIconOnClickListener : ")
+
             val jsonObject = JsonObject()
             jsonObject.addProperty(
                 "identity",
@@ -108,12 +110,15 @@ class UserChatFragment : Fragment() {
 
 //
         subscribe_lisner_images()
+        Log.d("TAG@123", (context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
         return view;
     }
 
     fun subscribe_lisner_images() {
         quickstartConversationsManager.mutableLiveData?.observe(viewLifecycleOwner, Observer {
             when (it) {
+
+
                 1 -> {
                     AppUtils.hideLoader()
                     Log.d("TAG@123", "notifyDataSetChanged : " + 1)
@@ -156,6 +161,8 @@ class UserChatFragment : Fragment() {
 
     internal class MessagesAdapter(var context: Context,var quickstartConversationsManager: QuickstartConversationsManager) :
         RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
+private val VIEW_TYPE_MY_MESSAGE by lazy { 1 }
+        private val VIEW_TYPE_OTHER_MESSAGE by lazy { 2 }
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             var textname: TextView
@@ -176,23 +183,27 @@ class UserChatFragment : Fragment() {
 
         }
 
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_message_item_outgoing, parent, false)
-            return ViewHolder(view)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+            if ( viewType==VIEW_TYPE_MY_MESSAGE){
+return  ViewHolder( LayoutInflater.from(parent.context)
+    .inflate(R.layout.row_message_item_outgoing, parent, false))
+            }
+            else{
+                return ViewHolder( LayoutInflater.from(parent.context)
+                    .inflate(R.layout.incoming_message_list_item, parent, false))
+            }
+
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+
             var message: Message = quickstartConversationsManager.getMessages().get(position)
-            message.attributes.jsonObject?.let { Log.d("TAG@123", it.getString("identity")) }
             Log.d("TAG@123", "attachedMedia : "+message.attachedMedia.size)
             Log.d("TAG@123", "attributes : "+message.attributes)
             var messageText = String.format("%s: %s", message.author, message.body)
             holder.textname.text = messageText
-
             // Set user img type
             val imgURl= (context as Home).sharedPreferencesStorage.getString(
                 AppConstants.upload_image
@@ -206,9 +217,20 @@ class UserChatFragment : Fragment() {
         override fun getItemCount(): Int {
             return quickstartConversationsManager.getMessages().size
         }
-       /* override fun getItemViewType(position: Int): Int {
-            return quickstartConversationsManager.getMessages().
-        }*/
+        override fun getItemViewType(position: Int): Int {
+val message= quickstartConversationsManager.messages.get(position)
+            Log.d("TAG@123","VIEWTYPE"+message.attributes.string)
+            val dd= message.attributes.string
+            val jsonObject= JSONObject(dd)
+            if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get("identity")){
+return VIEW_TYPE_MY_MESSAGE
+            }
+            else{
+return VIEW_TYPE_OTHER_MESSAGE
+            }
+
+
+        }
     }
 
 

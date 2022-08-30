@@ -45,7 +45,6 @@ import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView

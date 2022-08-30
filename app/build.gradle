@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
     implementation 'com.google.firebase:firebase-common-ktx:20.1.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.7'
     kapt 'com.google.dagger:hilt-compiler:2.42'
 
     kapt 'com.google.dagger:hilt-android-compiler:2.42'
