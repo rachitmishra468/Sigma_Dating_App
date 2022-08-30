@@ -41,6 +41,12 @@ class MainRepository @Inject constructor(
     suspend fun ctrateToken(id: JsonObject)= apiHelper.ctrateToken(id)
 
     suspend fun sentcomment(jsonObject: JsonObject)=apiHelper.sent_comment(jsonObject)
+    suspend fun save_like_post_data(jsonObject: JsonObject)=apiHelper.save_like_post_data(jsonObject)
+
+    suspend fun get_notification(jsonObject: String)=apiHelper.get_notification(jsonObject)
+    suspend fun deletenotification(jsonObject: JsonObject)=apiHelper.deletenotification(jsonObject)
+
+
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)
 
 }

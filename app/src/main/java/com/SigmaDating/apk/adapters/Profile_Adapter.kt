@@ -9,15 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
-import com.SigmaDating.apk.model.EditProfiledata
 import com.SigmaDating.apk.model.Postdata
-import com.SigmaDating.apk.views.FirstFragmentDirections
-import com.SigmaDating.apk.views.userdashboard.SecondFragmentDirections
 
 
 class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {

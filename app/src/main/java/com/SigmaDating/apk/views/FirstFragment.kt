@@ -116,7 +116,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             // Log and toast
 
             Log.d("TAG@123", token)
-            Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), token, Toast.LENGTH_SHORT).show()
         })
 
 

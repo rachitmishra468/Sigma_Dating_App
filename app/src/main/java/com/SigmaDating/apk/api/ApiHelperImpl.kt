@@ -93,7 +93,15 @@ class ApiHelperImpl @Inject constructor(
         apiService.sent_comment(jsonObject)
 
 
-    //  override suspend fun getUserDashboardProfile(id: JsonObject): Response<Loginmodel> =apiService.getUserDashboard(id)
+    override suspend fun save_like_post_data(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.save_like_post_data(jsonObject)
 
+
+    override suspend fun get_notification(id: String): Response<Notification_model> =
+        apiService.get_notification(id)
+
+
+    override suspend fun deletenotification(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.deletenotification(jsonObject)
 
 }

@@ -12,5 +12,6 @@ data class Postdata(
     var date_added:String,
     var first_name:String,
     var last_name:String,
+    var like :Boolean,
     var upload_image:String
 )

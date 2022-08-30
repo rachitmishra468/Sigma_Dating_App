@@ -47,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_baseline_arrow_back_ios_24"
                 app:layout_constraintStart_toEndOf="@+id/guideline_left"
@@ -69,8 +69,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="75dp"
                 android:gravity="bottom"
+                android:paddingTop="5dp"
                 android:orientation="horizontal"
                 android:padding="2dp"
                 android:weightSum="10">
@@ -87,6 +88,8 @@
                         android:id="@+id/user_img"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        app:civ_border_color="@color/black"
+                        app:civ_border_width="1dp"
                         android:layout_gravity="top|center_horizontal"
                         android:src="@drawable/fb_icon">
 
@@ -103,6 +106,8 @@
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         android:text="Joe andrwer"
                         android:layout_marginTop="8dp"
                         android:layout_height="wrap_content"/>
@@ -111,6 +116,9 @@
                         android:id="@+id/comment_title"
                         android:layout_width="wrap_content"
                         android:text="lorem ipsum"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:layout_marginTop="4dp"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -121,10 +129,17 @@
                     android:text="Comments "
                     android:textSize="22sp"
                     android:padding="5dp"
+                    android:layout_marginLeft="12sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp"
                     android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/light_text_color"/>
 
             </LinearLayout>
 

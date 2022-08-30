@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +32,6 @@ import com.example.demoapp.other.Status
 import com.google.android.gms.common.data.DataHolder
 import com.google.gson.JsonObject
 
-
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -44,6 +45,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     lateinit var sigma_list: ImageView
     private var _binding: FragmentChatListBinding? = null
     private val binding get() = _binding!!
+    lateinit var tvCounter: TextView
+    lateinit var movetonotification : ConstraintLayout
     private lateinit var chatlistAdapter: ChatList_Adapter
     private var dataList = mutableListOf<User_bids_list>()
     private var chat_list_recycler: RecyclerView? = null
@@ -63,6 +66,12 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
+        tvCounter = binding.root.findViewById(R.id.tvCounter)
+        movetonotification= binding.root.findViewById(R.id.movetonotification)
+        Home.notifications_count.let {
+            _binding?.tvCounter?.setText(Home.notifications_count)
+        }
+
         chatlistAdapter = ChatList_Adapter(requireContext(), this)
         footer_transition()
         _binding!!.movetoedit.setOnClickListener {
@@ -71,7 +80,9 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         _binding!!.movetosetting.setOnClickListener {
             findNavController().navigate(R.id.action_chatListFragment_to_setting)
         }
+
         _binding!!.movetonotification.setOnClickListener {
+
             findNavController().navigate(R.id.action_chatListFragment_to_notification)
         }
         chat_list_recycler = binding.root.findViewById(R.id.chatlist_recyclerView)
