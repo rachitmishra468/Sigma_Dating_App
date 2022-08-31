@@ -69,7 +69,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="70dp"
                 android:gravity="bottom"
                 android:paddingTop="5dp"
                 android:orientation="horizontal"
@@ -86,8 +86,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/user_img"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         app:civ_border_color="@color/black"
                         app:civ_border_width="1dp"
                         android:layout_gravity="top|center_horizontal"
@@ -106,8 +106,8 @@
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
                         android:text="Joe andrwer"
                         android:layout_marginTop="8dp"
                         android:layout_height="wrap_content"/>
@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:text="lorem ipsum"
                         android:textSize="12sp"
-                        android:textStyle="bold"
+                        android:textStyle="normal"
                         android:textColor="@color/black"
                         android:layout_marginTop="4dp"
                         android:layout_height="wrap_content"/>
@@ -127,13 +127,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="Comments "
-                    android:textSize="22sp"
-                    android:padding="5dp"
-                    android:layout_marginLeft="12sp"
+                    android:textSize="16sp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="2sp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"
-                    android:layout_height="wrap_content"/>
+                    android:textStyle="normal"
+                    android:layout_height="match_parent"/>
 
                 <View
                     android:layout_width="match_parent"

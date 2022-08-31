@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.SigmaDating.apk.views.FirstFragment"
+        android:name="com.SigmaDating.app.views.FirstFragment"
         android:label="first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.SigmaDating.apk.views.userdashboard.SecondFragment"
+        android:name="com.SigmaDating.app.views.userdashboard.SecondFragment"
         android:label="second_fragment_label"
         tools:layout="@layout/fragment_second">
 
@@ -77,7 +77,7 @@
 
     <fragment
         android:id="@+id/YourselfFragment"
-        android:name="com.SigmaDating.apk.views.intro_registration.BlankFragment"
+        android:name="com.SigmaDating.app.views.intro_registration.BlankFragment"
         android:label="first_blankfragment_label"
         tools:layout="@layout/about_yourself_layout">
 
@@ -89,7 +89,7 @@
 
     <fragment
         android:id="@+id/GenderFragment"
-        android:name="com.SigmaDating.apk.views.intro_registration.BlankFragment2"
+        android:name="com.SigmaDating.app.views.intro_registration.BlankFragment2"
         android:label="first_blankfragment2_label"
         tools:layout="@layout/about_yourself_layout2">
 
@@ -100,7 +100,7 @@
 
     <fragment
         android:id="@+id/BirthdayFragment"
-        android:name="com.SigmaDating.apk.views.intro_registration.BlankFragment3"
+        android:name="com.SigmaDating.app.views.intro_registration.BlankFragment3"
         android:label="first_blankfragment3_label"
         tools:layout="@layout/about_birthday">
 
@@ -111,7 +111,7 @@
 
     <fragment
         android:id="@+id/SchoolFragment"
-        android:name="com.SigmaDating.apk.views.intro_registration.BlankFragment4"
+        android:name="com.SigmaDating.app.views.intro_registration.BlankFragment4"
         android:label="first_blankfragment4_label"
         tools:layout="@layout/fragment_school_input">
 
@@ -123,7 +123,7 @@
 
     <fragment
         android:id="@+id/PasswordFragment"
-        android:name="com.SigmaDating.apk.views.intro_registration.Password"
+        android:name="com.SigmaDating.app.views.intro_registration.Password"
         android:label="Password"
         tools:layout="@layout/fragment_password">
 
@@ -134,7 +134,7 @@
 
     <fragment
         android:id="@+id/Profile_Photo"
-        android:name="com.SigmaDating.apk.views.intro_registration.Profile_Photo"
+        android:name="com.SigmaDating.app.views.intro_registration.Profile_Photo"
         android:label="Profile_Photo"
         tools:layout="@layout/fragment_profile__photo">
 
@@ -148,7 +148,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatListFragment"
-        android:name="com.SigmaDating.apk.views.chat.ChatListFragment"
+        android:name="com.SigmaDating.app.views.chat.ChatListFragment"
         android:label="fragment_chat_list"
         tools:layout="@layout/fragment_chat_list">
         <action
@@ -179,7 +179,7 @@
     </fragment>
     <fragment
         android:id="@+id/settings_frag"
-        android:name="com.SigmaDating.apk.views.settings.SettingsFragment"
+        android:name="com.SigmaDating.app.views.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -194,7 +194,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProfile"
-        android:name="com.SigmaDating.apk.views.profile.EditProfile"
+        android:name="com.SigmaDating.app.views.profile.EditProfile"
         android:label="EditProfile" >
         <action
             android:id="@+id/action_editProfile_to_SecondFragment"
@@ -202,7 +202,7 @@
     </fragment>
     <fragment
         android:id="@+id/userChatFragment"
-        android:name="com.SigmaDating.apk.views.chat.UserChatFragment"
+        android:name="com.SigmaDating.app.views.chat.UserChatFragment"
         android:label="UserChatFragment" >
 
         <argument
@@ -225,11 +225,11 @@
 
     <fragment
         android:id="@+id/notificationSettingsFragment"
-        android:name="com.SigmaDating.apk.NotificationSettingsFragment"
+        android:name="com.SigmaDating.app.NotificationSettingsFragment"
         android:label="NotificationSettingsFragment" />
     <fragment
         android:id="@+id/reportUserFragment"
-        android:name="com.SigmaDating.apk.views.profile.ReportUserFragment"
+        android:name="com.SigmaDating.app.views.profile.ReportUserFragment"
         android:label="fragment_report_user"
         tools:layout="@layout/fragment_report_user" >
         <argument
@@ -265,18 +265,18 @@
     </fragment>
     <fragment
         android:id="@+id/all_Activitys"
-        android:name="com.SigmaDating.apk.views.all_activity.All_Activitys"
+        android:name="com.SigmaDating.app.views.all_activity.All_Activitys"
         android:label="All_Activitys" >
 
     </fragment>
     <fragment
         android:id="@+id/contactUs"
-        android:name="com.SigmaDating.apk.views.settings.ContactUs"
+        android:name="com.SigmaDating.app.views.settings.ContactUs"
         android:label="ContactUs"
         tools:layout="@layout/fragment_contact_us"/>
     <fragment
         android:id="@+id/fullScreenImageFragment"
-        android:name="com.SigmaDating.apk.views.userdashboard.FullScreenImageFragment"
+        android:name="com.SigmaDating.app.views.userdashboard.FullScreenImageFragment"
         android:label="fragment_full_screen_image"
         tools:layout="@layout/fragment_full_screen_image" >
 
@@ -289,7 +289,7 @@
     </fragment>
     <fragment
         android:id="@+id/createPost"
-        android:name="com.SigmaDating.apk.views.post.CreatePost"
+        android:name="com.SigmaDating.app.views.post.CreatePost"
         android:label="CreatePost" >
         <argument
             android:name="user_image"
@@ -307,7 +307,7 @@
     </fragment>
     <fragment
         android:id="@+id/postList"
-        android:name="com.SigmaDating.apk.views.post.PostList"
+        android:name="com.SigmaDating.app.views.post.PostList"
         android:label="PostList" >
 
         <argument
@@ -346,7 +346,7 @@
     </fragment>
     <fragment
         android:id="@+id/comment_post"
-        android:name="com.SigmaDating.apk.views.post.Comment_post"
+        android:name="com.SigmaDating.app.views.post.Comment_post"
         android:label="Comment_post" >
 
         <argument

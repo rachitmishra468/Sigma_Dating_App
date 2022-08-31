@@ -1,42 +1,41 @@
 {
   "project_info": {
-    "project_number": "856275008761",
-    "project_id": "sigma-dating-app-1655315229262",
-    "storage_bucket": "sigma-dating-app-1655315229262.appspot.com"
+    "project_number": "574636637575",
+    "project_id": "sigmadating-145b6",
+    "storage_bucket": "sigmadating-145b6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:856275008761:android:4be7e747f014956406b628",
+        "mobilesdk_app_id": "1:574636637575:android:3a6c6b7eb65edb58a1e722",
         "android_client_info": {
-          "package_name": "com.SigmaDating.apk"
+          "package_name": "com.SigmaDating.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "856275008761-04f2nlq466q5114ig7mhk8qg0t233u6i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.SigmaDating.apk",
-            "certificate_hash": "c552614b56db5379a2d7a8cbd64e78494ff5c492"
-          }
-        },
-        {
-          "client_id": "856275008761-k3mo7qbabb3469le4o9937b1vpgcon3r.apps.googleusercontent.com",
+          "client_id": "574636637575-gt64iersihk0j2o8ulm5idon8trcbr8a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBiAX4q9CaZLJp9ye3QE0t-0e6z0Y9HK0k"
+          "current_key": "AIzaSyCaoc0oecvmBGUVil-seQJCtVwMwCSC1-U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "856275008761-k3mo7qbabb3469le4o9937b1vpgcon3r.apps.googleusercontent.com",
+              "client_id": "574636637575-gt64iersihk0j2o8ulm5idon8trcbr8a.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "574636637575-2f6fr2hpfbkkl3165k2l4idgmn65onec.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Mosiac.Com.SigmaDating"
+              }
             }
           ]
         }
