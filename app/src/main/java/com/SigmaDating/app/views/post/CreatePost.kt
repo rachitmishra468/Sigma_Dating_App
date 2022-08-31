@@ -355,7 +355,10 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
     private fun openGallery() {
         Intent(Intent.ACTION_GET_CONTENT).also { intent ->
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "image/* video/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
             activity?.packageManager?.let {
                 intent.resolveActivity(it)?.also {
                     startActivityForResult(intent, OPERATION_CHOOSE_PHOTO)
