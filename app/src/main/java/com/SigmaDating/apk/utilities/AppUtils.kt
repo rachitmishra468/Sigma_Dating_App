@@ -274,7 +274,10 @@ object AppUtils {
             view.animate().scaleX(1f).scaleY(1f)
         }
     }
-
+    fun fromMillisToTimeString(millis: Long) : String {
+        val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        return format.format(millis)
+    }
     fun setCustomDate(inputdate: String): String? {
         var newformateddate = ""
         val toformatstr = "MMM dd, yyyy | hh:mm aa"

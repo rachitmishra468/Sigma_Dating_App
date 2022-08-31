@@ -4,7 +4,7 @@
 
     <!-- view background color -->
     <!--<solid android:color="@color/bg_msg_right" >-->
-    <solid android:color="@color/light_blue_900" >
+    <solid android:color="@color/design_default_color_secondary" >
     </solid>
     <corners
         android:topLeftRadius="5dp"

@@ -28,6 +28,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -100,7 +102,7 @@ class UserChatFragment : Fragment() {
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         recyclerView!!.layoutManager = layoutManager
-        messagesAdapter = MessagesAdapter(requireContext(),quickstartConversationsManager)
+        messagesAdapter = MessagesAdapter(imagedata,requireContext(),quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
 
         quickstartConversationsManager.initializeWithAccessToken(
@@ -159,25 +161,24 @@ class UserChatFragment : Fragment() {
     }
 
 
-    internal class MessagesAdapter(var context: Context,var quickstartConversationsManager: QuickstartConversationsManager) :
+    internal class MessagesAdapter(
+        var imageString: String?,
+        var context: Context,
+        var quickstartConversationsManager: QuickstartConversationsManager) :
         RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
 private val VIEW_TYPE_MY_MESSAGE by lazy { 1 }
         private val VIEW_TYPE_OTHER_MESSAGE by lazy { 2 }
+        var booleanuser:Boolean=false
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             var textname: TextView
-            var imageAvatar:ImageView
-
-
-            // var univercity_name: TextView
-            // var date_text:TextView
-
+            var textTime: TextView
+            var imageAvatar:CircleImageView
             init {
-                // image = itemView.findViewById(R.id.image)
-                textname = itemView.findViewById(R.id.message_body)
-                imageAvatar=itemView.findViewById(R.id.message_avatar)
-                // univercity_name = itemView.findViewById(R.id.univercity_name)
-                // date_text= itemView.findViewById(R.id.date_text)
+                textname = itemView.findViewById(R.id.txtOtherMessage)
+                textTime=itemView.findViewById(R.id.txtOtherMessageTime)
+                imageAvatar=itemView.findViewById(R.id.imageAvatar)
+
 
             }
 
@@ -197,25 +198,40 @@ return  ViewHolder( LayoutInflater.from(parent.context)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
-            var message: Message = quickstartConversationsManager.getMessages().get(position)
+            val message: Message = quickstartConversationsManager.getMessages().get(position)
             Log.d("TAG@123", "attachedMedia : "+message.attachedMedia.size)
             Log.d("TAG@123", "attributes : "+message.attributes)
-            var messageText = String.format("%s: %s", message.author, message.body)
+            Log.d("TAG@123", "dateformat : "+message.dateCreatedAsDate)
+            val sdf = SimpleDateFormat("hh:mm aa")
+            val date: Date = message.dateCreatedAsDate
+            val string = sdf.format(date)
+
+            Calendar.getInstance().timeInMillis
+            val messageText = String.format( message.body)
             holder.textname.text = messageText
+            holder.textTime.text=string
             // Set user img type
-            val imgURl= (context as Home).sharedPreferencesStorage.getString(
-                AppConstants.upload_image
-            )
-            Glide.with(context).load(imgURl).into(holder.imageAvatar);
-
-
+if (booleanuser){
+    val imgURl= (context as Home).sharedPreferencesStorage.getString(
+        AppConstants.upload_image
+    )
+    if (imgURl==""){
+        Glide.with(context).load(R.drawable.blue_profile).into(holder.imageAvatar);
+    }
+    else {
+        Glide.with(context).load(imgURl).into(holder.imageAvatar);
+    }
+}
+            else{
+    Glide.with(context).load(imageString).into(holder.imageAvatar);
+            }
 
         }
 
         override fun getItemCount(): Int {
             return quickstartConversationsManager.getMessages().size
+
+
         }
         override fun getItemViewType(position: Int): Int {
 val message= quickstartConversationsManager.messages.get(position)
@@ -223,9 +239,11 @@ val message= quickstartConversationsManager.messages.get(position)
             val dd= message.attributes.string
             val jsonObject= JSONObject(dd)
             if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get("identity")){
-return VIEW_TYPE_MY_MESSAGE
+                booleanuser=true
+                return VIEW_TYPE_MY_MESSAGE
             }
             else{
+                booleanuser=false
 return VIEW_TYPE_OTHER_MESSAGE
             }
 
