@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:id="@+id/activity_main"
     android:background="@drawable/splash_bg"
-    tools:context=".apk.views.login.Login_Activity">
+    tools:context=".app.views.login.Login_Activity">
 
     <ScrollView
         android:layout_width="0dp"

@@ -17,7 +17,7 @@
     <dist:module dist:instant="true" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" tools:node="remove"/>
     <application
-        android:name="com.SigmaDating.apk.Sigmadatingapp"
+        android:name="com.SigmaDating.app.Sigmadatingapp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,7 +29,7 @@
         android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning"  >
         <activity
-            android:name="com.SigmaDating.apk.views.intro_registration.OnBoardingActivity"
+            android:name="com.SigmaDating.app.views.intro_registration.OnBoardingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -37,19 +37,19 @@
             android:theme="@style/Theme.SigmaDatingApp.NoActionBar">
         </activity>
         <activity
-            android:name="com.SigmaDating.apk.views.Home"
+            android:name="com.SigmaDating.app.views.Home"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.SigmaDatingApp.NoActionBar" >
         </activity>
         <activity
-            android:name="com.SigmaDating.apk.views.login.Login_Activity"
+            android:name="com.SigmaDating.app.views.login.Login_Activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SigmaDatingApp.NoActionBar"
             android:exported="false" />
         <activity
-            android:name="com.SigmaDating.apk.views.Splash"
+            android:name="com.SigmaDating.app.views.Splash"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Design.NoActionBar">
@@ -76,7 +76,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:authorities="com.SigmaDating.apk.provider"
+            android:authorities="com.SigmaDating.app.provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -85,7 +85,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <service
-            android:name="com.SigmaDating.apk.fcm.MyFirebaseMessagingService"
+            android:name="com.SigmaDating.app.fcm.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

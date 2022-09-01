@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/browser_actions_bg_grey"
     android:weightSum="10"
-    tools:context=".apk.views.profile.ReportUserFragment"
+    tools:context=".app.views.profile.ReportUserFragment"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
@@ -168,7 +168,7 @@
         android:layout_weight="4.5"
         android:layout_height="0dp">
         
-<com.SigmaDating.apk.utilities.BounceScrollView
+<com.SigmaDating.app.utilities.BounceScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -428,7 +428,7 @@
             android:layout_marginRight="12dp"
             android:layout_height="4px"/>
        </LinearLayout>
-</com.SigmaDating.apk.utilities.BounceScrollView>
+</com.SigmaDating.app.utilities.BounceScrollView>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

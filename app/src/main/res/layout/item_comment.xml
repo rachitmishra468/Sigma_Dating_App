@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="4dp"
-    android:elevation="4dp"
-    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="1dp"
+    android:elevation="1dp"
+    app:cardUseCompatPadding="false"
     >
 <LinearLayout
     android:layout_width="match_parent"
@@ -18,14 +18,14 @@
         android:id="@+id/fr"
         android:layout_width="0dp"
         android:layout_weight="2"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="0dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/comment_user_profile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:civ_border_color="@color/black"
             app:civ_border_width="1dp"
             android:layout_gravity="top|center_horizontal"
@@ -45,8 +45,8 @@
             android:layout_width="wrap_content"
             android:textColor="@color/black"
             android:text="Joe andrwer"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textStyle="normal"
             android:layout_marginTop="8dp"
             android:layout_height="wrap_content"/>
 
@@ -64,7 +64,7 @@
             android:id="@+id/comment_comment"
             android:layout_width="match_parent"
             android:textSize="12sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:text="lorem ipsum"
             android:textColor="@color/black"
             android:layout_gravity="bottom"
@@ -76,8 +76,6 @@
 
 
 </LinearLayout>
-
-
 
     <View
         android:layout_width="match_parent"
