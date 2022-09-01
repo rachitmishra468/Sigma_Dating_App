@@ -101,10 +101,12 @@ class UserChatFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
+
         recyclerView!!.layoutManager = layoutManager
         messagesAdapter = MessagesAdapter(imagedata,requireContext(),quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
-
+        recyclerView!!.scrollToPosition(quickstartConversationsManager.messages.size-1)
+        setListeners()
         quickstartConversationsManager.initializeWithAccessToken(
             requireContext(),
             Home.mCurrent_user_token
@@ -113,10 +115,29 @@ class UserChatFragment : Fragment() {
 //
         subscribe_lisner_images()
         Log.d("TAG@123", (context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
-        return view;
+               return view;
     }
+    private fun setListeners() {
 
+        recyclerView!!.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                if (quickstartConversationsManager.messages.isEmpty()){
+                    recyclerView!!.postDelayed(Runnable {
+                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size) }, 100)
+                }else{
+                    recyclerView!!.postDelayed(Runnable {
+                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size-1) }, 100)
+                }
+            }
+        }
+
+        }
     fun subscribe_lisner_images() {
+
+
+
+
+
         quickstartConversationsManager.mutableLiveData?.observe(viewLifecycleOwner, Observer {
             when (it) {
 
@@ -126,6 +147,8 @@ class UserChatFragment : Fragment() {
                     Log.d("TAG@123", "notifyDataSetChanged : " + 1)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
+                     //   setListeners()
+
                     }
                 }
                 2 -> {
@@ -140,6 +163,7 @@ class UserChatFragment : Fragment() {
                     Log.d("TAG@123", "notifyDataSetChanged : " + 3)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
+                      //  setListeners()
                     }
 
                 }
@@ -148,6 +172,8 @@ class UserChatFragment : Fragment() {
                     GlobalScope.launch(Dispatchers.Main) {
                         layoutManager.stackFromEnd = true
                         messagesAdapter!!.notifyDataSetChanged()
+                        //setListeners()
+                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size-1)
                     }
                 }
                 5->{

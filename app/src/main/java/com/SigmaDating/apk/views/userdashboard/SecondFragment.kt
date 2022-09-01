@@ -134,7 +134,6 @@ class SecondFragment : Fragment() {
         Log.d("TAG@123", " onResume")
 
         CoroutineScope(Dispatchers.Main).launch {
-            delay(100)
             subscribe_Login_User_details()
         }
 

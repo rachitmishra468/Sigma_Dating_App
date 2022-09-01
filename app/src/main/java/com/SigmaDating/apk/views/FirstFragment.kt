@@ -169,7 +169,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         subscribe_Login_User_details()
 
         CoroutineScope(Dispatchers.Main).launch {
-            delay(500)
+            //delay(500)
             subscribe_bids()
         }
 
@@ -439,14 +439,14 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                             try {
                                 Log.d("TAG@123", it.data?.user.toString())
-
-                                Glide.with(requireContext()).load(it.data?.user?.upload_image)
-                                    .error(R.drawable.profile_img)
-                                    .into(editProfile);
                                 sharedPreferencesStorage.setValue(
                                     AppConstants.upload_image,
                                     it.data?.user?.upload_image
                                 )
+                                Glide.with(requireContext()).load(it.data?.user?.upload_image)
+                                    .error(R.drawable.profile_img)
+                                    .into(editProfile);
+
                                 Home.current_user_profile= it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
