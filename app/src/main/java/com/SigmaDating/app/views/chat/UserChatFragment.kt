@@ -144,7 +144,7 @@ class UserChatFragment : Fragment() {
 
                 1 -> {
                     AppUtils.hideLoader()
-                    Log.d("TAG@123", "notifyDataSetChanged : " + 1)
+                    Log.d("TAG@123", "notifyDataSetChanged 1: " + 1)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
                      //   setListeners()
@@ -153,14 +153,16 @@ class UserChatFragment : Fragment() {
                 }
                 2 -> {
                     AppUtils.hideLoader()
-                    Log.d("TAG@123", "notifyDataSetChanged : " + 2)
+                    Log.d("TAG@123", "notifyDataSetChanged 2: " + 2)
                     GlobalScope.launch(Dispatchers.Main) {
                         writeMessageEditText!!.setText("")
+                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size-1)
+
                     }
                 }
                 3 -> {
                     AppUtils.hideLoader()
-                    Log.d("TAG@123", "notifyDataSetChanged : " + 3)
+                    Log.d("TAG@123", "notifyDataSetChanged 3: " + 3)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
                       //  setListeners()
@@ -168,16 +170,18 @@ class UserChatFragment : Fragment() {
 
                 }
                 4->{
-                    Log.d("TAG@123", "data  : ")
+                    Log.d("TAG@123", "data  4: ")
                     GlobalScope.launch(Dispatchers.Main) {
-                        layoutManager.stackFromEnd = true
+                      //  layoutManager.stackFromEnd = true
+
                         messagesAdapter!!.notifyDataSetChanged()
                         //setListeners()
                         recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size-1)
+                        writeMessageEditText!!.setText("")
                     }
                 }
                 5->{
-                    Log.d("TAG@123", "showLoader : ")
+                    Log.d("TAG@123", "showLoader 5: ")
                      AppUtils.showLoader(requireContext())
                 }
             }
@@ -225,9 +229,9 @@ return  ViewHolder( LayoutInflater.from(parent.context)
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
-            Log.d("TAG@123", "attachedMedia : "+message.attachedMedia.size)
-            Log.d("TAG@123", "attributes : "+message.attributes)
-            Log.d("TAG@123", "dateformat : "+message.dateCreatedAsDate)
+          //  Log.d("TAG@123", "attachedMedia : "+message.attachedMedia.size)
+         //   Log.d("TAG@123", "attributes : "+message.attributes)
+         //   Log.d("TAG@123", "dateformat : "+message.dateCreatedAsDate)
             val sdf = SimpleDateFormat("hh:mm aa")
             val date: Date = message.dateCreatedAsDate
             val string = sdf.format(date)
@@ -261,7 +265,7 @@ if (booleanuser){
         }
         override fun getItemViewType(position: Int): Int {
 val message= quickstartConversationsManager.messages.get(position)
-            Log.d("TAG@123","VIEWTYPE"+message.attributes.string)
+           // Log.d("TAG@123","VIEWTYPE"+message.attributes.string)
             val dd= message.attributes.string
             val jsonObject= JSONObject(dd)
             if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get("identity")){

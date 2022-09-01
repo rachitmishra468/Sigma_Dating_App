@@ -346,7 +346,7 @@ class Login_Activity : AppCompatActivity() {
                             Log.d("TAG@123",it.data?.user.toString())
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
-                            sharedPreferencesStorage.setValue(AppConstants.upload_image, res.user.upload_image)
+                           // sharedPreferencesStorage.setValue(AppConstants.upload_image, res.user.upload_image)
 
                             Log.d("TAG@123", res.user.id)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
@@ -521,7 +521,6 @@ class Login_Activity : AppCompatActivity() {
                                 }else{
                                     sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                                     sharedPreferencesStorage.setValue(AppConstants.USER_ID,  res.user.id)
-                                    sharedPreferencesStorage.setValue(AppConstants.upload_image,  res.user.upload_image)
                                     Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                         .show()
                                     startActivity(Intent(this, Home::class.java))
