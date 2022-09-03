@@ -82,6 +82,7 @@ interface ApiService {
     @Multipart
     @POST("post/save")
     suspend fun create_post( @Part("user_id") user_id: RequestBody,
+                             @Part("location") location: RequestBody,
                           @Part("title") title: RequestBody, @Part("description") description: RequestBody,
                              @Part("tag_users") tag_users: RequestBody,
                           @Part file: MultipartBody.Part?

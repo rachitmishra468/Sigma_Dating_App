@@ -1,17 +1,20 @@
 package com.SigmaDating.app.views.intro_registration
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.ContentUris
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
@@ -40,15 +43,23 @@ import java.io.IOException
 import android.widget.Toast
 
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.SigmaDating.app.Sigmadatingapp
 import com.SigmaDating.app.other.LocationService
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class Profile_Photo : Fragment() {
-
+    private val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
 
     //Our constants
     private val OPERATION_CAPTURE_PHOTO = 1
@@ -64,6 +75,7 @@ class Profile_Photo : Fragment() {
     private var text_termncon:TextView?=null
     lateinit var constraint_f1: ConstraintLayout
     lateinit var bitmap_string: String
+    var currentPhotoPath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,8 +124,7 @@ class Profile_Photo : Fragment() {
         }
 
         img_choose_dummy.setOnClickListener {
-
-            Popup()
+            checkGallerypermission()
         }
 
         Register()
@@ -122,7 +133,35 @@ class Profile_Photo : Fragment() {
     }
 
 
-    private fun Popup() {
+
+    private fun checkGallerypermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissions,
+                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            Popup()
+        }
+    }
+
+
+
+     fun Popup() {
         val view = layoutInflater.inflate(R.layout.selectcamera_gallery_layout, null)
         val dialog = activity?.let { BottomSheetDialog(requireActivity(), R.style.DialogStyle) }!!
         dialog.setContentView(view)
@@ -173,25 +212,42 @@ class Profile_Photo : Fragment() {
     }
 
     private fun capturePhoto() {
-        val capturedImage = File(requireActivity().externalCacheDir, "My_Captured_Photo.jpg")
-        if (capturedImage.exists()) {
-            capturedImage.delete()
-        }
-        capturedImage.createNewFile()
-        mUri = if (Build.VERSION.SDK_INT >= 24) {
-            FileProvider.getUriForFile(
-                requireActivity(),
-                "com.SigmaDating.app.fileprovider",
-                capturedImage
-            )
-        } else {
-            Uri.fromFile(capturedImage)
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+            } catch (ex: IOException) {
+            }
+            if (photoFile != null) {
+                val photoURI = FileProvider.getUriForFile(
+                    requireContext(), "com.SigmaDating.app.provider",
+                    photoFile
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, OPERATION_CAPTURE_PHOTO)
+            }
         }
 
-        val intent = Intent("android.media.action.IMAGE_CAPTURE")
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
-        startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
     }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+        currentPhotoPath = image.absolutePath
+        return image
+    }
+
+
+
 
     private fun openGallery() {
         Intent(Intent.ACTION_GET_CONTENT).also { intent ->
@@ -250,35 +306,6 @@ class Profile_Photo : Fragment() {
         return path!!
     }
 
-    @TargetApi(19)
-    private fun handleImageOnKitkat(data: Intent?) {
-        var imagePath: String? = null
-        val uri = data!!.data
-        if (DocumentsContract.isDocumentUri(requireActivity(), uri)) {
-            val docId = DocumentsContract.getDocumentId(uri)
-            if ("com.android.providers.media.documents" == uri?.authority) {
-                val id = docId.split(":")[1]
-                val selsetion = MediaStore.Images.Media._ID + "=" + id
-                imagePath = getImagePath(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    selsetion
-                )
-            } else if ("com.android.providers.downloads.documents" == uri?.authority) {
-                val contentUri = ContentUris.withAppendedId(
-                    Uri.parse(
-                        "content://downloads/public_downloads"
-                    ), java.lang.Long.valueOf(docId)
-                )
-                imagePath = getImagePath(contentUri, null)
-            }
-        } else if ("content".equals(uri?.scheme, ignoreCase = true)) {
-            imagePath = getImagePath(uri!!, null)
-        } else if ("file".equals(uri!!.scheme, ignoreCase = true)) {
-            imagePath = uri.path
-        }
-        renderImage(imagePath)
-    }
-
 
     private fun show(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
@@ -289,11 +316,9 @@ class Profile_Photo : Fragment() {
         when (requestCode) {
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    val bitmap = BitmapFactory.decodeStream(
-                        requireActivity().getContentResolver().openInputStream(mUri!!)
-                    )
-
-                    imageProfile!!.setImageBitmap(bitmap)
+                    mUri= Uri.fromFile(File(currentPhotoPath))
+                    val bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(mUri!!))
+                    imageProfile!!.setImageURI(mUri)
                     val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
                     var bitmapl: Bitmap = drawable.getBitmap()
                     bitmapl = Bitmap.createScaledBitmap(bitmapl, 250, 250, true);

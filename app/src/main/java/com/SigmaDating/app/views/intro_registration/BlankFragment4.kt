@@ -260,7 +260,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                         // AppUtils.hideLoader()
                         it.data.let { it1 ->
                             if (it1?.status == true) {
-                                Log.d("TAG@123", it.toString())
+                                Log.d("TAG@123", it.data.toString())
                                 schoolList = ArrayList<UniversityList>()
                                 schoolList = it1.data.universityList
                                 schoolListCopy=schoolList

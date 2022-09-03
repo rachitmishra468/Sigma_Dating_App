@@ -104,6 +104,36 @@
         </de.hdodenhof.circleimageview.CircleImageView>
 
 
+
+        <TextView
+            android:id="@+id/commetest_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:layout_marginLeft="5dp"
+            android:text="Rachit Mishra"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/profile_post_img"
+            app:layout_constraintTop_toTopOf="@+id/guideline_top"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
+            android:layout_marginLeft="5dp"
+            android:text=""
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@+id/profile_post_img"
+            app:layout_constraintTop_toBottomOf="@+id/commetest_name"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+
+
+
         <ImageView
             android:id="@+id/img_like"
             android:layout_width="40dp"

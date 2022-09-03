@@ -103,7 +103,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         user_tag_id = ArrayList()
         mFusedLocationClient =
             LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
-        CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch {
             getLocation()
         }
 
@@ -142,7 +142,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             } else if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption.."
             } else if (file == null) {
-                Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
+                Toast.makeText(requireContext(), "Please select a media to upload.", Toast.LENGTH_LONG)
                     .show()
             } else {
                 (activity as Home).homeviewmodel.create_post =
@@ -191,7 +191,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 it.textUpdateLocation.visibility = View.VISIBLE
                 it.textUpdateLocation.text = location_text
             }
-            //_binding?.tagLocation?.text = location_text
             dialog.dismiss()
         }
         update_value.setOnClickListener {
@@ -270,7 +269,9 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
                             location_text = "${list[0].locality}"
                             Log.d("TAG@123", "location name" + location_text)
-                            //_binding?.tagLocation?.text= location_text
+                            _binding?.textUpdateLocation?.text= location_text
+                            _binding?.textUpdateLocation?.visibility=View.VISIBLE
+
                         }
 
 

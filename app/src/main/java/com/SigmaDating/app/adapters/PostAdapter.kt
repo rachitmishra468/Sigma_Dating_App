@@ -48,6 +48,8 @@ class PostAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
         var title: TextView
+        var commetest_name:TextView
+        var location_text:TextView
         var discription: TextView
         var profile_img: CircleImageView
         var progressBar: ProgressBar
@@ -57,6 +59,8 @@ class PostAdapter(
         var videoView: PlayerView
 
         init {
+            location_text= itemView.findViewById(R.id.location_text)
+            commetest_name= itemView.findViewById(R.id.commetest_name)
             profile_img = itemView.findViewById(R.id.profile_post_img)
             image = itemView.findViewById(R.id.post_img)
             title = itemView.findViewById(R.id.post_title)
@@ -81,6 +85,8 @@ class PostAdapter(
         val data = dataList[position]
         holder.title.text = data.title
         holder.discription.text = data.description
+        holder.commetest_name.text=data.first_name+" "+data.last_name
+        holder.location_text.text=data.location
         Glide.with(context).load(data.upload_image).into(holder.profile_img);
         if (data.like) {
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.heart_solid))

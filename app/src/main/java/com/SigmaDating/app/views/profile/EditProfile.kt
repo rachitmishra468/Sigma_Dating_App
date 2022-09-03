@@ -1,22 +1,26 @@
 package com.SigmaDating.app.views.profile
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -52,6 +56,9 @@ import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -60,6 +67,14 @@ private const val ARG_PARAM2 = "param2"
 class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener,InterestAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
+
+    private val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
+
+
     private var param1: String? = null
     private var param2: String? = null
     private val OPERATION_CHOOSE_PHOTO = 2
@@ -80,7 +95,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var university: String? = null
     var community: String? = null
     var about: String? = null
-
+    var currentPhotoPath: String? = null
     // var interests: String? = null
     private var mUri: Uri? = null
     private val OPERATION_CAPTURE_PHOTO = 1
@@ -587,7 +602,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     override fun onCategoryClick(position: Int, boolean: Boolean) {
         if (boolean) {
-            popup()
+            checkGallerypermission()
         } else {
             (activity as Home).homeviewmodel.delete_images = MutableLiveData<Resource<Loginmodel>>()
             subscribe_delete_images()
@@ -600,6 +615,35 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         }
 
     }
+
+
+
+    private fun checkGallerypermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+            || ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissions,
+                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            popup()
+        }
+    }
+
+
 
     private fun popup() {
         val view = layoutInflater.inflate(R.layout.selectcamera_gallery_layout, null)
@@ -631,24 +675,38 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     private fun capturePhoto() {
-        val capturedImage = File(requireActivity().externalCacheDir, "My_Captured_Photo.jpg")
-        if (capturedImage.exists()) {
-            capturedImage.delete()
-        }
-        capturedImage.createNewFile()
-        mUri = if (Build.VERSION.SDK_INT >= 24) {
-            FileProvider.getUriForFile(
-                requireActivity(),
-                "com.SigmaDating.app.fileprovider",
-                capturedImage
-            )
-        } else {
-            Uri.fromFile(capturedImage)
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+            } catch (ex: IOException) {
+            }
+            if (photoFile != null) {
+                val photoURI = FileProvider.getUriForFile(
+                    requireContext(), "com.SigmaDating.app.provider",
+                    photoFile
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, OPERATION_CAPTURE_PHOTO)
+            }
         }
 
-        val intent = Intent("android.media.action.IMAGE_CAPTURE")
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
-        startActivityForResult(intent, OPERATION_CAPTURE_PHOTO)
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            storageDir
+        )
+        currentPhotoPath = image.absolutePath
+        return image
     }
 
     private fun openGallery() {
@@ -669,9 +727,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    val bitmap = BitmapFactory.decodeStream(
-                        requireActivity().getContentResolver().openInputStream(mUri!!)
-                    )
+                    val mUri= Uri.fromFile(File(currentPhotoPath))
+                    val bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(mUri!!))
                     val rotationMatrix = Matrix()
                     if (bitmap.getWidth() >= bitmap.getHeight()) {
                         rotationMatrix.setRotate((-90).toFloat())

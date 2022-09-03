@@ -190,13 +190,13 @@ class HomeViewModel @Inject constructor(
 
         val id: RequestBody = jsonObject.get("user_id")!!.toRequestBody("text/plain".toMediaType())
         val title: RequestBody = jsonObject.get("title")!!.toRequestBody("text/plain".toMediaType())
-        val tag_users: RequestBody =
-            jsonObject.get("tag_users")!!.toRequestBody("text/plain".toMediaType())
-        val description: RequestBody =
-            jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
+        val tag_users: RequestBody = jsonObject.get("tag_users")!!.toRequestBody("text/plain".toMediaType())
+        val description: RequestBody = jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
+        val location: RequestBody = jsonObject.get("location")!!.toRequestBody("text/plain".toMediaType())
+
         create_post.postValue(Resource.loading(null))
         mainRepository.create_post(
-            id, title, description, tag_users, profileImageBody
+            id, location,title, description, tag_users, profileImageBody
         ).let {
             if (it.isSuccessful) {
                 create_post.postValue(Resource.success(it.body()))
