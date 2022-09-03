@@ -41,8 +41,6 @@ class Sigmadatingapp : Application()  {
     companion object {
         var fcm_token: String=""
         var device_id:String=""
-        var isNetworkAvailable = AppReseources.getAppContext()?.let { ConnectivityMonitorImpl(it).isNetworkAvailable.asLiveData() }
-
     }
 
     fun get_device_id(){

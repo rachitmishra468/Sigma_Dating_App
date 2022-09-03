@@ -599,6 +599,8 @@ class SettingsFragment : Fragment() {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     val location: Location? = task.result
                     if (location != null) {
+
+                        try{
                         val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
                         val list: List<Address> =
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
@@ -614,8 +616,11 @@ class SettingsFragment : Fragment() {
 
                         }
 
-
+                        }catch (e:Exception){
+                            Log.e("TAG@123","Location Exception : ${e.message}")
+                        }
                     }
+
                 }
 
             } else {

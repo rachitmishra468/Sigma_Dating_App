@@ -116,6 +116,7 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
                         it.data.let { res ->
                             if (res?.status == true) {
                                 Log.d("TAG@123", "Notification list Status " + res.status)
+                                Home.notifications_count="0"
                                 setAdapterListData(false, res.data as ArrayList<Notification_list>)
 
 

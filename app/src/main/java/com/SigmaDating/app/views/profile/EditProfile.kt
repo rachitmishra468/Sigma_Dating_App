@@ -113,7 +113,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         independent= _binding?.root?.findViewById(R.id.independent)
         fraternity_button = _binding?.root?.findViewById(R.id.fraternity_button)
         fraternity_button!!.isSelected=true
-        fraternity_button!!.hint="Select Fraternity"
+       // fraternity_button!!.text="Select Fraternity"
         schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)
         fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
@@ -151,7 +151,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             else{
 
             }
-            fraternity_Spinner?.hint = "Select Fraternity"
+            fraternity_Spinner?.setText("Select Fraternity")
 
 
             fraternity_Spinner.visibility=View.VISIBLE
@@ -161,6 +161,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.black))
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
 
@@ -183,11 +184,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.white))
 
-            fraternity_Spinner?.hint = "Select Sorority"
+            fraternity_Spinner.setText("Select Sorority")
             Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             Socority_button?.setTextColor(this.resources.getColor(R.color.black))
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+
             schoolList = ArrayList<UniversityList>()
             schoolList = sororitiesList
             schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)
@@ -201,6 +203,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 AppConstants.community,
                 "Independent"
             )
+            community="Independent"
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
@@ -523,11 +526,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     } ?: run {
                                         university = ""
                                     }
+
                                     res.user.community.let {
                                         community = it
                                         fraternity_Spinner.setText(community)
                                     } ?: run {
                                         university = ""
+                                    }
+                                    res.user.orgType.let {
+                                        set_default_button(it)
                                     }
                                     res.user.about.let {
                                         about = it
@@ -632,7 +639,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         mUri = if (Build.VERSION.SDK_INT >= 24) {
             FileProvider.getUriForFile(
                 requireActivity(),
-                "com.SigmaDating.apk.fileprovider",
+                "com.SigmaDating.app.fileprovider",
                 capturedImage
             )
         } else {
@@ -886,6 +893,52 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         }
 
+
+    }
+
+    fun set_default_button(name:String){
+        when(name){
+            "Sorority"->{
+
+                Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+                Socority_button?.setTextColor(this.resources.getColor(R.color.black))
+
+                independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                independent?.setTextColor(this.resources.getColor(R.color.white))
+
+                fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+
+
+            }
+            "Fraternity"->{
+
+                fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+                fraternity_button?.setTextColor(this.resources.getColor(R.color.black))
+
+                independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                independent?.setTextColor(this.resources.getColor(R.color.white))
+
+                Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
+
+            }
+            "Independent"->{
+
+
+                independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
+                independent?.setTextColor(this.resources.getColor(R.color.black))
+
+                Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                Socority_button?.setTextColor(this.resources.getColor(R.color.white))
+
+                fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+                fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
+
+                fraternity_Spinner.visibility=View.INVISIBLE
+            }
+
+        }
 
     }
 }

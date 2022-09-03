@@ -181,7 +181,7 @@ class Profile_Photo : Fragment() {
         mUri = if (Build.VERSION.SDK_INT >= 24) {
             FileProvider.getUriForFile(
                 requireActivity(),
-                "com.SigmaDating.apk.fileprovider",
+                "com.SigmaDating.app.fileprovider",
                 capturedImage
             )
         } else {

@@ -13,5 +13,6 @@ data class Postdata(
     var first_name:String,
     var last_name:String,
     var like :Boolean,
+    var videofile:String,
     var upload_image:String
 )

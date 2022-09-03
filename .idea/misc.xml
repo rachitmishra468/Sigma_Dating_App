@@ -29,6 +29,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/interested_in_unselect.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/login_field_border_bg.xml" value="0.165234375" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/match_image_bg.xml" value="0.13914473684210527" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/my_message_bubble.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/notifications_24.xml" value="0.11348684210526316" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/radio_flat_regular.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/radio_flat_text_selector.xml" value="0.1111111111111111" />
@@ -52,6 +53,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_all__activitys.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_blank.xml" value="0.20416666666666666" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.11328125" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_comment_post.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_contact_us.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_create_post.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.17" />
@@ -66,6 +68,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_second.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.17" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/full_screen_dialog.xml" value="0.12" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_comment.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_empty_dataset.xml" value="0.14" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_search_photos.xml" value="0.10230263157894737" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/login_scroll.xml" value="0.18" />
@@ -76,7 +79,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/onboardingscroll.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/open_interests.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/phone_number_login.xml" value="0.18541666666666667" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/post_item.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/post_item.xml" value="0.11" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/profile_match_layout.xml" value="0.13" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/report_user_popup.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/row_message_item_outgoing.xml" value="0.2" />
@@ -183,7 +186,6 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_chat_list.xml" value="0.1125" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_first.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_report_user.xml" value="0.11096014492753623" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/incoming_message_list_item.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/layout_chat_left.xml" value="0.1" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/layout_chat_right.xml" value="0.1" />
@@ -192,7 +194,7 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/profile_match_layout.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/row_message_item_outgoing.xml" value="0.22" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/toolbar_hadder.xml" value="0.17552083333333332" />
-        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/user_chat_fragment.xml" value="0.13999999999999999" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/user_chat_fragment.xml" value="0.11096014492753623" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_main_drwable.xml" value="0.152" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_selected.xml" value="0.152" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/match_image_bg.xml" value="0.148" />

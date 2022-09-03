@@ -59,6 +59,7 @@ import com.SigmaDating.app.adapters.User_Tag_Adapter
 import com.SigmaDating.app.model.Match_bids
 import com.SigmaDating.app.model.User_bids_list
 import com.SigmaDating.app.utilities.*
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -84,7 +85,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     private val binding get() = _binding!!
     private var mUri: Uri? = null
     private val OPERATION_CHOOSE_PHOTO = 2
-     var file: File?=null
+    var file: File? = null
     lateinit var selectedImage: Uri
     var currentPhotoPath: String? = null
     private var dataList = mutableListOf<User_bids_list>()
@@ -126,7 +127,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
             it.tagUser.setOnClickListener {
                 if (!dataList.isNullOrEmpty()) {
-                    openUserTagDialog( dataList)
+                    openUserTagDialog(dataList)
                 }
             }
             it.tagLocation.setOnClickListener {
@@ -140,7 +141,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 _binding?.postTitle?.error = "Enter Post Title.."
             } else if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption.."
-            } else if (file==null) {
+            } else if (file == null) {
                 Toast.makeText(requireContext(), "Add Image", Toast.LENGTH_LONG)
                     .show()
             } else {
@@ -161,7 +162,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 )
                 map.put("description", _binding?.postDiscription?.text.toString())
                 map.put("location", location_text)
-                map.put("tag_users",user_tag_id.joinToString(","))
+                map.put("tag_users", user_tag_id.joinToString(","))
 
 
                 (activity as Home).homeviewmodel.create_post(file!!, map)
@@ -184,23 +185,23 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         val update_current = view.findViewById<Button>(R.id.update_current)
         title_text.setText("Update Location With Post Code.")
         current_value.setHint("Enter Location With Post Code.")
-        current_value.inputType= InputType.TYPE_CLASS_TEXT
+        current_value.inputType = InputType.TYPE_CLASS_TEXT
         update_current.setOnClickListener {
             _binding?.let {
-               it.textUpdateLocation.visibility=View.VISIBLE
-                it.textUpdateLocation.text=location_text
+                it.textUpdateLocation.visibility = View.VISIBLE
+                it.textUpdateLocation.text = location_text
             }
             //_binding?.tagLocation?.text = location_text
             dialog.dismiss()
         }
         update_value.setOnClickListener {
             if (!current_value.text.toString().isEmpty()) {
-                location_text=current_value.text.toString()
+                location_text = current_value.text.toString()
                 _binding?.let {
-                    it.textUpdateLocation.visibility=View.VISIBLE
-                    it.textUpdateLocation.text=current_value.text
+                    it.textUpdateLocation.visibility = View.VISIBLE
+                    it.textUpdateLocation.text = current_value.text
                 }
-                    dialog.dismiss()
+                dialog.dismiss()
             } else {
                 current_value.setError("Please Enter valid Location.. ")
             }
@@ -209,7 +210,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         dialog.setContentView(view)
         dialog.show()
     }
-
 
 
     private fun checkGallerypermission() {
@@ -247,6 +247,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         super.onStop()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
+
     @SuppressLint("MissingPermission", "SetTextI18n")
     private suspend fun getLocation() {
         if (checkPermissions()) {
@@ -268,7 +269,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                             longitude = "${list[0].longitude}"
 
                             location_text = "${list[0].locality}"
-                            Log.d("TAG@123","location name"+location_text)
+                            Log.d("TAG@123", "location name" + location_text)
                             //_binding?.tagLocation?.text= location_text
                         }
 
@@ -327,7 +328,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 val photoURI = FileProvider.getUriForFile(
-                    requireContext(), "com.SigmaDating.apk.provider",
+                    requireContext(), "com.SigmaDating.app.provider",
                     photoFile
                 )
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
@@ -385,15 +386,35 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    selectedImage = data!!.data!!
-                    val filePath = URIPathHelper().getPath(requireContext(), selectedImage)
-                    file = File(filePath)
-                    Log.d("TAG@123", "FILEPATH :" + filePath)
-                    Log.d("TAG@123", "FILE  PATH :" + file!!.absolutePath)
-                    _binding?.imageProfile?.setImageURI(selectedImage)
-                    Log.d("TAG@123", "URI :" + selectedImage)
-                    Log.d("TAG@123", "PATH :" + selectedImage.path)
-                    Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
+                    try {
+                        selectedImage = data!!.data!!
+                        val filePath = URIPathHelper().getPath(requireContext(), selectedImage)
+                        file = File(filePath)
+                        val mimeType: String? = selectedImage.let { returnUri ->
+                            requireContext().contentResolver.getType(returnUri)
+                        }
+                        if (mimeType.toString().equals("video/mp4")) {
+                            _binding?.imageProfile?.let {
+                                Glide
+                                    .with(requireContext())
+                                    .asBitmap()
+                                    .load(selectedImage)
+                                    .into(it)
+                            };
+                        } else {
+                            _binding?.imageProfile?.setImageURI(selectedImage)
+                        }
+
+                        Log.d("TAG@123", "FILEPATH :" + mimeType.toString())
+                        Log.d("TAG@123", "FILEPATH :" + filePath)
+                        Log.d("TAG@123", "FILE  PATH :" + file!!.absolutePath)
+                        Log.d("TAG@123", "URI :" + selectedImage)
+                        Log.d("TAG@123", "PATH :" + selectedImage.path)
+                        Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
+                    } catch (e: Exception) {
+                        Log.e("TAG@123", "File URI Exception : ${e.message}")
+
+                    }
                 }
         }
     }
@@ -434,7 +455,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.app_name)
         builder.setIcon(R.mipmap.ic_launcher)
-
         builder.setMessage("Are you want to Create More Post.")
         builder.background = ColorDrawable(
             Color.parseColor("#FFFFFF")
@@ -481,11 +501,11 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun openUserTagDialog( passDataList: List<User_bids_list>) {
+    private fun openUserTagDialog(passDataList: List<User_bids_list>) {
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.user_tag_sheet)
         var searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_user_tag)
-        var doneBtn=dialog.findViewById<Button>(R.id.text_done)
+        var doneBtn = dialog.findViewById<Button>(R.id.text_done)
         val titleText = dialog.findViewById<TextView>(R.id.title_layout)
         titleText.setText("Tag People")
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
@@ -498,7 +518,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         schoolAdapter.setDataList(passDataList)
         schoolAdapter.notifyDataSetChanged()
         dialog.show()
-        if (dialog.isShowing ){
+        if (dialog.isShowing) {
             doneBtn.setOnClickListener { dialog.dismiss() }
         }
         /* schoolAct_spinner!!.isEnabled = false
@@ -511,13 +531,14 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
     override fun onCategoryClick(position: User_bids_list) {
         if (!user_tag_id.contains(position.id)) {
-            position.tag_add=true
+            position.tag_add = true
             user_tag_id.add(position.id)
             Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(requireContext(), "Already Tag", Toast.LENGTH_LONG).show()
         }
     }
+
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),

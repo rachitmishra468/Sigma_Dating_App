@@ -63,9 +63,10 @@ class HomeViewModel @Inject constructor(
         // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
     }
 
-    fun get_home_feb_data(id: String) {
-        val one = async { get_Login_User_details(id) }
-        val two = async { get_Login_User_bids(id) }
+    fun get_home_feb_data(id: String) = viewModelScope.launch {
+        get_Login_User_details(id)
+        get_Login_User_bids(id)
+
     }
 
 
@@ -78,7 +79,7 @@ class HomeViewModel @Inject constructor(
                 ctrateToken_data.postValue(Resource.success(it.body()))
                 Resource.success(it.body()).data.let {
                     Home.mCurrent_user_token = it?.token.toString()
-                    Log.d("TAG@123",  "Token : "+Home.mCurrent_user_token)
+                    Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
                 }
             } else {
@@ -101,6 +102,7 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
     fun get_notification_list(jsonObject: String) = viewModelScope.launch {
         notification_list.postValue(Resource.loading(null))
         mainRepository.get_notification(jsonObject).let {
@@ -379,7 +381,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_edit_page_data(id: String) {
-        val one = async { getSchoolingData() }
+        getSchoolingData()
     }
 
     fun Update_edit_page_data(
@@ -389,10 +391,8 @@ class HomeViewModel @Inject constructor(
         interests: String,
         about: String
     ) {
-        val one = async {
-            update_profile(id, university, community, interests, about)
-        }
-        // val two = async { get_Login_User_details(id) }
+
+        update_profile(id, university, community, interests, about)
 
 
     }

@@ -62,7 +62,7 @@ class Splash : AppCompatActivity() {
     private fun GetKeyHase() {
         try {
             val info = packageManager.getPackageInfo(
-                "com.SigmaDating.apk",
+                "com.SigmaDating.app",
                 PackageManager.GET_SIGNATURES
             )
             for (signature in info.signatures) {

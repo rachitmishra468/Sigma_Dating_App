@@ -68,10 +68,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var credentials_card: ConstraintLayout
     lateinit var tvCounter: TextView
 
-    @Inject
-    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,13 +115,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         )
         footer_transition()
         subscribe_Login_User_details()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            //delay(500)
-            subscribe_bids()
-        }
-
-
+        subscribe_bids()
         return binding.root
 
     }
@@ -350,8 +340,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 notifications_count.let {
                                     tvCounter.setText(notifications_count)
                                 }
-                                adapter =
-                                    ProfileMatch(courseModalArrayList!!, requireActivity(), this)
+                                adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()
 
@@ -376,11 +365,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-
-
-
-
-
     fun subscribe_Login_User_details() {
         (activity as Home?)?.homeviewmodel?.get_user_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -391,7 +375,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                             try {
                                 Log.d("TAG@123", it.data?.user.toString())
-                                sharedPreferencesStorage.setValue(
+                                (activity as Home).sharedPreferencesStorage.setValue(
                                     AppConstants.upload_image,
                                     it.data?.user?.upload_image
                                 )

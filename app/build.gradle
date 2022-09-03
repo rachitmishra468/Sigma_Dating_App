@@ -118,6 +118,9 @@ dependencies {
     implementation 'com.twilio:conversations-android:3.0.0'
     implementation 'com.twilio:chat-android:6.0.0'
 
+//exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
+
     // implementation 'com.google.firebase:firebase-analytics-ktx'
 // twilio SDK
     // implementation "com.twilio:chat-android:6.0.0"
