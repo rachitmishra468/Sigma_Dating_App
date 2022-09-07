@@ -33,7 +33,6 @@ import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PostList : Fragment(), PostAdapter.OnItemClickListener {
-
     private var _binding: FragmentPostListBinding? = null
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView

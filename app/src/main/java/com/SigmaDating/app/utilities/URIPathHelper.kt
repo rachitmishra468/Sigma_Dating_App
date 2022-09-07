@@ -15,7 +15,6 @@ class URIPathHelper {
     fun getPath(context: Context, uri: Uri): String? {
         val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
-        // DocumentProvider
         if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 isKitKatorAbove && DocumentsContract.isDocumentUri(context, uri)
             } else {

@@ -75,6 +75,7 @@
         android:layout_width="28dp"
         android:layout_weight=".12"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:src="@drawable/ic_baseline_error_outline_24"
         android:layout_height="28dp"/>
 </LinearLayout>

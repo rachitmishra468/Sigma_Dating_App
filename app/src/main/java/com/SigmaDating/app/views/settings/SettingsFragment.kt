@@ -16,10 +16,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -40,20 +36,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import android.widget.RadioButton
 
 import com.SigmaDating.app.utilities.PhoneTextWatcher
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
+import android.widget.*
 import androidx.lifecycle.MutableLiveData
 import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.databinding.FragmentSettingsBinding
 import com.example.demoapp.other.Resource
+import com.google.android.material.snackbar.Snackbar
+
+import android.widget.CompoundButton
+
 
 class SettingsFragment : Fragment() {
 
     lateinit var _binding: FragmentSettingsBinding
     private val binding get() = _binding
+    var notification_flag = 0;
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
@@ -63,6 +64,7 @@ class SettingsFragment : Fragment() {
     var latitude = ""
     var longitude = ""
     var interested_in = ""
+
     fun Call_links() {
         val bundle = Bundle()
         _binding.licencesText.setOnClickListener {
@@ -156,6 +158,14 @@ class SettingsFragment : Fragment() {
             (activity as Home).onBackPressed()
         }
 
+        _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            notification_flag = if(isChecked) 0 else 1
+
+            Log.d("TAG@123","notification_flag :"+notification_flag)
+
+        })
+
+
         _binding.rg.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding.root.findViewById(checkedId) as RadioButton
             interested_in = rb.text.toString()
@@ -178,7 +188,8 @@ class SettingsFragment : Fragment() {
 
         _binding.updateSetting.setOnClickListener {
 
-            (activity as Home).homeviewmodel.setting_update_details= MutableLiveData<Resource<Loginmodel>>()
+            (activity as Home).homeviewmodel.setting_update_details =
+                MutableLiveData<Resource<Loginmodel>>()
             subscribe_setting_update_details()
             val jsonObject = JsonObject()
             Log.d(
@@ -195,6 +206,7 @@ class SettingsFragment : Fragment() {
             jsonObject.addProperty("latitude", latitude)
             jsonObject.addProperty("longitude", longitude)
             jsonObject.addProperty("interested_in", interested_in)
+            jsonObject.addProperty("notifications", notification_flag)
             Log.d("TAG@123", "interested_in :" + jsonObject.toString())
             (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
         }
@@ -290,6 +302,11 @@ class SettingsFragment : Fragment() {
                             if (it.data?.user?.location?.isEmpty() == true) {
                                 _binding.locationText.setText(location_text)
                                 location_text = it.data.user.location.toString()
+                            }
+                            if (it.data?.user?.notifications == 0) {
+                                _binding.switch1.isChecked = true
+                            } else {
+                                _binding.switch1.isChecked = false
                             }
 
 
@@ -468,14 +485,18 @@ class SettingsFragment : Fragment() {
                     }
 
                 } else {
-                    Toast.makeText(context, "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        context,
+                        "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
 
 
             } else {
                 if (AppUtils.isValid_password(editText_password.text.toString())) {
-                    if ( AppUtils.isValid_password_match(
+                    if (AppUtils.isValid_password_match(
                             editText_password.text.toString(),
                             editText_password_confirm.text.toString()
                         )
@@ -487,11 +508,12 @@ class SettingsFragment : Fragment() {
                             editText_password_confirm.text.toString()
                         )
                     } else {
-                        editText_password_confirm.error="Password Does Not Match"
+                        editText_password_confirm.error = "Password Does Not Match"
                     }
 
                 } else {
-                    editText_password.error="Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+                    editText_password.error =
+                        "Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
 
                 }
             }
@@ -555,12 +577,11 @@ class SettingsFragment : Fragment() {
                         "user_id",
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
-                    jsonObject.addProperty("phone", "+1"+current_value.text.toString())
+                    jsonObject.addProperty("phone", "+1" + current_value.text.toString())
                     (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
-                    _binding.phoneNumberText.text = "+1"+current_value.text.toString()
+                    _binding.phoneNumberText.text = "+1" + current_value.text.toString()
                     dialog.dismiss()
-                }
-                else {
+                } else {
                     val jsonObject = JsonObject()
                     Log.d(
                         "TAG@123",
@@ -600,31 +621,33 @@ class SettingsFragment : Fragment() {
                     val location: Location? = task.result
                     if (location != null) {
 
-                        try{
-                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
-                        val list: List<Address> =
-                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        try {
+                            val geocoder =
+                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                            val list: List<Address> =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
 
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(500)
-                            latitude = "${list[0].latitude}"
-                            longitude = "${list[0].longitude}"
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(500)
+                                latitude = "${list[0].latitude}"
+                                longitude = "${list[0].longitude}"
 
-                            location_text = "${list[0].locality}"
-                            Log.d("TAG@123","location name"+location_text)
+                                location_text = "${list[0].locality}"
+                                Log.d("TAG@123", "location name" + location_text)
 
-                        }
+                            }
 
-                        }catch (e:Exception){
-                            Log.e("TAG@123","Location Exception : ${e.message}")
+                        } catch (e: Exception) {
+                            Log.e("TAG@123", "Location Exception : ${e.message}")
                         }
                     }
 
                 }
 
             } else {
-                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
             }
         } else {
             requestPermissions()

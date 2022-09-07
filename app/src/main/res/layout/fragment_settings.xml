@@ -8,7 +8,6 @@
     android:fillViewport="true">
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,12 +74,12 @@
             style="@style/QText"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/border_line_radius"
             android:gravity="center"
             android:text="Update"
             android:textColor="@color/blue"
             android:textSize="11sp"
-            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.754"
             app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -160,8 +159,8 @@
                     android:text="@string/password_text" />
 
                 <TextView
-                    style="@style/blue_NormalText"
                     android:id="@+id/password_update"
+                    style="@style/blue_NormalText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
@@ -262,6 +261,33 @@
                     android:gravity="start|center"
                     android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:padding="6dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/NormalText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Notifications" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:layout_marginRight="10dp"
+                    android:thumb="@drawable/thumb"
+                    app:track="@drawable/track" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <View
@@ -303,11 +329,11 @@
             <RadioButton
                 android:id="@+id/rb_women"
                 android:layout_width="0dp"
-                android:layout_weight=".25"
                 android:layout_height="32dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -325,11 +351,11 @@
             <RadioButton
                 android:id="@+id/rb_men"
                 android:layout_width="0dp"
-                android:layout_weight=".25"
                 android:layout_height="32dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -347,11 +373,11 @@
             <RadioButton
                 android:id="@+id/rb_more"
                 android:layout_width="0dp"
-                android:layout_weight=".25"
                 android:layout_height="32dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -433,13 +459,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:stepSize="1.0"
             android:valueFrom="18.0"
             android:valueTo="30.0"
-            app:values="@array/initial_slider_values"
-            android:stepSize="1.0"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/textView_age" />
+            app:layout_constraintTop_toBottomOf="@id/textView_age"
+            app:values="@array/initial_slider_values" />
 
         <TextView
             android:id="@+id/textView_distance"
@@ -461,9 +487,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:stepSize="5"
             android:valueFrom="25"
             android:valueTo="100"
-            android:stepSize="5"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textView_distance" />
@@ -514,10 +540,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".6"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                 android:gravity="start|center"
-                android:text="Community Guidelines"
                 android:paddingRight="5dp"
-                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"/>
+                android:text="Community Guidelines" />
 
 
         </LinearLayout>
@@ -551,14 +577,15 @@
 
 
             <TextView
-                android:id="@+id/sefery"                style="@style/NormalText"
+                android:id="@+id/sefery"
+                style="@style/NormalText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".4"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                 android:gravity="start|center"
-                android:text="Safety Guides"
                 android:paddingRight="5dp"
-                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24" />
+                android:text="Safety Guides" />
 
 
         </LinearLayout>
@@ -613,9 +640,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
+                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:gravity="start|center"
                     android:paddingRight="5dp"
-                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:text="Licences" />
 
 
@@ -645,11 +672,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
-                    android:gravity="start|center"
+                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:drawablePadding="5dp"
-                    android:text="Privacy Prefernces"
+                    android:gravity="start|center"
                     android:paddingRight="5dp"
-                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24" />
+                    android:text="Privacy Prefernces" />
 
 
             </LinearLayout>
@@ -678,9 +705,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
+                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:gravity="start|center"
                     android:paddingRight="5dp"
-                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:text="Privacy Policy" />
 
             </LinearLayout>
@@ -709,10 +736,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
+                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                     android:gravity="start|center"
-                    android:text="Term of Service"
                     android:paddingRight="5dp"
-                    android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"/>
+                    android:text="Term of Service" />
 
 
             </LinearLayout>
@@ -750,11 +777,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".6"
                 android:alpha=".8"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
                 android:gravity="start|center"
-                android:text="Contact Us"
-                android:textSize="18sp"
                 android:paddingRight="5dp"
-                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"/>
+                android:text="Contact Us"
+                android:textSize="18sp" />
 
 
         </LinearLayout>

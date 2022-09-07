@@ -87,19 +87,12 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         }
         chat_list_recycler = binding.root.findViewById(R.id.chatlist_recyclerView)
         chat_list_recycler?.layoutManager = GridLayoutManager(requireContext(), 1)
-       // chatlistAdapter = ChatList_Adapter(requireContext(), this)
         _binding!!.editTextTextSearch.addTextChangedListener {
-
             filter(it.toString())
         }
-
-
         (activity as Home).homeviewmodel.all_match_bids= MutableLiveData<Resource<Match_bids>>()
         subscribe_create_post()
         (activity as Home).homeviewmodel.get_user_match_bids( (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
-
-
-
         return binding.root;
     }
 

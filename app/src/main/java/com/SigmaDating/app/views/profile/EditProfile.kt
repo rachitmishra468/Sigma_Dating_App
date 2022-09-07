@@ -96,7 +96,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var community: String? = null
     var about: String? = null
     var currentPhotoPath: String? = null
-    // var interests: String? = null
     private var mUri: Uri? = null
     private val OPERATION_CAPTURE_PHOTO = 1
     private lateinit var schoolAdapter: SchoolAdapter
@@ -113,22 +112,19 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
         Socority_button = _binding?.root?.findViewById(R.id.Socority_button)
         independent= _binding?.root?.findViewById(R.id.independent)
         fraternity_button = _binding?.root?.findViewById(R.id.fraternity_button)
         fraternity_button!!.isSelected=true
-       // fraternity_button!!.text="Select Fraternity"
         schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)
         fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
@@ -138,6 +134,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             (activity as Home).onBackPressed()
         }
         _binding?.done?.setOnClickListener {
+            if(community.isNullOrEmpty()){
+                Toast.makeText(requireContext(), "Please Select Fraternity/Sorority data", Toast.LENGTH_LONG)
+                    .show()
+
+            }else{
             (activity as Home).homeviewmodel.update_profile =
                 MutableLiveData<Resource<Loginmodel>>()
             subscribe_edit_profile()
@@ -153,13 +154,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     )
                 }
 
-            }
+            }}
         }
 
 
         fraternity_button?.setOnClickListener {
             if (!fraternity_button!!.isSelected){
                 fraternity_Spinner.setText("Select Fraternity")
+                community=null
+                Log.d("TAG@123","Community :"+community)
                 fraternity_button!!.isSelected=true
                 Socority_button!!.isSelected=false
             }
@@ -192,6 +195,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             if (!Socority_button!!.isSelected){
                 fraternity_button!!.isSelected=false
                 Socority_button!!.isSelected=true
+                community=null
                 fraternity_Spinner.setText("Select Sorority")
             }
 
@@ -210,10 +214,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             schoolAdapter = SchoolAdapter(this, AppConstants.Sorority)
 
         }
-
-
         independent?.setOnClickListener {
-
             (activity as Home?)?.sharedPreferencesStorage?.setValue(
                 AppConstants.community,
                 "Independent"
@@ -240,7 +241,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             openinterestsSearchDialog(AppConstants.School, interest as List<Interest>)
         }
 
-
         fraternity_Spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
@@ -253,8 +253,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     openSchoolSearchDialog(AppConstants.Fraternity, sororitiesList as List<UniversityList>
                     )
                 }
-
-
                 true
             } else false
         }
