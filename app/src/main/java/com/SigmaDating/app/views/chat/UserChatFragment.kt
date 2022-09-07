@@ -43,13 +43,14 @@ class UserChatFragment : Fragment() {
     private var writeMessageEditText: TextInputEditText? = null
 
     private var mTextInputLayout: TextInputLayout? = null
-    lateinit var  layoutManager:LinearLayoutManager
- var headerImg:CircleImageView?=null
-    private var userChatname:TextView?=null
+    lateinit var layoutManager: LinearLayoutManager
+    var headerImg: CircleImageView? = null
+    private var userChatname: TextView? = null
 
     private val quickstartConversationsManager = QuickstartConversationsManager()
-    private var username:String?=null
-    private var imagedata:String?=null
+    private var username: String? = null
+    private var imagedata: String? = null
+
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
 
@@ -62,15 +63,15 @@ class UserChatFragment : Fragment() {
         recyclerView = view.findViewById(R.id.messageList)
         writeMessageEditText = view.findViewById(R.id.messageInput)
         mTextInputLayout = view.findViewById(R.id.messageInputHolder)
-        headerImg=view.findViewById(R.id.header_img)
-        userChatname=view.findViewById<TextView>(R.id.chat_user_name)
-       // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
+        headerImg = view.findViewById(R.id.header_img)
+        userChatname = view.findViewById<TextView>(R.id.chat_user_name)
+        // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
-         username =  getArguments()?.getString("user_name")
-        if (username!=null) {
+        username = getArguments()?.getString("user_name")
+        if (username != null) {
             userChatname?.text = username
         }
-         imagedata = getArguments()?.getString("user_image")
+        imagedata = getArguments()?.getString("user_image")
         imagedata?.let {
             Glide.with(requireActivity()).load(it).into(headerImg as ImageView)
         }
@@ -82,30 +83,37 @@ class UserChatFragment : Fragment() {
             val jsonObject = JsonObject()
             jsonObject.addProperty(
                 "identity",
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
 
             val messageBody = writeMessageEditText?.text.toString()
             if (messageBody.length > 0) {
                 Log.d("TAG@123", "EndIconOnClickListener : " + messageBody)
-                quickstartConversationsManager.sendMessage(messageBody,jsonObject)
+                quickstartConversationsManager.sendMessage(messageBody, jsonObject)
             }
         }
         chat_settings_img = view.findViewById(R.id.chat_settings)
         chat_settings_img?.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("user_id", username)
-            bundle.putString("user_image",imagedata)
+            bundle.putString("user_image", imagedata)
             Navigation.findNavController(view)
-                .navigate(R.id.action_userChatFragment_to_notificationSettingsFragment,bundle,null,null);
+                .navigate(
+                    R.id.action_userChatFragment_to_notificationSettingsFragment,
+                    bundle,
+                    null,
+                    null
+                );
         }
 
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
 
         recyclerView!!.layoutManager = layoutManager
-        messagesAdapter = MessagesAdapter(imagedata,requireContext(),quickstartConversationsManager)
+        messagesAdapter =
+            MessagesAdapter(imagedata, requireContext(), quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
-        recyclerView!!.scrollToPosition(quickstartConversationsManager.messages.size-1)
+        recyclerView!!.scrollToPosition(quickstartConversationsManager.messages.size - 1)
         setListeners()
         quickstartConversationsManager.initializeWithAccessToken(
             requireContext(),
@@ -115,27 +123,28 @@ class UserChatFragment : Fragment() {
 //
         subscribe_lisner_images()
         Log.d("TAG@123", (context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
-               return view;
+        return view;
     }
+
     private fun setListeners() {
 
         recyclerView!!.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if (bottom < oldBottom) {
-                if (quickstartConversationsManager.messages.isEmpty()){
+                if (quickstartConversationsManager.messages.isEmpty()) {
                     recyclerView!!.postDelayed(Runnable {
-                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size) }, 100)
-                }else{
+                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size)
+                    }, 100)
+                } else {
                     recyclerView!!.postDelayed(Runnable {
-                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size-1) }, 100)
+                        recyclerView!!.smoothScrollToPosition(quickstartConversationsManager.messages.size - 1)
+                    }, 100)
                 }
             }
         }
 
-        }
+    }
+
     fun subscribe_lisner_images() {
-
-
-
 
 
         quickstartConversationsManager.mutableLiveData?.observe(viewLifecycleOwner, Observer {
@@ -147,7 +156,7 @@ class UserChatFragment : Fragment() {
                     Log.d("TAG@123", "notifyDataSetChanged 1: " + 1)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
-                     //   setListeners()
+                        //   setListeners()
 
                     }
                 }
@@ -156,7 +165,7 @@ class UserChatFragment : Fragment() {
                     Log.d("TAG@123", "notifyDataSetChanged 2: " + 2)
                     GlobalScope.launch(Dispatchers.Main) {
                         writeMessageEditText!!.setText("")
-                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size-1)
+                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size - 1)
 
                     }
                 }
@@ -165,24 +174,24 @@ class UserChatFragment : Fragment() {
                     Log.d("TAG@123", "notifyDataSetChanged 3: " + 3)
                     GlobalScope.launch(Dispatchers.Main) {
                         messagesAdapter!!.notifyDataSetChanged()
-                      //  setListeners()
+                        //  setListeners()
                     }
 
                 }
-                4->{
+                4 -> {
                     Log.d("TAG@123", "data  4: ")
                     GlobalScope.launch(Dispatchers.Main) {
-                      //  layoutManager.stackFromEnd = true
+                        //  layoutManager.stackFromEnd = true
 
                         messagesAdapter!!.notifyDataSetChanged()
                         //setListeners()
-                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size-1)
+                        recyclerView?.scrollToPosition(quickstartConversationsManager.messages.size - 1)
                         writeMessageEditText!!.setText("")
                     }
                 }
-                5->{
+                5 -> {
                     Log.d("TAG@123", "showLoader 5: ")
-                     AppUtils.showLoader(requireContext())
+                    AppUtils.showLoader(requireContext())
                 }
             }
         })
@@ -194,20 +203,22 @@ class UserChatFragment : Fragment() {
     internal class MessagesAdapter(
         var imageString: String?,
         var context: Context,
-        var quickstartConversationsManager: QuickstartConversationsManager) :
+        var quickstartConversationsManager: QuickstartConversationsManager
+    ) :
         RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
-private val VIEW_TYPE_MY_MESSAGE by lazy { 1 }
+        private val VIEW_TYPE_MY_MESSAGE by lazy { 1 }
         private val VIEW_TYPE_OTHER_MESSAGE by lazy { 2 }
-        var booleanuser:Boolean=false
+        var booleanuser: Boolean = false
 
         class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             var textname: TextView
             var textTime: TextView
-            var imageAvatar:CircleImageView
+            var imageAvatar: CircleImageView
+
             init {
                 textname = itemView.findViewById(R.id.txtOtherMessage)
-                textTime=itemView.findViewById(R.id.txtOtherMessageTime)
-                imageAvatar=itemView.findViewById(R.id.imageAvatar)
+                textTime = itemView.findViewById(R.id.txtOtherMessageTime)
+                imageAvatar = itemView.findViewById(R.id.imageAvatar)
 
 
             }
@@ -216,44 +227,41 @@ private val VIEW_TYPE_MY_MESSAGE by lazy { 1 }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-            if ( viewType==VIEW_TYPE_MY_MESSAGE){
-return  ViewHolder( LayoutInflater.from(parent.context)
-    .inflate(R.layout.row_message_item_outgoing, parent, false))
-            }
-            else{
-                return ViewHolder( LayoutInflater.from(parent.context)
-                    .inflate(R.layout.incoming_message_list_item, parent, false))
+            if (viewType == VIEW_TYPE_MY_MESSAGE) {
+                return ViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.row_message_item_outgoing, parent, false)
+                )
+            } else {
+                return ViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.incoming_message_list_item, parent, false)
+                )
             }
 
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
-          //  Log.d("TAG@123", "attachedMedia : "+message.attachedMedia.size)
-         //   Log.d("TAG@123", "attributes : "+message.attributes)
-         //   Log.d("TAG@123", "dateformat : "+message.dateCreatedAsDate)
             val sdf = SimpleDateFormat("hh:mm aa")
             val date: Date = message.dateCreatedAsDate
             val string = sdf.format(date)
 
             Calendar.getInstance().timeInMillis
-            val messageText = String.format( message.body)
+            val messageText = String.format(message.body)
             holder.textname.text = messageText
-            holder.textTime.text=string
-            // Set user img type
-if (booleanuser){
-    val imgURl= (context as Home).sharedPreferencesStorage.getString(
-        AppConstants.upload_image
-    )
-    if (imgURl==""){
-        Glide.with(context).load(R.drawable.blue_profile).into(holder.imageAvatar);
-    }
-    else {
-        Glide.with(context).load(imgURl).into(holder.imageAvatar);
-    }
-}
-            else{
-    Glide.with(context).load(imageString).into(holder.imageAvatar);
+            holder.textTime.text = string
+            if (booleanuser) {
+                val imgURl = (context as Home).sharedPreferencesStorage.getString(
+                    AppConstants.upload_image
+                )
+                if (imgURl == "") {
+                    Glide.with(context).load(R.drawable.blue_profile).into(holder.imageAvatar);
+                } else {
+                    Glide.with(context).load(imgURl).into(holder.imageAvatar);
+                }
+            } else {
+                Glide.with(context).load(imageString).into(holder.imageAvatar);
             }
 
         }
@@ -263,20 +271,25 @@ if (booleanuser){
 
 
         }
+
         override fun getItemViewType(position: Int): Int {
-val message= quickstartConversationsManager.messages.get(position)
-           // Log.d("TAG@123","VIEWTYPE"+message.attributes.string)
-            val dd= message.attributes.string
-            val jsonObject= JSONObject(dd)
-            if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get("identity")){
-                booleanuser=true
+            try {
+                val message = quickstartConversationsManager.messages.get(position)
+                val dd = message.attributes.string
+                val jsonObject = JSONObject(dd)
+                if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get(
+                        "identity"
+                    )
+                ) {
+                    booleanuser = true
+                    return VIEW_TYPE_MY_MESSAGE
+                } else {
+                    booleanuser = false
+                    return VIEW_TYPE_OTHER_MESSAGE
+                }
+            } catch (e: Exception) {
                 return VIEW_TYPE_MY_MESSAGE
             }
-            else{
-                booleanuser=false
-return VIEW_TYPE_OTHER_MESSAGE
-            }
-
 
         }
     }
