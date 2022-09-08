@@ -54,8 +54,7 @@ class SettingsFragment : Fragment() {
 
     lateinit var _binding: FragmentSettingsBinding
     private val binding get() = _binding
-    var notification_flag = 0;
-
+    var notification_flag = 1;
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
     var age_range = ""
@@ -159,7 +158,7 @@ class SettingsFragment : Fragment() {
         }
 
         _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            notification_flag = if(isChecked) 0 else 1
+            notification_flag = if(isChecked) 1 else 0
 
             Log.d("TAG@123","notification_flag :"+notification_flag)
 
@@ -303,11 +302,7 @@ class SettingsFragment : Fragment() {
                                 _binding.locationText.setText(location_text)
                                 location_text = it.data.user.location.toString()
                             }
-                            if (it.data?.user?.notifications == 0) {
-                                _binding.switch1.isChecked = true
-                            } else {
-                                _binding.switch1.isChecked = false
-                            }
+                            _binding.switch1.isChecked = it.data?.user?.notifications == 1
 
 
                             if (it.data?.user?.age_range?.isEmpty() == false) {

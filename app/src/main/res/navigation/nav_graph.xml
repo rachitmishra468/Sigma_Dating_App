@@ -42,6 +42,10 @@
         tools:layout="@layout/fragment_second">
 
         <action
+            android:id="@+id/action_chatListFragment_to_userChatFragment"
+            app:destination="@id/userChatFragment" />
+
+        <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
         <action

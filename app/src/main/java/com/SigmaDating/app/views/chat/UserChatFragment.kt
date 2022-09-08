@@ -245,12 +245,12 @@ class UserChatFragment : Fragment() {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
             val sdf = SimpleDateFormat("hh:mm aa")
             val date: Date = message.dateCreatedAsDate
-            val string = sdf.format(date)
-
+            val date_mess = sdf.format(date)
+            Log.d("TAG@123", "Date :" + date_mess)
             Calendar.getInstance().timeInMillis
             val messageText = String.format(message.body)
             holder.textname.text = messageText
-            holder.textTime.text = string
+            holder.textTime.text = date_mess
             if (booleanuser) {
                 val imgURl = (context as Home).sharedPreferencesStorage.getString(
                     AppConstants.upload_image

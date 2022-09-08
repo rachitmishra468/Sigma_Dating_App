@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.SigmaDating.R
@@ -48,7 +50,10 @@ class SecondFragment : Fragment() {
     lateinit var sigma_list: ImageView
     lateinit var greekLatter:TextView
     private var userID: String? = null
-
+    private var name: String? = null
+    private var photo: String? = null
+    lateinit var empty_text_view: TextView
+    lateinit var empty_item_layout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +62,9 @@ class SecondFragment : Fragment() {
     ): View {
         Log.d("TAG@123", " SecondFragment onCreateView")
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        empty_text_view = binding.root.findViewById(R.id.empty_text_view)
+        empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        empty_item_layout.visibility = View.GONE
         footer_transition()
         userID = getArguments()?.getString("user_id")
         if (userID == null) {
@@ -72,16 +80,16 @@ class SecondFragment : Fragment() {
         _binding?.editProfile?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
-
-
         if(!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
             _binding?.fab?.visibility=View.GONE
+            _binding?.profileImg?.visibility=View.VISIBLE
+        }
+        else{
+            _binding?.profileImg?.visibility=View.INVISIBLE
         }
         _binding?.fab?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_createpost)
         }
-
-
         _binding?.settingIcon?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_settings)
         }
@@ -89,7 +97,15 @@ class SecondFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
         _binding?.profileImg?.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+            val bundle = Bundle()
+            bundle.putString("user_name", name)
+            bundle.putString("user_image",photo)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_chatListFragment_to_userChatFragment, bundle,
+                    null,
+                    null);
+
+           // findNavController().navigate(R.id.action_chatListFragment_to_userChatFragment)
         }
 
         _binding?.comments?.setOnClickListener {
@@ -98,11 +114,7 @@ class SecondFragment : Fragment() {
              findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
 
         }
-
-
-
         return binding.root
-
     }
 
     override fun onStop() {
@@ -160,6 +172,8 @@ class SecondFragment : Fragment() {
     }
 
     fun setAdapterListData(dataListuser: ArrayList<Postdata>) {
+
+
         _binding?.recyclerView?.layoutManager = GridLayoutManager(AppReseources.getAppContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
@@ -180,6 +194,7 @@ class SecondFragment : Fragment() {
                                 it.addresText.setText(res?.user.university)
                                 it.ageText.setText(""+res?.user.age)
 
+
                             }
 
                             if(it.data!!.user.greekletter.length>0) {
@@ -197,10 +212,16 @@ class SecondFragment : Fragment() {
                                     .error(R.drawable.profile_img)
                                     .into(_binding!!.logoDetail);
                             }
-                           // dataListuser.clear()
+                            name=res.user.first_name +" "+ res.user.last_name
+                            photo=it.data.user.upload_image
                             if (!res.posts.isNullOrEmpty()) {
                                 dataListuser = res.posts
                                 setAdapterListData(dataListuser as ArrayList<Postdata>)
+                            }else{
+                                    empty_text_view.text = "No posts found."
+                                    empty_item_layout.visibility = View.VISIBLE
+                                    Log.d("TAG@123", " empty_text  Show")
+
                             }
 
                         } else {

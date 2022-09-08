@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -41,6 +43,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     lateinit var user_profile_photo: CircleImageView
     private var userID: String? = null
     private lateinit var photoAdapter: PostAdapter
+    lateinit var empty_text_view: TextView
+    lateinit var empty_item_layout: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,6 +56,11 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostListBinding.inflate(inflater, container, false)
+
+        empty_text_view = binding.root.findViewById(R.id.empty_text_view)
+        empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        empty_item_layout.visibility = View.GONE
+
         footer_transition()
         get_postdata()
         return binding.root
@@ -66,7 +76,15 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>) {
+    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>,mess:String) {
+
+        if (dataListuser!!.size==0) {
+            empty_text_view.text = "No Post Found"
+            empty_item_layout.visibility = View.VISIBLE
+            Log.d("TAG@123", " empty_text  Show")
+        }
+
+
         _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL, false
@@ -123,15 +141,10 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                         it.data.let { res ->
                             if (res?.status == true) {
 
-                                if (!userID.equals(
-                                        (activity as Home).sharedPreferencesStorage.getString(
-                                            AppConstants.USER_ID
-                                        )
-                                    )
-                                ) {
-                                    setAdapterListData(false, res.data as ArrayList<Postdata>)
+                                if (!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
+                                    setAdapterListData(false, res.data as ArrayList<Postdata>,"")
                                 } else {
-                                    setAdapterListData(true, res.data as ArrayList<Postdata>)
+                                    setAdapterListData(true, res.data as ArrayList<Postdata>,"")
 
                                 }
 

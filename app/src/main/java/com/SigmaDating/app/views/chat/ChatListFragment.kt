@@ -142,15 +142,20 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     }
 
 
-    override fun onCategoryClick(position: User_bids_list) {
-        (activity as Home).homeviewmodel.ctrateToken_data=MutableLiveData<Resource<Token_data>>()
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("identity",
-            position.match_id)
-        (activity as Home).homeviewmodel.get_User_token(
-            jsonObject
-        )
-        subscribe_Login_User_details(position)
+    override fun onCategoryClick(position: User_bids_list,flag:Boolean) {
+
+
+            (activity as Home).homeviewmodel.ctrateToken_data =
+                MutableLiveData<Resource<Token_data>>()
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "identity",
+                position.match_id
+            )
+            (activity as Home).homeviewmodel.get_User_token(
+                jsonObject
+            )
+            subscribe_Login_User_details(position,flag)
 
     }
 
@@ -204,11 +209,22 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     }
 
 
-    fun subscribe_Login_User_details(position: User_bids_list) {
+    fun subscribe_Login_User_details(position: User_bids_list,flag: Boolean) {
         (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
+
+                    if(flag){
+                        val bundle = Bundle()
+                        bundle.putString("user_id", position.id)
+                        findNavController().navigate(
+                            R.id.action_FirstFragment_to_SecondFragment,
+                            bundle,
+                            null,
+                            null
+                        )
+                    }else{
                     val bundle = Bundle()
                     bundle.putString("user_name", position?.first_name+" "+position.last_name)
                     bundle.putString("user_image",position.upload_image)
@@ -216,7 +232,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         .navigate(R.id.action_chatListFragment_to_userChatFragment, bundle,
                             null,
                             null);
-                }
+                }}
                 Status.LOADING -> {
                     AppUtils.showLoader(requireContext())
                 }

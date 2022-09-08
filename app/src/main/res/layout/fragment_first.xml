@@ -33,6 +33,20 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
+        <LinearLayout
+            android:id="@+id/empty_item_layout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent">
+            <include
+                layout="@layout/empty_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+            </include>
+        </LinearLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/credentials_card"
@@ -57,7 +71,6 @@
                 app:rotation_degrees="15.5" >
 
             </com.SigmaDating.app.views.CardManager.CardViewChanger>
-
 
 
 
@@ -87,6 +100,9 @@
                 app:lottie_rawRes="@raw/heart_loading" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
     </LinearLayout>
 
@@ -124,6 +140,5 @@
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
 
 </LinearLayout>

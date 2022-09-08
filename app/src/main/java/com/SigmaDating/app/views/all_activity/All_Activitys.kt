@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +36,8 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     private lateinit var _binding: FragmentAllActivitysBinding
     private val binding get() = _binding!!
     private var userID: String? = null
+    lateinit var empty_text_view: TextView
+    lateinit var empty_item_layout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +64,10 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     ): View? {
 
         _binding = FragmentAllActivitysBinding.inflate(inflater, container, false)
+        empty_text_view = binding.root.findViewById(R.id.empty_text_view)
+        empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        empty_item_layout.visibility = View.GONE
+
         _binding.finishNotification.setOnClickListener {
             (activity as Home).onBackPressed()
         }
@@ -97,7 +105,14 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     }
 
 
-    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Notification_list>) {
+    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Notification_list>,mes:String) {
+        if (dataListuser.size==0) {
+            empty_text_view.text = mes
+            empty_item_layout.visibility = View.VISIBLE
+            Log.d("TAG@123", " empty_text  Show")
+        }
+
+
         All_list_recycler?.layoutManager = GridLayoutManager(requireContext(), 1)
         adapter = All_Activity_Adapter(requireContext(), this)
         All_list_recycler?.adapter = adapter
@@ -117,7 +132,7 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
                             if (res?.status == true) {
                                 Log.d("TAG@123", "Notification list Status " + res.status)
                                 Home.notifications_count="0"
-                                setAdapterListData(false, res.data as ArrayList<Notification_list>)
+                                setAdapterListData(false, res.data as ArrayList<Notification_list>,res.message)
 
 
                             }

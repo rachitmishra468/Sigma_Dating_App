@@ -8,12 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 
 import com.SigmaDating.app.adapters.ProfileMatch
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -67,6 +64,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var adapter: ProfileMatch
     lateinit var credentials_card: ConstraintLayout
     lateinit var tvCounter: TextView
+    lateinit var empty_text_view: TextView
+    lateinit var empty_item_layout: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,9 +75,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Disclaimer()
                 )
     }
-
-
-
 
 
     override fun onCreateView(
@@ -93,6 +89,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         cardViewChanger = binding.root.findViewById(R.id.card_stack_view)
         credentials_card = binding.root.findViewById(R.id.credentials_card)
         tvCounter = binding.root.findViewById(R.id.tvCounter)
+        empty_text_view = binding.root.findViewById(R.id.empty_text_view)
+        empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        empty_item_layout.visibility = View.GONE
+
         editProfile.setOnClickListener {
             val bundle = Bundle()
             userId = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
@@ -149,7 +149,9 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
 
             override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
-
+                Log.d("TAG@123", "onAdapterAboutToEmpty")
+                empty_text_view.text = "No matching bids found."
+                empty_item_layout.visibility = View.VISIBLE
             }
 
             override fun onScroll(v: Float) {
@@ -205,7 +207,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         }
         sigma_list.setOnClickListener {
             AppUtils.animateImageview(sigma_list)
-            //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
         (activity as Home).clearBackStack()
     }
@@ -301,13 +302,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                               // Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
-                                Log.d("TAG@123", "Exception" + it.data?.message)
+                                Log.d("TAG@123",  ""+ it.data?.message)
                             } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception" + e.message.toString())
+                                Log.d("TAG@123", "Exception ::" + e.message.toString())
                             }
                         } else {
-                          //  Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT).show()
+
                         }
 
                     }
@@ -334,20 +334,30 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     "TAG@123",
                                     "notifications_count  :" + it.data?.notifications_count.toString()
                                 )
+
+                                Log.d("TAG@123", "notifications_count  :" + it.data.toString())
                                 courseModalArrayList = it.data?.bids as ArrayList<Bids>
                                 pages = it.data.pages as ArrayList<Pages>
                                 notifications_count = it.data.notifications_count
                                 notifications_count.let {
                                     tvCounter.setText(notifications_count)
                                 }
+
+                                if (courseModalArrayList!!.size==0) {
+                                    empty_text_view.text = it.data.message
+                                    empty_item_layout.visibility = View.VISIBLE
+                                    Log.d("TAG@123", " empty_text  Show")
+                                }
                                 adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()
 
                             } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception" + e.message.toString())
+                                Log.d("TAG@123", "Exception  :" + e.message.toString())
                             }
                         } else {
+
+
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -383,7 +393,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     .error(R.drawable.profile_img)
                                     .into(editProfile);
 
-                                Home.current_user_profile= it.data?.user?.upload_image.toString()
+                                Home.current_user_profile = it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
                                     Glide.with(requireContext()).load(
@@ -400,7 +410,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
                             } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception" + e.message.toString())
+                                Log.d("TAG@123", "Exception  :-" + e.message.toString())
                             }
 
                         } else {
@@ -431,7 +441,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         jsonObject.addProperty("profile_id", id)
         jsonObject.addProperty(key, "yes")
         Log.d("TAG@123", jsonObject.toString())
-        (activity as Home).homeviewmodel.profile_swipe=MutableLiveData<Resource<Loginmodel>>()
+        (activity as Home).homeviewmodel.profile_swipe = MutableLiveData<Resource<Loginmodel>>()
         subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }

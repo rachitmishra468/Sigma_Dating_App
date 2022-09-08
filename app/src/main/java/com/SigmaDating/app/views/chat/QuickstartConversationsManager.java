@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.SigmaDating.app.Sigmadatingapp;
 import com.SigmaDating.app.views.Home;
 import com.google.gson.JsonObject;
 import com.twilio.conversations.Attributes;
@@ -27,7 +28,7 @@ public class QuickstartConversationsManager {
 
     public MutableLiveData<Integer> mutableLiveData = new MutableLiveData<>();
 
-    private final static String DEFAULT_CONVERSATION_NAME = Home.Companion.getMatch_id();
+    private final static String DEFAULT_CONVERSATION_NAME = "Sigma"+Home.Companion.getMatch_id();
 
     final private ArrayList<Message> messages = new ArrayList<>();
 
@@ -275,6 +276,9 @@ public class QuickstartConversationsManager {
                 public void onSuccess(ConversationsClient conversationsClientP) {
                     QuickstartConversationsManager.this.conversationsClient = conversationsClientP;
                     conversationsClient.addListener(QuickstartConversationsManager.this.mConversationsClientListener);
+                    conversationsClient.registerFCMToken(new ConversationsClient.FCMToken(Sigmadatingapp.Companion.getFcm_token()),() -> {
+
+                    });
                     Log.d("TAG@123", "Success creating Twilio Conversations Client");
                 }
 

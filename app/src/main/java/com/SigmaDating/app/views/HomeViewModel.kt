@@ -76,12 +76,13 @@ class HomeViewModel @Inject constructor(
         mainRepository.ctrateToken(id).let {
             if (it.isSuccessful) {
 
-                ctrateToken_data.postValue(Resource.success(it.body()))
+
                 Resource.success(it.body()).data.let {
                     Home.mCurrent_user_token = it?.token.toString()
                     Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
                 }
+                ctrateToken_data.postValue(Resource.success(it.body()))
             } else {
                 Log.d("TAG@123", "error in get token call ")
                 ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))

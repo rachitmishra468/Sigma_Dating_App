@@ -40,7 +40,7 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
     }
 
     interface OnCategoryClickListener {
-        fun onCategoryClick(position: User_bids_list)
+        fun onCategoryClick(position: User_bids_list,flag:Boolean)
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -60,10 +60,13 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
 
         // Set item views based on your views and data model
         Glide.with(context).load(data.upload_image).into(holder.image);
-
+        holder.image.setOnClickListener {
+            Home.match_id=data.match_id
+            listener.onCategoryClick(data,true);
+        }
         holder.itemView.setOnClickListener {
             Home.match_id=data.match_id
-            listener.onCategoryClick(data);
+            listener.onCategoryClick(data,false);
         }
         holder.textname.text = data.first_name + " " + data.last_name
         holder.univercity_name.text = data.university
