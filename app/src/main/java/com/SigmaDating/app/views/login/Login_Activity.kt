@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
@@ -216,7 +217,7 @@ class Login_Activity : AppCompatActivity() {
         country_spinner = findViewById(R.id.ccp)
         val Country_code = resources.getStringArray(R.array.Country_code)
 
-        // access the spinner
+
         if (country_spinner != null) {
             val adapter = ArrayAdapter(
                 this,
@@ -224,6 +225,7 @@ class Login_Activity : AppCompatActivity() {
             )
             country_spinner.adapter = adapter
         }
+
         activity_main = findViewById(R.id.activity_main)
         editText_email = findViewById(R.id.editText_email)
         editText_password = findViewById(R.id.editText_password)
@@ -282,10 +284,7 @@ class Login_Activity : AppCompatActivity() {
 
 
     fun login_call(view: View) {
-
-
-
-            if (PHONE_LOGIN) {
+        if (PHONE_LOGIN) {
                 if (!AppUtils.isValid_phone_number(edittext_phone_no.text.toString())) {
                     edittext_phone_no.error = "Invalid Phone Number"
                     return
@@ -297,7 +296,7 @@ class Login_Activity : AppCompatActivity() {
 
                     sharedPreferencesStorage.setValue(
                         AppConstants.USER_COUNTRY_CODE,
-                       "+1"
+                       country_spinner.selectedItem.toString()
                     )
 
                     sharedPreferencesStorage.setValue(

@@ -207,7 +207,7 @@ class SecondFragment : Fragment() {
 
 
 
-                            it.data?.user?.upload_image?.let {
+                            it.data.user.upload_image.let {
                                 Glide.with(AppReseources.getAppContext()!!).load(it)
                                     .error(R.drawable.profile_img)
                                     .into(_binding!!.logoDetail);
@@ -218,7 +218,7 @@ class SecondFragment : Fragment() {
                                 dataListuser = res.posts
                                 setAdapterListData(dataListuser as ArrayList<Postdata>)
                             }else{
-                                    empty_text_view.text = "No posts found."
+                                    empty_text_view.text = res.post_message
                                     empty_item_layout.visibility = View.VISIBLE
                                     Log.d("TAG@123", " empty_text  Show")
 

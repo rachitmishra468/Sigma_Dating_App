@@ -56,4 +56,8 @@
     <string name="new_message">New message</string>
     <string name="message_send_error">An error has occurred. Tap for more info.</string>
 
+
+    <!--//Client ID  574636637575-uar7lnj32cd72draf2v36jntkrh5hm0c.apps.googleusercontent.com
+    //Client Secret  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-->
+
 </resources>

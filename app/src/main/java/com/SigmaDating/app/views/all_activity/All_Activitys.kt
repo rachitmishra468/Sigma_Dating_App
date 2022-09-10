@@ -105,14 +105,17 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     }
 
 
-    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Notification_list>,mes:String) {
-        if (dataListuser.size==0) {
+    fun setAdapterListData(
+        booleantype: Boolean,
+        dataListuser: ArrayList<Notification_list>,
+        mes: String
+    ) {
+
+        if (dataListuser.isEmpty()){
             empty_text_view.text = mes
             empty_item_layout.visibility = View.VISIBLE
             Log.d("TAG@123", " empty_text  Show")
         }
-
-
         All_list_recycler?.layoutManager = GridLayoutManager(requireContext(), 1)
         adapter = All_Activity_Adapter(requireContext(), this)
         All_list_recycler?.adapter = adapter
@@ -124,18 +127,23 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     fun subscribe_notification_list() {
         (activity as Home?)?.homeviewmodel?.notification_list?.observe(
             viewLifecycleOwner,
-            Observer { it ->
-                when (it.status) {
+            Observer { res ->
+                when (res.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        it.data.let { res ->
-                            if (res?.status == true) {
-                                Log.d("TAG@123", "Notification list Status " + res.status)
-                                Home.notifications_count="0"
-                                setAdapterListData(false, res.data as ArrayList<Notification_list>,res.message)
+                        Log.d("TAG@123", "Notification list Status " + res.status)
+                        Home.notifications_count = "0"
 
-
-                            }
+                        if(res.data!!.data.isNullOrEmpty()){
+                            empty_text_view.text = res.data!!.message
+                            empty_item_layout.visibility = View.VISIBLE
+                            Log.d("TAG@123", " empty_text  Show")
+                        }
+                        else {
+                            setAdapterListData(
+                                false,
+                                res.data?.data as ArrayList<Notification_list>, ""
+                            )
                         }
                     }
                     Status.LOADING -> {

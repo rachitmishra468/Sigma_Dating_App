@@ -24,6 +24,7 @@ data class User(
     val interested_in:String,
     val greekletter:String,
     val age:String,
+    val post_message:String,
     val notifications:Int,
     var photos:ArrayList<String> = arrayListOf()
 

@@ -235,8 +235,7 @@ class SettingsFragment : Fragment() {
             )
         )
 
-        mFusedLocationClient =
-            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
         getLocation()
         return binding.root
     }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -49,6 +50,9 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     private lateinit var chatlistAdapter: ChatList_Adapter
     private var dataList = mutableListOf<User_bids_list>()
     private var chat_list_recycler: RecyclerView? = null
+
+    lateinit var empty_text_view: TextView
+    lateinit var empty_item_layout: LinearLayout
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +70,10 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
+
+        empty_text_view = binding.root.findViewById(R.id.empty_text_view)
+        empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        empty_item_layout.visibility = View.GONE
         tvCounter = binding.root.findViewById(R.id.tvCounter)
         movetonotification= binding.root.findViewById(R.id.movetonotification)
         Home.notifications_count.let {
@@ -162,18 +170,23 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     fun subscribe_create_post() {
         (activity as Home?)?.homeviewmodel?.all_match_bids?.observe(
             viewLifecycleOwner,
-            Observer {
-                when (it.status) {
+            Observer {res->
+                when (res.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        it.data.let { res ->
-                            if (res?.status == true) {
-                                dataList=res.data as ArrayList<User_bids_list>
-                                setAdapterListData(res.data as ArrayList<User_bids_list>)
-                            } else {
+                        Log.d("TAG@123", "Notification list Status " + res.status)
+                        Home.notifications_count = "0"
 
-                            }
+                        if(res.data!!.data.isNullOrEmpty()){
+                            empty_text_view.text = res.data.message
+                            empty_item_layout.visibility = View.VISIBLE
+                            Log.d("TAG@123", " empty_text  Show")
                         }
+                        else {
+                            dataList=res.data.data as ArrayList<User_bids_list>
+                            setAdapterListData(res.data.data as ArrayList<User_bids_list>)
+                        }
+
                     }
                     Status.LOADING -> {
                         AppUtils.showLoader(requireContext())

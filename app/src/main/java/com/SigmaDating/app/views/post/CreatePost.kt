@@ -101,13 +101,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     ): View? {
         _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         user_tag_id = ArrayList()
-        mFusedLocationClient =
-            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
-            CoroutineScope(Dispatchers.IO).launch {
-            getLocation()
-        }
-
-
         (activity as Home).homeviewmodel.all_match_bids = MutableLiveData<Resource<Match_bids>>()
         subscribe_bids_list()
         (activity as Home).homeviewmodel.get_user_match_bids(
@@ -171,6 +164,9 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
         }
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        getLocation()
+
         return binding.root
     }
 
@@ -189,7 +185,8 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         update_current.setOnClickListener {
             _binding?.let {
                 it.textUpdateLocation.visibility = View.VISIBLE
-                it.textUpdateLocation.text = location_text
+                getLocation()
+
             }
             dialog.dismiss()
         }
@@ -248,7 +245,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     }
 
     @SuppressLint("MissingPermission", "SetTextI18n")
-    private suspend fun getLocation() {
+    private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
 
@@ -258,15 +255,13 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
                         val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
 
-                        val list: List<Address> =
-                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        val list: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
 
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(500)
                             latitude = "${list[0].latitude}"
                             longitude = "${list[0].longitude}"
-
                             location_text = "${list[0].locality}"
                             Log.d("TAG@123", "location name" + location_text)
                             _binding?.textUpdateLocation?.text= location_text
@@ -574,9 +569,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     ) {
         if (requestCode == permissionId) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    getLocation()
-                }
+                getLocation()
             }
         }
     }

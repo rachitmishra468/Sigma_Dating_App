@@ -76,10 +76,10 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>,mess:String) {
+    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>, mess: String) {
 
-        if (dataListuser!!.size==0) {
-            empty_text_view.text = "No Post Found"
+        if (dataListuser.size == 0) {
+            empty_text_view.text = mess
             empty_item_layout.visibility = View.VISIBLE
             Log.d("TAG@123", " empty_text  Show")
         }
@@ -100,6 +100,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
 
     }
+
     fun subscribe_save_post_like() {
         (activity as Home?)?.homeviewmodel?.like_post?.observe(
             viewLifecycleOwner,
@@ -109,12 +110,17 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
-                                Log.d("TAG@123",res.message)
-                                Toast.makeText(requireContext(),res.message,Toast.LENGTH_SHORT).show()
-                            }else{
+                                Log.d("TAG@123", res.message)
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
                                 if (res != null) {
-                                    Log.d("TAG@123",res.message)
-                                    Toast.makeText(requireContext(),res.message,Toast.LENGTH_SHORT).show()
+                                    Log.d("TAG@123", res.message)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        res.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
                             }
@@ -138,20 +144,36 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        it.data.let { res ->
-                            if (res?.status == true) {
-
-                                if (!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
-                                    setAdapterListData(false, res.data as ArrayList<Postdata>,"")
-                                } else {
-                                    setAdapterListData(true, res.data as ArrayList<Postdata>,"")
-
-                                }
-
+                        if (it.data!!.status) {
+                            if (!userID.equals(
+                                    (activity as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.USER_ID
+                                    )
+                                )
+                            ) {
+                                setAdapterListData(
+                                    false,
+                                    it.data.data as ArrayList<Postdata>,
+                                    it.data.message
+                                )
                             } else {
+                                setAdapterListData(
+                                    true,
+                                    it.data.data as ArrayList<Postdata>,
+                                    it.data.message
+                                )
 
                             }
+
+                        } else {
+
+
+                            empty_text_view.text =  it.data.message
+                            empty_item_layout.visibility = View.VISIBLE
+                            Log.d("TAG@123", " empty_text  Show")
+
                         }
+
                     }
                     Status.LOADING -> {
                         AppUtils.showLoader(requireContext())
@@ -182,26 +204,25 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             })
     }
 
-    override fun onDelete(position: Postdata,flag:Int) {
-        when(flag){
-            1->{
+    override fun onDelete(position: Postdata, flag: Int) {
+        when (flag) {
+            1 -> {
                 val bundle = Bundle()
-                bundle.putString("post_id",position.id)
-                bundle.putString("user_name",position.first_name+" "+position.last_name)
-                bundle.putString("user_img",position.upload_image)
-                bundle.putString("comment_title",position.title)
-                bundle.putString("media",position.media)
-                findNavController().navigate(R.id.action_FirstFragment_to_comment,bundle)
+                bundle.putString("post_id", position.id)
+                bundle.putString("user_name", position.first_name + " " + position.last_name)
+                bundle.putString("user_img", position.upload_image)
+                bundle.putString("comment_title", position.title)
+                bundle.putString("media", position.media)
+                findNavController().navigate(R.id.action_FirstFragment_to_comment, bundle)
             }
-            2->{
+            2 -> {
                 save_post_like(position.id)
             }
-            3->{
+            3 -> {
                 alertDeletepopup(position)
 
             }
         }
-
 
 
     }
@@ -259,7 +280,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as Home).homeviewmodel.getAllPost(jsonObject)
     }
 
-    fun save_post_like(post_id:String) {
+    fun save_post_like(post_id: String) {
         (activity as Home).homeviewmodel.like_post = MutableLiveData<Resource<Loginmodel>>()
         subscribe_save_post_like()
         val jsonObject = JsonObject()

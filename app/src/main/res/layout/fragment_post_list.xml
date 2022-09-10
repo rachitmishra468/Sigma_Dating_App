@@ -131,6 +131,9 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+
+
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -151,23 +154,6 @@
             app:layout_constraintRight_toRightOf="parent">
 
 
-            <LinearLayout
-                android:id="@+id/empty_item_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <include
-                    layout="@layout/empty_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:layout_gravity="center">
-
-                </include>
-            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_recyclerview"
@@ -179,6 +165,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <LinearLayout
+                android:id="@+id/empty_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <include
+                    layout="@layout/empty_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
+
+                </include>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
