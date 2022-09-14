@@ -31,7 +31,7 @@ public class AppConstants {
     public static final String Lastname="Lastname";
 
     public static final String Gender="Gender";
-    public static final String Fraternity="Fraternity";
+    public static final String Fraternity="Feternity";
     public static final String Sorority="Sorority";
     public static final String School="School";
 

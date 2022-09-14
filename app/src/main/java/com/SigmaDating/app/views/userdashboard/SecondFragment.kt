@@ -35,6 +35,7 @@ import kotlinx.coroutines.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
 class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
@@ -48,7 +49,7 @@ class SecondFragment : Fragment() {
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
-    lateinit var greekLatter:TextView
+    lateinit var greekLatter: TextView
     private var userID: String? = null
     private var name: String? = null
     private var photo: String? = null
@@ -80,12 +81,11 @@ class SecondFragment : Fragment() {
         _binding?.editProfile?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_editprofile)
         }
-        if(!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
-            _binding?.fab?.visibility=View.GONE
-            _binding?.profileImg?.visibility=View.VISIBLE
-        }
-        else{
-            _binding?.profileImg?.visibility=View.INVISIBLE
+        if (!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
+            _binding?.fab?.visibility = View.GONE
+            _binding?.profileImg?.visibility = View.VISIBLE
+        } else {
+            _binding?.profileImg?.visibility = View.INVISIBLE
         }
         _binding?.fab?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_createpost)
@@ -97,21 +97,26 @@ class SecondFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
         _binding?.profileImg?.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("user_name", name)
-            bundle.putString("user_image",photo)
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_chatListFragment_to_userChatFragment, bundle,
-                    null,
-                    null);
+            if (Home.mCurrent_user_token.equals("")) {
 
-           // findNavController().navigate(R.id.action_chatListFragment_to_userChatFragment)
+            } else {
+                val bundle = Bundle()
+                bundle.putString("user_name", name)
+                bundle.putString("user_image", photo)
+                Navigation.findNavController(binding.root)
+                    .navigate(
+                        R.id.action_chatListFragment_to_userChatFragment, bundle,
+                        null,
+                        null
+                    );
+
+            }
         }
 
         _binding?.comments?.setOnClickListener {
             val bundle = Bundle()
-             bundle.putString("user_id",userID)
-             findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
+            bundle.putString("user_id", userID)
+            findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
 
         }
         return binding.root
@@ -182,64 +187,65 @@ class SecondFragment : Fragment() {
     }
 
     fun subscribe_Login_User_details() {
-        (activity as Home?)?.homeviewmodel?.get_secound_feb_data?.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    AppUtils.hideLoader()
-                    it.data.let { res ->
-                        if (res?.status == true) {
-                            Log.d("TAG@123", "111 " + it.data?.user.toString())
-                            _binding?.let {
-                                it.nameText.setText(res?.user.first_name +" "+ res.user.last_name)
-                                it.addresText.setText(res?.user.university)
-                                it.ageText.setText(""+res?.user.age)
+        (activity as Home?)?.homeviewmodel?.get_secound_feb_data?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data.let { res ->
+                            if (res?.status == true) {
+                                Log.d("TAG@123", "111 " + it.data?.user.toString())
+                                _binding?.let {
+                                    it.nameText.setText(res?.user.first_name + " " + res.user.last_name)
+                                    it.addresText.setText(res?.user.university)
+                                    it.ageText.setText("" + res?.user.age)
 
 
-                            }
+                                }
 
-                            if(it.data!!.user.greekletter.length>0) {
-                                greekLatter.text = it.data.user.greekletter
-                                greekLatter.visibility=View.VISIBLE
-                            }
-                            else{
-                                greekLatter.visibility=View.GONE
-                            }
-
+                                if (it.data!!.user.greekletter.length > 0) {
+                                    greekLatter.text = it.data.user.greekletter
+                                    greekLatter.visibility = View.VISIBLE
+                                } else {
+                                    greekLatter.visibility = View.GONE
+                                }
 
 
-                            it.data.user.upload_image.let {
-                                Glide.with(AppReseources.getAppContext()!!).load(it)
-                                    .error(R.drawable.profile_img)
-                                    .into(_binding!!.logoDetail);
-                            }
-                            name=res.user.first_name +" "+ res.user.last_name
-                            photo=it.data.user.upload_image
-                            if (!res.posts.isNullOrEmpty()) {
-                                dataListuser = res.posts
-                                setAdapterListData(dataListuser as ArrayList<Postdata>)
-                            }else{
+
+                                it.data.user.upload_image.let {
+                                    Glide.with(AppReseources.getAppContext()!!).load(it)
+                                        .error(R.drawable.profile_img)
+                                        .into(_binding!!.logoDetail);
+                                }
+                                name = res.user.first_name + " " + res.user.last_name
+                                photo = it.data.user.upload_image
+                                if (!res.posts.isNullOrEmpty()) {
+                                    dataListuser = res.posts
+                                    setAdapterListData(dataListuser as ArrayList<Postdata>)
+                                } else {
                                     empty_text_view.text = res.post_message
                                     empty_item_layout.visibility = View.VISIBLE
                                     Log.d("TAG@123", " empty_text  Show")
 
-                            }
+                                }
 
-                        } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
+                            } else {
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                            }
                         }
                     }
-                }
-                Status.LOADING -> {
+                    Status.LOADING -> {
 
-                    AppUtils.showLoader(requireContext())
-                    Log.d("TAG@123", "LOADING is null")
+                        AppUtils.showLoader(requireContext())
+                        Log.d("TAG@123", "LOADING is null")
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
                 }
-                Status.ERROR -> {
-                    AppUtils.hideLoader()
-                }
-            }
-        })
+            })
     }
 
     override fun onDestroyView() {
@@ -253,7 +259,7 @@ class SecondFragment : Fragment() {
         chatIcon = binding.root.findViewById(R.id.chat_Icon)
         match_list = binding.root.findViewById(R.id.match_list)
         sigma_list = binding.root.findViewById(R.id.sigma_list)
-        greekLatter= binding.root.findViewById(R.id.greek_latter)
+        greekLatter = binding.root.findViewById(R.id.greek_latter)
 
         match_list.setImageDrawable(resources.getDrawable(R.drawable.heart_solid))
         chatIcon.setImageDrawable(resources.getDrawable(R.drawable.comments_disable))

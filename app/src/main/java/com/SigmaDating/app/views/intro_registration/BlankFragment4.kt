@@ -63,7 +63,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         independent= about_school_binding?.root?.findViewById(R.id.independent)
         fraternity_button = about_school_binding?.root?.findViewById(R.id.fraternity_button)
         fraternity_button!!.isSelected=true
-        fraternity_button!!.hint="Select Fraternity"
+        fraternity_button!!.hint="Select Feternity"
 
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
@@ -106,7 +106,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                 else if(fraternity_Spinner!!.text.isEmpty()&& flag){
                     Toast.makeText(
                         requireActivity(),
-                        "Select Fraternity/Sorority ",
+                        "Select Feternity/Sorority ",
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -121,14 +121,14 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
             flag=true;
             if (!fraternity_button!!.isSelected){
                 fraternity_Spinner?.setText("")
-                fraternity_Spinner?.hint = "Select Fraternity"
+                fraternity_Spinner?.hint = "Select Feternity"
                 fraternity_button!!.isSelected=true
                 Socority_button!!.isSelected=false
             }
             else{
 
             }
-            fraternity_Spinner?.hint = "Select Fraternity"
+            fraternity_Spinner?.hint = "Select Feternity"
                // schoolAct_spinner!!.isSelected=false
                 //fraternity_button!!.isSelected=true
 
@@ -218,7 +218,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         else if (stringtype.equals(AppConstants.Fraternity)){
             schoolList= ArrayList<UniversityList>()
             schoolList=fraternitiesList
-            searchVieww.queryHint="Search Fraternity "
+            searchVieww.queryHint="Search Feternity"
         }
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),

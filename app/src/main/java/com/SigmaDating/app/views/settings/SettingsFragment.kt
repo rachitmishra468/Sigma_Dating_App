@@ -572,8 +572,9 @@ class SettingsFragment : Fragment() {
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
                     jsonObject.addProperty("phone", "+1" + current_value.text.toString())
+                    (activity as Home).homeviewmodel.setting_update_details = MutableLiveData<Resource<Loginmodel>>()
                     (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
-                    _binding.phoneNumberText.text = "+1" + current_value.text.toString()
+                    _binding.phoneNumberText.text = current_value.text.toString()
                     dialog.dismiss()
                 } else {
                     val jsonObject = JsonObject()
