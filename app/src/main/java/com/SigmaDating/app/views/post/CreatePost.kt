@@ -130,10 +130,11 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
 
         _binding?.done?.setOnClickListener {
-            if (_binding?.postTitle?.text.toString().equals("")) {
+          /*  if (_binding?.postTitle?.text.toString().equals("")) {
                 _binding?.postTitle?.error = "Enter Post Title.."
-            } else if (_binding?.postDiscription?.text.toString().equals("")) {
-                _binding?.postDiscription?.error = "Enter Post Caption.."
+            } else */
+            if (_binding?.postDiscription?.text.toString().equals("")) {
+                _binding?.postDiscription?.error = "Enter Post Caption .."
             } else if (file == null) {
                 Toast.makeText(requireContext(), "Please select a media to upload.", Toast.LENGTH_LONG)
                     .show()
@@ -148,7 +149,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 )
 
                 val map: HashMap<String, String> = HashMap()
-                map.put("title", _binding?.postTitle?.text.toString())
+                map.put("title","")
                 map.put(
                     "user_id",
                     (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)

@@ -52,7 +52,7 @@ companion object {
 
 
                         CoroutineScope(Dispatchers.Main).launch {
-                            delay(1000)
+                            delay(500)
                             (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                 AppConstants.latitude,
                                 "${list[0].latitude}"

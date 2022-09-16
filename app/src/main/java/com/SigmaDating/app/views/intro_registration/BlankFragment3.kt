@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import com.SigmaDating.R
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
-import com.SigmaDating.databinding.AboutBirthdayBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
 import android.view.*
 import com.SigmaDating.app.utilities.PhoneTextWatcher
+import com.SigmaDating.databinding.AboutBirthdayBinding
 
 
 // TODO: Rename parameter arguments, choose names that match

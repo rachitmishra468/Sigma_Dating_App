@@ -13,10 +13,9 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.SigmaDating.R
-import com.SigmaDating.app.Sigmadatingapp
-import com.SigmaDating.databinding.AboutYourselfLayoutBinding
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.databinding.AboutYourselfLayoutBinding
 
 
 // TODO: Rename parameter arguments, choose names that match
