@@ -63,11 +63,11 @@ class HomeViewModel @Inject constructor(
         // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
     }
 
-    fun get_home_feb_data(id: String) = viewModelScope.launch {
-        get_Login_User_details(id)
-        get_Login_User_bids(id)
+    /*fun get_home_feb_data(id: String) {
+       var job= get_Login_User_bids(id)
+       var job_2= get_Login_User_details(id)
 
-    }
+    }*/
 
 
     fun get_User_token(id: JsonObject) = viewModelScope.launch {

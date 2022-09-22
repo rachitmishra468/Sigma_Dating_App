@@ -160,7 +160,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         fraternity_button?.setOnClickListener {
             if (!fraternity_button!!.isSelected){
-                fraternity_Spinner.setText("Select Feternity")
+                fraternity_Spinner.setText("Select Fraternity")
                 community=null
                 Log.d("TAG@123","Community :"+community)
                 fraternity_button!!.isSelected=true
@@ -169,8 +169,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             else{
 
             }
-            fraternity_Spinner?.setText("Select Feternity")
-
+            fraternity_Spinner?.setText("Select Fraternity")
 
             fraternity_Spinner.visibility=View.VISIBLE
 
@@ -292,8 +291,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             titleText.text = "School / University"
             searchVieww.queryHint = "Search School/University"
         } else {
-            titleText.text = "Sorority/Feternity"
-            searchVieww.queryHint = "Search Sorority/Feternity "
+            titleText.text = "Sorority/Fraternity"
+            searchVieww.queryHint = "Search Sorority/Fraternity "
         }
         dialog.show()
         schoolAct_spinner!!.isEnabled = false

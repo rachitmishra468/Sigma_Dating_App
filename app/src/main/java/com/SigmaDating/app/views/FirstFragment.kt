@@ -68,6 +68,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var empty_item_layout: LinearLayout
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
@@ -109,14 +110,22 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
         }
 
-        (activity as Home).homeviewmodel.get_home_feb_data(
+        (activity as Home).homeviewmodel.get_Login_User_bids(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
             )
         )
-        footer_transition()
-        subscribe_Login_User_details()
+
+        (activity as Home).homeviewmodel.get_Login_User_details(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
         subscribe_bids()
+        subscribe_Login_User_details()
+
+
+        footer_transition()
         return binding.root
 
     }
@@ -150,9 +159,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
 
             override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
-                Log.d("TAG@123", "onAdapterAboutToEmpty")
-                empty_text_view.text = "No matching bids found."
-                empty_item_layout.visibility = View.VISIBLE
+                Log.d("TAG@123", "onAdapterAboutToEmpty :"+itemsInAdapter)
+                if(itemsInAdapter==0){
+                    Log.d("TAG@123", "Bid list isNullOrEmpty")
+                    empty_text_view.text = "No matching bids found."
+                    empty_item_layout.visibility = View.VISIBLE
+                }
             }
 
             override fun onScroll(v: Float) {
@@ -328,6 +340,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         (activity as Home?)?.homeviewmodel?.user_bids?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+
+                    AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -338,6 +352,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                                 Log.d("TAG@123", "notifications_count  :" + it.data.toString())
                                 courseModalArrayList = it.data?.bids as ArrayList<Bids>
+
+                                Log.d("TAG@123", "courseModalArrayList Size   :" + courseModalArrayList!!.size)
                                 pages = it.data.pages as ArrayList<Pages>
                                 notifications_count = it.data.notifications_count
                                 notifications_count.let {
@@ -348,7 +364,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     empty_text_view.text = it.data.message
                                     empty_item_layout.visibility = View.VISIBLE
                                     Log.d("TAG@123", " empty_text  Show")
+                                }else{
+                                    empty_item_layout.visibility = View.GONE
                                 }
+
                                 adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()
@@ -357,8 +376,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())
                             }
                         } else {
-
-
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -366,9 +383,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
+
+                    AppUtils.showLoader(requireContext())
                 }
                 Status.ERROR -> {
-
+                    AppUtils.hideLoader()
                 }
             }
         })
@@ -421,10 +440,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
-                    AppUtils.showLoader(requireContext())
+
                 }
                 Status.ERROR -> {
-                    AppUtils.hideLoader()
+
                 }
             }
         })

@@ -92,7 +92,7 @@ object AppUtils {
     fun isValid_password(password: String?): Boolean {
         val pattern: Pattern
         val matcher: Matcher
-        val PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,15})"
+        val PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=!*]).{8,15})"
         pattern = Pattern.compile(PASSWORD_PATTERN)
         matcher = pattern.matcher(password)
         return matcher.matches()
@@ -127,10 +127,6 @@ object AppUtils {
         }
     }
 
-    fun isValidEmail(target: CharSequence?): Boolean {
-        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
-    }
-
     fun isValidDate(dateOfBirth: String): Boolean {
         var valid = true
         val formatter: DateFormat = SimpleDateFormat("MM/dd/yyyy")
@@ -145,34 +141,6 @@ object AppUtils {
         return valid
     }
 
-    fun validateDate(date: String): Boolean {
-        val regex = "^(0[0-9]||1[0-2])/([0-2][0-9]||3[0-1])/([0-9][0-9])?[0-9][0-9]$"
-        val matcher = Pattern.compile(regex).matcher(date)
-        return if (matcher.matches()) {
-            matcher.reset()
-            if (matcher.find()) {
-                val dateDetails = date.split("/")
-                val day: String = dateDetails[1]
-                val month: String = dateDetails[0]
-                val year: String = dateDetails[2]
-                if (validateMonthWithMaxDate(day, month)) {
-                    false
-                } else if (isFebruaryMonth(month)) {
-                    if (isLeapYear(year)) {
-                        leapYearWith29Date(day)
-                    } else {
-                        notLeapYearFebruary(day)
-                    }
-                } else {
-                    true
-                }
-            } else {
-                false
-            }
-        } else {
-            false
-        }
-    }
 
     private fun validateMonthWithMaxDate(day: String, month: String): Boolean =
         day == "31" && (month == "4" || month == "6" || month == "9" || month == "11" || month == "04" || month == "06" || month == "09")
@@ -259,24 +227,13 @@ object AppUtils {
         imm.hideSoftInputFromWindow(view.applicationWindowToken, 0)
     }
 
-    fun showSoftKeyBoard(context: Context, view: View) {
-        if (view.requestFocus()) {
-            val inputMethodManager =
-                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
 
     fun animateImageview(view: ImageView) {
         view.animate().scaleX(0.7f).setDuration(100).withEndAction {
             view.animate().scaleX(1f).scaleY(1f)
         }
     }
-    fun fromMillisToTimeString(millis: Long) : String {
-        val format = SimpleDateFormat("hh:mm a", Locale.getDefault())
-        return format.format(millis)
-    }
+
     fun setCustomDate(inputdate: String): String? {
         var newformateddate = ""
         val toformatstr = "MMM dd, yyyy | hh:mm aa"

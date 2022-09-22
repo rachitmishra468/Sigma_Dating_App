@@ -18,11 +18,20 @@
     </style>
 
     <style name="TextInputLayout" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="boxStrokeColor">@color/hint_text_color</item>
         <item name="android:textColorHint">@color/hint_text_color</item>
-        <item name="boxStrokeWidth">1dp</item>
         <item name="boxBackgroundColor">@color/hint_text_color</item>
+        <item name="boxStrokeWidth">1dp</item>
     </style>
+
+
 
     <style name="TextInputEditText" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox.Dense">
         <item name="android:textColor">@color/black</item>
