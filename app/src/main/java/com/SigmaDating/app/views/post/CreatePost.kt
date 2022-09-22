@@ -392,22 +392,16 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                         }
                         if (mimeType.toString().equals("video/mp4")) {
                             _binding?.imageProfile?.let {
-                                Glide
-                                    .with(requireContext())
-                                    .asBitmap()
-                                    .load(selectedImage)
-                                    .into(it)
+                                Glide.with(requireContext()).asBitmap().load(selectedImage).into(it)
                             };
                         } else {
-                            _binding?.imageProfile?.setImageURI(selectedImage)
+                            _binding?.imageProfile?.let {
+                                Glide.with(requireContext()).load(file).into(
+                                    it
+                                )
+                            }
                         }
 
-                        Log.d("TAG@123", "FILEPATH :" + mimeType.toString())
-                        Log.d("TAG@123", "FILEPATH :" + filePath)
-                        Log.d("TAG@123", "FILE  PATH :" + file!!.absolutePath)
-                        Log.d("TAG@123", "URI :" + selectedImage)
-                        Log.d("TAG@123", "PATH :" + selectedImage.path)
-                        Log.d("TAG@123", "ABsolute Url of Image is " + Uri.fromFile(file))
                     } catch (e: Exception) {
                         Log.e("TAG@123", "File URI Exception : ${e.message}")
 

@@ -2,20 +2,17 @@ package com.SigmaDating.app.views.intro_registration
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -25,13 +22,20 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.SigmaDating.R
+import com.SigmaDating.app.other.LocationService
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.utilities.URIPathHelper
 import com.SigmaDating.app.views.Home
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import de.hdodenhof.circleimageview.CircleImageView
@@ -39,14 +43,6 @@ import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-
-import android.widget.Toast
-
-import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.SigmaDating.app.Sigmadatingapp
-import com.SigmaDating.app.other.LocationService
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -317,26 +313,40 @@ class Profile_Photo : Fragment() {
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
                     mUri= Uri.fromFile(File(currentPhotoPath))
-                    val bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(mUri!!))
-                    imageProfile!!.setImageURI(mUri)
-                    val drawable: BitmapDrawable = imageProfile?.getDrawable() as BitmapDrawable
-                    var bitmapl: Bitmap = drawable.getBitmap()
-                    bitmapl = Bitmap.createScaledBitmap(bitmapl, 250, 250, true);
-                    convertBitmapToBase64(bitmapl)
 
+                    Glide.with(this)
+                        .asBitmap()
+                        .load(mUri)
+                        .into(object : CustomTarget<Bitmap>(300,300){
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                imageProfile?.setImageBitmap(resource)
+                                Bitmap.createScaledBitmap(resource, 250, 250, true);
+                                convertBitmapToBase64(resource)
+                            }
+                            override fun onLoadCleared(placeholder: Drawable?) {
+
+                            }
+                        })
 
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
                     if (data!=null) {
                         try {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                requireActivity().contentResolver,
-                                data.data
-                            )
-                            imageProfile?.setImageBitmap(bitmap)
-                           Bitmap.createScaledBitmap(bitmap, 250, 250, true);
-                            convertBitmapToBase64(bitmap)
+
+                            Glide.with(this)
+                                .asBitmap()
+                                .load(File(URIPathHelper().getPath(requireContext(), data!!.data!!)))
+                                .into(object : CustomTarget<Bitmap>(300,300){
+                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                        imageProfile?.setImageBitmap(resource)
+                                        Bitmap.createScaledBitmap(resource, 100, 100, true);
+                                        convertBitmapToBase64(resource)
+                                    }
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }

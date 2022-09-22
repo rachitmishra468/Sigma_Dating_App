@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -44,8 +45,12 @@ import com.SigmaDating.app.model.communityModel.UniversityList
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.utilities.EmptyDataObserver
+import com.SigmaDating.app.utilities.URIPathHelper
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.model.SchoolCommunityResponse
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.demoapp.other.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -725,38 +730,49 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
                     val mUri= Uri.fromFile(File(currentPhotoPath))
-                    val bitmap = BitmapFactory.decodeStream(requireActivity().getContentResolver().openInputStream(mUri!!))
-                    val rotationMatrix = Matrix()
-                    if (bitmap.getWidth() >= bitmap.getHeight()) {
-                        rotationMatrix.setRotate((-90).toFloat())
-                    } else {
-                        rotationMatrix.setRotate((0).toFloat())
-                    }
+                    Glide.with(this)
+                        .asBitmap()
+                        .load(mUri)
+                        .into(object : CustomTarget<Bitmap>(300,300){
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
 
-                    val rotatedBitmap = Bitmap.createBitmap(
-                        bitmap,
-                        0,
-                        0,
-                        bitmap.getWidth(),
-                        bitmap.getHeight(),
-                        rotationMatrix,
-                        true
-                    )
+                                Bitmap.createScaledBitmap(resource, 250, 250, true);
+                                convertBitmapToBase64(resource,true)
+                            }
+                            override fun onLoadCleared(placeholder: Drawable?) {
 
-                    Bitmap.createScaledBitmap(rotatedBitmap, 80, 90, true);
-                    convertBitmapToBase64(rotatedBitmap, true)
+                            }
+                        })
                 }
             OPERATION_CHOOSE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
 
                     if (data != null) {
                         try {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                requireActivity().contentResolver,
-                                data.data
-                            )
-                            Bitmap.createScaledBitmap(bitmap, 250, 250, true);
-                            convertBitmapToBase64(bitmap, false)
+
+                            Glide.with(this)
+                                .asBitmap()
+                                .load(File(URIPathHelper().getPath(requireContext(), data!!.data!!)))
+                                .into(object : CustomTarget<Bitmap>(300,300){
+                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                       // imageProfile?.setImageBitmap(resource)
+                                        Bitmap.createScaledBitmap(resource, 250, 250, true);
+                                        convertBitmapToBase64(resource,false)
+                                    }
+                                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                                    }
+                                })
+
+
+
+
+                            /* val bitmap = MediaStore.Images.Media.getBitmap(
+                                 requireActivity().contentResolver,
+                                 data.data
+                             )
+                             Bitmap.createScaledBitmap(bitmap, 250, 250, true);
+                             convertBitmapToBase64(bitmap, false)*/
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
