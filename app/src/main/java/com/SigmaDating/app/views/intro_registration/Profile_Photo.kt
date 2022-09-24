@@ -94,6 +94,7 @@ class Profile_Photo : Fragment() {
         text_termncon=view.findViewById(R.id.text_termncon)
         constraint_f1 = view.findViewById(R.id.constraint_f1)
         imageProfile = view.findViewById(R.id.img_profile)
+
         bitmap_string = ""
         profile_continue.setOnClickListener {
                 if (tc_check.isChecked) {
@@ -122,6 +123,11 @@ class Profile_Photo : Fragment() {
         img_choose_dummy.setOnClickListener {
             checkGallerypermission()
         }
+
+        imageProfile?.setOnClickListener {
+            checkGallerypermission()
+        }
+
 
         Register()
         LocationService.get_location(requireActivity())

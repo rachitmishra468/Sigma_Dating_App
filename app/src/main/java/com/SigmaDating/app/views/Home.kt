@@ -6,19 +6,18 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.model.Pages
-import com.SigmaDating.app.network.ConnectivityMonitorImpl
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -110,7 +109,23 @@ class Home : AppCompatActivity() {
         }
 
     }
+   /* override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
+        }
+        return super.onKeyUp(keyCode, event)
+    }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
+            )
+        }
+        return super.onKeyDown(keyCode, event)
+    }*/
 
     companion object {
         lateinit var pages: ArrayList<Pages>

@@ -81,93 +81,58 @@
 </LinearLayout>
     </LinearLayout>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messageList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/messageInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_head"
+        app:stackFromEnd="true"
+        android:overScrollMode="never"
+        tools:listitem="@layout/row_message_item_outgoing" />
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="110dp"
-        app:layout_constraintStart_toEndOf="@+id/linear_head"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content"
+        android:background="@color/gray_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messageList">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/messageList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/messageInputLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:stackFromEnd="true"
-            tools:listitem="@layout/row_message_item_outgoing" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/messageInputLayout"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/messageInputHolder"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/gray_background"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/new_message"
+            app:boxBackgroundColor="@color/white"
+            app:endIconDrawable="@drawable/ic_send_message"
+            app:endIconMode="custom"
+            app:endIconTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/messageList">
+            app:layout_constraintStart_toEndOf="parent"
+            >
 
-            <TextView
-                android:id="@+id/typingIndicator"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/messageInput"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="user00 is typing" />
+                android:inputType="textCapSentences" />
 
-            <ImageButton
-                android:id="@+id/messageAttachmentButton"
-                android:layout_width="5dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="9dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_attach"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/messageInputHolder"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/messageInputHolder"
-                app:tint="@color/colorPrimary" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/messageInputHolder"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="17dp"
-                android:layout_marginBottom="17dp"
-                android:hint="@string/new_message"
-                app:boxBackgroundColor="@color/white"
-                app:endIconDrawable="@drawable/ic_send_message"
-                app:endIconMode="custom"
-                app:endIconTint="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/messageAttachmentButton"
-                app:layout_constraintTop_toBottomOf="@+id/typingIndicator"
-                app:layout_goneMarginTop="17dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/messageInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

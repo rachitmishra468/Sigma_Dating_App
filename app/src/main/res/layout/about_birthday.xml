@@ -85,12 +85,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".2"
+            android:visibility="gone"
             android:background="@android:color/transparent"/>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:alpha=".3"
+            android:visibility="gone"
             android:background="@color/light_black" />
 
         <EditText
