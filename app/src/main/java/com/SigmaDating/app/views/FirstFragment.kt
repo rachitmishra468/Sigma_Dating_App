@@ -211,12 +211,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
         chatIcon.setOnClickListener {
-
-            findNavController().navigate(R.id.action_FirstFragment_to_chat)
+            if(AppUtils.isNetworkAvailable()) {
+            findNavController().navigate(R.id.action_FirstFragment_to_chat)}
         }
 
         match_list.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            if(AppUtils.isNetworkAvailable()) {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)}
         }
         sigma_list.setOnClickListener {
             AppUtils.animateImageview(sigma_list)

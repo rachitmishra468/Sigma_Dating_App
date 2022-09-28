@@ -81,8 +81,6 @@ class Login_Activity : AppCompatActivity() {
     var verfie_otp: Button? = null
 
 
-    private var disposableObserver: SingleObserver<Loginmodel>? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -273,7 +271,7 @@ class Login_Activity : AppCompatActivity() {
 
     fun sign_up(view: View) {
         startActivity(Intent(this, OnBoardingActivity::class.java))
-       // finish()
+
 
     }
 

@@ -20,10 +20,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Adapter
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
 import com.SigmaDating.R
@@ -41,6 +37,10 @@ import java.util.regex.Pattern
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.*
+import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.views.Home
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -144,38 +144,12 @@ object AppUtils {
 
     private fun validateMonthWithMaxDate(day: String, month: String): Boolean =
         day == "31" && (month == "4" || month == "6" || month == "9" || month == "11" || month == "04" || month == "06" || month == "09")
-
     private fun isFebruaryMonth(month: String): Boolean = month == "2" || month == "02"
     private fun isLeapYear(year: String): Boolean = year.toInt() % 4 == 0
     private fun leapYearWith29Date(day: String): Boolean = !(day == "30" || day == "31")
     private fun notLeapYearFebruary(day: String): Boolean =
         !(day == "29" || day == "30" || day == "31")
 
-
-
-    fun isNetworkNotAvailableDialog(context: Context) {
-        try {
-            val builder = MaterialAlertDialogBuilder(context)
-            builder.setTitle(R.string.app_name)
-            builder.setIcon(R.mipmap.ic_launcher)
-
-            builder.setMessage("Internet not available, Cross check your internet connectivity and try again.")
-            builder.background = ColorDrawable(
-                Color.parseColor("#FFFFFF")
-            )
-            builder.setPositiveButton("Yes") { dialog, which ->
-
-            }
-            builder.setNegativeButton("No") { dialog, which ->
-
-            }
-            builder.setCancelable(false)
-            val dialog = builder.create()
-            dialog.show()
-        } catch (e: java.lang.Exception) {
-            Log.d("TAG@123", "Show Dialog: " + e.message)
-        }
-    }
 
     @SuppressLint("ResourceAsColor")
     fun showSnackBar(
@@ -234,20 +208,6 @@ object AppUtils {
         }
     }
 
-    fun setCustomDate(inputdate: String): String? {
-        var newformateddate = ""
-        val toformatstr = "MMM dd, yyyy | hh:mm aa"
-        val todateFormat = SimpleDateFormat(toformatstr)
-        val fromformatstr = "yyyy-MM-dd hh:mm:ss"
-        val fromdateFormat = SimpleDateFormat(fromformatstr)
-        try {
-            val date = fromdateFormat.parse(inputdate.trim { it <= ' ' })
-            newformateddate = todateFormat.format(date)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return newformateddate
-    }
 
 
     fun checkValidationOnFisrtStep(
@@ -270,60 +230,7 @@ object AppUtils {
         return true
     }
 
-    fun getResizedBitmap(image: Bitmap, maxSize: Int): Bitmap? {
-        var width = image.width
-        var height = image.height
-        val bitmapRatio = width.toFloat() / height.toFloat()
-        if (bitmapRatio > 1) {
-            width = maxSize
-            height = (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true)
-    }
 
-    public fun getcheckImagerotation(photoPath: String, bitmap: Bitmap): Bitmap {
-        val ei: ExifInterface = ExifInterface(photoPath)
-        val orientation = ei.getAttributeInt(
-            ExifInterface.TAG_ORIENTATION,
-            ExifInterface.ORIENTATION_UNDEFINED
-        )
-
-        var rotatedBitmap: Bitmap? = null
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotatedBitmap = rotateImage(bitmap, 90F)
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotatedBitmap = rotateImage(bitmap, 180F)
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotatedBitmap = rotateImage(bitmap, 270F)
-            ExifInterface.ORIENTATION_NORMAL -> rotatedBitmap = bitmap
-            else -> rotatedBitmap = bitmap
-        }
-        return rotatedBitmap!!
-    }
-
-    fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
-        val matrix = Matrix()
-        matrix.postRotate(angle)
-        return Bitmap.createBitmap(
-            source, 0, 0, source.width, source.height,
-            matrix, true
-        )
-    }
-
-
-    fun index(spinner: Spinner, value: String?): Int {
-        val adapter: Adapter = spinner.getAdapter()
-        val n: Int = adapter.getCount()
-        for (i in 0 until n) {
-            var name = (spinner.getItemAtPosition(i) as UniversityList).name
-            if (name.equals(value)) {
-                return i
-                break
-            }
-        }
-        return 0
-    }
 
 
     fun getAgeDiffernce(dobString: String): Int {
@@ -417,6 +324,37 @@ object AppUtils {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetworkInfo
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting
+    }
+
+
+
+    fun isNetworkAvailable(): Boolean {
+        if(isNetworkAvailable_()){
+            return true
+        }
+        Toast.makeText(AppReseources.getAppContext()!!,R.string.internet_error_message, Toast.LENGTH_LONG).show()
+        return false
+    }
+
+    fun isNetworkAvailable_(): Boolean {
+        val context=AppReseources.getAppContext()!!
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+            return when {
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->    true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->   true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->   true
+                else -> false
+            }
+        }
+        else {
+            if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
+                return true
+            }
+        }
+
+        return false
     }
 
 }

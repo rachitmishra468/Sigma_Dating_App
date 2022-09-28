@@ -1,9 +1,12 @@
 package com.SigmaDating.app.views.login
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.SigmaDating.R
 import com.SigmaDating.app.Sigmadatingapp
 import com.example.demoapp.other.Resource
 import com.SigmaDating.app.model.Loginmodel
@@ -13,6 +16,7 @@ import com.SigmaDating.app.model.Forgotpassword
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.AppConstants.PHONE_LOGIN
 import com.SigmaDating.app.storage.SharedPreferencesStorage
+import com.SigmaDating.app.utilities.AppUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,33 +53,39 @@ class LoginViewModel @Inject constructor(
 
 
     fun User_1_login() = viewModelScope.launch {
-        _res?.postValue(Resource.loading(null))
 
-        val jsonObject = JsonObject()
-        if (PHONE_LOGIN) {
-            jsonObject.addProperty(
-                "phone",
-                sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
-                    AppConstants.phone
+        if(AppUtils.isNetworkAvailable()) {
+            _res?.postValue(Resource.loading(null))
+
+            val jsonObject = JsonObject()
+            if (PHONE_LOGIN) {
+                jsonObject.addProperty(
+                    "phone",
+                    sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                        AppConstants.phone
+                    )
                 )
-            )
-        } else {
-            jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
-            jsonObject.addProperty(
-                "password",
-                sharedPreferencesStorage.getString(AppConstants.password)
-            )
-            jsonObject.addProperty("device_token", Sigmadatingapp.fcm_token)
-            jsonObject.addProperty("device_type", "Android")
-            jsonObject.addProperty("phone", "")
-        }
-
-        Log.d("TAG@123", jsonObject.toString())
-        mainRepository.user_login(jsonObject).let {
-            if (it.isSuccessful) {
-                _res?.postValue(Resource.success(it.body()))
             } else {
-                _res?.postValue(Resource.error(it.errorBody().toString(), null))
+                jsonObject.addProperty(
+                    "email",
+                    sharedPreferencesStorage.getString(AppConstants.email)
+                )
+                jsonObject.addProperty(
+                    "password",
+                    sharedPreferencesStorage.getString(AppConstants.password)
+                )
+                jsonObject.addProperty("device_token", Sigmadatingapp.fcm_token)
+                jsonObject.addProperty("device_type", "Android")
+                jsonObject.addProperty("phone", "")
+            }
+
+            Log.d("TAG@123", jsonObject.toString())
+            mainRepository.user_login(jsonObject).let {
+                if (it.isSuccessful) {
+                    _res?.postValue(Resource.success(it.body()))
+                } else {
+                    _res?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
         }
     }

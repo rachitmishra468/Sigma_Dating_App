@@ -12,6 +12,7 @@ import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.app.repository.MainRepository
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
+import com.SigmaDating.app.utilities.AppUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,77 +33,83 @@ class User_Register @Inject constructor(
     }
 
     fun Register(bitmap: String) = viewModelScope.launch {
-        registration?.postValue(Resource.loading(null))
+        if(AppUtils.isNetworkAvailable()) {
+            registration?.postValue(Resource.loading(null))
 
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
-        jsonObject.addProperty(
-            "first_name",
-            sharedPreferencesStorage.getString(AppConstants.fisrtname)
-        )
-        jsonObject.addProperty(
-            "last_name",
-            sharedPreferencesStorage.getString(AppConstants.Lastname)
-        )
-        jsonObject.addProperty(
-            "password",
-            sharedPreferencesStorage.getString(AppConstants.password)
-        )
-        jsonObject.addProperty(
-            "password_confirm",
-            sharedPreferencesStorage.getString(AppConstants.password)
-        )
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("email", sharedPreferencesStorage.getString(AppConstants.email))
+            jsonObject.addProperty(
+                "first_name",
+                sharedPreferencesStorage.getString(AppConstants.fisrtname)
+            )
+            jsonObject.addProperty(
+                "last_name",
+                sharedPreferencesStorage.getString(AppConstants.Lastname)
+            )
+            jsonObject.addProperty(
+                "password",
+                sharedPreferencesStorage.getString(AppConstants.password)
+            )
+            jsonObject.addProperty(
+                "password_confirm",
+                sharedPreferencesStorage.getString(AppConstants.password)
+            )
 
-        jsonObject.addProperty(
-            "phone",
-            sharedPreferencesStorage.getString(AppConstants.phone)
-        )
+            jsonObject.addProperty(
+                "phone",
+                sharedPreferencesStorage.getString(AppConstants.phone)
+            )
 
 
-        jsonObject.addProperty(
-            "location", sharedPreferencesStorage.getString(AppConstants.location)
-        )
-        jsonObject.addProperty("dob", sharedPreferencesStorage.getString(AppConstants.Dob))
-        jsonObject.addProperty("gender", sharedPreferencesStorage.getString(AppConstants.gender))
-        jsonObject.addProperty(
-            "university",
-            sharedPreferencesStorage.getString(AppConstants.university)
-        )
-        jsonObject.addProperty(
-            "community",
-            sharedPreferencesStorage.getString(AppConstants.community)
-        )
-        jsonObject.addProperty("interests", "")
-        jsonObject.addProperty(
-            "interested_in",
-            sharedPreferencesStorage.getString(AppConstants.interested_in)
-        )
-        jsonObject.addProperty("facebookId", "")
-        jsonObject.addProperty("appleId", "")
-        jsonObject.addProperty(
-            "latitude",
-            sharedPreferencesStorage.getString(AppConstants.latitude)
-        )
-        jsonObject.addProperty(
-            "longitude",
-            sharedPreferencesStorage.getString(AppConstants.longitude)
-        )
-        jsonObject.addProperty("isSocialLogin", "")
-        jsonObject.addProperty("upload_image", bitmap)
-        jsonObject.addProperty("device_token", Sigmadatingapp.fcm_token)
-        jsonObject.addProperty("device_type", "Android")
-        Log.d("TAG@123", "registration data : " + jsonObject.toString())
-        mainRepository.user_register(jsonObject).let {
-            if (it.isSuccessful) {
-                registration?.postValue(Resource.success(it.body()))
-            } else {
-                registration?.postValue(Resource.error(it.errorBody().toString(), null))
+            jsonObject.addProperty(
+                "location", sharedPreferencesStorage.getString(AppConstants.location)
+            )
+            jsonObject.addProperty("dob", sharedPreferencesStorage.getString(AppConstants.Dob))
+            jsonObject.addProperty(
+                "gender",
+                sharedPreferencesStorage.getString(AppConstants.gender)
+            )
+            jsonObject.addProperty(
+                "university",
+                sharedPreferencesStorage.getString(AppConstants.university)
+            )
+            jsonObject.addProperty(
+                "community",
+                sharedPreferencesStorage.getString(AppConstants.community)
+            )
+            jsonObject.addProperty("interests", "")
+            jsonObject.addProperty(
+                "interested_in",
+                sharedPreferencesStorage.getString(AppConstants.interested_in)
+            )
+            jsonObject.addProperty("facebookId", "")
+            jsonObject.addProperty("appleId", "")
+            jsonObject.addProperty(
+                "latitude",
+                sharedPreferencesStorage.getString(AppConstants.latitude)
+            )
+            jsonObject.addProperty(
+                "longitude",
+                sharedPreferencesStorage.getString(AppConstants.longitude)
+            )
+            jsonObject.addProperty("isSocialLogin", "")
+            jsonObject.addProperty("upload_image", bitmap)
+            jsonObject.addProperty("device_token", Sigmadatingapp.fcm_token)
+            jsonObject.addProperty("device_type", "Android")
+            Log.d("TAG@123", "registration data : " + jsonObject.toString())
+            mainRepository.user_register(jsonObject).let {
+                if (it.isSuccessful) {
+                    registration?.postValue(Resource.success(it.body()))
+                } else {
+                    registration?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
         }
     }
 
 
     fun getSchoolingData() = viewModelScope.launch {
+        if(AppUtils.isNetworkAvailable()) {
         school_dataResponse?.postValue(Resource.loading(null))
         mainRepository.ListSchoolFeternity().let {
             if (it.isSuccessful) {
@@ -111,7 +118,7 @@ class User_Register @Inject constructor(
                 school_dataResponse?.postValue(Resource.error(it.errorBody().toString(), null))
             }
         }
-    }
+    }}
 
 
 }
