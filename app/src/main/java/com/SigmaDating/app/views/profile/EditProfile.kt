@@ -100,6 +100,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var university: String? = null
     var community: String? = null
     var about: String? = null
+    var is_private:String="0"
     var currentPhotoPath: String? = null
     private var mUri: Uri? = null
     private val OPERATION_CAPTURE_PHOTO = 1
@@ -155,7 +156,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         it1,
                         it2,
                         t,
-                        _binding!!.userAbout.text.toString()
+                        _binding!!.userAbout.text.toString(),
+                        is_private
                     )
                 }
 
@@ -244,6 +246,21 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         interests_text.setOnClickListener {
             openinterestsSearchDialog(AppConstants.School, interest as List<Interest>)
         }
+
+        _binding?.profileCreationGroup?.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding?.root!!.findViewById(checkedId) as RadioButton
+            when(rb.text.toString()){
+               "Public"->{
+                   is_private ="0"
+               }
+                "Private"->{
+                    is_private ="1"
+                }
+            }
+             Log.d("TAG@123", "profile : "+rb.text.toString())
+
+        }
+
 
         fraternity_Spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
@@ -375,15 +392,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
 
                                 Update_edit_Profile_info()
                             } catch (e: Exception) {
                             }
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
-                                .show()
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
                         }
 
                     }
@@ -552,6 +567,23 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     }
                                     res.user.orgType.let {
                                         set_default_button(it)
+                                    }
+                                    res.user.is_private.let {
+                                        when(it){
+                                            "0"->{
+                                                _binding?.profilePublic?.setChecked(true);
+                                                _binding?.profilePrivate?.setChecked(false);
+                                            }
+                                            "1"->{
+                                                _binding?.profilePublic?.setChecked(false);
+                                                _binding?.profilePrivate?.setChecked(true);
+                                            }
+
+                                            else -> {
+
+                                            }
+                                        }
+
                                     }
                                     res.user.about.let {
                                         about = it

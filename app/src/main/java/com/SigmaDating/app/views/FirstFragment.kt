@@ -361,6 +361,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     tvCounter.setText(notifications_count)
                                 }
 
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
+
+
                                 if (courseModalArrayList!!.size==0) {
                                     empty_text_view.text = it.data.message
                                     empty_item_layout.visibility = View.VISIBLE

@@ -72,7 +72,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_User_token(id: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             Log.d("TAG@123", "get user token call")
             ctrateToken_data.postValue(Resource.loading(null))
             mainRepository.ctrateToken(id).let {
@@ -97,7 +97,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_user_match_bids(id: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             all_match_bids.postValue(Resource.loading(null))
             mainRepository.get_user_match_bids(id).let {
                 if (it.isSuccessful) {
@@ -110,31 +110,33 @@ class HomeViewModel @Inject constructor(
     }
 
     fun get_notification_list(jsonObject: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        notification_list.postValue(Resource.loading(null))
-        mainRepository.get_notification(jsonObject).let {
-            if (it.isSuccessful) {
-                notification_list.postValue(Resource.success(it.body()))
-            } else {
-                notification_list.postValue(Resource.error(it.errorBody().toString(), null))
+        if (AppUtils.isNetworkAvailable()) {
+            notification_list.postValue(Resource.loading(null))
+            mainRepository.get_notification(jsonObject).let {
+                if (it.isSuccessful) {
+                    notification_list.postValue(Resource.success(it.body()))
+                } else {
+                    notification_list.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
     fun user_deletenotification(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        deletenotification.postValue(Resource.loading(null))
-        mainRepository.deletenotification(jsonObject).let {
-            if (it.isSuccessful) {
-                deletenotification.postValue(Resource.success(it.body()))
-            } else {
-                deletenotification.postValue(Resource.error(it.errorBody().toString(), null))
+        if (AppUtils.isNetworkAvailable()) {
+            deletenotification.postValue(Resource.loading(null))
+            mainRepository.deletenotification(jsonObject).let {
+                if (it.isSuccessful) {
+                    deletenotification.postValue(Resource.success(it.body()))
+                } else {
+                    deletenotification.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
     fun save_like_post_data(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             like_post.postValue(Resource.loading(null))
             mainRepository.save_like_post_data(jsonObject).let {
                 if (it.isSuccessful) {
@@ -148,7 +150,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun sent_comment(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             sent_comment.postValue(Resource.loading(null))
             mainRepository.sentcomment(jsonObject).let {
                 if (it.isSuccessful) {
@@ -161,7 +163,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getAllComment(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             All_comment.postValue(Resource.loading(null))
             mainRepository.getallcomment(jsonObject).let {
                 if (it.isSuccessful) {
@@ -174,7 +176,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getAllPost(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             All_post.postValue(Resource.loading(null))
             mainRepository.showmyposts(jsonObject).let {
                 if (it.isSuccessful) {
@@ -187,7 +189,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun create_post(file: File, jsonObject: HashMap<String, String>) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             Log.d("TAG@123", "images path : " + file.absolutePath)
             Log.d("TAG@123", "other data : " + jsonObject)
             Log.d(
@@ -231,22 +233,22 @@ class HomeViewModel @Inject constructor(
 
 
     fun deletepost(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        delete_post.postValue(Resource.loading(null))
-        mainRepository.deletepost(jsonObject).let {
-            if (it.isSuccessful) {
-                delete_post.postValue(Resource.success(it.body()))
-            } else {
-                delete_post.postValue(Resource.error(it.errorBody().toString(), null))
-            }
+        if (AppUtils.isNetworkAvailable()) {
+            delete_post.postValue(Resource.loading(null))
+            mainRepository.deletepost(jsonObject).let {
+                if (it.isSuccessful) {
+                    delete_post.postValue(Resource.success(it.body()))
+                } else {
+                    delete_post.postValue(Resource.error(it.errorBody().toString(), null))
+                }
 
-        }
+            }
         }
     }
 
 
     fun report_user(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             report_block_user.postValue(Resource.loading(null))
             mainRepository.report_user(jsonObject).let {
                 if (it.isSuccessful) {
@@ -259,7 +261,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun block_user(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             report_block_user.postValue(Resource.loading(null))
             mainRepository.block_user(jsonObject).let {
                 if (it.isSuccessful) {
@@ -273,7 +275,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             profile_swipe.postValue(Resource.loading(null))
             mainRepository.get_profile_swipe_details(jsonObject).let {
                 if (it.isSuccessful) {
@@ -287,7 +289,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_setting_update_details(jsonObject: JsonObject) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             setting_update_details.postValue(Resource.loading(null))
             mainRepository.get_setting_update_details(jsonObject).let {
                 if (it.isSuccessful) {
@@ -306,7 +308,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_Login_User_bids(id: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             user_bids.postValue(Resource.loading(null))
             Log.d("TAG@123", "get_Login_User_bids")
             mainRepository.get_user_bids(id).let {
@@ -323,7 +325,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_Edit_User_details(id: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             get_user_edit_user.postValue(Resource.loading(null))
             val jsonObject = JsonObject()
             Log.d("TAG@123", id)
@@ -341,7 +343,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_Login_User_details(id: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             get_user_data.postValue(Resource.loading(null))
             val jsonObject = JsonObject()
             Log.d("TAG@123", id)
@@ -359,23 +361,24 @@ class HomeViewModel @Inject constructor(
 
 
     fun get_secound_feb_User_details(id: String) = GlobalScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        get_secound_feb_data.postValue(Resource.loading(null))
-        val jsonObject = JsonObject()
-        Log.d("TAG@123", id)
-        jsonObject.addProperty("user_id", id)
-        Log.d("TAG@123", "22 : -" + jsonObject.toString())
-        mainRepository.get_login_user_data(jsonObject).let {
-            if (it.isSuccessful) {
-                get_secound_feb_data.postValue(Resource.success(it.body()))
-            } else {
-                get_secound_feb_data.postValue(Resource.error(it.errorBody().toString(), null))
+        if (AppUtils.isNetworkAvailable()) {
+            get_secound_feb_data.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("user_id", id)
+            Log.d("TAG@123", "22 : -" + jsonObject.toString())
+            mainRepository.get_login_user_data(jsonObject).let {
+                if (it.isSuccessful) {
+                    get_secound_feb_data.postValue(Resource.success(it.body()))
+                } else {
+                    get_secound_feb_data.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
     fun get_UserReport_details(id: String) = GlobalScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             get_UserReportdata.postValue(Resource.loading(null))
             val jsonObject = JsonObject()
             Log.d("TAG@123", id)
@@ -394,41 +397,42 @@ class HomeViewModel @Inject constructor(
     fun User_delete_account(id: String, password: String) =
 
         viewModelScope.launch {
-            if(AppUtils.isNetworkAvailable()) {
-            change_password.postValue(Resource.loading(null))
-            val jsonObject = JsonObject()
-            Log.d("TAG@123", id)
-            jsonObject.addProperty("id", id)
-            jsonObject.addProperty("password", password)
-            Log.d("TAG@123", "-- " + jsonObject.toString())
-            mainRepository.User_delete_account(jsonObject).let {
-                if (it.isSuccessful) {
-                    change_password.postValue(Resource.success(it.body()))
-                } else {
-                    change_password.postValue(Resource.error(it.errorBody().toString(), null))
+            if (AppUtils.isNetworkAvailable()) {
+                change_password.postValue(Resource.loading(null))
+                val jsonObject = JsonObject()
+                Log.d("TAG@123", id)
+                jsonObject.addProperty("id", id)
+                jsonObject.addProperty("password", password)
+                Log.d("TAG@123", "-- " + jsonObject.toString())
+                mainRepository.User_delete_account(jsonObject).let {
+                    if (it.isSuccessful) {
+                        change_password.postValue(Resource.success(it.body()))
+                    } else {
+                        change_password.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
                 }
             }
-        }
         }
 
 
     fun User_change_password(id: String, password: String, password_confirm: String) =
         viewModelScope.launch {
-            if(AppUtils.isNetworkAvailable()) {
-            change_password.postValue(Resource.loading(null))
-            val jsonObject = JsonObject()
-            Log.d("TAG@123", id)
-            jsonObject.addProperty("id", id)
-            jsonObject.addProperty("password", password)
-            jsonObject.addProperty("password_confirm", password_confirm)
-            Log.d("TAG@123", "-- " + jsonObject.toString())
-            mainRepository.change_password(jsonObject).let {
-                if (it.isSuccessful) {
-                    change_password.postValue(Resource.success(it.body()))
-                } else {
-                    change_password.postValue(Resource.error(it.errorBody().toString(), null))
+            if (AppUtils.isNetworkAvailable()) {
+                change_password.postValue(Resource.loading(null))
+                val jsonObject = JsonObject()
+                Log.d("TAG@123", id)
+                jsonObject.addProperty("id", id)
+                jsonObject.addProperty("password", password)
+                jsonObject.addProperty("password_confirm", password_confirm)
+                Log.d("TAG@123", "-- " + jsonObject.toString())
+                mainRepository.change_password(jsonObject).let {
+                    if (it.isSuccessful) {
+                        change_password.postValue(Resource.success(it.body()))
+                    } else {
+                        change_password.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
                 }
-            }}
+            }
         }
 
 
@@ -441,63 +445,67 @@ class HomeViewModel @Inject constructor(
         university: String,
         community: String,
         interests: String,
-        about: String
+        about: String,
+        is_private: String
     ) {
 
-        update_profile(id, university, community, interests, about)
+        update_profile(id, university, community, interests, about, is_private)
 
 
     }
 
 
     fun User_upload_images(id: String, img: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        upload_images.postValue(Resource.loading(null))
-        val jsonObject = JsonObject()
-        Log.d("TAG@123", id)
-        jsonObject.addProperty("user_id", id)
-        jsonObject.addProperty("upload_image", img)
+        if (AppUtils.isNetworkAvailable()) {
+            upload_images.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("user_id", id)
+            jsonObject.addProperty("upload_image", img)
 
-        Log.d("TAG@123", "-- " + jsonObject.toString())
-        mainRepository.upload_images(jsonObject).let {
-            if (it.isSuccessful) {
-                upload_images.postValue(Resource.success(it.body()))
-            } else {
-                upload_images.postValue(Resource.error(it.errorBody().toString(), null))
+            Log.d("TAG@123", "-- " + jsonObject.toString())
+            mainRepository.upload_images(jsonObject).let {
+                if (it.isSuccessful) {
+                    upload_images.postValue(Resource.success(it.body()))
+                } else {
+                    upload_images.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
 
     fun User_delete_images(id: String, img: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        delete_images.postValue(Resource.loading(null))
-        val jsonObject = JsonObject()
-        Log.d("TAG@123", id)
-        jsonObject.addProperty("user_id", id)
-        jsonObject.addProperty("photo", img)
+        if (AppUtils.isNetworkAvailable()) {
+            delete_images.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("user_id", id)
+            jsonObject.addProperty("photo", img)
 
-        Log.d("TAG@123", "-- " + jsonObject.toString())
-        mainRepository.delete_images(jsonObject).let {
-            if (it.isSuccessful) {
-                delete_images.postValue(Resource.success(it.body()))
-            } else {
-                delete_images.postValue(Resource.error(it.errorBody().toString(), null))
+            Log.d("TAG@123", "-- " + jsonObject.toString())
+            mainRepository.delete_images(jsonObject).let {
+                if (it.isSuccessful) {
+                    delete_images.postValue(Resource.success(it.body()))
+                } else {
+                    delete_images.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
 
     fun getSchoolingData() = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        school_dataResponse.postValue(Resource.loading(null))
-        mainRepository.ListSchoolFeternity().let {
-            if (it.isSuccessful) {
-                school_dataResponse.postValue(Resource.success(it.body()))
-            } else {
-                school_dataResponse.postValue(Resource.error(it.errorBody().toString(), null))
+        if (AppUtils.isNetworkAvailable()) {
+            school_dataResponse.postValue(Resource.loading(null))
+            mainRepository.ListSchoolFeternity().let {
+                if (it.isSuccessful) {
+                    school_dataResponse.postValue(Resource.success(it.body()))
+                } else {
+                    school_dataResponse.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
 
@@ -506,26 +514,29 @@ class HomeViewModel @Inject constructor(
         university: String,
         community: String,
         interests: String,
-        about: String
+        about: String,
+        is_private: String
     ) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        update_profile.postValue(Resource.loading(null))
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("user_id", id)
-        jsonObject.addProperty("university", university)
-        jsonObject.addProperty("community", community)
-        jsonObject.addProperty("interests", interests)
-        jsonObject.addProperty("about", about)
+        if (AppUtils.isNetworkAvailable()) {
+            update_profile.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("user_id", id)
+            jsonObject.addProperty("university", university)
+            jsonObject.addProperty("community", community)
+            jsonObject.addProperty("interests", interests)
+            jsonObject.addProperty("about", about)
+            jsonObject.addProperty("is_private", is_private)
 
-        Log.d("TAG@123", "done Update" + jsonObject.toString())
-        mainRepository.Update_profile(jsonObject).let {
-            if (it.isSuccessful) {
-                update_profile.postValue(Resource.success(it.body()))
+            Log.d("TAG@123", "done Update" + jsonObject.toString())
+            mainRepository.Update_profile(jsonObject).let {
+                if (it.isSuccessful) {
+                    update_profile.postValue(Resource.success(it.body()))
 
-            } else {
-                update_profile.postValue(Resource.error(it.errorBody().toString(), null))
+                } else {
+                    update_profile.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
 
@@ -536,22 +547,23 @@ class HomeViewModel @Inject constructor(
 
         ) = viewModelScope.launch {
 
-        if(AppUtils.isNetworkAvailable()) {
-        update_profile.postValue(Resource.loading(null))
-        val jsonObject = JsonObject()
+        if (AppUtils.isNetworkAvailable()) {
+            update_profile.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
 
-        jsonObject.addProperty("user_id", id)
-        jsonObject.addProperty(key, vlaue)
+            jsonObject.addProperty("user_id", id)
+            jsonObject.addProperty(key, vlaue)
 
 
-        Log.d("TAG@123", "done Update" + jsonObject.toString())
-        mainRepository.Update_profile(jsonObject).let {
-            if (it.isSuccessful) {
-                change_password.postValue(Resource.success(it.body()))
-            } else {
-                change_password.postValue(Resource.error(it.errorBody().toString(), null))
+            Log.d("TAG@123", "done Update" + jsonObject.toString())
+            mainRepository.Update_profile(jsonObject).let {
+                if (it.isSuccessful) {
+                    change_password.postValue(Resource.success(it.body()))
+                } else {
+                    change_password.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
-        }}
+        }
     }
 
 

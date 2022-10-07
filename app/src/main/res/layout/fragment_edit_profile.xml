@@ -57,18 +57,17 @@
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="wrap_content"
             style="@style/QText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:textSize="20sp"
+            android:gravity="center_horizontal"
             android:text="Edit Profile"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toBottomOf="@+id/guideline_top" />
-
 
 
         <Button
@@ -76,12 +75,12 @@
             style="@style/QText"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/border_line_radius"
             android:gravity="center"
             android:text="Update"
             android:textColor="@color/blue"
             android:textSize="11sp"
-            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.786"
             app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -89,50 +88,119 @@
 
 
         <TextView
-            android:id="@+id/profile_photo"
+            android:id="@+id/textView7"
+            style="@style/QText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Profile Visibility"
             android:textSize="16sp"
-            android:text="Profile Photos"
-            style="@style/QText"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
             />
+
+        <RadioGroup
+            android:id="@+id/profile_creation_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+            <RadioButton
+                android:id="@+id/profile_public"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="0.25"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Public"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/profile_private"
+                android:layout_width="100dp"
+                android:layout_weight="0.25"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Private"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+        </RadioGroup>
+
+
+        <TextView
+            android:id="@+id/profile_photo"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="Profile Photos"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/profile_creation_group"
+
+             />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/update_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-         android:layout_marginLeft="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
-            tools:listitem="@layout/update_photo"
-            tools:itemCount="1"
+            android:layout_marginBottom="5dp"
             app:layout_constraintStart_toEndOf="@+id/profile_photo"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
-
+            app:layout_constraintTop_toBottomOf="@+id/profile_photo"
+            tools:itemCount="1"
+            tools:listitem="@layout/update_photo" />
 
 
         <TextView
             android:id="@+id/about_text"
-            android:layout_width="wrap_content"
             style="@style/QText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"
+            android:gravity="center_horizontal"
             android:text="About Me"
-            app:layout_constraintTop_toBottomOf="@+id/update_image_view"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/update_image_view"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
+            tools:layout_editor_absoluteY="196dp" />
 
         <EditText
             android:id="@+id/user_about"
@@ -141,13 +209,13 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/login_field_border_bg"
             android:drawablePadding="10dp"
-            android:hint="Tell me .."
             android:gravity="top|left"
+            android:hint="Tell me .."
             android:inputType="textMultiLine"
+            android:maxLength="250"
             android:maxLines="6"
             android:minLines="6"
             android:paddingTop="15dp"
-            android:maxLength="250"
             android:paddingBottom="15dp"
             android:textColorHint="@color/hint_text_color"
             android:textSize="18sp"
@@ -156,43 +224,40 @@
             app:layout_constraintTop_toBottomOf="@+id/about_text" />
 
 
-
-
         <TextView
             android:id="@+id/interests_text"
-            android:layout_width="match_parent"
             style="@style/QText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left|center"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"
             android:layout_marginLeft="24sp"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="24sp"
             android:drawableRight="@drawable/add_icon"
+            android:gravity="left|center"
             android:text="Interests"
-            app:layout_constraintTop_toBottomOf="@+id/user_about"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/user_about"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
+            tools:layout_editor_absoluteY="196dp" />
 
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/rootContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="5dp"
-            android:isScrollContainer="true"
-            app:singleSelection="false"
             android:clickable="false"
-            app:layout_constraintTop_toBottomOf="@+id/interests_text"
-            app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            android:isScrollContainer="true"
+            android:orientation="horizontal"
+            android:weightSum="5"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/interests_text"
+            app:singleSelection="false"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            android:weightSum="5"></com.google.android.material.chip.ChipGroup>
+            tools:layout_editor_absoluteY="196dp"></com.google.android.material.chip.ChipGroup>
 
         <View
             android:id="@+id/v4"
@@ -208,35 +273,34 @@
 
         <TextView
             android:id="@+id/school_text"
-            android:layout_width="wrap_content"
             style="@style/QText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"
+            android:gravity="center_horizontal"
             android:text="School"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/v4"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/v4"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
+            tools:layout_editor_absoluteY="196dp" />
 
         <EditText
             android:id="@+id/school_data"
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:hint="School"
             android:background="@drawable/login_field_border_bg"
-            style="@android:style/Widget.Holo.Light.Spinner"
-            app:layout_constraintTop_toBottomOf="@+id/school_text"
-            app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            android:hint="School"
+            android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/school_text"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"/>
+            tools:layout_editor_absoluteY="196dp" />
 
         <View
             android:id="@+id/v5"
@@ -252,19 +316,18 @@
 
         <TextView
             android:id="@+id/sorority_text"
-            android:layout_width="wrap_content"
             style="@style/QText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"
+            android:gravity="center_horizontal"
             android:text="Sorority/Fraternity"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/v5"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/v5"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"
-            />
+            tools:layout_editor_absoluteY="196dp" />
 
         <LinearLayout
             android:id="@+id/linearr"
@@ -275,76 +338,74 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="1"
-            app:layout_constraintTop_toBottomOf="@+id/sorority_text"
-            app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintStart_toEndOf="@+id/guideline_left"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/sorority_text"
             tools:layout_editor_absoluteX="137dp">
 
             <Button
                 android:id="@+id/fraternity_button"
-                android:layout_width="0dp"
                 style="@style/QText"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight=".33"
                 android:background="@drawable/gray_circle_radius_bg"
                 android:text="@string/fraternity_text"
-                android:textStyle="bold"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
 
             <Button
                 android:id="@+id/Socority_button"
-                android:layout_width="0dp"
                 style="@style/QText"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="12dp"
                 android:layout_weight=".33"
                 android:background="@drawable/gray_circle_radius_bg"
                 android:text="@string/sorority_text"
-                android:textStyle="bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
 
             <Button
                 android:id="@+id/independent"
-                android:layout_width="0dp"
                 style="@style/QText"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="12dp"
                 android:layout_weight=".33"
                 android:background="@drawable/gray_circle_radius_bg"
                 android:text="@string/independent_text"
-                android:textStyle="bold"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
-
-
 
 
         <EditText
             android:id="@+id/et_type"
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_width="0dp"
             android:layout_height="54dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
+            android:background="@drawable/login_field_border_bg"
+            android:hint="Sorority/Fraternity"
             android:textSize="16sp"
             android:visibility="visible"
-            android:hint="Sorority/Fraternity"
-            android:background="@drawable/login_field_border_bg"
-            style="@android:style/Widget.Holo.Light.Spinner"
-            app:layout_constraintTop_toBottomOf="@+id/linearr"
-            app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintStart_toEndOf="@+id/guideline_left"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/linearr"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"/>
+            tools:layout_editor_absoluteY="196dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
