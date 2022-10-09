@@ -78,8 +78,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
-
-
     private var param1: String? = null
     private var param2: String? = null
     private val OPERATION_CHOOSE_PHOTO = 2

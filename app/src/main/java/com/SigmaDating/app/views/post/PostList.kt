@@ -222,6 +222,14 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 alertDeletepopup(position)
 
             }
+            4 -> {
+               // alertDeletepopup(position)
+
+            }
+            5 -> {
+               // alertDeletepopup(position)
+
+            }
         }
 
 

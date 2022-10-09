@@ -56,6 +56,7 @@ class PostAdapter(
         var postDelet: ImageView
         var comment_img: ImageView
         var img_like: ImageView
+        var post_visility:ImageView
         var videoView: PlayerView
 
         init {
@@ -70,6 +71,7 @@ class PostAdapter(
             postDelet = itemView.findViewById(R.id.post_delete_img)
             img_like = itemView.findViewById(R.id.img_like)
             videoView = itemView.findViewById(R.id.videoView)
+            post_visility=itemView.findViewById(R.id.post_visility_img)
         }
 
     }
@@ -93,6 +95,15 @@ class PostAdapter(
         } else {
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.white_heart))
         }
+
+        if (data.like) {
+            holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
+        } else {
+            holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
+        }
+
+
+
 
         if (!data.videofile.isNullOrEmpty()) {
             Log.d("TAG@123", "video/mp4")
@@ -134,15 +145,25 @@ class PostAdapter(
 
 
         }
-
-
-
-
         holder.img_like.setOnClickListener {
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.heart_solid))
             data.like = true
             listener.onDelete(data, 2)
         }
+
+        holder.post_visility.setOnClickListener {
+            if (data.like) {
+                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
+                data.like=false
+                listener.onDelete(data, 4)
+
+            } else {
+                data.like=true
+                listener.onDelete(data, 5)
+                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
+            }
+        }
+
 
         holder.comment_img.setOnClickListener {
             listener.onDelete(data, 1)
@@ -151,8 +172,10 @@ class PostAdapter(
 
         if (!booleantype) {
             holder.postDelet.visibility = View.GONE
+            holder.post_visility.visibility = View.GONE
         } else {
             holder.postDelet.visibility = View.VISIBLE
+            holder.post_visility.visibility = View.VISIBLE
         }
         holder.postDelet.setOnClickListener { listener.onDelete(data, 3) }
 
