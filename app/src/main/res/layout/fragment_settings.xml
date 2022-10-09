@@ -393,52 +393,105 @@
                 android:textStyle="bold" />
 
         </RadioGroup>
+        <TextView
+            android:id="@+id/textView_showme"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:alpha=".8"
+            android:text="Show Me"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/rg" />
 
-        <!--
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
+
+
+
+        <RadioGroup
+            android:id="@+id/rg_showme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView_showme">
+
+            <RadioButton
+                android:id="@+id/rb_greek"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Greek life"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_indepndt"
+                android:layout_width="0dp"
+                android:layout_height="37dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:gravity="start|center"
-                android:orientation="horizontal"
-                android:weightSum="1"
-                app:chipSpacing="18dp"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/textView7"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Independents"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-                app:singleSelection="true">
+            <RadioButton
+                android:id="@+id/rbboth"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Both"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:background="@drawable/login_field_border_bg"
-                    android:button="@android:color/transparent"
-                    android:text="WOMEN"
-                    app:chipCornerRadius="8dp" />
+        </RadioGroup>
 
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:background="@drawable/login_field_border_bg"
-                    android:button="@android:color/transparent"
-                    android:text="MEN"
-                    app:chipCornerRadius="8dp" />
 
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:background="@drawable/login_field_border_bg"
-
-                    android:button="@android:color/transparent"
-                    android:text="OTHER"
-                    app:chipCornerRadius="8dp">
-
-                </com.google.android.material.chip.Chip>
-            </com.google.android.material.chip.ChipGroup>
-        -->
 
         <TextView
             android:id="@+id/textView_age"
@@ -452,7 +505,7 @@
             android:text="Age Range"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/rg" />
+            app:layout_constraintTop_toBottomOf="@id/rg_showme" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/seekBar_age"
