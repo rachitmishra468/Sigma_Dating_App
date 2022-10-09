@@ -10,7 +10,7 @@
     tools:context="com.SigmaDating.app.views.FirstFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="bottom"
         android:layout_weight="1.1"
@@ -22,8 +22,8 @@
             layout="@layout/toolbar_hadder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_gravity="bottom"></include>
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"></include>
     </LinearLayout>
 
     <LinearLayout

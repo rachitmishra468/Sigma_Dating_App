@@ -63,6 +63,7 @@ class SettingsFragment : Fragment() {
     var latitude = ""
     var longitude = ""
     var interested_in = ""
+    lateinit  var showMe:String
 
     fun Call_links() {
         val bundle = Bundle()
@@ -170,7 +171,11 @@ class SettingsFragment : Fragment() {
             interested_in = rb.text.toString()
             Log.d("TAG@123", "interested_in  $interested_in")
         }
-
+        _binding.rgShowme.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding.root.findViewById(checkedId) as RadioButton
+            showMe = rb.text.toString()
+            Log.d("TAG@123", "show me  $showMe")
+        }
         _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
             Log.d("TAG@123", value.toString())
             _binding.textView11.text = "$value miles"
