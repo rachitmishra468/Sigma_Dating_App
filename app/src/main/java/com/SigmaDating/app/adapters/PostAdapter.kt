@@ -186,7 +186,6 @@ class PostAdapter(
         val dataSourceFactory = DefaultHttpDataSource.Factory()
         val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(MediaItem.fromUri(videoURL))
-
         return mediaSource
     }
 

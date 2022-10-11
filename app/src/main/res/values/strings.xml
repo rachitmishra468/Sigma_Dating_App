@@ -29,6 +29,7 @@
     <string name="sign_in_text">OR SIGN IN WITH</string>
     <string name="continue_text">CONTINUE</string>
     <string name="tell_us">Tell us a little\nabout yourself.</string>
+    <string name="otp_verification">OTP Verification</string>
     <string name="tell_us_school">Tell us about\n your school</string>
     <string name="title_activity_on_boarding">OnBoardingActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -39,7 +40,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name ="internet_error_message">Internet Connection Not Present</string>
+    <string name="internet_error_message">Internet Connection Not Present</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

@@ -223,9 +223,7 @@ class ReportUserFragment : Fragment() {
                                     else{
                                         it.reportGreek.visibility=View.GONE
                                     }
-
-
-                                    it.textAge.setText("" + res?.user.age)
+                                    it.textAge.setText("" + res.user.age)
 
                                 }
                                 res.user.apply { }

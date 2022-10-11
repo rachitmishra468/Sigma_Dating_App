@@ -197,9 +197,9 @@ class SecondFragment : Fragment() {
                             if (res?.status == true) {
                                 Log.d("TAG@123", "111 " + it.data?.user.toString())
                                 _binding?.let {
-                                    it.nameText.setText(res?.user.first_name + " " + res.user.last_name)
-                                    it.addresText.setText(res?.user.university)
-                                    it.ageText.setText("" + res?.user.age)
+                                    it.nameText.setText(res.user.first_name + " " + res.user.last_name)
+                                    it.addresText.setText(res.user.university)
+                                    it.ageText.setText("" + res.user.age)
 
 
                                 }

@@ -427,9 +427,9 @@
                 android:layout_width="0dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight=".25"
+                android:layout_weight=".23"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -447,11 +447,11 @@
             <RadioButton
                 android:id="@+id/rb_indepndt"
                 android:layout_width="0dp"
-                android:layout_height="37dp"
+                android:layout_height="32dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight=".25"
+                android:layout_weight=".35"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -471,9 +471,9 @@
                 android:layout_width="0dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight=".25"
+                android:layout_weight=".18"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -888,7 +888,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.896"
             app:layout_constraintStart_toEndOf="@+id/textView_age"
-            app:layout_constraintTop_toBottomOf="@+id/rg" />
+            app:layout_constraintTop_toBottomOf="@+id/rg_showme" />
 
         <TextView
             android:id="@+id/textView11"

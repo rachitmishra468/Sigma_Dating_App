@@ -32,15 +32,20 @@ class OnBoardingViewPagerAdapter(
                 context.resources.getString(R.string.app_name)
             )
 
-            4 -> BlankFragment4.newInstance(
+            4 -> Otp_verification.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            5 -> Password.newInstance(
+
+            5 -> BlankFragment4.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
-            6 -> Profile_Photo.newInstance(
+            6 -> Password.newInstance(
+                context.resources.getString(R.string.app_name),
+                context.resources.getString(R.string.app_name)
+            )
+            7 -> Profile_Photo.newInstance(
                 context.resources.getString(R.string.app_name),
                 context.resources.getString(R.string.app_name)
             )
