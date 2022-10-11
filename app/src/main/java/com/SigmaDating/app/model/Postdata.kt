@@ -16,3 +16,4 @@ data class Postdata(
     var videofile:String,
     var upload_image:String
 )
+
