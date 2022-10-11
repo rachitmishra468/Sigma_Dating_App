@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -62,6 +64,9 @@ class UserChatFragment : Fragment() {
         val view = inflater.inflate(R.layout.user_chat_fragment, container, false)
         recyclerView = view.findViewById(R.id.messageList)
         writeMessageEditText = view.findViewById(R.id.messageInput)
+        //activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
+
         mTextInputLayout = view.findViewById(R.id.messageInputHolder)
         headerImg = view.findViewById(R.id.header_img)
         userChatname = view.findViewById<TextView>(R.id.chat_user_name)

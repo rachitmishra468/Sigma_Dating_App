@@ -35,7 +35,7 @@ class Home : AppCompatActivity() {
     val homeviewmodel: HomeViewModel by viewModels()
     lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    /*override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
             if (v is EditText) {
@@ -50,14 +50,18 @@ class Home : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(event)
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val inputManager: InputMethodManager? = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputManager?.toggleSoftInput(
+            InputMethodManager.SHOW_FORCED,
+            InputMethodManager.HIDE_IMPLICIT_ONLY
+        )
 
 
         setSupportActionBar(binding.toolbar)
