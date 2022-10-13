@@ -25,11 +25,14 @@ class User_Register @Inject constructor(
 
     var registration: MutableLiveData<Resource<Loginmodel>>? = null
     var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>? = null
+    var sent_otp: MutableLiveData<Resource<Loginmodel>>? = null
+    var verifly_otp: MutableLiveData<Resource<Loginmodel>>? = null
 
     init {
         registration = MutableLiveData<Resource<Loginmodel>>()
         school_dataResponse = MutableLiveData<Resource<SchoolCommunityResponse>>()
-        // Register()
+
+
     }
 
     fun Register(bitmap: String) = viewModelScope.launch {
@@ -119,6 +122,68 @@ class User_Register @Inject constructor(
             }
         }
     }}
+
+
+    fun verification_phone_email(phone:Boolean) = viewModelScope.launch {
+
+        sent_otp?.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
+        if(phone){
+            jsonObject.addProperty(
+                "phone",
+                  sharedPreferencesStorage.getString(
+                    AppConstants.phone
+                )
+            )
+
+        }
+        else{
+            jsonObject.addProperty(
+                "phone",
+                 sharedPreferencesStorage.getString(
+                    AppConstants.phone
+                )
+            )
+        }
+        Log.d("TAG@123", jsonObject.toString())
+        mainRepository.user_login_phone(jsonObject).let {
+            if (it.isSuccessful) {
+                sent_otp?.postValue(Resource.success(it.body()))
+            } else {
+                sent_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+
+
+    }
+
+
+
+    fun verifly_OTP(OTP: String) = viewModelScope.launch {
+
+        verifly_otp?.postValue(Resource.loading(null))
+
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "phone",
+            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                AppConstants.phone
+            )
+        )
+        jsonObject.addProperty("otp", OTP)
+        Log.d("TAG@123", jsonObject.toString())
+        mainRepository.user_phone_verifly(jsonObject).let {
+            if (it.isSuccessful) {
+                verifly_otp?.postValue(Resource.success(it.body()))
+            } else {
+                verifly_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+
+
+    }
+
+
 
 
 }
