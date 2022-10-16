@@ -57,7 +57,7 @@ class OnBoardingViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 7
+        return 8
     }
 
 }

@@ -24,9 +24,15 @@ class Otp_verification : Fragment() {
 
     private lateinit var _binding:FragmentOtpVerificationBinding
     private var mUser_Verification:Boolean=false
+    private var email=""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentOtpVerificationBinding.inflate(inflater, container, false)
+
+        _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+        _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+        _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.white))
+        _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.white))
 
 
         _binding.emailButtonVerification.setOnClickListener {
@@ -36,6 +42,7 @@ class Otp_verification : Fragment() {
             _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.white))
             (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
             (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(false)
+            email="email"
             sent_otp()
         }
 
@@ -46,8 +53,8 @@ class Otp_verification : Fragment() {
             _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.black))
             _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.white))
             (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
-
             (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(true)
+            email="phone"
             sent_otp()
         }
 
@@ -64,8 +71,13 @@ class Otp_verification : Fragment() {
                Toast.makeText(requireContext(),"Enter OTP ..",Toast.LENGTH_SHORT).show()
             }else {
                 (activity as OnBoardingActivity?)?.userRegister?.verifly_otp = MutableLiveData<Resource<Loginmodel>>()
+               if(  email.equals("email")){
+                   (activity as OnBoardingActivity?)?.userRegister?.verifly_OTP(_binding.editTextOtpVerification.text.toString(),false)
+               }else{
+                   (activity as OnBoardingActivity?)?.userRegister?.verifly_OTP(_binding.editTextOtpVerification.text.toString(),true)
+               }
                 verifly_otp()
-                (activity as OnBoardingActivity?)?.userRegister?.verifly_OTP(_binding.editTextOtpVerification.text.toString())
+
             } }
 
 
@@ -113,7 +125,7 @@ class Otp_verification : Fragment() {
                                 mUser_Verification=true
                                 _binding.verificationDone.setBackgroundResource(R.drawable.signup_circle_bg)
                                 _binding.verificationDone.setTextColor(resources.getColor(R.color.white))
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                               // Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
                                 Log.d("TAG@123", res.message)
                             }catch (e:Exception){
                                 Log.d("TAG@123",e.message.toString())

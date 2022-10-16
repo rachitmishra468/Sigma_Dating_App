@@ -125,7 +125,6 @@ class User_Register @Inject constructor(
 
 
     fun verification_phone_email(phone:Boolean) = viewModelScope.launch {
-
         sent_otp?.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
         if(phone){
@@ -135,50 +134,77 @@ class User_Register @Inject constructor(
                     AppConstants.phone
                 )
             )
+            mainRepository.user_login_phone(jsonObject).let {
+                if (it.isSuccessful) {
+                    sent_otp?.postValue(Resource.success(it.body()))
+                } else {
+                    sent_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+
 
         }
         else{
             jsonObject.addProperty(
-                "phone",
+                "email",
                  sharedPreferencesStorage.getString(
-                    AppConstants.phone
+                    AppConstants.email
                 )
             )
+            mainRepository.email_otp_send(jsonObject).let {
+                if (it.isSuccessful) {
+                    sent_otp?.postValue(Resource.success(it.body()))
+                } else {
+                    sent_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+
         }
         Log.d("TAG@123", jsonObject.toString())
-        mainRepository.user_login_phone(jsonObject).let {
-            if (it.isSuccessful) {
-                sent_otp?.postValue(Resource.success(it.body()))
-            } else {
-                sent_otp?.postValue(Resource.error(it.errorBody().toString(), null))
-            }
-        }
 
 
     }
 
 
 
-    fun verifly_OTP(OTP: String) = viewModelScope.launch {
-
+    fun verifly_OTP(OTP: String,phone: Boolean) = viewModelScope.launch {
         verifly_otp?.postValue(Resource.loading(null))
-
         val jsonObject = JsonObject()
-        jsonObject.addProperty(
-            "phone",
-            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
-                AppConstants.phone
+        if(phone){
+            jsonObject.addProperty(
+                "phone",
+                sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                    AppConstants.phone
+                )
             )
-        )
-        jsonObject.addProperty("otp", OTP)
-        Log.d("TAG@123", jsonObject.toString())
-        mainRepository.user_phone_verifly(jsonObject).let {
-            if (it.isSuccessful) {
-                verifly_otp?.postValue(Resource.success(it.body()))
-            } else {
-                verifly_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+            jsonObject.addProperty("otp", OTP)
+            Log.d("TAG@123", jsonObject.toString())
+            mainRepository.user_phone_verifly(jsonObject).let {
+                if (it.isSuccessful) {
+                    verifly_otp?.postValue(Resource.success(it.body()))
+                } else {
+                    verifly_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
         }
+        else{
+            jsonObject.addProperty(
+                "email",
+                 sharedPreferencesStorage.getString(
+                    AppConstants.email
+                )
+            )
+            jsonObject.addProperty("otp", OTP)
+            Log.d("TAG@123", jsonObject.toString())
+            mainRepository.email_otp_verification(jsonObject).let {
+                if (it.isSuccessful) {
+                    verifly_otp?.postValue(Resource.success(it.body()))
+                } else {
+                    verifly_otp?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+
 
 
     }

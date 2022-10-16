@@ -115,4 +115,10 @@ interface ApiService {
 
     @POST("notification/deletenotification")
     suspend fun deletenotification(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/sendotpemail")
+    suspend fun email_otp_send(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/verifyotpemail")
+    suspend fun email_otp_verification(@Body jsonObject: JsonObject): Response<Loginmodel>
 }

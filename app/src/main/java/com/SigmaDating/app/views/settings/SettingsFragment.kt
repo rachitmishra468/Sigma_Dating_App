@@ -63,7 +63,7 @@ class SettingsFragment : Fragment() {
     var latitude = ""
     var longitude = ""
     var interested_in = ""
-    lateinit  var showMe:String
+    var show_me=""
 
     fun Call_links() {
         val bundle = Bundle()
@@ -173,8 +173,8 @@ class SettingsFragment : Fragment() {
         }
         _binding.rgShowme.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding.root.findViewById(checkedId) as RadioButton
-            showMe = rb.text.toString()
-            Log.d("TAG@123", "show me  $showMe")
+            show_me = rb.text.toString()
+            Log.d("TAG@123", "show me  $show_me")
         }
         _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
             Log.d("TAG@123", value.toString())
@@ -209,6 +209,7 @@ class SettingsFragment : Fragment() {
             jsonObject.addProperty("location", _binding.locationText.text.toString())
             jsonObject.addProperty("latitude", latitude)
             jsonObject.addProperty("longitude", longitude)
+            jsonObject.addProperty("show_me", show_me)
             jsonObject.addProperty("interested_in", interested_in)
             jsonObject.addProperty("notifications", notification_flag)
             Log.d("TAG@123", "interested_in :" + jsonObject.toString())
@@ -332,6 +333,16 @@ class SettingsFragment : Fragment() {
                                     "BOTH" -> _binding.rbMore.setChecked(true);
                                     "Both" -> _binding.rbMore.setChecked(true);
 
+                                }
+                            }
+
+
+                            if (it.data?.user?.show_me?.isEmpty() == false) {
+                                show_me = it.data.user.show_me
+                                when (show_me) {
+                                    "Greek Life" -> _binding.rbGreek.setChecked(true);
+                                    "Independents" -> _binding.rbIndepndt.setChecked(true);
+                                    "Both" -> _binding.rbboth.setChecked(true);
                                 }
                             }
 

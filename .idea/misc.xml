@@ -60,8 +60,8 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_comment_post.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_contact_us.xml" value="0.12" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_create_post.xml" value="0.12894736842105264" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.22" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_create_post.xml" value="0.15" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_gender.xml" value="0.12894736842105264" />
@@ -73,7 +73,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_report_user.xml" value="0.16" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_school_input.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_second.xml" value="0.18" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/full_screen_dialog.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/incoming_message_list_item.xml" value="0.11480263157894736" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_comment.xml" value="0.22" />
