@@ -4,6 +4,7 @@ import android.app.Application
 import android.provider.Settings
 import android.util.Log
 import androidx.lifecycle.asLiveData
+import androidx.multidex.MultiDex
 import com.SigmaDating.app.model.Pages
 import com.SigmaDating.app.network.ConnectivityMonitorImpl
 import com.google.android.gms.tasks.OnCompleteListener
@@ -22,6 +23,7 @@ class Sigmadatingapp : Application()  {
     override fun onCreate() {
         super.onCreate()
         AppReseources.setAppContext(applicationContext)
+        MultiDex.install(this);
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("TAG@123", "Fetching FCM registration token failed", task.exception)

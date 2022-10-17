@@ -170,6 +170,9 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/gender_enable.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/gender_selector_drawable.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/gray_circle_radius_bg.xml" value="0.1495" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/ic_bluetooth_white_24dp.xml" value="0.126" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/ic_switch_camera_white_24dp.xml" value="0.1205" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/ic_video_call_white_24dp.xml" value="0.1205" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/interested_in_main_drwable.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/interested_in_selected.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/interested_in_unselect.xml" value="0.1495" />
@@ -189,7 +192,9 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/drawable/white_radius_bg.xml" value="0.1495" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/activity_home.xml" value="0.11096014492753623" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/activity_login.xml" value="0.11096014492753623" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/activity_video.xml" value="0.13385416666666666" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/content_home.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/content_video.xml" value="0.109375" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_chat_list.xml" value="0.1125" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_first.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/fragment_report_user.xml" value="0.11096014492753623" />
@@ -203,6 +208,7 @@
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/row_message_item_outgoing.xml" value="0.22" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/toolbar_hadder.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/layout/user_chat_fragment.xml" value="0.11096014492753623" />
+        <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_August/app/src/main/res/xml/settings.xml" value="0.8306451612903226" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_main_drwable.xml" value="0.152" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/interested_in_selected.xml" value="0.152" />
         <entry key="..\:/Users/Android/AndroidStudioProjects/Sigma_Dating_App_enw/app/src/main/res/drawable/match_image_bg.xml" value="0.148" />

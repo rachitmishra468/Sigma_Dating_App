@@ -1,21 +1,21 @@
 package com.SigmaDating.app.views.chat
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
+import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
@@ -37,6 +37,7 @@ import javax.inject.Inject
 
 class UserChatFragment : Fragment() {
     var chat_settings_img: ImageView? = null
+    var make_videocall:ImageView?=null
 
     private var recyclerView: RecyclerView? = null
 
@@ -109,6 +110,14 @@ class UserChatFragment : Fragment() {
                     null,
                     null
                 );
+        }
+
+        make_videocall=view.findViewById(R.id.make_videocall)
+        make_videocall?.setOnClickListener {
+            activity?.let {
+                val intent = Intent(it, VideoActivity::class.java)
+                it.startActivity(intent)
+            }
         }
 
         layoutManager = LinearLayoutManager(requireContext())
