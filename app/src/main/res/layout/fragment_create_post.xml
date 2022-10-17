@@ -172,6 +172,91 @@
             app:layout_constraintTop_toBottomOf="@id/post_discription" />
 
 
+
+        <TextView
+            android:id="@+id/post_visibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:textColor="@color/light_text_color"
+            android:layout_marginLeft="24sp"
+            android:layout_marginRight="24sp"
+            android:text="Post Visibility"
+            app:layout_constraintTop_toBottomOf="@+id/v4"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            />
+
+        <RadioGroup
+            android:id="@+id/post_creation_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/post_visibility">
+
+            <RadioButton
+                android:id="@+id/post_public"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="0.25"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/light_text_color"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Public"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/post_private"
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Private"
+                android:textColor="@color/light_text_color"                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+        </RadioGroup>
+
+        <View
+            android:id="@+id/v51"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_creation_group" />
+
         <TextView
             android:id="@+id/tag_user"
             android:layout_width="match_parent"
@@ -184,7 +269,7 @@
             android:layout_marginRight="24sp"
             android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             android:text="Tag People"
-            app:layout_constraintTop_toBottomOf="@+id/v4"
+            app:layout_constraintTop_toBottomOf="@+id/v51"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp"

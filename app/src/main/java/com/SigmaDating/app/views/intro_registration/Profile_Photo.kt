@@ -294,19 +294,7 @@ class Profile_Photo : Fragment() {
         }
     }
 
-    @SuppressLint("Range")
-    private fun getImagePath(uri: Uri, selection: String?): String {
-        var path: String? = null
 
-        val cursor = activity?.contentResolver?.query(uri, null, selection, null, null)
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            }
-            cursor.close()
-        }
-        return path!!
-    }
 
 
     private fun show(message: String) {
@@ -371,15 +359,10 @@ class Profile_Photo : Fragment() {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
-
                                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                    AppConstants.IS_AUTHENTICATED,
-                                    true
-                                )
+                                    AppConstants.IS_AUTHENTICATED, true)
                                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                    AppConstants.USER_ID,
-                                    res.user.id
-                                )
+                                    AppConstants.USER_ID, res.user.id)
                                 startActivity(Intent(context, Home::class.java))
                                 (activity as OnBoardingActivity?)?.finish()
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)

@@ -96,7 +96,7 @@ class PostAdapter(
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.white_heart))
         }
 
-        if (data.like) {
+        if (data.isPrivate) {
             holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
         } else {
             holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
@@ -152,13 +152,12 @@ class PostAdapter(
         }
 
         holder.post_visility.setOnClickListener {
-            if (data.like) {
+            if (data.isPrivate) {
                 holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
-                data.like=false
+                data.isPrivate=false
                 listener.onDelete(data, 4)
-
             } else {
-                data.like=true
+                data.isPrivate=true
                 listener.onDelete(data, 5)
                 holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
             }
@@ -186,7 +185,6 @@ class PostAdapter(
         val dataSourceFactory = DefaultHttpDataSource.Factory()
         val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(MediaItem.fromUri(videoURL))
-
         return mediaSource
     }
 

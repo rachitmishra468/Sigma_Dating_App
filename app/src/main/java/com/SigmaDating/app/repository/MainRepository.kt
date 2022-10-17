@@ -13,6 +13,8 @@ class MainRepository @Inject constructor(
     suspend fun user_register(jsonObject: JsonObject) = apiHelper.user_register(jsonObject)
     suspend fun user_forgotpass(jsonObject: JsonObject) = apiHelper.user_forgot_password(jsonObject)
     suspend fun user_login_phone(jsonObject: JsonObject) = apiHelper.user_login_phone(jsonObject)
+    suspend fun email_otp_send(jsonObject: JsonObject) = apiHelper.email_otp_send(jsonObject)
+    suspend fun email_otp_verification(jsonObject: JsonObject) = apiHelper.email_otp_verification(jsonObject)
     suspend fun user_phone_verifly(jsonObject: JsonObject) = apiHelper.user_phone_verifly(jsonObject)
     suspend fun get_profile_swipe_details(jsonObject: JsonObject) = apiHelper.get_profile_swipe_details(jsonObject)
     suspend fun report_user(jsonObject: JsonObject) = apiHelper.report_user(jsonObject)
@@ -43,6 +45,10 @@ class MainRepository @Inject constructor(
 
     suspend fun get_notification(jsonObject: String)=apiHelper.get_notification(jsonObject)
     suspend fun deletenotification(jsonObject: JsonObject)=apiHelper.deletenotification(jsonObject)
+
+
+
+
 
 
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)

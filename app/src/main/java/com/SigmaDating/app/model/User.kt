@@ -24,6 +24,7 @@ data class User(
     val interested_in:String,
     val greekletter:String,
     val age:String,
+    val show_me:String,
     val post_message:String,
     val is_private:String,
     val notifications:Int,

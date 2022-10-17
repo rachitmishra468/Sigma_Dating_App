@@ -109,6 +109,21 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             )
         )
 
+
+        _binding!!.postCreationGroup.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding!!.root.findViewById(checkedId) as RadioButton
+
+            when(rb.text.toString()){
+                "Public"->{
+
+                }
+                "Private"->{
+
+                }
+            }
+            Log.d("TAG@123", "is_private   "+rb.text.toString())
+        }
+
         _binding?.let {
             it.backPost.setOnClickListener {
                 (activity as Home).onBackPressed()
@@ -130,44 +145,38 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
 
         _binding?.done?.setOnClickListener {
-          /*  if (_binding?.postTitle?.text.toString().equals("")) {
-                _binding?.postTitle?.error = "Enter Post Title.."
-            } else */
             if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption .."
             } else if (file == null) {
-                Toast.makeText(requireContext(), "Please select a media to upload.", Toast.LENGTH_LONG)
-                    .show()
-            } else {
+                Toast.makeText(requireContext(), "Please select a media to upload.", Toast.LENGTH_LONG).show()
+            }
+            else if (!_binding!!.postPublic.isChecked && !_binding!!.postPrivate.isChecked) {
+                Toast.makeText(requireContext(), "Please select Post Visibility", Toast.LENGTH_LONG).show()
+            }
+            else {
                 (activity as Home).homeviewmodel.create_post =
                     MutableLiveData<Resource<Loginmodel>>()
                 subscribe_create_post()
-
-                Log.d(
-                    "TAG@123",
-                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-                )
-
+                Log.d("TAG@123", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
                 val map: HashMap<String, String> = HashMap()
                 map.put("title","")
-                map.put(
-                    "user_id",
-                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-                )
+                map.put("user_id", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
                 map.put("description", _binding?.postDiscription?.text.toString())
                 map.put("location", location_text)
+                if(_binding!!.postPublic.isChecked){
+                    map.put("isPrivate", "0")
+                }else{
+                    map.put("isPrivate", "1")
+                }
                 map.put("tag_users", user_tag_id.joinToString(","))
 
+                Log.d("TAG@123", map.toString())
 
                 (activity as Home).homeviewmodel.create_post(file!!, map)
-
             }
-
         }
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
         getLocation()
-
         return binding.root
     }
 

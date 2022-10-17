@@ -32,6 +32,11 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun user_login_phone(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.user_login_phone(jsonObject)
 
+    override suspend fun email_otp_send(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.email_otp_send(jsonObject)
+    override suspend fun email_otp_verification(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.email_otp_verification(jsonObject)
+
     override suspend fun user_phone_verifly(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.user_phone_verifly(jsonObject)
 

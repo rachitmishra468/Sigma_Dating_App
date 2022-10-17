@@ -57,11 +57,11 @@ class Home : AppCompatActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val inputManager: InputMethodManager? = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+      /*  val inputManager: InputMethodManager? = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         inputManager?.toggleSoftInput(
             InputMethodManager.SHOW_FORCED,
             InputMethodManager.HIDE_IMPLICIT_ONLY
-        )
+        )*/
 
 
         setSupportActionBar(binding.toolbar)
@@ -103,16 +103,6 @@ class Home : AppCompatActivity() {
     }
 
 
-    fun OpenSocial(Url: String?) {
-        try {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse(Url)
-            startActivity(i)
-
-        } catch (e: Exception) {
-        }
-
-    }
    /* override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(

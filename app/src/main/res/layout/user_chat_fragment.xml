@@ -130,11 +130,14 @@
             app:endIconMode="custom"
             app:endIconTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.SigmaDating.app.utilities.BaseTextInputEditText
                 android:id="@+id/messageInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

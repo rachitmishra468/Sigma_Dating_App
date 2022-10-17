@@ -415,7 +415,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.058"
             app:layout_constraintStart_toEndOf="@id/guideline_right"
@@ -424,10 +424,10 @@
 
             <RadioButton
                 android:id="@+id/rb_greek"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
                 android:layout_weight=".25"
                 android:background="@drawable/interested_in_main_drwable"
@@ -439,19 +439,19 @@
                 android:paddingTop="3dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="3dp"
-                android:text="Greek life"
+                android:text="Greek Life"
                 android:textColor="@drawable/text_selector_default"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/rb_indepndt"
-                android:layout_width="0dp"
-                android:layout_height="37dp"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight=".25"
+                android:layout_weight=".35"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -468,12 +468,12 @@
 
             <RadioButton
                 android:id="@+id/rbboth"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight=".25"
+                android:layout_weight=".15"
                 android:background="@drawable/interested_in_main_drwable"
                 android:button="@android:color/transparent"
                 android:checked="false"
@@ -888,7 +888,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.896"
             app:layout_constraintStart_toEndOf="@+id/textView_age"
-            app:layout_constraintTop_toBottomOf="@+id/rg" />
+            app:layout_constraintTop_toBottomOf="@+id/rg_showme" />
 
         <TextView
             android:id="@+id/textView11"

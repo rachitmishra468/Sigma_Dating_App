@@ -107,10 +107,9 @@ class BlankFragment3 : Fragment() {
                         AppConstants.Dob,
                         editbirthday.text.toString()
                     )
-
-
+                    /*Todo Remove +91 to +1 when we done testing */
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.phone, "+1" + edit_text_phone.text.toString()
+                        AppConstants.phone, "+91" + edit_text_phone.text.toString()
                     )
 
                     val

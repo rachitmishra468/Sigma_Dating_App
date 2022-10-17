@@ -47,7 +47,6 @@ public class QuickstartConversationsManager {
 
     void sendMessage(String messageBody, JsonObject user) {
         if (mconversation != null) {
-            String messageUuid = UUID.randomUUID().toString();
             mconversation.prepareMessage()
                     .setBody(messageBody)
                     .setAttributes(new Attributes(String.valueOf(user)))
