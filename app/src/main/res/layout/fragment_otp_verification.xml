@@ -29,7 +29,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginTop="12dp"
         android:alpha=".8"
-        android:text="Please select which one you want send Otp."
+        android:text="Select an option to receive the OTP"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/guideline8"
