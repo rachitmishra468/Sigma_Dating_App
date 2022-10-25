@@ -6,7 +6,7 @@ data class Postdata(
     var title:String,
     var location:String,
     var media:String,
-    var isPrivate:Boolean,
+    var isPrivate:String,
     var user_id:String,
     var post_id:String,
     var date_added:String,

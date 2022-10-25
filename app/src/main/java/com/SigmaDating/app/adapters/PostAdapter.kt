@@ -96,14 +96,13 @@ class PostAdapter(
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.white_heart))
         }
 
-        if (data.isPrivate) {
-            holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
-        } else {
-            holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
-        }
-
-
-
+       if(!data.isPrivate.isNullOrEmpty()){
+           if (data.isPrivate.equals("0")) {
+               holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
+           } else {
+               holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
+           }
+       }
 
         if (!data.videofile.isNullOrEmpty()) {
             Log.d("TAG@123", "video/mp4")
@@ -152,15 +151,22 @@ class PostAdapter(
         }
 
         holder.post_visility.setOnClickListener {
-            if (data.isPrivate) {
-                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
-                data.isPrivate=false
-                listener.onDelete(data, 4)
-            } else {
-                data.isPrivate=true
+            if(!data.isPrivate.isNullOrEmpty()){
+                if (data.isPrivate.equals("0")) {
+                    holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
+                    data.isPrivate="1"
+                    listener.onDelete(data, 4)
+                } else {
+                    data.isPrivate="0"
+                    listener.onDelete(data, 5)
+                    holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
+                }
+            }else{
+                data.isPrivate="0"
                 listener.onDelete(data, 5)
                 holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
             }
+
         }
 
 

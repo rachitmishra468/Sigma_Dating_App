@@ -34,8 +34,9 @@ interface ApiHelper {
     suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun Update_profile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun get_user_bids(jsonObject: String):Response<home_model>
-    suspend fun create_post(user_id:RequestBody,location:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody,file: MultipartBody.Part):Response<Loginmodel>
+    suspend fun create_post(isPrivate:RequestBody,user_id:RequestBody,location:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody,file: MultipartBody.Part):Response<Loginmodel>
     suspend fun deletepost(jsonObject: JsonObject):Response<delelepost>
+    suspend fun PostStatusChange(jsonObject: JsonObject):Response<delelepost>
     suspend fun showmyposts(jsonObject: JsonObject):Response<post>
     suspend fun getallcomment(jsonObject: JsonObject):Response<Comment_model>
     suspend fun get_user_match_bids(jsonObject: String):Response<Match_bids>

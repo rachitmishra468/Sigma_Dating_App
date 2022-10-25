@@ -96,10 +96,6 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
 
-    fun getUserisSame(): Boolean {
-        return !userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
-
-    }
 
     fun subscribe_save_post_like() {
         (activity as Home?)?.homeviewmodel?.like_post?.observe(
@@ -185,6 +181,30 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             })
     }
 
+
+
+
+    fun PostStatusObserverResponse() {
+        (activity as Home?)?.homeviewmodel?.change_status_post?.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        Log.d("TAG@123", "Poast Hide Status :-"+it.message)
+                        get_postdata()
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+    }
+
+
     fun deletePostObserverResponse() {
         (activity as Home?)?.homeviewmodel?.delete_post?.observe(
             viewLifecycleOwner,
@@ -192,6 +212,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
+                        Log.d("TAG@123", "Delete Post Status :-"+it.message)
                         get_postdata()
                     }
                     Status.LOADING -> {
@@ -223,11 +244,27 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
             }
             4 -> {
-               // alertDeletepopup(position)
+                val jsonObject = JsonObject()
+                Log.d("TAG@123", position.id + "")
+                (activity as Home).homeviewmodel.change_status_post = MutableLiveData<Resource<delelepost>>()
+                PostStatusObserverResponse()
+                jsonObject.addProperty("user_id", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) )
+                jsonObject.addProperty("post_id", position.id)
+                jsonObject.addProperty("isPrivate", "1")
+                Log.d("TAG@123", "Poast Status :-"+jsonObject.toString())
+                (activity as Home).homeviewmodel.PostStatusChange(jsonObject)
 
             }
             5 -> {
-               // alertDeletepopup(position)
+                val jsonObject = JsonObject()
+                Log.d("TAG@123", position.id + "")
+                (activity as Home).homeviewmodel.change_status_post = MutableLiveData<Resource<delelepost>>()
+                PostStatusObserverResponse()
+                jsonObject.addProperty("user_id", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) )
+                jsonObject.addProperty("post_id", position.id)
+                jsonObject.addProperty("isPrivate", "0")
+                Log.d("TAG@123", "Poast Status :-"+jsonObject.toString())
+                (activity as Home).homeviewmodel.PostStatusChange(jsonObject)
 
             }
         }

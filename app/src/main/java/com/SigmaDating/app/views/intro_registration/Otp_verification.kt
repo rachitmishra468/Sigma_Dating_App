@@ -29,13 +29,10 @@ class Otp_verification : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentOtpVerificationBinding.inflate(inflater, container, false)
 
-        _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
-        _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
-        _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.white))
-        _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.white))
 
 
         _binding.emailButtonVerification.setOnClickListener {
+            _binding.editTextOtpVerification.setText("")
             _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.black))
@@ -48,6 +45,7 @@ class Otp_verification : Fragment() {
 
 
         _binding.phoneNumberVerification.setOnClickListener {
+            _binding.editTextOtpVerification.setText("")
             _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.black))
@@ -131,6 +129,7 @@ class Otp_verification : Fragment() {
                                 Log.d("TAG@123",e.message.toString())
                             }
                         } else {
+                            _binding.editTextOtpVerification.setText("")
                             if (res != null) {
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
                             }
@@ -146,6 +145,21 @@ class Otp_verification : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mUser_Verification=false
+        _binding.verificationDone.setBackgroundResource(R.drawable.white_circle_bg)
+        _binding.verificationDone.setTextColor(resources.getColor(R.color.hint_text_color))
+        _binding.editTextOtpVerification.setText("")
+        _binding.editTextOtpVerification.visibility=View.INVISIBLE
+        _binding.verfieOtp.visibility=View.INVISIBLE
+        _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+        _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
+        _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.white))
+        _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.white))
+        Log.d("TAG@123","onResume")
     }
 
     companion object {

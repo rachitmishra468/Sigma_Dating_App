@@ -43,6 +43,8 @@ class HomeViewModel @Inject constructor(
     lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var delete_post: MutableLiveData<Resource<delelepost>>
+    lateinit var change_status_post: MutableLiveData<Resource<delelepost>>
+
     lateinit var All_post: MutableLiveData<Resource<post>>
     lateinit var like_post: MutableLiveData<Resource<Loginmodel>>
     lateinit var notification_list: MutableLiveData<Resource<Notification_model>>
@@ -217,10 +219,12 @@ class HomeViewModel @Inject constructor(
                 jsonObject.get("description")!!.toRequestBody("text/plain".toMediaType())
             val location: RequestBody =
                 jsonObject.get("location")!!.toRequestBody("text/plain".toMediaType())
+            val isPrivate: RequestBody =
+                jsonObject.get("isPrivate")!!.toRequestBody("text/plain".toMediaType())
 
             create_post.postValue(Resource.loading(null))
             mainRepository.create_post(
-                id, location, title, description, tag_users, profileImageBody
+                isPrivate, id, location, title, description, tag_users, profileImageBody
             ).let {
                 if (it.isSuccessful) {
                     create_post.postValue(Resource.success(it.body()))
@@ -231,6 +235,20 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    fun PostStatusChange(jsonObject: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            change_status_post.postValue(Resource.loading(null))
+            mainRepository.PostStatusChange(jsonObject).let {
+                if (it.isSuccessful) {
+                    change_status_post.postValue(Resource.success(it.body()))
+                } else {
+                    change_status_post.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+
+            }
+        }
+    }
 
     fun deletepost(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
@@ -245,6 +263,9 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+
 
 
     fun report_user(jsonObject: JsonObject) = viewModelScope.launch {

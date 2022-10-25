@@ -76,12 +76,20 @@ interface ApiService {
     @POST("post/deletepost")
     suspend fun deletepost(@Body jsonObject: JsonObject): Response<delelepost>
 
+    @POST("post/changestatus")
+    suspend fun PostStatusChange(@Body jsonObject: JsonObject): Response<delelepost>
+
+
+
+
     @POST("post/showmyposts")
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>
 
     @Multipart
     @POST("post/save")
-    suspend fun create_post( @Part("user_id") user_id: RequestBody,
+    suspend fun create_post(
+        @Part("isPrivate") isPrivate: RequestBody,
+        @Part("user_id") user_id: RequestBody,
                              @Part("location") location: RequestBody,
                           @Part("title") title: RequestBody, @Part("description") description: RequestBody,
                              @Part("tag_users") tag_users: RequestBody,
@@ -121,4 +129,6 @@ interface ApiService {
 
     @POST("users/verifyotpemail")
     suspend fun email_otp_verification(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
 }

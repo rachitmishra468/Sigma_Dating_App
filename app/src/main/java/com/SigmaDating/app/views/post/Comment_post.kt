@@ -60,7 +60,6 @@ class Comment_post : Fragment() {
 
 
     fun get_commentdata() {
-
         get_all_comment_list()
         mTextInputLayout?.setEndIconOnClickListener {
             val messageBody = writeMessageEditText?.text.toString()

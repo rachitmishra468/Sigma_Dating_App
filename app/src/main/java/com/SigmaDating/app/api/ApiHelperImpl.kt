@@ -74,11 +74,17 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun block_user(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.block_user(jsonObject)
 
-    override suspend fun create_post(user_id:RequestBody,location:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody, file: MultipartBody.Part): Response<Loginmodel> =
-        apiService.create_post(user_id,location,title,discription,tag_users,file)
+    override suspend fun create_post(isPrivate:RequestBody,user_id:RequestBody,location:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody, file: MultipartBody.Part): Response<Loginmodel> =
+        apiService.create_post(isPrivate,user_id,location,title,discription,tag_users,file)
 
     override suspend fun deletepost(jsonObject: JsonObject): Response<delelepost> =
         apiService.deletepost(jsonObject)
+
+
+    override suspend fun PostStatusChange(jsonObject: JsonObject): Response<delelepost> =
+        apiService.PostStatusChange(jsonObject)
+
+
 
     override suspend fun showmyposts(jsonObject: JsonObject): Response<post> =
         apiService.showmyposts(jsonObject)
