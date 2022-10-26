@@ -121,8 +121,9 @@ class Otp_verification : Fragment() {
                         if (res?.status == true) {
                             try {
                                 mUser_Verification=true
-                                _binding.verificationDone.setBackgroundResource(R.drawable.signup_circle_bg)
-                                _binding.verificationDone.setTextColor(resources.getColor(R.color.white))
+                                (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
+                              //  _binding.verificationDone.setBackgroundResource(R.drawable.signup_circle_bg)
+                              //  _binding.verificationDone.setTextColor(resources.getColor(R.color.white))
                                // Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
                                 Log.d("TAG@123", res.message)
                             }catch (e:Exception){
@@ -150,8 +151,8 @@ class Otp_verification : Fragment() {
     override fun onResume() {
         super.onResume()
         mUser_Verification=false
-        _binding.verificationDone.setBackgroundResource(R.drawable.white_circle_bg)
-        _binding.verificationDone.setTextColor(resources.getColor(R.color.hint_text_color))
+       // _binding.verificationDone.setBackgroundResource(R.drawable.white_circle_bg)
+      //  _binding.verificationDone.setTextColor(resources.getColor(R.color.hint_text_color))
         _binding.editTextOtpVerification.setText("")
         _binding.editTextOtpVerification.visibility=View.INVISIBLE
         _binding.verfieOtp.visibility=View.INVISIBLE
