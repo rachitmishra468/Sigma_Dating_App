@@ -257,7 +257,54 @@
             app:layout_constraintTop_toBottomOf="@+id/interests_text"
             app:singleSelection="false"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="196dp"></com.google.android.material.chip.ChipGroup>
+            tools:layout_editor_absoluteY="196dp" />
+
+        <View
+            android:id="@+id/v41"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rootContainer" />
+
+        <TextView
+            android:id="@+id/instragram"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="Show my Instagram Photos"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/v41"
+            tools:layout_editor_absoluteX="137dp"
+            tools:layout_editor_absoluteY="196dp" />
+
+        <TextView
+            android:id="@+id/instragram_text"
+            style="@android:style/Widget.Holo.Light.Spinner"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_field_border_bg"
+            android:textSize="16sp"
+            android:text="Connect Instagram"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/guideline_left"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/instragram"
+            tools:layout_editor_absoluteX="137dp"
+            tools:layout_editor_absoluteY="196dp" />
+
+
+
+
 
         <View
             android:id="@+id/v4"
@@ -269,7 +316,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rootContainer" />
+            app:layout_constraintTop_toBottomOf="@id/instragram_text" />
 
         <TextView
             android:id="@+id/school_text"
