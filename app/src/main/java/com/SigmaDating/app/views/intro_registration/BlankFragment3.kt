@@ -13,8 +13,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 import android.view.*
+import androidx.lifecycle.MutableLiveData
+import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.app.utilities.PhoneTextWatcher
 import com.SigmaDating.databinding.AboutBirthdayBinding
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -112,10 +116,18 @@ class BlankFragment3 : Fragment() {
                         AppConstants.phone, "+91" + edit_text_phone.text.toString()
                     )
 
-                    val
-                            ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
+                    val ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
                     Log.d("TAG@123", ee.toString())
-                    (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+
+
+                    (activity as OnBoardingActivity?)?.userRegister?.email_validate = MutableLiveData<Resource<Loginmodel>>()
+
+                    (activity as OnBoardingActivity?)?.userRegister?.email_validation_check(
+                        email_id.text.toString(),
+                        edit_text_phone.text.toString()
+                    )
+
+                    checkEmailValidation()
 
                 }
 
@@ -176,4 +188,35 @@ class BlankFragment3 : Fragment() {
         mDialog.show()
 
     }
+
+
+    fun checkEmailValidation() {
+        (activity as OnBoardingActivity?)?.userRegister?.email_validate?.observe(
+            requireActivity(),
+            androidx.lifecycle.Observer {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        it.data?.let { res ->
+                            if (res.status) {
+                                Log.d("TAG@123","status ${res.message}")
+                                (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+                            } else {
+                                Log.d("TAG@123","status ${res.message}")
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                    Status.LOADING -> {
+
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+
+    }
+
 }

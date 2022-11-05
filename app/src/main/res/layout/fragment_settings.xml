@@ -290,7 +290,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View
+      <!--  <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
@@ -392,8 +392,8 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-        </RadioGroup>
-        <TextView
+        </RadioGroup>-->
+      <!--  <TextView
             android:id="@+id/textView_showme"
             style="@style/QText"
             android:layout_width="wrap_content"
@@ -405,10 +405,7 @@
             android:text="Show Me"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@+id/rg" />
-
-
-
+            app:layout_constraintTop_toBottomOf="@+id/main_linear" />
 
         <RadioGroup
             android:id="@+id/rg_showme"
@@ -489,11 +486,11 @@
                 android:textStyle="bold" />
 
         </RadioGroup>
+-->
 
 
 
-
-        <TextView
+       <!-- <TextView
             android:id="@+id/textView_age"
             style="@style/QText"
             android:layout_width="wrap_content"
@@ -505,7 +502,7 @@
             android:text="Age Range"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/rg_showme" />
+            app:layout_constraintTop_toBottomOf="@id/main_linear" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/seekBar_age"
@@ -518,9 +515,9 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/textView_age"
-            app:values="@array/initial_slider_values" />
+            app:values="@array/initial_slider_values" />-->
 
-        <TextView
+       <!-- <TextView
             android:id="@+id/textView_distance"
             style="@style/QText"
             android:layout_width="wrap_content"
@@ -532,7 +529,7 @@
             android:text="Distance"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/seekBar_age" />
+            app:layout_constraintTop_toBottomOf="@id/main_linear" />
 
 
         <com.google.android.material.slider.Slider
@@ -545,7 +542,7 @@
             android:valueTo="100"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/textView_distance" />
+            app:layout_constraintTop_toBottomOf="@id/textView_distance" />-->
 
 
         <View
@@ -558,7 +555,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/seekBar" />
+            app:layout_constraintTop_toBottomOf="@id/main_linear" />
 
         <TextView
             android:id="@+id/textView9"
@@ -878,7 +875,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/continue_logout" />
 
-        <TextView
+       <!-- <TextView
             android:id="@+id/textView8"
             style="@style/blue_NormalText"
             android:layout_width="wrap_content"
@@ -888,9 +885,9 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.896"
             app:layout_constraintStart_toEndOf="@+id/textView_age"
-            app:layout_constraintTop_toBottomOf="@+id/rg_showme" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_age" />-->
 
-        <TextView
+    <!--    <TextView
             android:id="@+id/textView11"
             style="@style/blue_NormalText"
             android:layout_width="wrap_content"
@@ -899,7 +896,7 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/textView_distance"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.906"
-            app:layout_constraintStart_toEndOf="@+id/textView_distance" />
+            app:layout_constraintStart_toEndOf="@+id/textView_distance" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

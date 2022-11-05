@@ -16,6 +16,7 @@ class MainRepository @Inject constructor(
     suspend fun email_otp_send(jsonObject: JsonObject) = apiHelper.email_otp_send(jsonObject)
     suspend fun email_otp_verification(jsonObject: JsonObject) = apiHelper.email_otp_verification(jsonObject)
     suspend fun user_phone_verifly(jsonObject: JsonObject) = apiHelper.user_phone_verifly(jsonObject)
+    suspend fun email_validation_check(jsonObject: JsonObject) = apiHelper.email_validation_check(jsonObject)
     suspend fun get_profile_swipe_details(jsonObject: JsonObject) = apiHelper.get_profile_swipe_details(jsonObject)
     suspend fun report_user(jsonObject: JsonObject) = apiHelper.report_user(jsonObject)
     suspend fun block_user(jsonObject: JsonObject) = apiHelper.block_user(jsonObject)

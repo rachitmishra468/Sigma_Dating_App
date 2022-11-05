@@ -467,10 +467,14 @@ class HomeViewModel @Inject constructor(
         community: String,
         interests: String,
         about: String,
-        is_private: String
+        is_private: String,
+        interested_in:String,
+        show_me:String,
+        age_range:String,
+        distance:String
     ) {
 
-        update_profile(id, university, community, interests, about, is_private)
+        update_profile(id, university, community, interests, about, is_private,interested_in,show_me,age_range,distance)
 
 
     }
@@ -536,7 +540,11 @@ class HomeViewModel @Inject constructor(
         community: String,
         interests: String,
         about: String,
-        is_private: String
+        is_private: String,
+        interested_in:String,
+        show_me:String,
+        age_range:String,
+        distance:String
     ) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             update_profile.postValue(Resource.loading(null))
@@ -547,7 +555,10 @@ class HomeViewModel @Inject constructor(
             jsonObject.addProperty("interests", interests)
             jsonObject.addProperty("about", about)
             jsonObject.addProperty("is_private", is_private)
-
+            jsonObject.addProperty("interested_in", interested_in)
+            jsonObject.addProperty("show_me", show_me)
+            jsonObject.addProperty("age_range", age_range)
+            jsonObject.addProperty("distance", distance)
             Log.d("TAG@123", "done Update" + jsonObject.toString())
             mainRepository.Update_profile(jsonObject).let {
                 if (it.isSuccessful) {

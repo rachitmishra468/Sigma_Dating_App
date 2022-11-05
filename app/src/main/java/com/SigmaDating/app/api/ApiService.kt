@@ -36,6 +36,9 @@ interface ApiService {
     @POST("twilio/verifyotp")
     suspend fun user_phone_verifly(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+    @POST("users/emailused")
+    suspend fun email_validation_check(@Body jsonObject: JsonObject): Response<Loginmodel>
+
     @POST("users/view")
     suspend fun get_login_user_data(@Body jsonObject: JsonObject): Response<Loginmodel>
 

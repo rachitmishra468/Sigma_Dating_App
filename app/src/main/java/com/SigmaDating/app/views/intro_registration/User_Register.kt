@@ -27,6 +27,7 @@ class User_Register @Inject constructor(
     var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>? = null
     var sent_otp: MutableLiveData<Resource<Loginmodel>>? = null
     var verifly_otp: MutableLiveData<Resource<Loginmodel>>? = null
+    var email_validate: MutableLiveData<Resource<Loginmodel>>? = null
 
     init {
         registration = MutableLiveData<Resource<Loginmodel>>()
@@ -36,7 +37,7 @@ class User_Register @Inject constructor(
     }
 
     fun Register(bitmap: String) = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
+        if (AppUtils.isNetworkAvailable()) {
             registration?.postValue(Resource.loading(null))
 
             val jsonObject = JsonObject()
@@ -112,25 +113,26 @@ class User_Register @Inject constructor(
 
 
     fun getSchoolingData() = viewModelScope.launch {
-        if(AppUtils.isNetworkAvailable()) {
-        school_dataResponse?.postValue(Resource.loading(null))
-        mainRepository.ListSchoolFeternity().let {
-            if (it.isSuccessful) {
-                school_dataResponse?.postValue(Resource.success(it.body()))
-            } else {
-                school_dataResponse?.postValue(Resource.error(it.errorBody().toString(), null))
+        if (AppUtils.isNetworkAvailable()) {
+            school_dataResponse?.postValue(Resource.loading(null))
+            mainRepository.ListSchoolFeternity().let {
+                if (it.isSuccessful) {
+                    school_dataResponse?.postValue(Resource.success(it.body()))
+                } else {
+                    school_dataResponse?.postValue(Resource.error(it.errorBody().toString(), null))
+                }
             }
         }
-    }}
+    }
 
 
-    fun verification_phone_email(phone:Boolean) = viewModelScope.launch {
+    fun verification_phone_email(phone: Boolean) = viewModelScope.launch {
         sent_otp?.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
-        if(phone){
+        if (phone) {
             jsonObject.addProperty(
                 "phone",
-                  sharedPreferencesStorage.getString(
+                sharedPreferencesStorage.getString(
                     AppConstants.phone
                 )
             )
@@ -143,11 +145,10 @@ class User_Register @Inject constructor(
             }
 
 
-        }
-        else{
+        } else {
             jsonObject.addProperty(
                 "email",
-                 sharedPreferencesStorage.getString(
+                sharedPreferencesStorage.getString(
                     AppConstants.email
                 )
             )
@@ -166,11 +167,10 @@ class User_Register @Inject constructor(
     }
 
 
-
-    fun verifly_OTP(OTP: String,phone: Boolean) = viewModelScope.launch {
+    fun verifly_OTP(OTP: String, phone: Boolean) = viewModelScope.launch {
         verifly_otp?.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
-        if(phone){
+        if (phone) {
             jsonObject.addProperty(
                 "phone",
                 sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
@@ -186,11 +186,10 @@ class User_Register @Inject constructor(
                     verifly_otp?.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
-        }
-        else{
+        } else {
             jsonObject.addProperty(
                 "email",
-                 sharedPreferencesStorage.getString(
+                sharedPreferencesStorage.getString(
                     AppConstants.email
                 )
             )
@@ -206,10 +205,31 @@ class User_Register @Inject constructor(
         }
 
 
-
     }
 
+    fun email_validation_check(email: String, phone: String) = viewModelScope.launch {
+        email_validate?.postValue(Resource.loading(null))
+        val jsonObject = JsonObject()
 
+      /*  jsonObject.addProperty(
+            "phone",
+            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
+                AppConstants.phone
+            )
+        )*/
+        jsonObject.addProperty("phone", phone)
+        jsonObject.addProperty("email", email)
+        Log.d("TAG@123", jsonObject.toString())
+        mainRepository.email_validation_check(jsonObject).let {
+            if (it.isSuccessful) {
+                email_validate?.postValue(Resource.success(it.body()))
+            } else {
+                email_validate?.postValue(Resource.error(it.errorBody().toString(), null))
+            }
+        }
+
+
+    }
 
 
 }

@@ -57,13 +57,13 @@ class SettingsFragment : Fragment() {
     var notification_flag = 1;
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
-    var age_range = ""
-    var distance = ""
+   // var age_range = ""
+    //var distance = ""
     var location_text = ""
     var latitude = ""
     var longitude = ""
-    var interested_in = ""
-    var show_me=""
+   // var interested_in = ""
+  //  var show_me=""
 
     fun Call_links() {
         val bundle = Bundle()
@@ -166,29 +166,31 @@ class SettingsFragment : Fragment() {
         })
 
 
+/*
         _binding.rg.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding.root.findViewById(checkedId) as RadioButton
             interested_in = rb.text.toString()
             Log.d("TAG@123", "interested_in  $interested_in")
         }
-        _binding.rgShowme.setOnCheckedChangeListener { group, checkedId ->
+*/
+      /*  _binding.rgShowme.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding.root.findViewById(checkedId) as RadioButton
             show_me = rb.text.toString()
             Log.d("TAG@123", "show me  $show_me")
-        }
-        _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
+        }*/
+       /* _binding.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
             Log.d("TAG@123", value.toString())
             _binding.textView11.text = "$value miles"
             distance = value.toString()
-        }
+        }*/
 
-        _binding.seekBarAge.addOnChangeListener { rangeSlider, value, fromUser ->
+       /* _binding.seekBarAge.addOnChangeListener { rangeSlider, value, fromUser ->
             val values = rangeSlider.values
             Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
             _binding.textView8.text = "${values[0].toInt()}-${values[1].toInt()} "
             age_range = "${values[0].toInt()}-${values[1].toInt()}"
 
-        }
+        }*/
 
         _binding.updateSetting.setOnClickListener {
 
@@ -204,13 +206,13 @@ class SettingsFragment : Fragment() {
                 "user_id",
                 (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
             )
-            jsonObject.addProperty("age_range", age_range)
-            jsonObject.addProperty("distance", distance)
+            //jsonObject.addProperty("age_range", age_range)
+          //  jsonObject.addProperty("distance", distance)
             jsonObject.addProperty("location", _binding.locationText.text.toString())
             jsonObject.addProperty("latitude", latitude)
             jsonObject.addProperty("longitude", longitude)
-            jsonObject.addProperty("show_me", show_me)
-            jsonObject.addProperty("interested_in", interested_in)
+           // jsonObject.addProperty("show_me", show_me)
+         //   jsonObject.addProperty("interested_in", interested_in)
             jsonObject.addProperty("notifications", notification_flag)
             Log.d("TAG@123", "interested_in :" + jsonObject.toString())
             (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
@@ -310,6 +312,7 @@ class SettingsFragment : Fragment() {
                             _binding.switch1.isChecked = it.data?.user?.notifications == 1
 
 
+/*
                             if (it.data?.user?.age_range?.isEmpty() == false) {
                                 _binding.textView8.setText(it.data.user.age_range)
 
@@ -322,7 +325,9 @@ class SettingsFragment : Fragment() {
                                     Log.d("TAG@123", "seekBarAge ${e.message}")
                                 }
                             }
+*/
 
+/*
                             if (it.data?.user?.interested_in?.isEmpty() == false) {
                                 interested_in = it.data.user.interested_in
                                 when (interested_in) {
@@ -335,8 +340,10 @@ class SettingsFragment : Fragment() {
 
                                 }
                             }
+*/
 
 
+/*
                             if (it.data?.user?.show_me?.isEmpty() == false) {
                                 show_me = it.data.user.show_me
                                 when (show_me) {
@@ -345,14 +352,15 @@ class SettingsFragment : Fragment() {
                                     "Both" -> _binding.rbboth.setChecked(true);
                                 }
                             }
+*/
 
 
-                            if (it.data?.user?.distance?.isEmpty() == false) {
+                         /*   if (it.data?.user?.distance?.isEmpty() == false) {
                                 if (it.data.user.distance.toFloat() >= 25) {
                                     _binding.seekBar.setValue(it.data.user.distance.toFloat())
                                 }
                                 _binding.textView11.setText(it.data.user.distance + " miles")
-                            }
+                            }*/
 
 
                         } else {
@@ -602,8 +610,8 @@ class SettingsFragment : Fragment() {
                         "user_id",
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
-                    jsonObject.addProperty("age_range", age_range)
-                    jsonObject.addProperty("distance", distance)
+                   // jsonObject.addProperty("age_range", age_range)
+                  //  jsonObject.addProperty("distance", distance)
                     jsonObject.addProperty("location", current_value.text.toString())
                     jsonObject.addProperty("latitude", latitude)
                     jsonObject.addProperty("longitude", longitude)

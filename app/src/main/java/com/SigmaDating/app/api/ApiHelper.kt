@@ -20,6 +20,8 @@ interface ApiHelper {
     suspend fun email_otp_send(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun email_otp_verification(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun user_phone_verifly(jsonObject: JsonObject):Response<Loginmodel>
+    suspend fun email_validation_check(jsonObject: JsonObject):Response<Loginmodel>
+
     suspend fun get_profile_swipe_details(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun report_user(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun block_user(jsonObject: JsonObject):Response<Loginmodel>

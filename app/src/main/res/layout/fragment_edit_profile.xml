@@ -260,6 +260,299 @@
             tools:layout_editor_absoluteY="196dp" />
 
         <View
+            android:id="@+id/vgone"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rootContainer" />
+
+
+        <TextView
+            android:id="@+id/textView_showme"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="24dp"
+            android:alpha=".8"
+            android:text="Show Me"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/vgone" />
+
+        <RadioGroup
+            android:id="@+id/rg_showme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView_showme">
+
+            <RadioButton
+                android:id="@+id/rb_greek"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Greek Life"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_indepndt"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".35"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Independents"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rbboth"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".15"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Both"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </RadioGroup>
+
+        <View
+            android:id="@+id/vgone1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rg_showme" />
+
+
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:alpha=".8"
+            android:text="Interested In"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/vgone1" />
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <RadioButton
+                android:id="@+id/rb_women"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Women"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_men"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Men"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rb_more"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight=".25"
+                android:background="@drawable/interested_in_main_drwable"
+                android:button="@android:color/transparent"
+                android:checked="false"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingTop="3dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="3dp"
+                android:text="Both"
+                android:textColor="@drawable/text_selector_default"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </RadioGroup>
+
+        <View
+            android:id="@+id/v4111"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rg" />
+
+
+        <TextView
+            android:id="@+id/textView_age"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:alpha=".8"
+            android:text="Age Range"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v4111" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/seekBar_age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:stepSize="1.0"
+            android:valueFrom="18.0"
+            android:valueTo="30.0"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textView_age"
+            app:values="@array/initial_slider_values" />
+
+        <View
+            android:id="@+id/v411"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:alpha=".6"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekBar_age" />
+
+        <TextView
+            android:id="@+id/textView_distance"
+            style="@style/QText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:alpha=".8"
+            android:text="Distance"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v411" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:stepSize="5"
+            android:valueFrom="25"
+            android:valueTo="100"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/textView_distance" />
+
+
+        <View
             android:id="@+id/v41"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -269,7 +562,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rootContainer" />
+            app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
         <TextView
             android:id="@+id/instragram"
@@ -454,6 +747,33 @@
             tools:layout_editor_absoluteX="137dp"
             tools:layout_editor_absoluteY="196dp" />
 
+
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/blue_NormalText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="18-30"
+            android:layout_marginRight="5dp"
+            android:gravity="right"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/textView_age"
+            app:layout_constraintTop_toBottomOf="@+id/v4111" />
+
+        <TextView
+            android:id="@+id/textView11"
+            style="@style/blue_NormalText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="25 miles"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="16dp"
+            android:gravity="right"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toEndOf="@+id/textView_age"
+            app:layout_constraintTop_toBottomOf="@+id/v411" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

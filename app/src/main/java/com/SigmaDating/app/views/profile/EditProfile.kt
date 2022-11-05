@@ -110,6 +110,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     private var fraternity_button: Button? = null
     private var independent:Button?=null
 
+    var interested_in = ""
+    var show_me=""
+    var age_range = ""
+    var distance = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -155,7 +160,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         it2,
                         t,
                         _binding!!.userAbout.text.toString(),
-                        is_private
+                        is_private,
+                        interested_in,
+                        show_me,
+                        age_range,
+                        distance
                     )
                 }
 
@@ -257,6 +266,33 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             }
              Log.d("TAG@123", "profile : "+rb.text.toString())
 
+        }
+
+        _binding!!.rgShowme.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding!!.root.findViewById(checkedId) as RadioButton
+            show_me = rb.text.toString()
+            Log.d("TAG@123", "show me  $show_me")
+        }
+
+
+        _binding!!.rg.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding!!.root.findViewById(checkedId) as RadioButton
+            interested_in = rb.text.toString()
+            Log.d("TAG@123", "interested_in  $interested_in")
+        }
+
+        _binding!!.seekBarAge.addOnChangeListener { rangeSlider, value, fromUser ->
+            val values = rangeSlider.values
+            Log.d("TAG@123", "Start value: ${values[0]}, End value: ${values[1]}")
+            _binding!!.textView8.text = "${values[0].toInt()}-${values[1].toInt()} "
+            age_range = "${values[0].toInt()}-${values[1].toInt()}"
+
+        }
+
+        _binding!!.seekBar.addOnChangeListener { rangeSlider, value, fromUser ->
+            Log.d("TAG@123", value.toString())
+            _binding!!.textView11.text = "$value miles"
+            distance = value.toString()
         }
 
 
@@ -583,6 +619,49 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         }
 
                                     }
+                                    if (it.data?.user?.interested_in?.isEmpty() == false) {
+                                        interested_in = it.data.user.interested_in
+                                        when (interested_in) {
+                                            "Women" -> _binding?.rbWomen?.setChecked(true);
+                                            "Men" -> _binding?.rbMen?.setChecked(true);
+                                            "WOMEN" -> _binding?.rbWomen?.setChecked(true);
+                                            "MEN" -> _binding?.rbMen?.setChecked(true);
+                                            "BOTH" -> _binding?.rbMore?.setChecked(true);
+                                            "Both" -> _binding?.rbMore?.setChecked(true);
+
+                                        }
+                                    }
+                                    if (it.data?.user?.show_me?.isEmpty() == false) {
+                                        show_me = it.data.user.show_me
+                                        when (show_me) {
+                                            "Greek Life" -> _binding!!.rbGreek.setChecked(true);
+                                            "Independents" -> _binding!!.rbIndepndt.setChecked(true);
+                                            "Both" -> _binding!!.rbboth.setChecked(true);
+                                        }
+                                    }
+
+
+                                    if (it.data?.user?.age_range?.isEmpty() == false) {
+                                        _binding!!.textView8.setText(it.data.user.age_range)
+
+                                        try {
+                                            _binding!!.seekBarAge.setValues(
+                                                res.user.age_range.split("-").get(0).toFloat(),
+                                                res.user.age_range.split("-").get(1).toFloat()
+                                            )
+                                        } catch (e: Exception) {
+                                            Log.d("TAG@123", "seekBarAge ${e.message}")
+                                        }
+                                    }
+
+                                    if (it.data?.user?.distance?.isEmpty() == false) {
+                                        if (it.data.user.distance.toFloat() >= 25) {
+                                            _binding!!.seekBar.setValue(it.data.user.distance.toFloat())
+                                        }
+                                        _binding!!.textView11.setText(it.data.user.distance + " miles")
+                                    }
+
+
                                     res.user.about.let {
                                         about = it
                                         _binding?.userAbout?.setText(about)
