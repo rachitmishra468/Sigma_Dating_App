@@ -51,6 +51,7 @@ import com.facebook.login.LoginManager
 class Login_Activity : AppCompatActivity() {
     private val EMAIL = "email"
     private val USER_POSTS = "user_posts"
+    private val USER_photos = "user_photos"
     private val AUTH_TYPE = "rerequest"
 
     private var mCallbackManager: CallbackManager? = null
@@ -105,7 +106,7 @@ class Login_Activity : AppCompatActivity() {
         textforgot.setOnClickListener {
             openforgotPasswordDialog()
         }
-        mLoginButton.setPermissions(Arrays.asList(EMAIL, USER_POSTS));
+        mLoginButton.setPermissions(Arrays.asList(EMAIL,USER_POSTS,USER_photos));
         mLoginButton.setAuthType(AUTH_TYPE);
         mLoginButton.registerCallback(
             mCallbackManager,
