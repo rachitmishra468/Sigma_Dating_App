@@ -48,9 +48,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="internetdisconnect">internet not connected</string>
     <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
-    <string name="facebook_app_id">833040661414380</string>
-    <string name="fb_login_protocol_scheme">fb833040661414380</string>
-    <string name="facebook_client_token">45b0c477021194b4b5d95bde259fcc58</string>
+    <string name="facebook_app_id">1153185138897679</string>
+    <string name="fb_login_protocol_scheme">fb1153185138897679</string>
+    <string name="facebook_client_token">2adb7bbfa0c7f0c103f8973c668d818c</string>
     <string name="term_and_condition">I agree with the <u>Terms and Conditions</u> <a href="https://www.rushdatingapp.com/terms-and-conditions/"></a></string>
     <string name="password_strength_weak">Your Password is Weak</string>
     <string name="password_strength_medium">Your Password is Medium</string>

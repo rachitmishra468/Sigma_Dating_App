@@ -1,50 +1,45 @@
 package com.SigmaDating.app.views.login
 
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
-import android.widget.AdapterView.OnItemSelectedListener
-import androidx.lifecycle.Observer
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.demoapp.other.Status
-import com.SigmaDating.app.model.Loginmodel
+import androidx.lifecycle.Observer
+import com.SigmaDating.R
+import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.AppConstants.PHONE_LOGIN
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
-import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.SingleObserver
-import javax.inject.Inject
-import com.facebook.CallbackManager
-import com.facebook.login.widget.LoginButton
-import java.util.*
-import com.facebook.FacebookException
-import com.SigmaDating.R
-import com.SigmaDating.app.AppReseources
-import com.SigmaDating.app.Sigmadatingapp
 import com.SigmaDating.app.utilities.PhoneTextWatcher
-import com.facebook.login.LoginResult
-
-
+import com.SigmaDating.app.views.Home
+import com.SigmaDating.app.views.intro_registration.OnBoardingActivity
+import com.example.demoapp.other.Status
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
+import com.facebook.GraphResponse
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.SigmaDating.app.views.Home
-import com.SigmaDating.app.views.intro_registration.OnBoardingActivity
-
-import com.facebook.GraphRequest
-import com.facebook.login.LoginManager
+import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.http.HttpMethod
+import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -53,7 +48,7 @@ class Login_Activity : AppCompatActivity() {
     private val USER_POSTS = "user_posts"
     private val USER_photos = "user_photos"
     private val AUTH_TYPE = "rerequest"
-
+    private val Public_profile="public_profile"
     private var mCallbackManager: CallbackManager? = null
     val mainViewModel: LoginViewModel by viewModels()
 
@@ -106,7 +101,7 @@ class Login_Activity : AppCompatActivity() {
         textforgot.setOnClickListener {
             openforgotPasswordDialog()
         }
-        mLoginButton.setPermissions(Arrays.asList(EMAIL,USER_POSTS,USER_photos));
+        mLoginButton.setPermissions(Arrays.asList(EMAIL,Public_profile,USER_POSTS,USER_photos));
         mLoginButton.setAuthType(AUTH_TYPE);
         mLoginButton.registerCallback(
             mCallbackManager,
@@ -122,14 +117,17 @@ class Login_Activity : AppCompatActivity() {
 
                 override fun onSuccess(result: LoginResult?) {
                     setResult(RESULT_OK);
-                    Log.d("TAG@123",""+result)
+                    Log.d("TAG@123","result"+result)
+                    Log.d("TAG@123", "accessToken :"+result?.accessToken)
 
                     val request = GraphRequest.newMeRequest(
                         result?.accessToken
                     ) { jsonObject, response ->
-
+                        Log.d("TAG@123", "accessToken :"+result?.accessToken)
                         Log.d("TAG@123", ""+jsonObject?.get("email"))
-
+                        Log.d("TAG@123", "jsonObject : "+jsonObject.toString())
+                        getphotos(jsonObject?.get("id").toString())
+                        disconnectFromFacebook()
                         sharedPreferencesStorage.setValue(
                             AppConstants.upload_image,
                             jsonObject?.get("picture").toString()
@@ -154,11 +152,12 @@ class Login_Activity : AppCompatActivity() {
                             jsonObject?.get("name")
                         )
                         LoginManager.getInstance().logOut();
+
                         mainViewModel.Register()
 
                     }
                     val parameters = Bundle()
-                    parameters.putString("fields", "id,name,link,email,picture")
+                    parameters.putString("fields", "id,name,link,email,picture,user_photos,user_posts")
                     request.parameters = parameters
                     request.executeAsync()
 
@@ -170,6 +169,41 @@ class Login_Activity : AppCompatActivity() {
             })
 
     }
+
+
+
+    private fun getphotos( user_id:String){
+        GraphRequest(
+            AccessToken.getCurrentAccessToken(),
+            "/$user_id/photos",
+            null,
+            com.facebook.HttpMethod.GET,
+           GraphRequest.Callback {
+                fun onCompleted(response: GraphResponse) {
+                    Log.d("TAG@123", "accessTresponse :"+response)
+
+                }
+            }
+        ).executeAsync()
+    }
+
+    fun disconnectFromFacebook() {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Log.d("TAG@123", "getCurrentAccessToken Logout" )
+            return  // already logged out
+        }
+        GraphRequest(
+            AccessToken.getCurrentAccessToken(),
+            "/me/permissions/",
+            null,
+            com.facebook.HttpMethod.DELETE,
+            GraphRequest.Callback {
+                Log.d("TAG@123", "DELETE Logout" )
+                LoginManager.getInstance().logOut()
+            }).executeAsync()
+    }
+
+
 
     private fun openforgotPasswordDialog() {
         val dialog = BottomSheetDialog(this, R.style.DialogStyle)

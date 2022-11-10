@@ -39,7 +39,6 @@ import com.SigmaDating.app.adapters.Edit_Profile_Adapter
 import com.SigmaDating.app.adapters.InterestAdapter
 import com.SigmaDating.app.adapters.SchoolAdapter
 import com.SigmaDating.app.model.Loginmodel
-import com.SigmaDating.databinding.FragmentEditProfileBinding
 import com.SigmaDating.app.model.communityModel.Interest
 import com.SigmaDating.app.model.communityModel.UniversityList
 import com.SigmaDating.app.storage.AppConstants
@@ -47,6 +46,7 @@ import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.utilities.EmptyDataObserver
 import com.SigmaDating.app.utilities.URIPathHelper
 import com.SigmaDating.app.views.Home
+import com.SigmaDating.databinding.FragmentEditProfileBinding
 import com.SigmaDating.model.SchoolCommunityResponse
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget

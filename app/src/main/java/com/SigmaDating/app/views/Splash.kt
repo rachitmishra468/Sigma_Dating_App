@@ -30,7 +30,7 @@ class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-       // GetKeyHase()
+        GetKeyHase()
 
     }
 
@@ -69,7 +69,7 @@ class Splash : AppCompatActivity() {
                 val md: MessageDigest = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 val hashkey_value: String = String(Base64.encode(md.digest(), 0))
-                Log.d("TAG@123  hash key", hashkey_value)
+                Log.d("TAG@123","hash key "+ hashkey_value)
                 //check you logcat hash key value
             }
         } catch (e: Exception) {
