@@ -52,9 +52,21 @@
         android:theme="@style/Theme.SigmaDatingApp"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:ignore="GoogleAppIndexingWarning">
+
+
         <activity
             android:name=".app.video.VideoActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".app.video.SettingsActivity"
+            android:parentActivityName=".app.video.VideoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.SigmaDating.app.video.VideoActivity" />
+        </activity>
+
+
         <activity
             android:name=".app.views.intro_registration.OnBoardingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

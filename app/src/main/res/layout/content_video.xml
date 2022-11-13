@@ -22,7 +22,7 @@
         android:id="@+id/primaryVideoView"
         app:tviMirror="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"/>
 
     <ProgressBar
@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
-            android:text="status"/>
+            android:text="Status"/>
 
     </LinearLayout>
 

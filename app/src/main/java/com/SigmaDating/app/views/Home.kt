@@ -126,6 +126,7 @@ class Home : AppCompatActivity() {
         var notifications_count: String="0"
         var current_user_profile: String=""
         var mCurrent_user_token:String=""
+        var mVideoGrant_user_token:String=""
         var  match_id:String=""
 
         fun get_settingpage_data(alias: String): Pages? {

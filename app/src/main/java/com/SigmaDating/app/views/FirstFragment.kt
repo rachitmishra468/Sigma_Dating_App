@@ -85,6 +85,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     ): View {
         Log.d("TAG@123", "FirstFragment onCreateView")
         Home.mCurrent_user_token=""
+        Home.mVideoGrant_user_token=""
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)

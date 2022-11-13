@@ -8,7 +8,12 @@
     android:fitsSystemWindows="true"
     tools:context="com.SigmaDating.app.video.VideoActivity">
 
-    <include layout="@layout/content_video" />
+    <include
+        layout="@layout/content_video"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -51,5 +56,7 @@
             android:src="@drawable/ic_video_call_white_24dp" />
 
     </LinearLayout>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

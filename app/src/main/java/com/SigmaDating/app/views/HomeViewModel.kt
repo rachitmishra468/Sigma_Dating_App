@@ -82,7 +82,9 @@ class HomeViewModel @Inject constructor(
 
 
                     Resource.success(it.body()).data.let {
+                        Log.d("TAG@123", " token call :"+it)
                         Home.mCurrent_user_token = it?.token.toString()
+                        Home.mVideoGrant_user_token = it?.token.toString()
                         Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
                     }

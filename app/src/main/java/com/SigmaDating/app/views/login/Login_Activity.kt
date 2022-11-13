@@ -92,10 +92,7 @@ class Login_Activity : AppCompatActivity() {
         }
         verfie_otp = findViewById(R.id.verfie_otp)
         signInButton.setOnClickListener {
-
-                signIn()
-
-
+            signIn()
         }
 
         textforgot.setOnClickListener {
