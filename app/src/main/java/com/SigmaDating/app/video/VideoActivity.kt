@@ -46,7 +46,7 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var videoStatusTextView: TextView
 
     private val CAMERA_MIC_PERMISSION_REQUEST_CODE = 1
-    private val TAG = "VideoActivity"
+    private val TAG = "TAG@123"
     private val CAMERA_PERMISSION_INDEX = 0
     private val MIC_PERMISSION_INDEX = 1
     private val DEFAULT_CONVERSATION_NAME = "Sigma" + match_id
@@ -411,6 +411,8 @@ class VideoActivity : AppCompatActivity() {
             remoteVideoTrackPublication: RemoteVideoTrackPublication,
             remoteVideoTrack: RemoteVideoTrack
         ) {
+
+
             Log.d(
                 TAG, "onVideoTrackSubscribed: " +
                         "[RemoteParticipant: identity=${remoteParticipant.identity}], " +
@@ -912,6 +914,7 @@ class VideoActivity : AppCompatActivity() {
      * Called when participant joins the room
      */
     private fun addRemoteParticipant(remoteParticipant: RemoteParticipant) {
+        Log.d("TAG@123","addRemoteParticipant :"+room)
         /*
          * This app only displays video for one additional participant per Room
          */
@@ -946,12 +949,14 @@ class VideoActivity : AppCompatActivity() {
      * Set primary view as renderer for participant video track
      */
     private fun addRemoteParticipantVideo(videoTrack: VideoTrack) {
+        Log.d("TAG@123","addRemoteParticipantVideo :")
         moveLocalVideoToThumbnailView()
         primaryVideoView.mirror = false
         videoTrack.addSink(primaryVideoView)
     }
 
     private fun moveLocalVideoToThumbnailView() {
+        Log.d("TAG@123","moveLocalVideoToThumbnailView :")
         if (thumbnailVideoView.visibility == View.GONE) {
             thumbnailVideoView.visibility = View.VISIBLE
             with(localVideoTrack) {

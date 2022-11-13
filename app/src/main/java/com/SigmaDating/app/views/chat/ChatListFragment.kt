@@ -158,7 +158,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             val jsonObject = JsonObject()
             jsonObject.addProperty(
                 "identity",
-                position.match_id
+                position.match_id+"match"
             )
         Log.d("TAG@123","identity : "+jsonObject.toString())
             (activity as Home).homeviewmodel.get_User_token(
