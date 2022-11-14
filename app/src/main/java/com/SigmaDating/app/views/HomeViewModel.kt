@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         report_block_user = MutableLiveData<Resource<Loginmodel>>()
-        // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
+        //  =MutableLiveData<Resource<Loginmodel>>()
         get_UserReportdata = MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
         get_secound_feb_data = MutableLiveData<Resource<Loginmodel>>()
@@ -98,6 +98,34 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun get_User_video_token(id: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "get user token call")
+            ctrateToken_data.postValue(Resource.loading(null))
+            mainRepository.ctrateToken(id).let {
+                if (it.isSuccessful) {
+
+
+                    Resource.success(it.body()).data.let {
+                        Log.d("TAG@123", " token call :"+it)
+                       // Home.mCurrent_user_token = it?.token.toString()
+                        Home.mVideoGrant_user_token = it?.token.toString()
+                        Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
+
+                    }
+                    ctrateToken_data.postValue(Resource.success(it.body()))
+                } else {
+                    Log.d("TAG@123", "error in get token call ")
+                    ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+
+
+            }
+        }
+    }
+
+
 
 
     fun get_user_match_bids(id: String) = viewModelScope.launch {

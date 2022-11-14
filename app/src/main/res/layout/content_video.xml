@@ -13,8 +13,8 @@
         app:tviOverlaySurface="true"
         app:tviMirror="true"
         android:visibility="gone"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
         android:layout_margin="16dp"
         android:layout_gravity="bottom|start"/>
 

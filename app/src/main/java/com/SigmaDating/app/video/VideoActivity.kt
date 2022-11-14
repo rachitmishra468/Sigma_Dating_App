@@ -713,7 +713,7 @@ class VideoActivity : AppCompatActivity() {
                 )
         }
         if (displayRational) {
-            Toast.makeText(this, "permissions_needed", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "permissions needed", Toast.LENGTH_LONG).show()
         } else {
             ActivityCompat.requestPermissions(
                 this, permissions, CAMERA_MIC_PERMISSION_REQUEST_CODE
@@ -757,7 +757,7 @@ class VideoActivity : AppCompatActivity() {
 
     private fun setAccessToken() {
 
-        this.accessToken = Home.mCurrent_user_token
+        this.accessToken = Home.mVideoGrant_user_token
 /*
         if (!BuildConfig.USE_TOKEN_SERVER) {
             */

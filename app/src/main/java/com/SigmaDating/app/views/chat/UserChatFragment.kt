@@ -10,17 +10,23 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
+import com.SigmaDating.app.model.Token_data
+import com.SigmaDating.app.model.User_bids_list
 import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
 import com.bumptech.glide.Glide
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
@@ -37,7 +43,7 @@ import javax.inject.Inject
 
 class UserChatFragment : Fragment() {
     var chat_settings_img: ImageView? = null
-    var make_videocall:ImageView?=null
+    var make_videocall: ImageView? = null
 
     private var recyclerView: RecyclerView? = null
 
@@ -53,6 +59,7 @@ class UserChatFragment : Fragment() {
     private val quickstartConversationsManager = QuickstartConversationsManager()
     private var username: String? = null
     private var imagedata: String? = null
+    private var id: String? = null
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -74,6 +81,7 @@ class UserChatFragment : Fragment() {
         // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
         username = getArguments()?.getString("user_name")
+        id = getArguments()?.getString("user_ID")
         if (username != null) {
             userChatname?.text = username
         }
@@ -81,8 +89,6 @@ class UserChatFragment : Fragment() {
         imagedata?.let {
             Glide.with(requireActivity()).load(it).into(headerImg as ImageView)
         }
-
-
         mTextInputLayout?.setEndIconOnClickListener {
             Log.d("TAG@123", "EndIconOnClickListener : ")
 
@@ -112,13 +118,27 @@ class UserChatFragment : Fragment() {
                 );
         }
 
-        make_videocall=view.findViewById(R.id.make_videocall)
+        make_videocall = view.findViewById(R.id.make_videocall)
         make_videocall?.setOnClickListener {
-            activity?.let {
-                val intent = Intent(it, VideoActivity::class.java)
-                it.startActivity(intent)
-            }
+            (activity as Home).homeviewmodel.ctrateToken_data =
+                MutableLiveData<Resource<Token_data>>()
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "identity",
+                id
+            )
+            Log.d("TAG@123", "identity : " + jsonObject.toString())
+            (activity as Home).homeviewmodel.get_User_video_token(
+                jsonObject
+            )
+            subscribe_Login_User_details()
+
+
         }
+
+
+
+
 
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
@@ -306,6 +326,30 @@ class UserChatFragment : Fragment() {
             }
 
         }
+    }
+
+    fun subscribe_Login_User_details() {
+        (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+
+                    activity?.let {
+                        val intent = Intent(it, VideoActivity::class.java)
+                        it.startActivity(intent)
+                    }
+
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
+                }
+                Status.ERROR -> {
+                    AppUtils.hideLoader()
+                }
+            }
+        })
+
+
     }
 
 
