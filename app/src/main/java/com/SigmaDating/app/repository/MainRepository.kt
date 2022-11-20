@@ -41,7 +41,7 @@ class MainRepository @Inject constructor(
     suspend fun getallcomment(jsonObject: JsonObject)=apiHelper.getallcomment(jsonObject)
     suspend fun get_user_match_bids(id: String)= apiHelper.get_user_match_bids(id)
     suspend fun ctrateToken(id: JsonObject)= apiHelper.ctrateToken(id)
-
+    suspend fun sendNotification(id: JsonObject)= apiHelper.sendNotification(id)
     suspend fun sentcomment(jsonObject: JsonObject)=apiHelper.sent_comment(jsonObject)
     suspend fun save_like_post_data(jsonObject: JsonObject)=apiHelper.save_like_post_data(jsonObject)
 

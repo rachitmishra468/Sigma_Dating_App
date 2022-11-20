@@ -24,21 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+
+
 public class QuickstartConversationsManager {
 
     public MutableLiveData<Integer> mutableLiveData = new MutableLiveData<>();
-
-    private final static String DEFAULT_CONVERSATION_NAME = "Sigma"+Home.Companion.getMatch_id();
-
+    private final static String DEFAULT_CONVERSATION_NAME = "Sigma" + Home.Companion.getMatch_id();
     final private ArrayList<Message> messages = new ArrayList<>();
-
     private ConversationsClient conversationsClient;
-
     private Conversation mconversation;
+    public  SendNotification sm;
 
-
-    void initializeWithAccessToken(final Context context, final String token) {
+    void initializeWithAccessToken(final Context context, final String token,final SendNotification sendNotification) {
         mutableLiveData.postValue(5);
+        sm=sendNotification;
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().setCommandTimeout(90000).createProperties();
         ConversationsClient.create(context, token, props, mConversationsClientCallback);
         Log.d("TAG@123", "DEFAULT_CONVERSATION_NAME : " + DEFAULT_CONVERSATION_NAME);
@@ -54,8 +54,14 @@ public class QuickstartConversationsManager {
                     .send(new CallbackListener<Message>() {
                         @Override
                         public void onSuccess(Message result) {
-                            Log.d("TAG@123", "message send call back");
+                            Log.d("TAG@12345", "message send call back");
                             mutableLiveData.postValue(2);
+                            if (!Home.Companion.getChatFlag()) {
+                                Home.Companion.setChatFlag(true);
+                                Log.d("TAG@12345", "message send Notification first time ");
+                                sm.send();
+
+                            }
                         }
                     });
 
@@ -70,9 +76,9 @@ public class QuickstartConversationsManager {
             return;
         }
         List<Conversation> con = conversationsClient.getMyConversations();
-        String name=DEFAULT_CONVERSATION_NAME;
-        if(con.size()>0){
-            name=con.get(0).getSid();
+        String name = DEFAULT_CONVERSATION_NAME;
+        if (con.size() > 0) {
+            name = con.get(0).getSid();
             Log.d("TAG@123", "con " + con.get(0).getFriendlyName());
             Log.d("TAG@123", "con " + con.get(0).getSid());
         }
@@ -275,7 +281,7 @@ public class QuickstartConversationsManager {
                 public void onSuccess(ConversationsClient conversationsClientP) {
                     QuickstartConversationsManager.this.conversationsClient = conversationsClientP;
                     conversationsClient.addListener(QuickstartConversationsManager.this.mConversationsClientListener);
-                    conversationsClient.registerFCMToken(new ConversationsClient.FCMToken(Sigmadatingapp.Companion.getFcm_token()),() -> {
+                    conversationsClient.registerFCMToken(new ConversationsClient.FCMToken(Sigmadatingapp.Companion.getFcm_token()), () -> {
 
                     });
                     Log.d("TAG@123", "Success creating Twilio Conversations Client");
@@ -345,7 +351,8 @@ public class QuickstartConversationsManager {
     }
 
 
-
-
+    interface SendNotification {
+        public void send();
+    }
 }
 

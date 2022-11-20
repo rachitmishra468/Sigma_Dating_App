@@ -1,15 +1,7 @@
 package com.SigmaDating.app.views
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Rect
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -22,6 +14,7 @@ import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.gson.JsonObject
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,34 +28,12 @@ class Home : AppCompatActivity() {
     val homeviewmodel: HomeViewModel by viewModels()
     lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    /*override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            val v = currentFocus
-            if (v is EditText) {
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm: InputMethodManager =
-                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event)
-    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-      /*  val inputManager: InputMethodManager? = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputManager?.toggleSoftInput(
-            InputMethodManager.SHOW_FORCED,
-            InputMethodManager.HIDE_IMPLICIT_ONLY
-        )*/
-
 
         setSupportActionBar(binding.toolbar)
 
@@ -128,6 +99,7 @@ class Home : AppCompatActivity() {
         var mCurrent_user_token:String=""
         var mVideoGrant_user_token:String=""
         var  match_id:String=""
+        var chatFlag:Boolean=false
 
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
@@ -139,5 +111,9 @@ class Home : AppCompatActivity() {
             return null
         }
 
+
+
     }
+
+
 }

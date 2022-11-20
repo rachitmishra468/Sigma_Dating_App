@@ -110,6 +110,10 @@ interface ApiService {
     suspend fun ctrateToken(@Body jsonObject: JsonObject): Response<Token_data>
 
 
+
+    @POST("twilio/notifyuser")
+    suspend fun sendNotification(@Body jsonObject: JsonObject): Response<Token_data>
+
     @POST("post/getpostcomments")
     suspend fun getallcomment(@Body jsonObject: JsonObject): Response<Comment_model>
 

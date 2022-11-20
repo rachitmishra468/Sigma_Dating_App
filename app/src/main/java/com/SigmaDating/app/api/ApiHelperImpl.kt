@@ -25,7 +25,6 @@ class ApiHelperImpl @Inject constructor(
         apiService.get_setting_update_details(jsonObject)
 
 
-
     override suspend fun user_forgot_password(jsonObject: JsonObject): Response<Forgotpassword> =
         apiService.forgotpass(jsonObject)
 
@@ -34,6 +33,7 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun email_otp_send(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.email_otp_send(jsonObject)
+
     override suspend fun email_otp_verification(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.email_otp_verification(jsonObject)
 
@@ -75,11 +75,20 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun report_user(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.report_user(jsonObject)
+
     override suspend fun block_user(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.block_user(jsonObject)
 
-    override suspend fun create_post(isPrivate:RequestBody,user_id:RequestBody,location:RequestBody,title:RequestBody,discription:RequestBody,tag_users:RequestBody, file: MultipartBody.Part): Response<Loginmodel> =
-        apiService.create_post(isPrivate,user_id,location,title,discription,tag_users,file)
+    override suspend fun create_post(
+        isPrivate: RequestBody,
+        user_id: RequestBody,
+        location: RequestBody,
+        title: RequestBody,
+        discription: RequestBody,
+        tag_users: RequestBody,
+        file: MultipartBody.Part
+    ): Response<Loginmodel> =
+        apiService.create_post(isPrivate, user_id, location, title, discription, tag_users, file)
 
     override suspend fun deletepost(jsonObject: JsonObject): Response<delelepost> =
         apiService.deletepost(jsonObject)
@@ -87,7 +96,6 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun PostStatusChange(jsonObject: JsonObject): Response<delelepost> =
         apiService.PostStatusChange(jsonObject)
-
 
 
     override suspend fun showmyposts(jsonObject: JsonObject): Response<post> =
@@ -100,6 +108,9 @@ class ApiHelperImpl @Inject constructor(
 
     override suspend fun ctrateToken(jsonObject: JsonObject): Response<Token_data> =
         apiService.ctrateToken(jsonObject)
+
+    override suspend fun sendNotification(jsonObject: JsonObject): Response<Token_data> =
+        apiService.sendNotification(jsonObject)
 
     override suspend fun getallcomment(jsonObject: JsonObject): Response<Comment_model> =
         apiService.getallcomment(jsonObject)

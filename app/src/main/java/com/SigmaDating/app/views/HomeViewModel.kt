@@ -79,12 +79,9 @@ class HomeViewModel @Inject constructor(
             ctrateToken_data.postValue(Resource.loading(null))
             mainRepository.ctrateToken(id).let {
                 if (it.isSuccessful) {
-
-
                     Resource.success(it.body()).data.let {
                         Log.d("TAG@123", " token call :"+it)
                         Home.mCurrent_user_token = it?.token.toString()
-                        Home.mVideoGrant_user_token = it?.token.toString()
                         Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
                     }
@@ -627,6 +624,22 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+    fun sendChatNotification(id: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "get sendChat Notification")
+            mainRepository.sendNotification(id).let {
+                if (it.isSuccessful) {
+                    Log.d("TAG@123", "sendChatNotification sent")
+                } else {
+                    Log.d("TAG@123", "error in get sendChatNotification call ")
+
+                }
+            }
+        }
+    }
+
 
 
 }

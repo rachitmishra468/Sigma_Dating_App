@@ -60,7 +60,7 @@
     <string name="message_send_error">An error has occurred. Tap for more info.</string>
 
 
-   <!-- https://api.instagram.com/oauth/authorize?client_id=3446740358985126&
+    <!-- https://api.instagram.com/oauth/authorize?client_id=3446740358985126&
     redirect_uri=https://medium.com//200&scope=user_profile,user_media&response_type=code-->
 
     <!--//Client ID  574636637575-uar7lnj32cd72draf2v36jntkrh5hm0c.apps.googleusercontent.com

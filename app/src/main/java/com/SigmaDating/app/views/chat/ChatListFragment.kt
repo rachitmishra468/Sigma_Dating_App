@@ -32,6 +32,7 @@ import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
+import com.SigmaDating.app.views.Home.Companion.chatFlag
 import com.SigmaDating.databinding.FragmentChatListBinding
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
@@ -76,6 +77,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        chatFlag=false
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
 
@@ -173,11 +175,20 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
         (activity as Home).homeviewmodel.ctrateToken_data =
             MutableLiveData<Resource<Token_data>>()
+
+        (activity as Home).sharedPreferencesStorage.getString(
+            AppConstants.USER_ID
+        )
         val jsonObject = JsonObject()
-        jsonObject.addProperty(
+      jsonObject.addProperty(
             "identity",
             position.match_id
         )
+       /* jsonObject.addProperty(
+            "identity",
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )        )*/
         Log.d("TAG@123", "identity : " + jsonObject.toString())
         (activity as Home).homeviewmodel.get_User_token(
             jsonObject
@@ -321,6 +332,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         )
                         bundle.putString("user_image", position.upload_image)
                         bundle.putString("user_ID", position.id)
+                        bundle.putString("match_ID", position.match_id)
                         Navigation.findNavController(binding.root)
                             .navigate(
                                 R.id.action_chatListFragment_to_userChatFragment, bundle,

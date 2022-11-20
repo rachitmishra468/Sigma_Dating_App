@@ -13,16 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.app.model.Token_data
-import com.SigmaDating.app.model.User_bids_list
-import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.views.Home
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
@@ -41,7 +39,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class UserChatFragment : Fragment() {
+class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotification {
     var chat_settings_img: ImageView? = null
     var make_videocall: ImageView? = null
 
@@ -60,6 +58,7 @@ class UserChatFragment : Fragment() {
     private var username: String? = null
     private var imagedata: String? = null
     private var id: String? = null
+    private var match_id:String?=null
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -81,6 +80,7 @@ class UserChatFragment : Fragment() {
         // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
         username = getArguments()?.getString("user_name")
+        match_id= getArguments()?.getString("match_ID")
         id = getArguments()?.getString("user_ID")
         if (username != null) {
             userChatname?.text = username
@@ -151,7 +151,8 @@ class UserChatFragment : Fragment() {
         setListeners()
         quickstartConversationsManager.initializeWithAccessToken(
             requireContext(),
-            Home.mCurrent_user_token
+            Home.mCurrent_user_token,
+            this
         )
 
 //
@@ -350,6 +351,24 @@ class UserChatFragment : Fragment() {
         })
 
 
+    }
+
+    override fun send() {
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "user_id",
+            id
+        )
+        jsonObject.addProperty(
+            "match_id",
+            match_id
+        )
+        jsonObject.addProperty(
+            "type",
+            "chat"
+        )
+        Log.d("TAG@123", "send Notification data  "+jsonObject.toString())
+        (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
     }
 
 

@@ -13,10 +13,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,18 +24,24 @@ import com.SigmaDating.R
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.app.views.Home.Companion.match_id
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.JsonObject
 import com.twilio.audioswitch.AudioDevice
 import com.twilio.audioswitch.AudioSwitch
 import com.twilio.video.*
 import com.twilio.video.ktx.Video
 import com.twilio.video.ktx.createLocalAudioTrack
 import com.twilio.video.ktx.createLocalVideoTrack
+import dagger.hilt.android.AndroidEntryPoint
 import tvi.webrtc.VideoSink
 import kotlin.properties.Delegates
 
-
+@AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
+
+
+
+    val homeviewmodel: VideoViewModel by viewModels()
     private lateinit var connectActionFab: FloatingActionButton
     private lateinit var localVideoActionFab: FloatingActionButton
     private lateinit var muteActionFab: FloatingActionButton
@@ -188,6 +194,7 @@ class VideoActivity : AppCompatActivity() {
                 initializeUI()
                 moveLocalVideoToPrimaryView()
             }
+            onBackPressed()
         }
 
         override fun onParticipantConnected(room: Room, participant: RemoteParticipant) {
@@ -199,6 +206,7 @@ class VideoActivity : AppCompatActivity() {
             Log.d("TAG@123","onParticipantDisconnected :"+room+"  :: participant :"+participant.sid)
 
             removeRemoteParticipant(participant)
+            onBackPressed()
         }
 
         override fun onRecordingStarted(room: Room) {
@@ -627,6 +635,21 @@ class VideoActivity : AppCompatActivity() {
                 View.GONE else
                 View.VISIBLE
             videoStatusTextView.text = "Connected to ${it.name}"
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "identity",
+                "position.match_id"
+            )
+            /* jsonObject.addProperty(
+                 "identity",
+                 (activity as Home).sharedPreferencesStorage.getString(
+                     AppConstants.USER_ID
+                 )        )*/
+            Log.d("TAG@123", "identity : " + jsonObject.toString())
+            homeviewmodel.sendNotification(
+                jsonObject
+            )
+
         }
     }
 
