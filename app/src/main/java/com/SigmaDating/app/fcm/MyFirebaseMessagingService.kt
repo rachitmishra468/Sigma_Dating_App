@@ -17,7 +17,6 @@ import org.json.JSONObject
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
     val VIDEO_USERID = "USERID"
     val VIDEO_NOTIFICATION_MatchID = "MATCHID"
     var user_ID = ""

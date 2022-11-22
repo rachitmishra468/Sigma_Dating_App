@@ -334,7 +334,6 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             when (it.status) {
                 Status.SUCCESS -> {
                     AppUtils.hideLoader()
-
                     activity?.let {
                         val intent = Intent(it, VideoActivity::class.java)
                         it.startActivity(intent)
@@ -350,6 +349,15 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                         jsonObject.addProperty(
                             "type",
                             "video"
+                        )
+                        jsonObject.addProperty(
+                            "user_name",
+                            username
+                        )
+
+                        jsonObject.addProperty(
+                            "user_image",
+                            imagedata
                         )
                         Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
                         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
@@ -382,6 +390,15 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         jsonObject.addProperty(
             "type",
             "chat"
+        )
+        jsonObject.addProperty(
+            "user_name",
+            username
+        )
+
+        jsonObject.addProperty(
+            "user_image",
+            imagedata
         )
         Log.d("TAG@123", "send Notification data  " + jsonObject.toString())
         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
