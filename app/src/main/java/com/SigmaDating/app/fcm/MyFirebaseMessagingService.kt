@@ -29,13 +29,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-            val json = JSONObject(remoteMessage.data.toString())
-            user_ID = json.getString("user_id")
-            type = json.getString("type")
-            match_ID = json.getString("match_id")
+           // val json = JSONObject(java.lang.String.valueOf(remoteMessage.data))
+           // val json = JSONObject(remoteMessage.data.toString())
+            user_ID = remoteMessage.data["user_id"].toString()
+            type = remoteMessage.data["type"].toString()
+            match_ID = remoteMessage.data["match_id"].toString()
+           // user_ID = json.getString("user_id")
+           // type = json.getString("type")
+            //match_ID = json.getString("match_id")
+            showNotification(remoteMessage.data["title"].toString(), remoteMessage.data["body"].toString(), "")
+            if (type.equals("video")) {
+                broadcastVideoNotification("", "")
+            }
 
         }
 
+/*
         remoteMessage.notification?.let {
             Log.d(TAG, "Message Notification Body: ${it.body}")
             showNotification(it.title!!, it.body!!, "")
@@ -44,6 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
 
         }
+*/
 
     }
 

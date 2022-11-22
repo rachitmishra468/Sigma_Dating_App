@@ -351,12 +351,12 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                             "video"
                         )
                         jsonObject.addProperty(
-                            "user_name",
+                            "name",
                             username
                         )
 
                         jsonObject.addProperty(
-                            "user_image",
+                            "image",
                             imagedata
                         )
                         Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
@@ -392,12 +392,12 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             "chat"
         )
         jsonObject.addProperty(
-            "user_name",
+            "name",
             username
         )
 
         jsonObject.addProperty(
-            "user_image",
+            "image",
             imagedata
         )
         Log.d("TAG@123", "send Notification data  " + jsonObject.toString())

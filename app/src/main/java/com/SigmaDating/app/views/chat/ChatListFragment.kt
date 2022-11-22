@@ -204,7 +204,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                 when (res.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        Log.d("TAG@123", "Notification list Status " + res.status)
+                        Log.d("TAG@123", "Status " + res.status)
                         Home.notifications_count = "0"
 
                         if (res.data!!.data.isNullOrEmpty()) {
