@@ -39,8 +39,6 @@ import kotlin.properties.Delegates
 class VideoActivity : AppCompatActivity() {
 
 
-
-
     val homeviewmodel: VideoViewModel by viewModels()
     private lateinit var connectActionFab: FloatingActionButton
     private lateinit var localVideoActionFab: FloatingActionButton
@@ -153,7 +151,7 @@ class VideoActivity : AppCompatActivity() {
      */
     private val roomListener = object : Room.Listener {
         override fun onConnected(room: Room) {
-            Log.d("TAG@123","onConnected :"+room)
+            Log.d("TAG@123", "onConnected :" + room)
             localParticipant = room.localParticipant
             videoStatusTextView.text = "Connected to ${room.name}"
             title = room.name
@@ -163,19 +161,22 @@ class VideoActivity : AppCompatActivity() {
         }
 
         override fun onReconnected(room: Room) {
-            Log.d("TAG@123","onReconnected :"+room)
+            Log.d("TAG@123", "onReconnected :" + room)
             videoStatusTextView.text = "Connected to ${room.name}"
             reconnectingProgressBar.visibility = View.GONE
         }
 
         override fun onReconnecting(room: Room, twilioException: TwilioException) {
-            Log.d("TAG@123","onReconnecting :"+room+"  :: TwilioException :"+twilioException.toString())
+            Log.d(
+                "TAG@123",
+                "onReconnecting :" + room + "  :: TwilioException :" + twilioException.toString()
+            )
             videoStatusTextView.text = "Reconnecting to ${room.name}"
             reconnectingProgressBar.visibility = View.VISIBLE
         }
 
         override fun onConnectFailure(room: Room, e: TwilioException) {
-            Log.d("TAG@123","onConnectFailure :"+room+"  :: TwilioException :"+e.toString())
+            Log.d("TAG@123", "onConnectFailure :" + room + "  :: TwilioException :" + e.toString())
             videoStatusTextView.text = "Failed to connect"
             audioSwitch.deactivate()
             initializeUI()
@@ -183,7 +184,7 @@ class VideoActivity : AppCompatActivity() {
 
         override fun onDisconnected(room: Room, e: TwilioException?) {
 
-            Log.d("TAG@123","Error :"+e.toString())
+            Log.d("TAG@123", "Error :" + e.toString())
             localParticipant = null
             videoStatusTextView.text = "Disconnected from ${room.name}"
             reconnectingProgressBar.visibility = View.GONE
@@ -193,24 +194,28 @@ class VideoActivity : AppCompatActivity() {
                 audioSwitch.deactivate()
                 initializeUI()
                 moveLocalVideoToPrimaryView()
+                onBackPressed()
             }
-            onBackPressed()
+
         }
 
         override fun onParticipantConnected(room: Room, participant: RemoteParticipant) {
-            Log.d("TAG@123","onConnectFailure :"+room+"  :: participant :"+participant.sid)
+            Log.d("TAG@123", "onConnectFailure :" + room + "  :: participant :" + participant.sid)
             addRemoteParticipant(participant)
         }
 
         override fun onParticipantDisconnected(room: Room, participant: RemoteParticipant) {
-            Log.d("TAG@123","onParticipantDisconnected :"+room+"  :: participant :"+participant.sid)
+            Log.d(
+                "TAG@123",
+                "onParticipantDisconnected :" + room + "  :: participant :" + participant.sid
+            )
 
             removeRemoteParticipant(participant)
-            onBackPressed()
+
         }
 
         override fun onRecordingStarted(room: Room) {
-            Log.d("TAG@123","onRecordingStarted :"+room)
+            Log.d("TAG@123", "onRecordingStarted :" + room)
 
             /*
              * Indicates when media shared to a Room is being recorded. Note that
@@ -220,7 +225,7 @@ class VideoActivity : AppCompatActivity() {
         }
 
         override fun onRecordingStopped(room: Room) {
-            Log.d("TAG@123","onRecordingStopped :"+room)
+            Log.d("TAG@123", "onRecordingStopped :" + room)
 
             /*
              * Indicates when media shared to a Room is no longer being recorded. Note that
@@ -532,7 +537,7 @@ class VideoActivity : AppCompatActivity() {
         thumbnailVideoView = findViewById(R.id.thumbnailVideoView)
         videoStatusTextView = findViewById(R.id.videoStatusTextView)
 
-
+        connectActionFab.setOnClickListener { onBackPressed() }
 
 
         /*
@@ -574,19 +579,10 @@ class VideoActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         if (requestCode == CAMERA_MIC_PERMISSION_REQUEST_CODE) {
-            /*
-             * The first two permissions are Camera & Microphone, bluetooth isn't required but
-             * enabling it enables bluetooth audio routing functionality.
-             */
             val cameraAndMicPermissionGranted =
                 ((PackageManager.PERMISSION_GRANTED == grantResults[CAMERA_PERMISSION_INDEX])
                         and (PackageManager.PERMISSION_GRANTED == grantResults[MIC_PERMISSION_INDEX]))
 
-            /*
-             * Due to bluetooth permissions being requested at the same time as camera and mic
-             * permissions, AudioSwitch should be started after providing the user the option
-             * to grant the necessary permissions for bluetooth.
-             */
             audioSwitch.start { audioDevices, audioDevice -> updateAudioDeviceIcon(audioDevice) }
 
             if (cameraAndMicPermissionGranted) {
@@ -594,7 +590,7 @@ class VideoActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                   "permissions_needed",
+                    "permissions_needed",
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -603,9 +599,6 @@ class VideoActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        /*
-         * If the local video track was released when the app was put in the background, recreate.
-         */
         localVideoTrack = if (localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
             createLocalVideoTrack(
                 this,
@@ -616,40 +609,13 @@ class VideoActivity : AppCompatActivity() {
             localVideoTrack
         }
         localVideoTrack?.addSink(localVideoView)
-
-        /*
-         * If connected to a Room then share the local video track.
-         */
         localVideoTrack?.let { localParticipant?.publishTrack(it) }
-
-        /*
-         * Update encoding parameters if they have changed.
-         */
         localParticipant?.setEncodingParameters(encodingParameters)
-
-        /*
-         * Update reconnecting UI
-         */
         room?.let {
             reconnectingProgressBar.visibility = if (it.state != Room.State.RECONNECTING)
                 View.GONE else
                 View.VISIBLE
             videoStatusTextView.text = "Connected to ${it.name}"
-            val jsonObject = JsonObject()
-            jsonObject.addProperty(
-                "identity",
-                "position.match_id"
-            )
-            /* jsonObject.addProperty(
-                 "identity",
-                 (activity as Home).sharedPreferencesStorage.getString(
-                     AppConstants.USER_ID
-                 )        )*/
-            Log.d("TAG@123", "identity : " + jsonObject.toString())
-            homeviewmodel.sendNotification(
-                jsonObject
-            )
-
         }
     }
 
@@ -707,11 +673,10 @@ class VideoActivity : AppCompatActivity() {
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
-           // R.id.menu_audio_device -> showAudioDevices()
+            // R.id.menu_audio_device -> showAudioDevices()
         }
         return true
     }
@@ -767,10 +732,7 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun createAudioAndVideoTracks() {
-        // Share your microphone
         localAudioTrack = createLocalAudioTrack(this, true)
-
-        // Share your camera
         localVideoTrack = createLocalVideoTrack(
             this,
             true,
@@ -781,29 +743,6 @@ class VideoActivity : AppCompatActivity() {
     private fun setAccessToken() {
 
         this.accessToken = Home.mVideoGrant_user_token
-/*
-        if (!BuildConfig.USE_TOKEN_SERVER) {
-            */
-/*
-             * OPTION 1 - Generate an access token from the getting started portal
-             * https://www.twilio.com/console/video/dev-tools/testing-tools and add
-             * the variable TWILIO_ACCESS_TOKEN setting it equal to the access token
-             * string in your local.properties file.
-             *//*
-
-            this.accessToken = TWILIO_ACCESS_TOKEN
-        } else {
-            */
-/*
-             * OPTION 2 - Retrieve an access token from your own web app.
-             * Add the variable ACCESS_TOKEN_SERVER assigning it to the url of your
-             * token server and the variable USE_TOKEN_SERVER=true to your
-             * local.properties file.
-             *//*
-
-            retrieveAccessTokenfromServer()
-        }
-*/
     }
 
     private fun connectToRoom(roomName: String) {
@@ -812,42 +751,18 @@ class VideoActivity : AppCompatActivity() {
 
         room = Video.connect(this, accessToken, roomListener) {
             roomName(roomName)
-            /*
-             * Add local audio track to connect options to share with participants.
-             */
-
             audioTracks(listOf(localAudioTrack))
-            /*
-             * Add local video track to connect options to share with participants.
-             */
             videoTracks(listOf(localVideoTrack))
-
-            /*
-             * Set the preferred audio and video codec for media.
-             */
             preferAudioCodecs(listOf(audioCodec))
             preferVideoCodecs(listOf(videoCodec))
-
-            /*
-             * Set the sender side encoding parameters.
-             */
             encodingParameters(encodingParameters)
 
-            /*
-             * Toggles automatic track subscription. If set to false, the LocalParticipant will receive
-             * notifications of track publish events, but will not automatically subscribe to them. If
-             * set to true, the LocalParticipant will automatically subscribe to tracks as they are
-             * published. If unset, the default is true. Note: This feature is only available for Group
-             * Rooms. Toggling the flag in a P2P room does not modify subscription behavior.
-             */
             enableAutomaticSubscription(enableAutomaticSubscription)
         }
         setDisconnectAction()
     }
 
-    /*
-     * The initial state when there is no active room.
-     */
+
     private fun initializeUI() {
         connectActionFab.setImageDrawable(
             ContextCompat.getDrawable(
@@ -865,37 +780,6 @@ class VideoActivity : AppCompatActivity() {
         muteActionFab.setOnClickListener(muteClickListener())
     }
 
-    /*
-     * Show the current available audio devices.
-     */
-   /* private fun showAudioDevices() {
-        val availableAudioDevices = audioSwitch.availableAudioDevices
-
-        audioSwitch.selectedAudioDevice?.let { selectedDevice ->
-            val selectedDeviceIndex = availableAudioDevices.indexOf(selectedDevice)
-            val audioDeviceNames = ArrayList<String>()
-
-            for (a in availableAudioDevices) {
-                audioDeviceNames.add(a.name)
-            }
-
-            AlertDialog.Builder(this)
-                .setTitle(R.string.room_screen_select_device)
-                .setSingleChoiceItems(
-                    audioDeviceNames.toTypedArray<CharSequence>(),
-                    selectedDeviceIndex
-                ) { dialog, index ->
-                    dialog.dismiss()
-                    val selectedAudioDevice = availableAudioDevices[index]
-                    updateAudioDeviceIcon(selectedAudioDevice)
-                    audioSwitch.selectDevice(selectedAudioDevice)
-                }.create().show()
-        }
-    }*/
-
-    /*
-     * Update the menu icon based on the currently selected audio device.
-     */
     private fun updateAudioDeviceIcon(selectedAudioDevice: AudioDevice?) {
         val audioDeviceMenuIcon = when (selectedAudioDevice) {
             is AudioDevice.BluetoothHeadset -> R.drawable.ic_bluetooth_white_24dp
@@ -907,9 +791,6 @@ class VideoActivity : AppCompatActivity() {
         audioDeviceMenuItem?.setIcon(audioDeviceMenuIcon)
     }
 
-    /*
-     * The actions performed during disconnect.
-     */
     private fun setDisconnectAction() {
         connectActionFab.setImageDrawable(
             ContextCompat.getDrawable(
@@ -921,65 +802,31 @@ class VideoActivity : AppCompatActivity() {
         connectActionFab.setOnClickListener(disconnectClickListener())
     }
 
-    /*
-     * Creates an connect UI dialog
-     */
-   /* private fun showConnectDialog() {
-        val roomEditText = EditText(this)
-        alertDialog = createConnectDialog(
-            roomEditText,
-            connectClickListener(roomEditText), cancelConnectDialogClickListener(), this
-        )
-        alertDialog?.show()
-    }*/
-
-    /*
-     * Called when participant joins the room
-     */
     private fun addRemoteParticipant(remoteParticipant: RemoteParticipant) {
-        Log.d("TAG@123","addRemoteParticipant :"+room)
-        /*
-         * This app only displays video for one additional participant per Room
-         */
+        Log.d("TAG@123", "addRemoteParticipant :" + room)
         if (thumbnailVideoView.visibility == View.VISIBLE) {
-            /*Snackbar.make(
-                connectActionFab,
-                "Multiple participants are not currently support in this UI",
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("Action", null).show()*/
             return
         }
         participantIdentity = remoteParticipant.identity
         videoStatusTextView.text = "Participant $participantIdentity joined"
-
-        /*
-         * Add participant renderer
-         */
         remoteParticipant.remoteVideoTracks.firstOrNull()?.let { remoteVideoTrackPublication ->
             if (remoteVideoTrackPublication.isTrackSubscribed) {
                 remoteVideoTrackPublication.remoteVideoTrack?.let { addRemoteParticipantVideo(it) }
             }
         }
-
-        /*
-         * Start listening for participant events
-         */
         remoteParticipant.setListener(participantListener)
     }
 
-    /*
-     * Set primary view as renderer for participant video track
-     */
+
     private fun addRemoteParticipantVideo(videoTrack: VideoTrack) {
-        Log.d("TAG@123","addRemoteParticipantVideo :")
+        Log.d("TAG@123", "addRemoteParticipantVideo :")
         moveLocalVideoToThumbnailView()
         primaryVideoView.mirror = false
         videoTrack.addSink(primaryVideoView)
     }
 
     private fun moveLocalVideoToThumbnailView() {
-        Log.d("TAG@123","moveLocalVideoToThumbnailView :")
+        Log.d("TAG@123", "moveLocalVideoToThumbnailView :")
         if (thumbnailVideoView.visibility == View.GONE) {
             thumbnailVideoView.visibility = View.VISIBLE
             with(localVideoTrack) {
@@ -1000,16 +847,13 @@ class VideoActivity : AppCompatActivity() {
         if (remoteParticipant.identity != participantIdentity) {
             return
         }
-
-        /*
-         * Remove participant renderer
-         */
         remoteParticipant.remoteVideoTracks.firstOrNull()?.let { remoteVideoTrackPublication ->
             if (remoteVideoTrackPublication.isTrackSubscribed) {
                 remoteVideoTrackPublication.remoteVideoTrack?.let { removeParticipantVideo(it) }
             }
         }
         moveLocalVideoToPrimaryView()
+        onBackPressed()
     }
 
     private fun removeParticipantVideo(videoTrack: VideoTrack) {
@@ -1030,7 +874,6 @@ class VideoActivity : AppCompatActivity() {
     }
 
 
-
     private fun disconnectClickListener(): View.OnClickListener {
         return View.OnClickListener {
             /*
@@ -1043,14 +886,14 @@ class VideoActivity : AppCompatActivity() {
 
     private fun connectActionClickListener(): View.OnClickListener {
         return View.OnClickListener {
-           // showConnectDialog()
+            onBackPressed()
         }
     }
 
     private fun cancelConnectDialogClickListener(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
             initializeUI()
-           // alertDialog?.dismiss()
+            // alertDialog?.dismiss()
         }
     }
 
@@ -1113,42 +956,42 @@ class VideoActivity : AppCompatActivity() {
     }
 
 
-  /*  private fun createConnectDialog(
-        participantEditText: EditText,
-        callParticipantsClickListener: DialogInterface.OnClickListener,
-        cancelClickListener: DialogInterface.OnClickListener,
-        context: Context
-    ): AlertDialog {
-        val alertDialogBuilder = AlertDialog.Builder(context).apply {
-            setIcon(R.drawable.ic_video_call_white_24dp)
-            setTitle("Connect to a room")
-            setPositiveButton("Connect", callParticipantsClickListener)
-            setNegativeButton("Cancel", cancelClickListener)
-            setCancelable(false)
-        }
+    /*  private fun createConnectDialog(
+          participantEditText: EditText,
+          callParticipantsClickListener: DialogInterface.OnClickListener,
+          cancelClickListener: DialogInterface.OnClickListener,
+          context: Context
+      ): AlertDialog {
+          val alertDialogBuilder = AlertDialog.Builder(context).apply {
+              setIcon(R.drawable.ic_video_call_white_24dp)
+              setTitle("Connect to a room")
+              setPositiveButton("Connect", callParticipantsClickListener)
+              setNegativeButton("Cancel", cancelClickListener)
+              setCancelable(false)
+          }
 
-      //  setRoomNameFieldInDialog(participantEditText, alertDialogBuilder, context)
+        //  setRoomNameFieldInDialog(participantEditText, alertDialogBuilder, context)
 
-        return alertDialogBuilder.create()
-    }*/
+          return alertDialogBuilder.create()
+      }*/
 
-  /*  @SuppressLint("RestrictedApi")
-    private fun setRoomNameFieldInDialog(
-        roomNameEditText: EditText,
-        alertDialogBuilder: AlertDialog.Builder,
-        context: Context
-    ) {
-        roomNameEditText.hint = "room name"
-        val horizontalPadding =
-            context.resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
-        val verticalPadding =
-            context.resourcesDisc.getDimensionPixelOffset(R.dimen.activity_vertical_margin)
-        alertDialogBuilder.setView(
-            roomNameEditText,
-            horizontalPadding,
-            verticalPadding,
-            horizontalPadding,
-            0
-        )
-    }*/
+    /*  @SuppressLint("RestrictedApi")
+      private fun setRoomNameFieldInDialog(
+          roomNameEditText: EditText,
+          alertDialogBuilder: AlertDialog.Builder,
+          context: Context
+      ) {
+          roomNameEditText.hint = "room name"
+          val horizontalPadding =
+              context.resources.getDimensionPixelOffset(R.dimen.activity_horizontal_margin)
+          val verticalPadding =
+              context.resourcesDisc.getDimensionPixelOffset(R.dimen.activity_vertical_margin)
+          alertDialogBuilder.setView(
+              roomNameEditText,
+              horizontalPadding,
+              verticalPadding,
+              horizontalPadding,
+              0
+          )
+      }*/
 }

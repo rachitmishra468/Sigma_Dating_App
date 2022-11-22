@@ -120,13 +120,14 @@
 
         <service
             android:name=".app.fcm.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="false"
+            android:directBootAware="true"
+           >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.SigmaDating.app.video.VideoActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

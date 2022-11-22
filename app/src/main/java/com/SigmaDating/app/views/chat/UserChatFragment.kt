@@ -39,7 +39,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotification {
+class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotification {
     var chat_settings_img: ImageView? = null
     var make_videocall: ImageView? = null
 
@@ -58,7 +58,7 @@ class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotific
     private var username: String? = null
     private var imagedata: String? = null
     private var id: String? = null
-    private var match_id:String?=null
+    private var match_id: String? = null
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -80,7 +80,7 @@ class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotific
         // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
         username = getArguments()?.getString("user_name")
-        match_id= getArguments()?.getString("match_ID")
+        match_id = getArguments()?.getString("match_ID")
         id = getArguments()?.getString("user_ID")
         if (username != null) {
             userChatname?.text = username
@@ -338,6 +338,22 @@ class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotific
                     activity?.let {
                         val intent = Intent(it, VideoActivity::class.java)
                         it.startActivity(intent)
+                        val jsonObject = JsonObject()
+                        jsonObject.addProperty(
+                            "user_id",
+                            id
+                        )
+                        jsonObject.addProperty(
+                            "match_id",
+                            match_id
+                        )
+                        jsonObject.addProperty(
+                            "type",
+                            "video"
+                        )
+                        Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
+                        (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+
                     }
 
                 }
@@ -367,7 +383,7 @@ class UserChatFragment : Fragment() , QuickstartConversationsManager.SendNotific
             "type",
             "chat"
         )
-        Log.d("TAG@123", "send Notification data  "+jsonObject.toString())
+        Log.d("TAG@123", "send Notification data  " + jsonObject.toString())
         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
     }
 

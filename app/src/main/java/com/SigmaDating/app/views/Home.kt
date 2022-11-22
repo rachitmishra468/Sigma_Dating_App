@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.model.Pages
 import com.SigmaDating.app.storage.SharedPreferencesStorage
@@ -40,7 +43,6 @@ class Home : AppCompatActivity() {
         val navController = findNavController(com.SigmaDating.R.id.nav_host_fragment_content_home)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
 
     }
 

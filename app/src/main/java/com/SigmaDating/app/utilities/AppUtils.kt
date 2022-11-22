@@ -37,6 +37,7 @@ import java.util.regex.Pattern
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.MediaPlayer
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.*
@@ -48,7 +49,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 object AppUtils {
 
     private var dialog: Dialog? = null
-
+    private var mp: MediaPlayer? = null
 
 
     fun hideLoader() {
@@ -60,22 +61,22 @@ object AppUtils {
     }
 
     fun showLoader(context: Context?) {
-            context?.javaClass?.name?.let { Log.d("TAG@123", it) }
-            val builder = AlertDialog.Builder(context, R.style.NewDialog)
-            val inflater = LayoutInflater.from(context)
-            val view: View = inflater.inflate(R.layout.custom_loader, null, false)
-            builder.setView(view)
-            dialog?.getWindow()?.setDimAmount(0f);
-            dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
-            dialog = builder.create()
-            (dialog as AlertDialog?)?.setCancelable(false)
-            val groupcreate: LottieAnimationView =
-                view.findViewById<View>(R.id.email) as LottieAnimationView
-            groupcreate.setAnimation(R.raw.loader)
-            groupcreate.playAnimation()
-            (dialog as AlertDialog?)?.getWindow()!!
-                .setBackgroundDrawableResource(R.color.hint_text_color)
-            (dialog as AlertDialog?)?.show()
+        context?.javaClass?.name?.let { Log.d("TAG@123", it) }
+        val builder = AlertDialog.Builder(context, R.style.NewDialog)
+        val inflater = LayoutInflater.from(context)
+        val view: View = inflater.inflate(R.layout.custom_loader, null, false)
+        builder.setView(view)
+        dialog?.getWindow()?.setDimAmount(0f);
+        dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
+        dialog = builder.create()
+        (dialog as AlertDialog?)?.setCancelable(false)
+        val groupcreate: LottieAnimationView =
+            view.findViewById<View>(R.id.email) as LottieAnimationView
+        groupcreate.setAnimation(R.raw.loader)
+        groupcreate.playAnimation()
+        (dialog as AlertDialog?)?.getWindow()!!
+            .setBackgroundDrawableResource(R.color.hint_text_color)
+        (dialog as AlertDialog?)?.show()
 
     }
 
@@ -144,6 +145,7 @@ object AppUtils {
 
     private fun validateMonthWithMaxDate(day: String, month: String): Boolean =
         day == "31" && (month == "4" || month == "6" || month == "9" || month == "11" || month == "04" || month == "06" || month == "09")
+
     private fun isFebruaryMonth(month: String): Boolean = month == "2" || month == "02"
     private fun isLeapYear(year: String): Boolean = year.toInt() % 4 == 0
     private fun leapYearWith29Date(day: String): Boolean = !(day == "30" || day == "31")
@@ -209,7 +211,6 @@ object AppUtils {
     }
 
 
-
     fun checkValidationOnFisrtStep(
         context: Context,
         view: View?,
@@ -229,8 +230,6 @@ object AppUtils {
 
         return true
     }
-
-
 
 
     fun getAgeDiffernce(dobString: String): Int {
@@ -327,28 +326,33 @@ object AppUtils {
     }
 
 
-
     fun isNetworkAvailable(): Boolean {
-        if(isNetworkAvailable_()){
+        if (isNetworkAvailable_()) {
             return true
         }
-        Toast.makeText(AppReseources.getAppContext()!!,R.string.internet_error_message, Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            AppReseources.getAppContext()!!,
+            R.string.internet_error_message,
+            Toast.LENGTH_LONG
+        ).show()
         return false
     }
 
     fun isNetworkAvailable_(): Boolean {
-        val context=AppReseources.getAppContext()!!
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val context = AppReseources.getAppContext()!!
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                    ?: return false
             return when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->    true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->   true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->   true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
                 else -> false
             }
-        }
-        else {
+        } else {
             if (connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnectedOrConnecting) {
                 return true
             }
@@ -357,7 +361,14 @@ object AppUtils {
         return false
     }
 
+    fun playPhoneCallRing(context: Context?) {
+        mp = MediaPlayer.create(context, com.SigmaDating.R.raw.phone_ringing_sound)
+        mp?.start()
+    }
 
+    fun stopPhoneCallRing() {
+        mp?.stop()
+    }
 
 
 }
