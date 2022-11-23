@@ -27,6 +27,6 @@
     <color name="colorAccent">#C6C6C6</color>
     <color name="bel_red_text">#C6C6C6</color>
     <color name="colorPrimary">#C6C6C6</color>
-
-
+    <color name="red">#BF0101</color>
+    <color name="green">#04A50B</color>
 </resources>

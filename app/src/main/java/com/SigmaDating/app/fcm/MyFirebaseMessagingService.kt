@@ -19,42 +19,29 @@ import org.json.JSONObject
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     val VIDEO_USERID = "USERID"
     val VIDEO_NOTIFICATION_MatchID = "MATCHID"
+    val USER_NAME = "NAME"
+    val USER_IMAGE = "IMAGE"
+
     var user_ID = ""
     var type = ""
     var match_ID = ""
-
+    var user_name=""
+    var user_images=""
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-           // val json = JSONObject(java.lang.String.valueOf(remoteMessage.data))
-           // val json = JSONObject(remoteMessage.data.toString())
             user_ID = remoteMessage.data["user_id"].toString()
             type = remoteMessage.data["type"].toString()
             match_ID = remoteMessage.data["match_id"].toString()
-           // user_ID = json.getString("user_id")
-           // type = json.getString("type")
-            //match_ID = json.getString("match_id")
+            user_name = remoteMessage.data["name"].toString()
+            user_images = remoteMessage.data["image"].toString()
             showNotification(remoteMessage.data["title"].toString(), remoteMessage.data["body"].toString(), "")
             if (type.equals("video")) {
                 broadcastVideoNotification("", "")
             }
 
         }
-
-/*
-        remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
-            showNotification(it.title!!, it.body!!, "")
-            if (type.equals("video")) {
-                broadcastVideoNotification("", "")
-            }
-
-        }
-*/
-
     }
 
 
@@ -74,6 +61,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         intent.putExtra(VIDEO_USERID, user_ID)
         intent.putExtra(VIDEO_NOTIFICATION_MatchID, match_ID)
+        intent.putExtra(USER_NAME, user_name)
+        intent.putExtra(USER_IMAGE, user_images)
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         var pendingIntent: PendingIntent? = null
@@ -106,6 +96,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra(VIDEO_USERID, user_ID)
             intent.putExtra(VIDEO_NOTIFICATION_MatchID, match_ID)
+            intent.putExtra(USER_NAME, user_name)
+            intent.putExtra(USER_IMAGE, user_images)
             startActivity(intent)
         } catch (e: Exception) {
 
