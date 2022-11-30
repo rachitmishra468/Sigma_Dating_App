@@ -45,6 +45,7 @@ class IncomingVideoCall : AppCompatActivity() {
         match_ID = intent.getStringExtra("MATCHID").toString()
         user_name = intent.getStringExtra("NAME").toString()
         user_images = intent.getStringExtra("IMAGE").toString()
+        Log.d("TAG@123", "identity IncomingVideoCall : " + match_ID)
         Home.match_id = match_ID
         homeviewmodel.ctrateToken_data =
             MutableLiveData<Resource<Token_data>>()
@@ -67,12 +68,15 @@ class IncomingVideoCall : AppCompatActivity() {
         call_pick.setOnClickListener {
             AppUtils.stopPhoneCallRing()
             val intent = Intent(this, VideoActivity::class.java)
+            intent.putExtra("TYPE", 1)
             startActivity(intent)
             finish()
         }
         call_cut.setOnClickListener {
-            onBackPressed()
             AppUtils.stopPhoneCallRing()
+            val intent = Intent(this, VideoActivity::class.java)
+            intent.putExtra("TYPE", 2)
+            startActivity(intent)
         }
     }
 
@@ -80,14 +84,11 @@ class IncomingVideoCall : AppCompatActivity() {
         homeviewmodel.ctrateToken_data.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    AppUtils.hideLoader()
                     call_pick.isEnabled = true
                 }
                 Status.LOADING -> {
-                    AppUtils.showLoader(this)
                 }
                 Status.ERROR -> {
-                    AppUtils.hideLoader()
                 }
             }
         })

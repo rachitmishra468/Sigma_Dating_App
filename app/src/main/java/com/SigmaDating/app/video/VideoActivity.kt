@@ -183,13 +183,11 @@ class VideoActivity : AppCompatActivity() {
         }
 
         override fun onDisconnected(room: Room, e: TwilioException?) {
-
             Log.d("TAG@123", "Error :" + e.toString())
             localParticipant = null
             videoStatusTextView.text = "Disconnected from ${room.name}"
             reconnectingProgressBar.visibility = View.GONE
             this@VideoActivity.room = null
-            // Only reinitialize the UI if disconnect was not called from onDestroy()
             if (!disconnectedFromOnDestroy) {
                 audioSwitch.deactivate()
                 initializeUI()
@@ -540,6 +538,7 @@ class VideoActivity : AppCompatActivity() {
         connectActionFab.setOnClickListener { onBackPressed() }
 
 
+
         /*
          * Set local video view to primary view
          */
@@ -760,6 +759,15 @@ class VideoActivity : AppCompatActivity() {
             enableAutomaticSubscription(enableAutomaticSubscription)
         }
         setDisconnectAction()
+
+        when(intent.getIntExtra("TYPE",0)){
+            2->{
+                room?.disconnect()
+                Log.d("TAG@123", "-------///////Room  :" + room?.disconnect())}
+            else->{
+
+            }
+        }
     }
 
 

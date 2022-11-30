@@ -25,11 +25,12 @@ class Splash : AppCompatActivity() {
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
-
-
+    var match_ID = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        match_ID = intent.getStringExtra("MATCHID").toString()
+        Log.d("TAG@123", "identity : " + match_ID)
         GetKeyHase()
 
     }

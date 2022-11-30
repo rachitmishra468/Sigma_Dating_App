@@ -36,7 +36,7 @@ public class QuickstartConversationsManager {
     private Conversation mconversation;
     public  SendNotification sm;
 
-    void initializeWithAccessToken(final Context context, final String token,final SendNotification sendNotification) {
+    void initializeWithAccessToken(final Context    context, final String token,final SendNotification sendNotification) {
         mutableLiveData.postValue(5);
         sm=sendNotification;
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().setCommandTimeout(90000).createProperties();

@@ -336,6 +336,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                     AppUtils.hideLoader()
                     activity?.let {
                         val intent = Intent(it, VideoActivity::class.java)
+                        intent.putExtra("TYPE", 0)
                         it.startActivity(intent)
                         val jsonObject = JsonObject()
                         jsonObject.addProperty(
