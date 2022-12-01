@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.SigmaDating.R
@@ -77,6 +78,12 @@ class IncomingVideoCall : AppCompatActivity() {
             val intent = Intent(this, VideoActivity::class.java)
             intent.putExtra("TYPE", 2)
             startActivity(intent)
+            finish()
+        }
+
+        val manager = NotificationManagerCompat.from(this)
+        manager.apply {
+            cancelAll()
         }
     }
 

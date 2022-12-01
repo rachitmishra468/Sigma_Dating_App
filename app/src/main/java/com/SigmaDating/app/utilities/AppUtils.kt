@@ -50,7 +50,7 @@ object AppUtils {
 
     private var dialog: Dialog? = null
     private var mp: MediaPlayer? = null
-
+    private var flag: Boolean? = false
 
     fun hideLoader() {
         try {
@@ -362,12 +362,18 @@ object AppUtils {
     }
 
     fun playPhoneCallRing(context: Context?) {
-        mp = MediaPlayer.create(context, com.SigmaDating.R.raw.phone_ringing_sound)
-        mp?.start()
+        if(!flag!!){
+            mp = MediaPlayer.create(context, com.SigmaDating.R.raw.phone_ringing_sound)
+            mp?.start()
+            flag=true
+
+        }
+
     }
 
     fun stopPhoneCallRing() {
         mp?.stop()
+        flag=false
     }
 
 

@@ -45,9 +45,9 @@ import androidx.lifecycle.MutableLiveData
 import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.databinding.FragmentSettingsBinding
 import com.example.demoapp.other.Resource
-import com.google.android.material.snackbar.Snackbar
 
 import android.widget.CompoundButton
+import com.SigmaDating.app.advertising.view.AdvertisingActivity
 
 
 class SettingsFragment : Fragment() {
@@ -156,6 +156,9 @@ class SettingsFragment : Fragment() {
         }
         _binding.imageView2.setOnClickListener {
             (activity as Home).onBackPressed()
+        }
+        _binding.advertisin.setOnClickListener {
+            startActivity(Intent(requireContext(), AdvertisingActivity::class.java))
         }
 
         _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->

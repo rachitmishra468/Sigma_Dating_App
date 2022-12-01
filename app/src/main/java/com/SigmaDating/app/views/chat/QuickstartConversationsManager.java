@@ -2,9 +2,7 @@ package com.SigmaDating.app.views.chat;
 
 import android.content.Context;
 import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.SigmaDating.app.Sigmadatingapp;
 import com.SigmaDating.app.views.Home;
 import com.google.gson.JsonObject;

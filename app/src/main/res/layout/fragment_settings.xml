@@ -796,7 +796,7 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/v5"
+            android:id="@+id/v55"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
@@ -805,6 +805,49 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_linears" />
+
+
+        <LinearLayout
+            android:id="@+id/ad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:weightSum="1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v55">
+
+
+            <TextView
+                android:id="@+id/advertisin"
+                style="@style/QText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".6"
+                android:alpha=".8"
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+                android:gravity="start|center"
+                android:paddingRight="5dp"
+                android:text="Advertising with Us"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ad" />
+
+
 
 
         <LinearLayout

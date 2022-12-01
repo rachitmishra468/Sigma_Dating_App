@@ -2,8 +2,7 @@ package com.SigmaDating.app.video
 
 
 import android.Manifest
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.os.Build
@@ -18,11 +17,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.SigmaDating.R
+import com.SigmaDating.app.model.Token_data
+import com.SigmaDating.app.storage.AppConstants
+import com.SigmaDating.app.storage.SharedPreferencesStorage
+import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.app.views.Home.Companion.match_id
+import com.bumptech.glide.Glide
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.JsonObject
 import com.twilio.audioswitch.AudioDevice
@@ -32,14 +44,17 @@ import com.twilio.video.ktx.Video
 import com.twilio.video.ktx.createLocalAudioTrack
 import com.twilio.video.ktx.createLocalVideoTrack
 import dagger.hilt.android.AndroidEntryPoint
+import de.hdodenhof.circleimageview.CircleImageView
 import tvi.webrtc.VideoSink
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
-
-    val homeviewmodel: VideoViewModel by viewModels()
+    @Inject
+    lateinit var sharedPreferencesStorage: SharedPreferencesStorage
+    val viewModel: IncomingVideoCallViewModel by viewModels()
     private lateinit var connectActionFab: FloatingActionButton
     private lateinit var localVideoActionFab: FloatingActionButton
     private lateinit var muteActionFab: FloatingActionButton
@@ -48,12 +63,24 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var reconnectingProgressBar: ProgressBar
     private lateinit var thumbnailVideoView: VideoView
     private lateinit var videoStatusTextView: TextView
+    private lateinit var main_window: ConstraintLayout
 
     private val CAMERA_MIC_PERMISSION_REQUEST_CODE = 1
     private val TAG = "TAG@123"
     private val CAMERA_PERMISSION_INDEX = 0
     private val MIC_PERMISSION_INDEX = 1
     private val DEFAULT_CONVERSATION_NAME = "Sigma" + match_id
+    var type = 0
+
+    var user_ID = ""
+    var match_ID = ""
+    var user_name = ""
+    var user_images = ""
+
+    lateinit var call_pick: FloatingActionButton
+    lateinit var call_cut: FloatingActionButton
+    lateinit var nameTextView: TextView
+    lateinit var userImageView: CircleImageView
 
     /*
      * You must provide a Twilio Access Token to connect to the Video service
@@ -232,6 +259,219 @@ class VideoActivity : AppCompatActivity() {
             Log.d(TAG, "onRecordingStopped")
         }
     }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_video)
+        main_window = findViewById(R.id.main_window)
+        connectActionFab = findViewById(R.id.connectActionFab)
+        localVideoActionFab = findViewById(R.id.localVideoActionFab)
+        muteActionFab = findViewById(R.id.muteActionFab)
+        switchCameraActionFab = findViewById(R.id.switchCameraActionFab)
+        primaryVideoView = findViewById(R.id.primaryVideoView)
+        reconnectingProgressBar = findViewById(R.id.reconnectingProgressBar)
+        thumbnailVideoView = findViewById(R.id.thumbnailVideoView)
+        videoStatusTextView = findViewById(R.id.videoStatusTextView)
+        val manager = NotificationManagerCompat.from(this)
+        manager.apply {
+            cancelAll()
+        }
+        Log.d("TAG@123", "Video identity : ----- " + intent.getIntExtra("TYPE", 100))
+        when (intent.getIntExtra("TYPE", 100)) {
+            1 -> {
+                LocalBroadcastManager.getInstance(this)
+                    .registerReceiver(
+                        broadCastReceiver,
+                        IntentFilter("BROADCAST_DEFAULT_ALBUM_CHANGED")
+                    )
+                user_ID = intent.getStringExtra("USERID").toString()
+                match_ID = intent.getStringExtra("MATCHID").toString()
+                user_name = intent.getStringExtra("NAME").toString()
+                user_images = intent.getStringExtra("IMAGE").toString()
+                viewModel.ctrateToken_data =
+                    MutableLiveData<Resource<Token_data>>()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty(
+                    "identity",
+                    match_ID
+                )
+                Log.d("TAG@123", "identity : " + jsonObject.toString())
+                viewModel.get_User_video_token(
+                    jsonObject
+                )
+                subscribe_Login_User_details()
+                from_notification()
+            }
+            0 -> {
+                main_window.visibility = View.GONE
+                from_chat()
+            }
+            else -> {
+                user_ID = intent.getStringExtra("USERID").toString()
+                match_ID = intent.getStringExtra("MATCHID").toString()
+                user_name = intent.getStringExtra("NAME").toString()
+                user_images = intent.getStringExtra("IMAGE").toString()
+                viewModel.ctrateToken_data =
+                    MutableLiveData<Resource<Token_data>>()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty(
+                    "identity",
+                    match_ID
+                )
+                Log.d("TAG@123", "identity : " + jsonObject.toString())
+                viewModel.get_User_video_token(
+                    jsonObject
+                )
+                subscribe_Login_User_details()
+                from_notification()
+
+            }
+        }
+
+
+    }
+
+    fun subscribe_Login_User_details() {
+        viewModel.ctrateToken_data.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    call_pick.isEnabled = true
+
+                    connectActionFab.setOnClickListener { onBackPressed() }
+
+
+                    /*
+                     * Set local video view to primary view
+                     */
+                    localVideoView = primaryVideoView
+
+                    /*
+                     * Enable changing the volume using the up/down keys during a conversation
+                     */
+                    savedVolumeControlStream = volumeControlStream
+                    volumeControlStream = AudioManager.STREAM_VOICE_CALL
+
+                    /*
+                     * Set access token
+                     */
+
+
+                    setAccessToken()
+                    //  connectToRoom(DEFAULT_CONVERSATION_NAME,false)
+                    AppUtils.stopPhoneCallRing()
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(this)
+                    AppUtils.playPhoneCallRing(this)
+                }
+                Status.ERROR -> {
+                    AppUtils.hideLoader()
+                }
+            }
+        })
+    }
+
+
+    fun from_notification() {
+        AppUtils.stopPhoneCallRing()
+        call_pick = findViewById(R.id.pick_call)
+        call_cut = findViewById(R.id.end_call)
+        nameTextView = findViewById(R.id.incomig_call_title)
+        userImageView = findViewById(R.id.image_profile)
+        Glide.with(this).load(user_images)
+            .error(R.drawable.profile_img)
+            .into(userImageView);
+        nameTextView.setText("Video call " + user_name)
+        call_pick.isEnabled = false
+        call_pick.setOnClickListener {
+            main_window.visibility = View.GONE
+            if (!checkPermissionForCameraAndMicrophone()) {
+                requestPermissionForCameraMicrophoneAndBluetooth()
+            } else {
+                audioSwitch.start { audioDevices, audioDevice ->
+                    updateAudioDeviceIcon(
+                        audioDevice
+                    )
+                }
+            }
+            initializeUI()
+            connectToRoom(DEFAULT_CONVERSATION_NAME, true)
+            connectvideoTrack(false)
+        }
+        call_cut.setOnClickListener {
+            onBackPressed()
+            //sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "user_id",
+                user_ID
+            )
+            jsonObject.addProperty(
+                "match_id",
+                match_ID
+            )
+            jsonObject.addProperty(
+                "type",
+                "chat"
+            )
+            jsonObject.addProperty(
+                "name",
+                "call_cut_test"
+            )
+            jsonObject.addProperty(
+                "image",
+                "imagedata"
+            )
+
+            Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
+            viewModel.sendChatNotification(jsonObject)
+           // onBackPressed()
+
+        }
+    }
+
+
+    fun from_chat() {
+        connectActionFab.setOnClickListener { onBackPressed() }
+
+
+        /*
+         * Set local video view to primary view
+         */
+        localVideoView = primaryVideoView
+
+        /*
+         * Enable changing the volume using the up/down keys during a conversation
+         */
+        savedVolumeControlStream = volumeControlStream
+        volumeControlStream = AudioManager.STREAM_VOICE_CALL
+
+        /*
+         * Set access token
+         */
+        setAccessToken()
+
+        /*
+         * Check camera and microphone permissions. Also, request for bluetooth
+         * permissions for enablement of bluetooth audio routing.
+         */
+        if (!checkPermissionForCameraAndMicrophone()) {
+            requestPermissionForCameraMicrophoneAndBluetooth()
+        } else {
+            audioSwitch.start { audioDevices, audioDevice -> updateAudioDeviceIcon(audioDevice) }
+        }
+        /*
+         * Set the initial state of the UI
+         */
+        initializeUI()
+        connectToRoom(DEFAULT_CONVERSATION_NAME, true)
+        connectvideoTrack(false)
+
+
+    }
+
 
     /*
      * RemoteParticipant events listener
@@ -522,55 +762,6 @@ class VideoActivity : AppCompatActivity() {
     private var disconnectedFromOnDestroy = false
     private var isSpeakerPhoneEnabled = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
-        connectActionFab = findViewById(R.id.connectActionFab)
-
-        localVideoActionFab = findViewById(R.id.localVideoActionFab)
-        muteActionFab = findViewById(R.id.muteActionFab)
-        switchCameraActionFab = findViewById(R.id.switchCameraActionFab)
-        primaryVideoView = findViewById(R.id.primaryVideoView)
-        reconnectingProgressBar = findViewById(R.id.reconnectingProgressBar)
-        thumbnailVideoView = findViewById(R.id.thumbnailVideoView)
-        videoStatusTextView = findViewById(R.id.videoStatusTextView)
-
-        connectActionFab.setOnClickListener { onBackPressed() }
-
-
-
-        /*
-         * Set local video view to primary view
-         */
-        localVideoView = primaryVideoView
-
-        /*
-         * Enable changing the volume using the up/down keys during a conversation
-         */
-        savedVolumeControlStream = volumeControlStream
-        volumeControlStream = AudioManager.STREAM_VOICE_CALL
-
-        /*
-         * Set access token
-         */
-        setAccessToken()
-
-        /*
-         * Check camera and microphone permissions. Also, request for bluetooth
-         * permissions for enablement of bluetooth audio routing.
-         */
-        if (!checkPermissionForCameraAndMicrophone()) {
-            requestPermissionForCameraMicrophoneAndBluetooth()
-        } else {
-            audioSwitch.start { audioDevices, audioDevice -> updateAudioDeviceIcon(audioDevice) }
-        }
-        /*
-         * Set the initial state of the UI
-         */
-        initializeUI()
-        connectToRoom(DEFAULT_CONVERSATION_NAME)
-
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -596,26 +787,52 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
+
+    fun connectvideoTrack(flag: Boolean) {
+        try {
+
+            localVideoTrack =
+                if (localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
+                    createLocalVideoTrack(
+                        this,
+                        true,
+                        cameraCapturerCompat
+                    )
+                } else {
+                    localVideoTrack
+                }
+            localVideoTrack?.addSink(localVideoView)
+            localVideoTrack?.let { localParticipant?.publishTrack(it) }
+            localParticipant?.setEncodingParameters(encodingParameters)
+            room?.let {
+                reconnectingProgressBar.visibility = if (it.state != Room.State.RECONNECTING)
+                    View.GONE else
+                    View.VISIBLE
+                videoStatusTextView.text = "Connected to ${it.name}"
+            }
+
+            if (flag) {
+                room?.disconnect()
+            }
+        } catch (e: Exception) {
+
+        }
+
+
+    }
+
+
+    val broadCastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(contxt: Context?, intent: Intent?) {
+            when (intent?.action) {
+                "BROADCAST_DEFAULT_ALBUM_CHANGED" -> finish()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        localVideoTrack = if (localVideoTrack == null && checkPermissionForCameraAndMicrophone()) {
-            createLocalVideoTrack(
-                this,
-                true,
-                cameraCapturerCompat
-            )
-        } else {
-            localVideoTrack
-        }
-        localVideoTrack?.addSink(localVideoView)
-        localVideoTrack?.let { localParticipant?.publishTrack(it) }
-        localParticipant?.setEncodingParameters(encodingParameters)
-        room?.let {
-            reconnectingProgressBar.visibility = if (it.state != Room.State.RECONNECTING)
-                View.GONE else
-                View.VISIBLE
-            videoStatusTextView.text = "Connected to ${it.name}"
-        }
+        // connectvideoTrack()
     }
 
     override fun onPause() {
@@ -655,6 +872,10 @@ class VideoActivity : AppCompatActivity() {
          */
         localAudioTrack?.release()
         localVideoTrack?.release()
+
+        Log.d("TAG@123","unregister Receiver ")
+        LocalBroadcastManager.getInstance(this)
+            .unregisterReceiver(broadCastReceiver)
 
         super.onDestroy()
     }
@@ -744,10 +965,11 @@ class VideoActivity : AppCompatActivity() {
         this.accessToken = Home.mVideoGrant_user_token
     }
 
-    private fun connectToRoom(roomName: String) {
+    private fun connectToRoom(roomName: String, flag: Boolean) {
         createAudioAndVideoTracks()
-        audioSwitch.activate()
-
+        if (flag == true) {
+            audioSwitch.activate()
+        }
         room = Video.connect(this, accessToken, roomListener) {
             roomName(roomName)
             audioTracks(listOf(localAudioTrack))
@@ -755,19 +977,11 @@ class VideoActivity : AppCompatActivity() {
             preferAudioCodecs(listOf(audioCodec))
             preferVideoCodecs(listOf(videoCodec))
             encodingParameters(encodingParameters)
-
             enableAutomaticSubscription(enableAutomaticSubscription)
         }
-        setDisconnectAction()
 
-        when(intent.getIntExtra("TYPE",0)){
-            2->{
-                room?.disconnect()
-                Log.d("TAG@123", "-------///////Room  :" + room?.disconnect())}
-            else->{
+        setDisconnectAction(flag)
 
-            }
-        }
     }
 
 
@@ -799,13 +1013,16 @@ class VideoActivity : AppCompatActivity() {
         audioDeviceMenuItem?.setIcon(audioDeviceMenuIcon)
     }
 
-    private fun setDisconnectAction() {
+    private fun setDisconnectAction(flag: Boolean) {
         connectActionFab.setImageDrawable(
             ContextCompat.getDrawable(
                 this,
                 R.drawable.ic_call_end_white_24px
             )
         )
+        if (!flag) {
+            // room?.disconnect()
+        }
         connectActionFab.show()
         connectActionFab.setOnClickListener(disconnectClickListener())
     }
