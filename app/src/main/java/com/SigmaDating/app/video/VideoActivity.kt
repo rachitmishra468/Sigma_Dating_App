@@ -76,6 +76,7 @@ class VideoActivity : AppCompatActivity() {
     var match_ID = ""
     var user_name = ""
     var user_images = ""
+    var sender_id = ""
 
     lateinit var call_pick: FloatingActionButton
     lateinit var call_cut: FloatingActionButton
@@ -264,6 +265,11 @@ class VideoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(
+                broadCastReceiver,
+                IntentFilter("BROADCAST_FOR_CLOSE_VIDEO")
+            )
         main_window = findViewById(R.id.main_window)
         connectActionFab = findViewById(R.id.connectActionFab)
         localVideoActionFab = findViewById(R.id.localVideoActionFab)
@@ -280,21 +286,18 @@ class VideoActivity : AppCompatActivity() {
         Log.d("TAG@123", "Video identity : ----- " + intent.getIntExtra("TYPE", 100))
         when (intent.getIntExtra("TYPE", 100)) {
             1 -> {
-                LocalBroadcastManager.getInstance(this)
-                    .registerReceiver(
-                        broadCastReceiver,
-                        IntentFilter("BROADCAST_DEFAULT_ALBUM_CHANGED")
-                    )
+
                 user_ID = intent.getStringExtra("USERID").toString()
                 match_ID = intent.getStringExtra("MATCHID").toString()
                 user_name = intent.getStringExtra("NAME").toString()
                 user_images = intent.getStringExtra("IMAGE").toString()
+                sender_id = intent.getStringExtra("SENDERID").toString()
                 viewModel.ctrateToken_data =
                     MutableLiveData<Resource<Token_data>>()
                 val jsonObject = JsonObject()
                 jsonObject.addProperty(
                     "identity",
-                    match_ID
+                    Home.sender_id
                 )
                 Log.d("TAG@123", "identity : " + jsonObject.toString())
                 viewModel.get_User_video_token(
@@ -312,12 +315,13 @@ class VideoActivity : AppCompatActivity() {
                 match_ID = intent.getStringExtra("MATCHID").toString()
                 user_name = intent.getStringExtra("NAME").toString()
                 user_images = intent.getStringExtra("IMAGE").toString()
+                sender_id = intent.getStringExtra("SENDERID").toString()
                 viewModel.ctrateToken_data =
                     MutableLiveData<Resource<Token_data>>()
                 val jsonObject = JsonObject()
                 jsonObject.addProperty(
                     "identity",
-                    match_ID
+                    Home.sender_id
                 )
                 Log.d("TAG@123", "identity : " + jsonObject.toString())
                 viewModel.get_User_video_token(
@@ -406,7 +410,7 @@ class VideoActivity : AppCompatActivity() {
             val jsonObject = JsonObject()
             jsonObject.addProperty(
                 "user_id",
-                user_ID
+                Home.sender_id
             )
             jsonObject.addProperty(
                 "match_id",
@@ -414,20 +418,20 @@ class VideoActivity : AppCompatActivity() {
             )
             jsonObject.addProperty(
                 "type",
-                "chat"
+                "close_video"
             )
             jsonObject.addProperty(
                 "name",
-                "call_cut_test"
+                "."
             )
             jsonObject.addProperty(
                 "image",
-                "imagedata"
+                user_images
             )
 
-            Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
+            Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
             viewModel.sendChatNotification(jsonObject)
-           // onBackPressed()
+            onBackPressed()
 
         }
     }
@@ -824,8 +828,11 @@ class VideoActivity : AppCompatActivity() {
 
     val broadCastReceiver = object : BroadcastReceiver() {
         override fun onReceive(contxt: Context?, intent: Intent?) {
+            Log.d("TAG@123","----.////// broadCastReceiver")
+
             when (intent?.action) {
-                "BROADCAST_DEFAULT_ALBUM_CHANGED" -> finish()
+
+                "BROADCAST_FOR_CLOSE_VIDEO" -> onBackPressed()
             }
         }
     }

@@ -32,6 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     var match_ID = ""
     var user_name=""
     var user_images=""
+    var sender_id=""
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.size>0) {
@@ -41,17 +42,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             match_ID = remoteMessage.data["match_id"].toString()
             user_name = remoteMessage.data["name"].toString()
             user_images = remoteMessage.data["image"].toString()
-            if(user_name.equals("call_cut_test")){
-                Log.d(TAG, "call_cut Notification : ${remoteMessage.from}")
+            sender_id= remoteMessage.data["sender_id"].toString()
+            if(type.equals("close_video")){
+                Log.d(TAG, "call_cut Notification recived user id : $user_ID  sender id : $sender_id : ${remoteMessage.from}")
                 LocalBroadcastManager.getInstance(this)
-                    .sendBroadcast(Intent("BROADCAST_DEFAULT_ALBUM_CHANGED"))
-            }else{
+                    .sendBroadcast(Intent("BROADCAST_FOR_CLOSE_VIDEO"))
+            }
             showNotification(remoteMessage.data["title"].toString(), remoteMessage.data["body"].toString())
             if (type.equals("video")) {
+                Home.sender_id=sender_id
                 Home.match_id = match_ID
                 broadcastVideoNotification("", "")
             }
-        }
+
         }
     }
 
@@ -74,6 +77,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent = Intent(this, Splash::class.java)
         }
         intent.putExtra("TYPE", 1)
+        intent.putExtra("SENDERID", sender_id)
         intent.putExtra(VIDEO_USERID, user_ID)
         intent.putExtra(VIDEO_NOTIFICATION_MatchID, match_ID)
         intent.putExtra(USER_NAME, user_name)
@@ -110,6 +114,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent.putExtra(USER_NAME, user_name)
             intent.putExtra(USER_IMAGE, user_images)
             intent.putExtra("TYPE", 1)
+            intent.putExtra("SENDERID", sender_id)
             startActivity(intent)
         } catch (e: Exception) {
 

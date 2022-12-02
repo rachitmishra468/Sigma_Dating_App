@@ -69,7 +69,7 @@ class IncomingVideoCallViewModel @Inject constructor(
             Log.d("TAG@123", "Notification")
             mainRepository.sendNotification(id).let {
                 if (it.isSuccessful) {
-                    Log.d("TAG@123", "send Chat Notification sent")
+                    Log.d("TAG@123", "Video cut Notification sent")
                 } else {
                     Log.d("TAG@123", "error in get send Chat Notification call ")
 

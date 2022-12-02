@@ -101,6 +101,7 @@ class Home : AppCompatActivity() {
         var mCurrent_user_token:String=""
         var mVideoGrant_user_token:String=""
         var  match_id:String=""
+        var sender_id:String=""
         var chatFlag:Boolean=false
 
         fun get_settingpage_data(alias: String): Pages? {
