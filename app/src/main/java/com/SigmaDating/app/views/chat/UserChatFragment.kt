@@ -56,7 +56,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
 
     private val quickstartConversationsManager = QuickstartConversationsManager()
     private var username: String? = null
-    private var imagedata: String? = null
+    var imagedata: String? = null
     private var id: String? = null
     private var match_id: String? = null
 
@@ -125,7 +125,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             val jsonObject = JsonObject()
             jsonObject.addProperty(
                 "identity",
-                id
+                id+"00"
             )
             Log.d("TAG@123", "identity : " + jsonObject.toString())
             (activity as Home).homeviewmodel.get_User_video_token(
@@ -144,8 +144,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         layoutManager.stackFromEnd = true
 
         recyclerView!!.layoutManager = layoutManager
-        messagesAdapter =
-            MessagesAdapter(imagedata, requireContext(), quickstartConversationsManager)
+        messagesAdapter = MessagesAdapter(imagedata, requireContext(), quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
         recyclerView!!.scrollToPosition(quickstartConversationsManager.messages.size - 1)
         setListeners()
@@ -235,8 +234,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     }
 
 
-    internal class MessagesAdapter(
-        var imageString: String?,
+     class MessagesAdapter(
+        var imagedata: String?,
         var context: Context,
         var quickstartConversationsManager: QuickstartConversationsManager
     ) :
@@ -249,11 +248,13 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             var textname: TextView
             var textTime: TextView
             var imageAvatar: CircleImageView
+            var imageAvatar_self:CircleImageView
 
             init {
                 textname = itemView.findViewById(R.id.txtOtherMessage)
                 textTime = itemView.findViewById(R.id.txtOtherMessageTime)
                 imageAvatar = itemView.findViewById(R.id.imageAvatar)
+                imageAvatar_self = itemView.findViewById(R.id.imageAvatar)
 
 
             }
@@ -278,6 +279,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
+            Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
             val sdf = SimpleDateFormat("hh:mm aa")
             val date: Date = message.dateCreatedAsDate
             val date_mess = sdf.format(date)
@@ -296,7 +298,9 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                     Glide.with(context).load(imgURl).into(holder.imageAvatar);
                 }
             } else {
-                Glide.with(context).load(imageString).into(holder.imageAvatar);
+
+                Glide.with(context).load(imagedata).into(holder.imageAvatar_self);
+                //Glide.with(context).load(imageString).into(holder.imageAvatar);
             }
 
         }
@@ -310,8 +314,10 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         override fun getItemViewType(position: Int): Int {
             try {
                 val message = quickstartConversationsManager.messages.get(position)
-                val dd = message.attributes.string
-                val jsonObject = JSONObject(dd)
+                val dd = message.attributes
+                Log.d("TAG@123","message : "+message +" ...."+dd)
+                Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
+                val jsonObject = JSONObject(dd.toString())
                 if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get(
                         "identity"
                     )
@@ -323,6 +329,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                     return VIEW_TYPE_OTHER_MESSAGE
                 }
             } catch (e: Exception) {
+                booleanuser = true
+                Log.d("TAG@321", "Exception  : -"+e.message.toString())
                 return VIEW_TYPE_MY_MESSAGE
             }
 
@@ -337,6 +345,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                     activity?.let {
                         val intent = Intent(it, VideoActivity::class.java)
                         intent.putExtra("TYPE", 0)
+                        intent.putExtra("USERID", id)
+                        intent.putExtra("NAME", username)
                         it.startActivity(intent)
                         val jsonObject = JsonObject()
                         jsonObject.addProperty(

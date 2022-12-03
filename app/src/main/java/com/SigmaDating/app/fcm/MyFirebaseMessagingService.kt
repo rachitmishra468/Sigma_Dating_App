@@ -44,6 +44,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             user_images = remoteMessage.data["image"].toString()
             sender_id= remoteMessage.data["sender_id"].toString()
             if(type.equals("close_video")){
+
+                AppUtils.stopPhoneCallRing()
                 Log.d(TAG, "call_cut Notification recived user id : $user_ID  sender id : $sender_id : ${remoteMessage.from}")
                 LocalBroadcastManager.getInstance(this)
                     .sendBroadcast(Intent("BROADCAST_FOR_CLOSE_VIDEO"))

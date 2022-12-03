@@ -212,6 +212,7 @@ class VideoActivity : AppCompatActivity() {
 
         override fun onDisconnected(room: Room, e: TwilioException?) {
             Log.d("TAG@123", "Error :" + e.toString())
+            close()
             localParticipant = null
             videoStatusTextView.text = "Disconnected from ${room.name}"
             reconnectingProgressBar.visibility = View.GONE
@@ -308,6 +309,8 @@ class VideoActivity : AppCompatActivity() {
             }
             0 -> {
                 main_window.visibility = View.GONE
+                user_ID = intent.getStringExtra("USERID").toString()
+                user_name = intent.getStringExtra("NAME").toString()
                 from_chat()
             }
             else -> {
@@ -422,7 +425,9 @@ class VideoActivity : AppCompatActivity() {
             )
             jsonObject.addProperty(
                 "name",
-                "."
+                sharedPreferencesStorage.getString(
+                AppConstants.USER_NAME
+            )
             )
             jsonObject.addProperty(
                 "image",
@@ -1226,4 +1231,32 @@ class VideoActivity : AppCompatActivity() {
               0
           )
       }*/
+
+
+    fun close(){
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "user_id",
+            user_ID
+        )
+        jsonObject.addProperty(
+            "match_id",
+            match_id
+        )
+        jsonObject.addProperty(
+            "type",
+            "close_video"
+        )
+        jsonObject.addProperty(
+            "name",
+            user_name
+        )
+        jsonObject.addProperty(
+            "image",
+            user_images
+        )
+
+        Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
+        viewModel.sendChatNotification(jsonObject)
+    }
 }

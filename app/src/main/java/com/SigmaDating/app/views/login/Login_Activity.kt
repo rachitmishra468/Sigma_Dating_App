@@ -375,6 +375,7 @@ class Login_Activity : AppCompatActivity() {
                             Log.d("TAG@123",it.data?.user.toString())
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
+                            sharedPreferencesStorage.setValue(AppConstants.USER_NAME, res.user.first_name+" "+res.user.last_name)
                            // sharedPreferencesStorage.setValue(AppConstants.upload_image, res.user.upload_image)
 
                             Log.d("TAG@123", res.user.id)

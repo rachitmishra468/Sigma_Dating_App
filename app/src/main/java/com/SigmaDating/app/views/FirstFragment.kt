@@ -418,7 +418,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Glide.with(requireContext()).load(it.data?.user?.upload_image)
                                     .error(R.drawable.profile_img)
                                     .into(editProfile);
-
+                                (activity as Home).sharedPreferencesStorage.setValue(AppConstants.USER_NAME, res.user.first_name+" "+res.user.last_name)
                                 Home.current_user_profile = it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {

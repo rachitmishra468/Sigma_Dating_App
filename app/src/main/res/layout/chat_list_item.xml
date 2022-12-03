@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight=".25"
             android:textSize="12sp"
+            android:visibility="gone"
             android:text="22/12/1995" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
