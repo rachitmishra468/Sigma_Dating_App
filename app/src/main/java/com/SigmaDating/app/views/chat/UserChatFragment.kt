@@ -312,9 +312,9 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         }
 
         override fun getItemViewType(position: Int): Int {
+            val message = quickstartConversationsManager.messages.get(position)
+            val dd = message.attributes
             try {
-                val message = quickstartConversationsManager.messages.get(position)
-                val dd = message.attributes
                 Log.d("TAG@123","message : "+message +" ...."+dd)
                 Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
                 val jsonObject = JSONObject(dd.toString())
@@ -329,9 +329,28 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                     return VIEW_TYPE_OTHER_MESSAGE
                 }
             } catch (e: Exception) {
-                booleanuser = true
-                Log.d("TAG@321", "Exception  : -"+e.message.toString())
-                return VIEW_TYPE_MY_MESSAGE
+                try {
+                    val ddt = message.attributes.string
+                    val jsonObject = JSONObject(ddt)
+                    if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get(
+                            "identity"
+                        )
+                    ) {
+                        booleanuser = true
+                        return VIEW_TYPE_MY_MESSAGE
+                    } else {
+                        booleanuser = false
+                        return VIEW_TYPE_OTHER_MESSAGE
+                    }
+                    booleanuser = true
+                    Log.d("TAG@321", "Exception  : -"+e.message.toString())
+                    return VIEW_TYPE_MY_MESSAGE
+                }catch (e:Exception){
+                    booleanuser = true
+                    Log.d("TAG@321", "Exception  : -"+e.message.toString())
+                    return VIEW_TYPE_MY_MESSAGE
+                }
+
             }
 
         }
@@ -363,12 +382,15 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                         )
                         jsonObject.addProperty(
                             "name",
-                            username
+                            (context as Home).sharedPreferencesStorage.getString(
+                                AppConstants.USER_NAME
+                            )
                         )
-
                         jsonObject.addProperty(
                             "image",
-                            imagedata
+                            (context as Home).sharedPreferencesStorage.getString(
+                                AppConstants.upload_image
+                            )
                         )
                         Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
                         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
@@ -404,12 +426,16 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         )
         jsonObject.addProperty(
             "name",
-            username
+            (context as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_NAME
+            )
         )
 
         jsonObject.addProperty(
             "image",
-            imagedata
+            (context as Home).sharedPreferencesStorage.getString(
+                AppConstants.upload_image
+            )
         )
         Log.d("TAG@123", "send Notification data  " + jsonObject.toString())
         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
