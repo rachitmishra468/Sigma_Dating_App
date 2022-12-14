@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="180dp"
+    android:clickable="true"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/card_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="5dp"
+        app:cardElevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@drawable/splash_bg">
+
+        </ImageView>
+
+
+        <VideoView
+            android:id="@+id/videoview"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/card_ad"
+        app:layout_constraintTop_toTopOf="@+id/card_ad"
+        android:src="@drawable/close_ad">
+    </ImageView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

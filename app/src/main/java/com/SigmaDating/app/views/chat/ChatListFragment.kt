@@ -8,10 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -62,6 +59,11 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
 
+
+    //Ad
+
+    lateinit var ad_video: VideoView
+
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +79,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        chatFlag=false
+        chatFlag = false
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
 
@@ -116,10 +118,14 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             )
         )
 
+
+        //Ad view
+        ad_video = binding.root.findViewById(R.id.videoview)
+        ad_video.setVideoPath("http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
+        ad_video.start();
+
         return binding.root;
     }
-
-
 
 
     fun filter(text: String?) {
@@ -180,15 +186,15 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             AppConstants.USER_ID
         )
         val jsonObject = JsonObject()
-      jsonObject.addProperty(
+        jsonObject.addProperty(
             "identity",
             position.match_id
         )
-       /* jsonObject.addProperty(
-            "identity",
-            (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )        )*/
+        /* jsonObject.addProperty(
+             "identity",
+             (activity as Home).sharedPreferencesStorage.getString(
+                 AppConstants.USER_ID
+             )        )*/
         Log.d("TAG@123", "identity : " + jsonObject.toString())
         (activity as Home).homeviewmodel.get_User_token(
             jsonObject
@@ -287,9 +293,6 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         }
         return shouldCheck
     }
-
-
-
 
 
     override fun onStop() {

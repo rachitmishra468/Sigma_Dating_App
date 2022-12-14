@@ -63,7 +63,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/footer_layout.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_all__activitys.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_blank.xml" value="0.20416666666666666" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.1" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_chat_list.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_comment_post.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_contact_us.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_create_post.xml" value="0.18" />
@@ -85,8 +85,10 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_comment.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_empty_dataset.xml" value="0.14" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/item_search_photos.xml" value="0.10230263157894737" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/layout_chat_right.xml" value="0.1675929884566054" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/login_scroll.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/main_activity.xml" value="0.18541666666666667" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/main_ad_layout.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/main_fragment.xml" value="0.18541666666666667" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/my_notification_layout.xml" value="0.1145788798631894" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/notification_setting_fragment.xml" value="0.12894736842105264" />
