@@ -22,6 +22,8 @@ interface ApiHelper {
     suspend fun user_phone_verifly(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun email_validation_check(jsonObject: JsonObject):Response<Loginmodel>
 
+
+
     suspend fun get_profile_swipe_details(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun report_user(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun block_user(jsonObject: JsonObject):Response<Loginmodel>
@@ -31,6 +33,8 @@ interface ApiHelper {
     suspend fun User_delete_account(jsonObject: JsonObject):Response<Loginmodel>
 
     suspend fun getSchoolFeternityList():Response<SchoolCommunityResponse>
+
+    suspend fun getlistads(jsonObject: JsonObject):Response<advertisingData>
 
     suspend fun upload_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>

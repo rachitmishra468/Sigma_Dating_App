@@ -53,6 +53,7 @@ class HomeViewModel @Inject constructor(
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
     val user_bids: MutableLiveData<Resource<home_model>>
+    lateinit var app_ads: MutableLiveData<Resource<advertisingData>>
 
     init {
         report_block_user = MutableLiveData<Resource<Loginmodel>>()
@@ -352,6 +353,26 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun get_ads_list(id: String) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("position", id)
+            app_ads.postValue(Resource.loading(null))
+            Log.d("TAG@123", "get_app_ads_list")
+            mainRepository.getlistads(jsonObject).let {
+                if (it.isSuccessful) {
+                    Log.d("TAG@123", "get_Login_User_bids  isSuccessful")
+                    app_ads.postValue(Resource.success(it.body()))
+                } else {
+                    Log.d("TAG@123", "get_Login_User_bids  isSuccessful false")
+                    app_ads.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
+
 
 
     fun get_Login_User_bids(id: String) = viewModelScope.launch {

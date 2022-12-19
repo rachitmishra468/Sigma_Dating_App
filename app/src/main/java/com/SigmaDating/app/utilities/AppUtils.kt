@@ -3,14 +3,14 @@ package com.SigmaDating.app.utilities
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.IntentFilter
-import android.graphics.Bitmap
-import android.graphics.Matrix
+import android.content.Intent
+import android.media.MediaPlayer
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
+import android.os.Build
 import android.text.SpannableStringBuilder
-import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -20,10 +20,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.exifinterface.media.ExifInterface
+import androidx.core.content.ContextCompat.startActivity
 import com.SigmaDating.R
-import com.SigmaDating.app.model.communityModel.UniversityList
+import com.SigmaDating.app.AppReseources
 import com.airbnb.lottie.LottieAnimationView
 import com.example.demoapp.other.Constants
 import com.google.android.material.snackbar.Snackbar
@@ -34,16 +35,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.media.MediaPlayer
-import android.net.NetworkCapabilities
-import android.os.Build
-import android.widget.*
-import com.SigmaDating.app.AppReseources
-import com.SigmaDating.app.views.Home
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 object AppUtils {
@@ -264,7 +255,6 @@ object AppUtils {
         spanTxt.setSpan(object : ClickableSpan() {
             override fun onClick(widget: View) {
                 try {
-
                     open_web(view_fab)
                 } catch (e: Exception) {
                     Log.d("TAG@123", "Terms and Conditions" + e.message)
@@ -362,10 +352,10 @@ object AppUtils {
     }
 
     fun playPhoneCallRing(context: Context?) {
-        if(!flag!!){
+        if (!flag!!) {
             mp = MediaPlayer.create(context, com.SigmaDating.R.raw.phone_ringing_sound)
             mp?.start()
-            flag=true
+            flag = true
 
         }
 
@@ -373,8 +363,14 @@ object AppUtils {
 
     fun stopPhoneCallRing() {
         mp?.stop()
-        flag=false
+        flag = false
     }
 
+
+    fun open_ad_link(url: String, context: Context) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        context.startActivity(i)
+    }
 
 }

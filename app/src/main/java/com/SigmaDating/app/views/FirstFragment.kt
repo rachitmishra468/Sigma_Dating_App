@@ -1,9 +1,11 @@
 package com.SigmaDating.app.views
 
 import android.app.Dialog
+import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,31 +18,33 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
-import com.SigmaDating.app.model.Bids
-import com.SigmaDating.app.model.Loginmodel
-import com.SigmaDating.app.model.Pages
+import com.SigmaDating.app.model.*
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.utilities.AppUtils.open_ad_link
 import com.SigmaDating.app.views.CardManager.CardViewChanger
+import com.SigmaDating.app.views.Home.Companion.ads_list_index
 import com.SigmaDating.app.views.Home.Companion.notifications_count
 import com.SigmaDating.app.views.Home.Companion.pages
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -69,8 +73,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     //Ad
     lateinit var ad_video: VideoView
-    lateinit var close_ad_img:ImageView
-    lateinit var ad_main:ConstraintLayout
+    lateinit var close_ad_img: ImageView
+    lateinit var ad_main: ConstraintLayout
+    lateinit var ads_image_view: ImageView
+    lateinit var progress_bar_ads: ProgressBar
+    lateinit var skip_text: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,8 +94,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         savedInstanceState: Bundle?
     ): View {
         Log.d("TAG@123", "FirstFragment onCreateView")
-        Home.mCurrent_user_token=""
-        Home.mVideoGrant_user_token=""
+        Home.mCurrent_user_token = ""
+        Home.mVideoGrant_user_token = ""
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
@@ -98,7 +105,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         empty_text_view = binding.root.findViewById(R.id.empty_text_view)
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
         empty_item_layout.visibility = View.GONE
-
         editProfile.setOnClickListener {
             val bundle = Bundle()
             userId = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
@@ -125,31 +131,29 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.USER_ID
             )
         )
+        (activity as Home).homeviewmodel.app_ads =
+            MutableLiveData<Resource<advertisingData>>()
+        (activity as Home).homeviewmodel.get_ads_list("")
+
         subscribe_bids()
         subscribe_Login_User_details()
-
-
+        subscribe_app_ads()
         footer_transition()
 
+
         //Ad view
-        ad_main=binding.root.findViewById(R.id.ad_main)
-        close_ad_img=binding.root.findViewById(R.id.close_ad_img)
-        ad_main.visibility=View.VISIBLE
+        ad_main = binding.root.findViewById(R.id.ad_main)
+        progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
+        ads_image_view = binding.root.findViewById(R.id.ads_image_view)
+        close_ad_img = binding.root.findViewById(R.id.close_ad_img)
+        skip_text = binding.root.findViewById(R.id.skip_text)
+        ad_main.visibility = View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
-        ad_video.setVideoPath("http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
-        ad_video.start()
-        ad_video.setOnCompletionListener {
-            ad_video.start()
-        }
         close_ad_img.setOnClickListener {
-           if(ad_video.isPlaying){
-               ad_video.stopPlayback()
-           }
-            ad_main.visibility=View.GONE
+            ad_video.stopPlayback()
+            ad_main.visibility = View.GONE
         }
-
         return binding.root
-
     }
 
     override fun onResume() {
@@ -163,26 +167,33 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             override fun onCardExitLeft(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitLeft")
                 if (dataObject is Bids) {
-                    idUserConnected = (dataObject as Bids).id
-                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
-                    swipe_update(idUserConnected, "dislike")
-                    Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+                    if ((dataObject as Bids).record_type.equals("bid")) {
+                        idUserConnected = (dataObject as Bids).id
+                        Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                        swipe_update(idUserConnected, "dislike")
+                        Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
             override fun onCardExitRight(dataObject: Any) {
                 Log.d("TAG@123", "onCardExitRight")
                 if (dataObject is Bids) {
-                    idUserConnected = (dataObject as Bids).id
-                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
-                    swipe_update(idUserConnected, "like")
-                    Toast.makeText(requireContext(), "Like", Toast.LENGTH_SHORT).show()
+                    if ((dataObject as Bids).record_type.equals("bid")) {
+                        idUserConnected = (dataObject as Bids).id
+                        Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                        swipe_update(idUserConnected, "like")
+                        Toast.makeText(requireContext(), "Like", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("TAG@123", "open this link " + (dataObject as Bids).ad_link)
+                        requireContext().let { open_ad_link((dataObject as Bids).ad_link, it) }
+                    }
                 }
             }
 
             override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
-                Log.d("TAG@123", "onAdapterAboutToEmpty :"+itemsInAdapter)
-                if(itemsInAdapter==0){
+                Log.d("TAG@123", "onAdapterAboutToEmpty :" + itemsInAdapter)
+                if (itemsInAdapter == 0) {
                     Log.d("TAG@123", "Bid list isNullOrEmpty")
                     empty_text_view.text = "No matching bids found."
                     empty_item_layout.visibility = View.VISIBLE
@@ -197,10 +208,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Log.d("TAG@123", "onCardExitTop")
 
                 if (dataObject is Bids) {
-                    idUserConnected = (dataObject as Bids).id
-                    Log.d("TAG@123", "idUserConnected " + idUserConnected)
-                    swipe_update(idUserConnected, "superlike")
-                    Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+                    if ((dataObject as Bids).record_type.equals("bid")) {
+                        idUserConnected = (dataObject as Bids).id
+                        Log.d("TAG@123", "idUserConnected " + idUserConnected)
+                        swipe_update(idUserConnected, "superlike")
+                        Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -233,13 +246,15 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
         chatIcon.setOnClickListener {
-            if(AppUtils.isNetworkAvailable()) {
-            findNavController().navigate(R.id.action_FirstFragment_to_chat)}
+            if (AppUtils.isNetworkAvailable()) {
+                findNavController().navigate(R.id.action_FirstFragment_to_chat)
+            }
         }
 
         match_list.setOnClickListener {
-            if(AppUtils.isNetworkAvailable()) {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)}
+            if (AppUtils.isNetworkAvailable()) {
+                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            }
         }
         sigma_list.setOnClickListener {
             AppUtils.animateImageview(sigma_list)
@@ -338,12 +353,43 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Log.d("TAG@123",  ""+ it.data?.message)
+                                Log.d("TAG@123", "" + it.data?.message)
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception ::" + e.message.toString())
                             }
                         } else {
 
+                        }
+
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+    }
+
+
+    fun subscribe_app_ads() {
+        (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            try {
+                                Log.d("TAG@123", "ads data count  :" + it.data.toString())
+                                Home.ads_list = it.data?.ads as ArrayList<advertising_model>
+                                if (Home.ads_list.isNotEmpty()) {
+                                    ads_list_index = 0
+                                    start_ads_listing(Home.ads_list)
+                                }
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception  :" + e.message.toString())
+                            }
                         }
 
                     }
@@ -376,7 +422,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Log.d("TAG@123", "notifications_count  :" + it.data.toString())
                                 courseModalArrayList = it.data?.bids as ArrayList<Bids>
 
-                                Log.d("TAG@123", "courseModalArrayList Size   :" + courseModalArrayList!!.size)
+                                Log.d(
+                                    "TAG@123",
+                                    "courseModalArrayList Size   :" + courseModalArrayList!!.size
+                                )
                                 pages = it.data.pages as ArrayList<Pages>
                                 notifications_count = it.data.notifications_count
                                 notifications_count.let {
@@ -387,15 +436,16 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     .show()
 
 
-                                if (courseModalArrayList!!.size==0) {
+                                if (courseModalArrayList!!.size == 0) {
                                     empty_text_view.text = it.data.message
                                     empty_item_layout.visibility = View.VISIBLE
                                     Log.d("TAG@123", " empty_text  Show")
-                                }else{
+                                } else {
                                     empty_item_layout.visibility = View.GONE
                                 }
 
-                                adapter = ProfileMatch(courseModalArrayList!!, requireActivity(), this)
+                                adapter =
+                                    ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
                                 adapter.notifyDataSetChanged()
 
@@ -439,7 +489,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 Glide.with(requireContext()).load(it.data?.user?.upload_image)
                                     .error(R.drawable.profile_img)
                                     .into(editProfile);
-                                (activity as Home).sharedPreferencesStorage.setValue(AppConstants.USER_NAME, res.user.first_name+" "+res.user.last_name)
+                                (activity as Home).sharedPreferencesStorage.setValue(
+                                    AppConstants.USER_NAME,
+                                    res.user.first_name + " " + res.user.last_name
+                                )
                                 Home.current_user_profile = it.data?.user?.upload_image.toString()
 
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
@@ -491,6 +544,88 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         (activity as Home).homeviewmodel.profile_swipe = MutableLiveData<Resource<Loginmodel>>()
         subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
+    }
+
+
+    fun start_ads_listing(list: ArrayList<advertising_model>) {
+        Log.d("TAG@123", "start_ads_listing")
+
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (ads_list_index == list.size) {
+                    ads_list_index = 0
+                }
+                if (list[ads_list_index].type.equals("image")) {
+                    ads_image_view.visibility = View.VISIBLE
+                    ad_video.visibility = View.GONE
+                    skip_text.visibility = View.GONE
+
+                    Log.d("TAG@123", "start_ads_listing" + list[ads_list_index].filename)
+                    // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
+                    progress_bar_ads.visibility = View.VISIBLE
+                    Glide.with(requireContext()).load(list[ads_list_index].filename)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progress_bar_ads.visibility = View.GONE
+                                return false;
+                            }
+
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progress_bar_ads.visibility = View.GONE
+                                return false;
+                            }
+
+                        }).into(ads_image_view);
+
+                    ads_image_view.setOnClickListener {
+                        requireContext().let {
+                            open_ad_link(list[ads_list_index].ad_link, it)
+                        }
+                    }
+
+                    ads_list_index++
+                    handler.postDelayed(this, 10000)//1 sec delay
+                } else {
+                    skip_text.visibility = View.VISIBLE
+                    ad_video.visibility = View.VISIBLE
+                    progress_bar_ads.visibility = View.VISIBLE
+                    ads_image_view.visibility = View.GONE
+                    ad_video.setVideoPath(list[ads_list_index].filename)
+                    ad_video.setOnPreparedListener {
+                        progress_bar_ads.visibility = View.GONE
+                        ad_video.start()
+                    }
+
+                    skip_text.setOnClickListener {
+                        ads_list_index++
+                        start_ads_listing(Home.ads_list)
+                    }
+
+                    ad_video.setOnCompletionListener {
+                        ad_video.start()
+                    }
+
+                    ad_video.setOnClickListener {
+                        requireContext().let {
+                            open_ad_link(list[ads_list_index].ad_link, it)
+                        }
+                    }
+                }
+
+            }
+        }, 0)
     }
 
 

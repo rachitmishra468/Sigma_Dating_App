@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="180dp"
+    android:layout_width="wrap_content"
     android:clickable="true"
     android:id="@+id/ad_main"
+    android:background="@color/white"
     android:layout_height="wrap_content">
 
 
@@ -12,26 +13,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="5dp"
+        android:padding="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/ads_image_view"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:scaleType="fitXY"
-            android:visibility="gone"
             android:src="@drawable/splash_bg">
-
         </ImageView>
 
 
         <VideoView
             android:id="@+id/videoview"
             android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+            android:visibility="gone"
+            android:layout_height="200dp"/>
 
     </LinearLayout>
 
@@ -44,5 +45,42 @@
         app:layout_constraintTop_toTopOf="@+id/card_ad"
         android:src="@drawable/close_ad">
     </ImageView>
+
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar_ads"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/skip_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/black_bg"
+        android:clickable="true"
+        android:gravity="center|right"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:visibility="gone"
+        android:text="Skip Ads"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/card_ad"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="normal"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

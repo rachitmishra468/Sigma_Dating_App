@@ -20,7 +20,7 @@ public class CardViewChanger extends BaseFlingAdapterView {
 
     private static final double SCALE_OFFSET = 0.04;
 
-    private static final float TRANS_OFFSET = 45;
+    private static final float TRANS_OFFSET = 60;
 
     protected boolean DETECT_BOTTOM_SWIPE;
 
@@ -36,7 +36,7 @@ public class CardViewChanger extends BaseFlingAdapterView {
 
     private int MAX_VISIBLE = 1;
 
-    private int MIN_ADAPTER_STACK = 6;
+    private int MIN_ADAPTER_STACK = 1;
 
     private float ROTATION_DEGREES = 15.f;
 

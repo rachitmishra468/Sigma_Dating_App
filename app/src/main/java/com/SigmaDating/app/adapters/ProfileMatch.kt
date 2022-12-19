@@ -55,6 +55,7 @@ class ProfileMatch(
         var mageview = (v.findViewById<View>(R.id.idIVCourse) as ImageView)
         var idIV_actiontyp = (v.findViewById<LottieAnimationView>(R.id.img_hide))
         var progressBar = (v.findViewById<ProgressBar>(R.id.progress_bar))
+        var progress_bar_ads= (v.findViewById<ProgressBar>(R.id.progress_bar_ads))
         var greek_latter = (v.findViewById<TextView>(R.id.greek_latter))
         var broken_heart = (v.findViewById<LottieAnimationView>(R.id.broken_heart))
         var heart_loading = (v.findViewById<LottieAnimationView>(R.id.heart_loading))
@@ -81,7 +82,6 @@ class ProfileMatch(
                     progressBar.visibility = View.GONE
                     return false;
                 }
-
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -93,10 +93,6 @@ class ProfileMatch(
                 }
 
             }).into(mageview);
-
-
-
-
 
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
@@ -118,18 +114,13 @@ class ProfileMatch(
                 listener.onCategoryClick(
                     courseData[position], 5, null, mageview
                 )
-
-
             }
 
             override fun onSwipeRight() {
                 super.onSwipeRight()
-
                 listener.onCategoryClick(
                     courseData[position], 2, null, mageview
                 )
-
-
             }
 
             @SuppressLint("ClickableViewAccessibility")
@@ -151,7 +142,6 @@ class ProfileMatch(
         if (courseData[position].record_type.equals("bid")) {
             mConstraintLayout.visibility=View.GONE
             main_layout.visibility=View.VISIBLE
-
             if (courseData[position].greekletter.length > 0) {
                 greek_latter.visibility = View.VISIBLE
                 greek_latter.text = courseData[position].greekletter
@@ -196,11 +186,10 @@ class ProfileMatch(
         } else {
             mConstraintLayout.visibility=View.VISIBLE
             main_layout.visibility=View.GONE
-
             if(courseData[position].type.equals("image")){
                 ad_image_view.visibility=View.VISIBLE
                 ad_videoview.visibility=View.GONE
-
+                progress_bar_ads.visibility=View.VISIBLE
                 Glide.with(context).load(courseData[position].filename)
                     .listener(object : RequestListener<Drawable> {
                         override fun onResourceReady(
@@ -210,17 +199,16 @@ class ProfileMatch(
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            progressBar.visibility = View.GONE
+                            progress_bar_ads.visibility = View.GONE
                             return false;
                         }
-
                         override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
                             target: Target<Drawable>?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            progressBar.visibility = View.GONE
+                            progress_bar_ads.visibility = View.GONE
                             return false;
                         }
 
@@ -229,13 +217,18 @@ class ProfileMatch(
 
 
             }else{
+                progress_bar_ads.visibility=View.VISIBLE
                 ad_image_view.visibility=View.GONE
                 ad_videoview.visibility=View.VISIBLE
                 ad_videoview.setVideoPath(courseData[position].filename);
+
                 ad_videoview.setOnCompletionListener {
-                    ad_videoview.start()
+
+                        ad_videoview.start()
                 }
                 ad_videoview.setOnPreparedListener {
+                    progress_bar_ads.visibility=View.GONE
+                    it.setVolume(0f,0f)
                     ad_videoview.start()
                 }
 

@@ -12,7 +12,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
+import com.SigmaDating.app.model.Bids
 import com.SigmaDating.app.model.Pages
+import com.SigmaDating.app.model.advertising_model
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -96,6 +98,7 @@ class Home : AppCompatActivity() {
 
     companion object {
         lateinit var pages: ArrayList<Pages>
+        lateinit var ads_list: ArrayList<advertising_model>
         var notifications_count: String="0"
         var current_user_profile: String=""
         var mCurrent_user_token:String=""
@@ -103,6 +106,7 @@ class Home : AppCompatActivity() {
         var  match_id:String=""
         var sender_id:String=""
         var chatFlag:Boolean=false
+        var ads_list_index:Int=0
 
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {

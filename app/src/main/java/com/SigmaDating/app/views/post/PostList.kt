@@ -2,7 +2,9 @@ package com.SigmaDating.app.views.post
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,15 +19,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.SigmaDating.R
 import com.SigmaDating.app.adapters.PostAdapter
-import com.SigmaDating.app.model.Loginmodel
-import com.SigmaDating.app.model.Postdata
-import com.SigmaDating.app.model.delelepost
-import com.SigmaDating.app.model.post
+import com.SigmaDating.app.model.*
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.databinding.FragmentPostListBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -49,6 +52,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     lateinit var ad_video: VideoView
     lateinit var close_ad_img:ImageView
     lateinit var ad_main:ConstraintLayout
+    lateinit var ads_image_view: ImageView
+    lateinit var progress_bar_ads: ProgressBar
+    lateinit var skip_text: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,16 +73,24 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
         footer_transition()
         get_postdata()
-      //Ad view
+
+        (activity as Home).homeviewmodel.app_ads =
+            MutableLiveData<Resource<advertisingData>>()
+        (activity as Home).homeviewmodel.get_ads_list("")
+
+        subscribe_app_ads()
+
+
+
+        //Ad view
+        progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
+        ads_image_view = binding.root.findViewById(R.id.ads_image_view)
+        skip_text = binding.root.findViewById(R.id.skip_text)
         ad_main=binding.root.findViewById(R.id.ad_main)
         ad_main.visibility=View.VISIBLE
         close_ad_img=binding.root.findViewById(R.id.close_ad_img)
         ad_video = binding.root.findViewById(R.id.videoview)
-        ad_video.setVideoPath("http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
-        ad_video.start();
-        ad_video.setOnCompletionListener {
-            ad_video.start()
-        }
+
         close_ad_img.setOnClickListener {
             if(ad_video.isPlaying){
                 ad_video.stopPlayback()
@@ -379,6 +393,121 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         val dialog = builder.create()
         dialog.show()
     }
+
+
+    fun subscribe_app_ads() {
+        (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            try {
+                                Log.d("TAG@123", "ads data count  :" + it.data.toString())
+                                Home.ads_list = it.data?.ads as ArrayList<advertising_model>
+                                if (Home.ads_list.isNotEmpty()) {
+                                    Home.ads_list_index = 0
+                                    start_ads_listing(Home.ads_list)
+                                }
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception  :" + e.message.toString())
+                            }
+                        }
+
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+
+    }
+
+
+
+    fun start_ads_listing(list: ArrayList<advertising_model>) {
+        Log.d("TAG@123", "start_ads_listing")
+
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (Home.ads_list_index == list.size) {
+                    Home.ads_list_index = 0
+                }
+                if (list[Home.ads_list_index].type.equals("image")) {
+                    ads_image_view.visibility = View.VISIBLE
+                    ad_video.visibility = View.GONE
+                    skip_text.visibility = View.GONE
+
+                    Log.d("TAG@123", "start_ads_listing" + list[Home.ads_list_index].filename)
+                    // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
+                    progress_bar_ads.visibility = View.VISIBLE
+                    Glide.with(requireContext()).load(list[Home.ads_list_index].filename)
+                        .listener(object : RequestListener<Drawable> {
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progress_bar_ads.visibility = View.GONE
+                                return false;
+                            }
+
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                progress_bar_ads.visibility = View.GONE
+                                return false;
+                            }
+
+                        }).into(ads_image_view);
+
+                    ads_image_view.setOnClickListener {
+                        requireContext().let {
+                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                        }
+                    }
+
+                    Home.ads_list_index++
+                    handler.postDelayed(this, 10000)//1 sec delay
+                } else {
+                    skip_text.visibility = View.VISIBLE
+                    ad_video.visibility = View.VISIBLE
+                    progress_bar_ads.visibility = View.VISIBLE
+                    ads_image_view.visibility = View.GONE
+                    ad_video.setVideoPath(list[Home.ads_list_index].filename)
+                    ad_video.setOnPreparedListener {
+                        progress_bar_ads.visibility = View.GONE
+                        ad_video.start()
+                    }
+
+                    skip_text.setOnClickListener {
+                        Home.ads_list_index++
+                        start_ads_listing(Home.ads_list)
+                    }
+
+                    ad_video.setOnCompletionListener {
+                        ad_video.start()
+                    }
+
+                    ad_video.setOnClickListener {
+                        requireContext().let {
+                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                        }
+                    }
+                }
+
+            }
+        }, 0)
+    }
+
 
 
 }

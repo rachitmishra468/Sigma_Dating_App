@@ -22,7 +22,7 @@ class MainRepository @Inject constructor(
     suspend fun block_user(jsonObject: JsonObject) = apiHelper.block_user(jsonObject)
 
     suspend fun  ListSchoolFeternity()=apiHelper.getSchoolFeternityList()
-
+    suspend fun  getlistads(jsonObject: JsonObject)=apiHelper.getlistads(jsonObject)
     suspend fun get_setting_update_details(jsonObject: JsonObject) = apiHelper.get_setting_update_details(jsonObject)
     suspend fun get_login_user_data(jsonObject: JsonObject) = apiHelper.get_login_user_data(jsonObject)
     suspend fun change_password(jsonObject: JsonObject)=apiHelper.change_password(jsonObject)
