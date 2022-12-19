@@ -67,7 +67,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
 
-
+    //Ad
+    lateinit var ad_video: VideoView
+    lateinit var close_ad_img:ImageView
+    lateinit var ad_main:ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +130,24 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
 
         footer_transition()
+
+        //Ad view
+        ad_main=binding.root.findViewById(R.id.ad_main)
+        close_ad_img=binding.root.findViewById(R.id.close_ad_img)
+        ad_main.visibility=View.VISIBLE
+        ad_video = binding.root.findViewById(R.id.videoview)
+        ad_video.setVideoPath("http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
+        ad_video.start()
+        ad_video.setOnCompletionListener {
+            ad_video.start()
+        }
+        close_ad_img.setOnClickListener {
+           if(ad_video.isPlaying){
+               ad_video.stopPlayback()
+           }
+            ad_main.visibility=View.GONE
+        }
+
         return binding.root
 
     }

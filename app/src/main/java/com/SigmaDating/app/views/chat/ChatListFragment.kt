@@ -63,6 +63,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     //Ad
 
     lateinit var ad_video: VideoView
+    lateinit var close_ad_img:ImageView
+    lateinit var ad_main:ConstraintLayout
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -120,9 +122,21 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
 
         //Ad view
+        ad_main=binding.root.findViewById(R.id.ad_main)
+        close_ad_img=binding.root.findViewById(R.id.close_ad_img)
+        ad_main.visibility=View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
         ad_video.setVideoPath("http://videocdn.bodybuilding.com/video/mp4/62000/62792m.mp4");
         ad_video.start();
+        ad_video.setOnCompletionListener {
+            ad_video.start()
+        }
+        close_ad_img.setOnClickListener {
+            if(ad_video.isPlaying){
+                ad_video.stopPlayback()
+            }
+            ad_main.visibility=View.GONE
+        }
 
         return binding.root;
     }
