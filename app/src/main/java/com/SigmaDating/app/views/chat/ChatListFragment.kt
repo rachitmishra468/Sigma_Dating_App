@@ -132,8 +132,9 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
-        (activity as Home).homeviewmodel.get_ads_list("")
-
+        (activity as Home).homeviewmodel.get_ads_list("chatscreen")
+        ad_main = binding.root.findViewById(R.id.ad_main)
+        ad_main.visibility=View.GONE
         subscribe_app_ads()
 
         //Ad view
@@ -141,7 +142,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         skip_text = binding.root.findViewById(R.id.skip_text)
 
-        ad_main=binding.root.findViewById(R.id.ad_main)
+
         close_ad_img=binding.root.findViewById(R.id.close_ad_img)
         ad_main.visibility=View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
@@ -389,6 +390,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    ad_main.visibility=View.VISIBLE
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -406,9 +408,10 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
+                    ad_main.visibility=View.GONE
                 }
                 Status.ERROR -> {
-
+                    ad_main.visibility=View.GONE
                 }
             }
         })

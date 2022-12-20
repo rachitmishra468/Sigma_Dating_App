@@ -133,16 +133,18 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         )
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
-        (activity as Home).homeviewmodel.get_ads_list("")
+        (activity as Home).homeviewmodel.get_ads_list("mainscreen")
 
         subscribe_bids()
         subscribe_Login_User_details()
+        ad_main = binding.root.findViewById(R.id.ad_main)
+        ad_main.visibility=View.GONE
         subscribe_app_ads()
         footer_transition()
 
 
         //Ad view
-        ad_main = binding.root.findViewById(R.id.ad_main)
+
         progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         close_ad_img = binding.root.findViewById(R.id.close_ad_img)
@@ -378,6 +380,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    ad_main.visibility=View.VISIBLE
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -395,8 +398,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
+                    ad_main.visibility=View.GONE
                 }
                 Status.ERROR -> {
+                    ad_main.visibility=View.GONE
 
                 }
             }

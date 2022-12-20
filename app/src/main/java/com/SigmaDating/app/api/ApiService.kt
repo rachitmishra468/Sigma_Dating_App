@@ -52,8 +52,8 @@ interface ApiService {
     suspend fun listSchoolFeternity(): Response<SchoolCommunityResponse>
 
     //@Body jsonObject: JsonObject
-    @GET("common/ads")
-    suspend fun listads(): Response<advertisingData>
+    @POST("common/ads")
+    suspend fun listads(@Body jsonObject: JsonObject): Response<advertisingData>
 
     @GET("common/{id}")
     suspend fun get_user_bids(@Path("id") id: String): Response<home_model>

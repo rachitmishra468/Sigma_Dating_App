@@ -52,7 +52,7 @@ class ApiHelperImpl @Inject constructor(
         apiService.listSchoolFeternity()
 
     override suspend fun getlistads(jsonObject: JsonObject): Response<advertisingData> =
-        apiService.listads()
+        apiService.listads(jsonObject)
 
     override suspend fun upload_images(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.upload_images(jsonObject)
