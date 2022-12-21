@@ -2,11 +2,11 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 <LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_with_opecity"
@@ -65,20 +65,20 @@
 
             <!--on below line we are creating a swipe
                 frame layout for providing a swipe action-->
+
+
             <com.SigmaDating.app.views.CardManager.CardViewChanger
-                xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/card_stack_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 android:orientation="vertical"
                 app:bottom_swipe_detect="false"
-                android:layout_margin="10dp"
-                app:rotation_degrees="15.5" >
+                app:rotation_degrees="15.5"
+                tools:layout_editor_absoluteX="15dp"
+                tools:layout_editor_absoluteY="16dp">
 
             </com.SigmaDating.app.views.CardManager.CardViewChanger>
-
-
-
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/broken_heart"
@@ -151,15 +151,5 @@
 
 </LinearLayout>
 
-    <include
-        layout="@layout/main_ad_layout"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:cardUseCompatPadding="false">
 
-    </include>
 </androidx.constraintlayout.widget.ConstraintLayout>

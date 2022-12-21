@@ -214,6 +214,31 @@ class ProfileMatch(
 
                     }).into(ad_image_view);
 
+                ad_image_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
+                    override fun onSwipeLeft() {
+                        super.onSwipeLeft()
+                        listener.onCategoryClick(
+                            courseData[position], 5, null, mageview
+                        )
+                    }
+                    override fun onSwipeRight() {
+                        super.onSwipeRight()
+                        listener.onCategoryClick(
+                            courseData[position], 2, null, mageview
+                        )
+                    }
+
+                    @SuppressLint("ClickableViewAccessibility")
+                    override fun onSwipeUp() {
+                        super.onSwipeUp()
+
+                    }
+
+                    override fun onSwipeDown() {
+                        super.onSwipeDown()
+                    }
+
+                })
 
 
             }else{
@@ -231,6 +256,33 @@ class ProfileMatch(
                     it.setVolume(0f,0f)
                     ad_videoview.start()
                 }
+
+                ad_videoview.setOnTouchListener(object : OnSwipeTouchListener(context) {
+                    override fun onSwipeLeft() {
+                        super.onSwipeLeft()
+                        listener.onCategoryClick(
+                            courseData[position], 5, null, mageview
+                        )
+                    }
+                    override fun onSwipeRight() {
+                        super.onSwipeRight()
+                        listener.onCategoryClick(
+                            courseData[position], 2, null, mageview
+                        )
+                    }
+
+                    @SuppressLint("ClickableViewAccessibility")
+                    override fun onSwipeUp() {
+                        super.onSwipeUp()
+
+                    }
+
+                    override fun onSwipeDown() {
+                        super.onSwipeDown()
+                    }
+
+                })
+
 
             }
         }

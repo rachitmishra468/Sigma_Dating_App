@@ -71,13 +71,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
 
-    //Ad
-    lateinit var ad_video: VideoView
-    lateinit var close_ad_img: ImageView
-    lateinit var ad_main: ConstraintLayout
-    lateinit var ads_image_view: ImageView
-    lateinit var progress_bar_ads: ProgressBar
-    lateinit var skip_text: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,30 +125,18 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.USER_ID
             )
         )
-        (activity as Home).homeviewmodel.app_ads =
-            MutableLiveData<Resource<advertisingData>>()
-        (activity as Home).homeviewmodel.get_ads_list("mainscreen")
+
 
         subscribe_bids()
         subscribe_Login_User_details()
-        ad_main = binding.root.findViewById(R.id.ad_main)
-        ad_main.visibility=View.GONE
-        subscribe_app_ads()
+
+
         footer_transition()
 
 
         //Ad view
 
-        progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
-        ads_image_view = binding.root.findViewById(R.id.ads_image_view)
-        close_ad_img = binding.root.findViewById(R.id.close_ad_img)
-        skip_text = binding.root.findViewById(R.id.skip_text)
-        ad_main.visibility = View.VISIBLE
-        ad_video = binding.root.findViewById(R.id.videoview)
-        close_ad_img.setOnClickListener {
-            ad_video.stopPlayback()
-            ad_main.visibility = View.GONE
-        }
+
         return binding.root
     }
 
@@ -376,38 +358,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-    fun subscribe_app_ads() {
-        (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    ad_main.visibility=View.VISIBLE
-                    it.data.let { res ->
-                        if (res?.status == true) {
-                            try {
-                                Log.d("TAG@123", "ads data count  :" + it.data.toString())
-                                Home.ads_list = it.data?.ads as ArrayList<advertising_model>
-                                if (Home.ads_list.isNotEmpty()) {
-                                    ads_list_index = 0
-                                    start_ads_listing(Home.ads_list)
-                                }
-                            } catch (e: Exception) {
-                                Log.d("TAG@123", "Exception  :" + e.message.toString())
-                            }
-                        }
-
-                    }
-                }
-                Status.LOADING -> {
-                    ad_main.visibility=View.GONE
-                }
-                Status.ERROR -> {
-                    ad_main.visibility=View.GONE
-
-                }
-            }
-        })
-
-    }
 
 
     fun subscribe_bids() {
@@ -552,86 +502,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-    fun start_ads_listing(list: ArrayList<advertising_model>) {
-        Log.d("TAG@123", "start_ads_listing")
-
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                if (ads_list_index == list.size) {
-                    ads_list_index = 0
-                }
-                if (list[ads_list_index].type.equals("image")) {
-                    ads_image_view.visibility = View.VISIBLE
-                    ad_video.visibility = View.GONE
-                    skip_text.visibility = View.GONE
-
-                    Log.d("TAG@123", "start_ads_listing" + list[ads_list_index].filename)
-                    // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
-                    progress_bar_ads.visibility = View.VISIBLE
-                    Glide.with(requireContext()).load(list[ads_list_index].filename)
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                progress_bar_ads.visibility = View.GONE
-                                return false;
-                            }
-
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                progress_bar_ads.visibility = View.GONE
-                                return false;
-                            }
-
-                        }).into(ads_image_view);
-
-                    ads_image_view.setOnClickListener {
-                        requireContext().let {
-                            open_ad_link(list[ads_list_index].ad_link, it)
-                        }
-                    }
-
-                    ads_list_index++
-                    handler.postDelayed(this, 10000)//1 sec delay
-                } else {
-                    skip_text.visibility = View.VISIBLE
-                    ad_video.visibility = View.VISIBLE
-                    progress_bar_ads.visibility = View.VISIBLE
-                    ads_image_view.visibility = View.GONE
-                    ad_video.setVideoPath(list[ads_list_index].filename)
-                    ad_video.setOnPreparedListener {
-                        progress_bar_ads.visibility = View.GONE
-                        ad_video.start()
-                    }
-
-                    skip_text.setOnClickListener {
-                        ads_list_index++
-                        start_ads_listing(Home.ads_list)
-                    }
-
-                    ad_video.setOnCompletionListener {
-                        ad_video.start()
-                    }
-
-                    ad_video.setOnClickListener {
-                        requireContext().let {
-                            open_ad_link(list[ads_list_index].ad_link, it)
-                        }
-                    }
-                }
-
-            }
-        }, 0)
-    }
 
 
 }
