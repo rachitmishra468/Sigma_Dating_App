@@ -30,7 +30,6 @@ class OnBoardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.onboarding_activity)
-
         mViewPager = findViewById(R.id.viewPager)
         mViewPager.setOnTouchListener(null)
         img_back = findViewById<ImageView>(R.id.img_back)
