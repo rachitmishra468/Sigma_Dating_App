@@ -195,6 +195,10 @@
             android:id="@+id/action_settings_frag_to_ContactUs"
             app:destination="@id/contactUs" />
 
+        <action
+            android:id="@+id/action_setting_to_planslist"
+            app:destination="@id/subscriptionPlanList" />
+
     </fragment>
     <fragment
         android:id="@+id/editProfile"
@@ -359,6 +363,8 @@
         <action
             android:id="@+id/action_FirstFragment_to_notification"
             app:destination="@id/all_Activitys" />
+
+
     </fragment>
     <fragment
         android:id="@+id/comment_post"
@@ -398,6 +404,116 @@
             />
 
     </fragment>
+
+
+
+    <fragment
+        android:id="@+id/subscriptionPlanDiscription"
+        android:name="com.SigmaDating.app.views.membership.Subscription_Plan_Discription"
+        android:label="Subscription_Plan_Discription" >
+        <argument
+            android:name="price"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="plan_description"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="plan_name"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="colour"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="0"
+            />
+
+        <action
+            android:id="@+id/action_plandiscription_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+
+        <action
+            android:id="@+id/action_plandiscription_to_notification"
+            app:destination="@id/notificationSettingsFragment" />
+
+        <action
+            android:id="@+id/action_planslIist_to_notification"
+            app:destination="@id/notificationSettingsFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_chat"
+            app:destination="@id/chatListFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_all_activity"
+            app:destination="@id/all_Activitys" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/subscriptionPlanList"
+        android:name="com.SigmaDating.app.views.membership.SubscriptionPlanList"
+        android:label="SubscriptionPlanList" >
+
+
+        <action
+            android:id="@+id/action_planslIist_to_discription"
+            app:destination="@id/subscriptionPlanDiscription" />
+
+        <action
+            android:id="@+id/action_planslIist_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+
+        <action
+            android:id="@+id/action_planslIist_to_notification"
+            app:destination="@id/notificationSettingsFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_chat"
+            app:destination="@id/chatListFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" >
+        </action>
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_FirstFragment_to_all_activity"
+            app:destination="@id/all_Activitys" />
+
+    </fragment>
+
 
 
 </navigation>

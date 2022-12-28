@@ -51,7 +51,12 @@ interface ApiService {
     @GET("common/listschoolscommunity")
     suspend fun listSchoolFeternity(): Response<SchoolCommunityResponse>
 
-    //@Body jsonObject: JsonObject
+    @POST("users/subscribe_membership")
+    suspend fun PostSubscriptionPlansdata(@Body jsonObject: JsonObject): Response<SubscriptionPlanData>
+
+    @GET("users/plans")
+    suspend fun getSubscriptionPlanslist(): Response<SubscriptionPlanData>
+
     @POST("common/ads")
     suspend fun listads(@Body jsonObject: JsonObject): Response<advertisingData>
 
@@ -79,15 +84,11 @@ interface ApiService {
     @POST("dating/doswipe")
     suspend fun get_profile_swipe_details(@Body jsonObject: JsonObject): Response<Loginmodel>
 
-
     @POST("post/deletepost")
     suspend fun deletepost(@Body jsonObject: JsonObject): Response<delelepost>
 
     @POST("post/changestatus")
     suspend fun PostStatusChange(@Body jsonObject: JsonObject): Response<delelepost>
-
-
-
 
     @POST("post/showmyposts")
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>

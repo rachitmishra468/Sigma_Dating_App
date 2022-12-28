@@ -160,6 +160,9 @@ class SettingsFragment : Fragment() {
         _binding.advertisin.setOnClickListener {
             startActivity(Intent(requireContext(), AdvertisingActivity::class.java))
         }
+        _binding.textViewMembership.setOnClickListener {
+            findNavController().navigate(R.id.action_setting_to_planslist)
+        }
 
         _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             notification_flag = if(isChecked) 1 else 0

@@ -52,6 +52,9 @@ class HomeViewModel @Inject constructor(
     lateinit var All_comment: MutableLiveData<Resource<Comment_model>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
+
+    lateinit var subscriptionPlans: MutableLiveData<Resource<SubscriptionPlanData>>
+    lateinit var subscription_post: MutableLiveData<Resource<SubscriptionPlanData>>
     val user_bids: MutableLiveData<Resource<home_model>>
     lateinit var app_ads: MutableLiveData<Resource<advertisingData>>
 
@@ -116,8 +119,6 @@ class HomeViewModel @Inject constructor(
                     Log.d("TAG@123", "error in get token call ")
                     ctrateToken_data.postValue(Resource.error(it.errorBody().toString(), null))
                 }
-
-
             }
         }
     }
@@ -518,10 +519,11 @@ class HomeViewModel @Inject constructor(
         interested_in:String,
         show_me:String,
         age_range:String,
-        distance:String
+        distance:String,
+        gender:String
     ) {
 
-        update_profile(id, university, community, interests, about, is_private,interested_in,show_me,age_range,distance)
+        update_profile(id, university, community, interests, about, is_private,interested_in,show_me,age_range,distance,gender)
 
 
     }
@@ -591,7 +593,8 @@ class HomeViewModel @Inject constructor(
         interested_in:String,
         show_me:String,
         age_range:String,
-        distance:String
+        distance:String,
+        gender:String
     ) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             update_profile.postValue(Resource.loading(null))
@@ -606,6 +609,7 @@ class HomeViewModel @Inject constructor(
             jsonObject.addProperty("show_me", show_me)
             jsonObject.addProperty("age_range", age_range)
             jsonObject.addProperty("distance", distance)
+            jsonObject.addProperty("gender", gender)
             Log.d("TAG@123", "done Update" + jsonObject.toString())
             mainRepository.Update_profile(jsonObject).let {
                 if (it.isSuccessful) {
@@ -660,6 +664,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    fun getSubscriptionPlans() = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "Notification")
+            mainRepository.getSubscriptionPlanslist().let {
+                if (it.isSuccessful) {
+                    subscriptionPlans.postValue(Resource.success(it.body()))
+                } else {
+                    subscriptionPlans.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
+
+
+    fun postSubscriptionData(id: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "postSubscriptionData"+id)
+            mainRepository.postSubscriptionPlansdata(id).let {
+                if (it.isSuccessful) {
+                    subscription_post.postValue(Resource.success(it.body()))
+                } else {
+                    subscription_post.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
 
 
 

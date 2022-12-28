@@ -29,4 +29,8 @@
     <color name="colorPrimary">#C6C6C6</color>
     <color name="red">#BF0101</color>
     <color name="green">#04A50B</color>
+
+    <color name="plans_color_one">#EA2391</color>
+    <color name="plans_color_tew">#34488D</color>
+    <color name="plans_color_there">#6C4294</color>
 </resources>

@@ -36,6 +36,10 @@ interface ApiHelper {
 
     suspend fun getlistads(jsonObject: JsonObject):Response<advertisingData>
 
+    suspend fun getSubscriptionPlanslist():Response<SubscriptionPlanData>
+
+    suspend fun PostSubscriptionPlansdata(jsonObject: JsonObject):Response<SubscriptionPlanData>
+
     suspend fun upload_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun delete_images(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun Update_profile(jsonObject: JsonObject):Response<Loginmodel>

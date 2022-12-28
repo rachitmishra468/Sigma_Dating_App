@@ -48,7 +48,8 @@ class MainRepository @Inject constructor(
     suspend fun get_notification(jsonObject: String)=apiHelper.get_notification(jsonObject)
     suspend fun deletenotification(jsonObject: JsonObject)=apiHelper.deletenotification(jsonObject)
 
-
+    suspend fun  getSubscriptionPlanslist()=apiHelper.getSubscriptionPlanslist()
+    suspend fun  postSubscriptionPlansdata(jsonObject: JsonObject)=apiHelper.PostSubscriptionPlansdata(jsonObject)
 
 
 

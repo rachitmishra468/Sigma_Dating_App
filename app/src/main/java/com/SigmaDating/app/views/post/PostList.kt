@@ -90,6 +90,10 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         close_ad_img=binding.root.findViewById(R.id.close_ad_img)
         ad_video = binding.root.findViewById(R.id.videoview)
 
+        _binding!!.userProfilePhoto.setOnClickListener {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
         close_ad_img.setOnClickListener {
             if(ad_video.isPlaying){
                 ad_video.stopPlayback()

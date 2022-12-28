@@ -114,6 +114,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var show_me=""
     var age_range = ""
     var distance = ""
+    var gender = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,7 +166,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         interested_in,
                         show_me,
                         age_range,
-                        distance
+                        distance,
+                        gender
                     )
                 }
 
@@ -267,6 +270,14 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
              Log.d("TAG@123", "profile : "+rb.text.toString())
 
         }
+
+        _binding?.genderWomen?.setChecked(true);
+        _binding!!.genderRb.setOnCheckedChangeListener { group, checkedId ->
+            val rb = _binding!!.root.findViewById(checkedId) as RadioButton
+            gender = rb.text.toString()
+            Log.d("TAG@123", "show me  $gender")
+        }
+
 
         _binding!!.rgShowme.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding!!.root.findViewById(checkedId) as RadioButton
@@ -631,6 +642,17 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
                                         }
                                     }
+
+                                    if (it.data?.user?.gender?.isEmpty() == false) {
+                                        gender = it.data.user.gender
+                                        when (gender) {
+                                            "Women" -> _binding?.genderWomen?.setChecked(true);
+                                            "Men" -> _binding?.genderMen?.setChecked(true);
+                                            "WOMEN" -> _binding?.genderWomen?.setChecked(true);
+                                            "MEN" -> _binding?.genderMen?.setChecked(true);
+                                        }
+                                    }
+
                                     if (it.data?.user?.show_me?.isEmpty() == false) {
                                         show_me = it.data.user.show_me
                                         when (show_me) {
