@@ -420,7 +420,7 @@
                 android:paddingTop="3dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="3dp"
-                android:text="Women"
+                android:text="Woman"
                 android:textColor="@drawable/text_selector_default"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -442,7 +442,7 @@
                 android:paddingTop="3dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="3dp"
-                android:text="Men"
+                android:text="Man"
                 android:textColor="@drawable/text_selector_default"
                 android:textSize="14sp"
                 android:textStyle="bold" />

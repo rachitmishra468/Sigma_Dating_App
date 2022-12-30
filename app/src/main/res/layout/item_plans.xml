@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
-    android:layout_margin="5dp">
+    android:padding="0dp"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-       android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-
+        android:layout_height="wrap_content"
+       android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         app:cardBackgroundColor="@color/light_blue_600"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="15dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:weightSum="3"
             android:orientation="vertical">
@@ -32,22 +31,24 @@
             <TextView
                 android:id="@+id/plan_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="plan_name"
+                android:layout_marginTop="5dp"
                 android:textColor="@color/white"
-                android:textSize="12dp"
+                android:textSize="16dp"
                 ></TextView>
 
             <TextView
                 android:id="@+id/plane_price"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="plan_name"
-                android:textSize="18dp"
+                android:text="Plan_name"
+                android:textSize="30dp"
+                android:layout_margin="15dp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 ></TextView>
@@ -55,11 +56,12 @@
             <TextView
                 android:id="@+id/plan_discription"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="12dp"
+                android:textSize="16dp"
                 android:textColor="@color/white"
+                android:layout_marginBottom="5dp"
                 android:text="plan_name"></TextView>
 
         </LinearLayout>
@@ -71,7 +73,7 @@
         android:id="@+id/navigatetodis"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginRight="-17dp"
+        android:layout_marginRight="-22dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="24dp"
         app:cardUseCompatPadding="true"

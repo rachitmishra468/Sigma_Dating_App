@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -313,6 +314,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         dialog.setContentView(R.layout.full_screen_dialog)
         val logout = dialog.findViewById<Button>(R.id.logout)
         val cancle = dialog.findViewById<Button>(R.id.cancel)
+        dialog.setOnKeyListener { dialog, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_UP) {
+                (activity as Home).onBackPressed()
+                dialog.dismiss()
+            }
+            true
+        }
         logout.setOnClickListener {
             (activity as Home).sharedPreferencesStorage.setValue(
                 AppConstants.Disclaimer,
@@ -327,6 +335,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             )
             (activity as Home).onBackPressed()
         }
+
         dialog.show()
     }
 
@@ -500,7 +509,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }
-
 
 
 

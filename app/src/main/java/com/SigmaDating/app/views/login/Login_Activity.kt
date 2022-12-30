@@ -509,8 +509,6 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-
-                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
                             phone_number_layout.visibility = View.GONE
@@ -519,7 +517,6 @@ class Login_Activity : AppCompatActivity() {
                             editText_otp?.visibility = View.VISIBLE
 
                         } else {
-                            sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
                             Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)
                                 .show()
                         }

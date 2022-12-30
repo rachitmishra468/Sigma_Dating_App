@@ -69,23 +69,23 @@ class SubscriptionAdapter(var context: Context, private var listener: OnCategory
 
         when (color) {
             0 -> {
-                holder.main_layout.setCardBackgroundColor(Color.parseColor("#EA2391"))
-                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#34488D"))
+                holder.main_layout.setCardBackgroundColor(Color.parseColor("#34488D"))
+                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#EA2391"))
                 data.color=color.toString()
                 color = 1
 
 
             }
             1 -> {
-                holder.main_layout.setCardBackgroundColor(Color.parseColor("#34488D"))
-                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#EA2391"))
+                holder.main_layout.setCardBackgroundColor(Color.parseColor("#EA2391"))
+                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#34488D"))
                 data.color=color.toString()
                 color = 2
 
             }
             2 -> {
                 holder.main_layout.setCardBackgroundColor(Color.parseColor("#6C4294"))
-                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#34488D"))
+                holder.navigatetodis.setCardBackgroundColor(Color.parseColor("#EA2391"))
                 data.color=color.toString()
                 color = 0
 

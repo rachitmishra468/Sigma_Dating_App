@@ -646,10 +646,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     if (it.data?.user?.gender?.isEmpty() == false) {
                                         gender = it.data.user.gender
                                         when (gender) {
-                                            "Women" -> _binding?.genderWomen?.setChecked(true);
-                                            "Men" -> _binding?.genderMen?.setChecked(true);
-                                            "WOMEN" -> _binding?.genderWomen?.setChecked(true);
-                                            "MEN" -> _binding?.genderMen?.setChecked(true);
+                                            "Woman" -> _binding?.genderWomen?.setChecked(true);
+                                            "Man" -> _binding?.genderMen?.setChecked(true);
+                                            "WOMAN" -> _binding?.genderWomen?.setChecked(true);
+                                            "MAN" -> _binding?.genderMen?.setChecked(true);
                                         }
                                     }
 

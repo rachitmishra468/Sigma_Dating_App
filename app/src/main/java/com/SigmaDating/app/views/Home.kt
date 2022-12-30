@@ -15,6 +15,7 @@ import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.model.Bids
 import com.SigmaDating.app.model.Pages
 import com.SigmaDating.app.model.advertising_model
+import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -62,6 +63,13 @@ class Home : AppCompatActivity() {
         }
     }
 
+
+    override fun onBackPressed() {
+        if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)){
+            finish()
+        }
+        super.onBackPressed()
+    }
 
     fun initializeGoogleSignIn() {
         try {
