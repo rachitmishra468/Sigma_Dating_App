@@ -7,7 +7,11 @@ import androidx.lifecycle.asLiveData
 import androidx.multidex.MultiDex
 import com.SigmaDating.app.model.Pages
 import com.SigmaDating.app.network.ConnectivityMonitorImpl
+import com.google.android.gms.common.wrappers.InstantApps
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
 
@@ -15,6 +19,7 @@ import dagger.hilt.android.HiltAndroidApp
 class Sigmadatingapp : Application()  {
 
     private val instance: Sigmadatingapp? = null
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     fun get(): Sigmadatingapp? {
         return instance
@@ -23,6 +28,7 @@ class Sigmadatingapp : Application()  {
     override fun onCreate() {
         super.onCreate()
         AppReseources.setAppContext(applicationContext)
+        firebaseAnalytics = Firebase.analytics
         MultiDex.install(this);
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -36,8 +42,13 @@ class Sigmadatingapp : Application()  {
 
         })
 
-        get_device_id()
+        if (InstantApps.isInstantApp(this)) {
+            firebaseAnalytics.setUserProperty("ANALYTICS_USER_PROP", "STATUS_INSTANT");
+        } else {
+            firebaseAnalytics.setUserProperty("ANALYTICS_USER_PROP", "STATUS_INSTALLED");
+        }
 
+        get_device_id()
 
     }
     companion object {

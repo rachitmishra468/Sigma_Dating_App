@@ -39,6 +39,8 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/radio_flat_text_selector.xml" value="0.1111111111111111" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/radius_border_bg.xml" value="0.1111111111111111" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/signup_circle_bg.xml" value="0.165234375" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/subscribe_blue.xml" value="0.102" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/subscribe_button_red.xml" value="0.124" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/tootbar_bg.xml" value="0.2046875" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/top_right_left_circle_bg.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/visibility_off_post.xml" value="0.1" />
@@ -82,7 +84,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_school_input.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_second.xml" value="0.18" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_subscription__plan__discription.xml" value="0.22" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_subscription__plan__discription.xml" value="0.33" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_subscription_plan_list.xml" value="0.2" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/full_screen_dialog.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/incoming_message_list_item.xml" value="0.11480263157894736" />

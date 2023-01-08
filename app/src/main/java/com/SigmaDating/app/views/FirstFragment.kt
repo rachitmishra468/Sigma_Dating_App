@@ -302,7 +302,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                 }
             }
+
             5 -> cardViewChanger?.throwLeft()
+            7->{
+                requireContext().let {
+                    position?.ad_link?.let { it1 -> AppUtils.open_ad_link(it1, it) }
+                }
+            }
             6 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
@@ -509,8 +515,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }
-
-
 
 }
 

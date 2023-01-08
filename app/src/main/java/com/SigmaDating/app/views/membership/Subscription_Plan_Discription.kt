@@ -110,23 +110,23 @@ class Subscription_Plan_Discription : Fragment() {
         when (color) {
             0 -> {
                 _binding!!.mainLayoutDis.setCardBackgroundColor(Color.parseColor("#34488D"))
-                _binding!!.buyNow.setBackgroundColor(Color.parseColor("#EA2391"))
+               // _binding!!.buyNow.setBackgroundColor(Color.parseColor("#EA2391"))
                 // color = 1
 
             }
             1 -> {
                 _binding!!.mainLayoutDis.setCardBackgroundColor(Color.parseColor("#EA2391"))
-                _binding!!.buyNow.setBackgroundColor(Color.parseColor("#34488D"))
+              //  _binding!!.buyNow.setBackgroundColor(Color.parseColor("#34488D"))
 
             }
             2 -> {
                 _binding!!.mainLayoutDis.setCardBackgroundColor(Color.parseColor("#6C4294"))
-                _binding!!.buyNow.setBackgroundColor(Color.parseColor("#EA2391"))
+             //   _binding!!.buyNow.setBackgroundColor(Color.parseColor("#EA2391"))
 
             }
             else -> {
                 _binding!!.mainLayoutDis.setCardBackgroundColor(Color.parseColor("#EA2391"))
-                _binding!!.buyNow.setBackgroundColor(Color.parseColor("#34488D"))
+            //    _binding!!.buyNow.setBackgroundColor(Color.parseColor("#34488D"))
 
 
             }

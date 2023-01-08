@@ -175,9 +175,7 @@ class ProfileMatch(
             }
 
             (v.findViewById<View>(R.id.cancle_view) as ImageView).setOnClickListener {
-                listener.onCategoryClick(
-                    courseData[position], 5, null, mageview
-                )
+                listener.onCategoryClick(courseData[position], 5, null, mageview)
             }
 
             (v.findViewById<View>(R.id.idIVCourse) as ImageView).setOnClickListener {
@@ -214,6 +212,10 @@ class ProfileMatch(
 
                     }).into(ad_image_view);
 
+                ad_image_view.setOnClickListener {
+                    listener.onCategoryClick(courseData[position], 7, null, ad_image_view)
+                }
+
                 ad_image_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
                     override fun onSwipeLeft() {
                         super.onSwipeLeft()
@@ -248,13 +250,16 @@ class ProfileMatch(
                 ad_videoview.setVideoPath(courseData[position].filename);
 
                 ad_videoview.setOnCompletionListener {
-
-                        ad_videoview.start()
+                    ad_videoview.start()
                 }
                 ad_videoview.setOnPreparedListener {
                     progress_bar_ads.visibility=View.GONE
                     it.setVolume(0f,0f)
                     ad_videoview.start()
+                }
+
+                ad_videoview.setOnClickListener {
+                    listener.onCategoryClick(courseData[position], 7, null, ad_image_view)
                 }
 
                 ad_videoview.setOnTouchListener(object : OnSwipeTouchListener(context) {

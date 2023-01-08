@@ -20,6 +20,10 @@ import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.google.gson.JsonObject
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -33,16 +37,14 @@ class Home : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     val homeviewmodel: HomeViewModel by viewModels()
     lateinit var mGoogleSignInClient: GoogleSignInClient
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
-
         val navController = findNavController(com.SigmaDating.R.id.nav_host_fragment_content_home)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -55,14 +57,12 @@ class Home : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-
     public fun clearBackStack() {
         val fm = supportFragmentManager
         for (i in 0 until fm.backStackEntryCount) {
             fm.popBackStack()
         }
     }
-
 
     override fun onBackPressed() {
         if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)){
@@ -80,6 +80,15 @@ class Home : AppCompatActivity() {
 
                 Log.d("TAG@123", "GoogleSignInOptions Logout ")
             }
+
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                param(
+                    "USER_LOGOUT",
+                    sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+
+            }
+
 
         } catch (e: Exception) {
         }
@@ -128,6 +137,20 @@ class Home : AppCompatActivity() {
 
 
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+       // firebaseAnalytics = Firebase.analytics
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(
+                "USER_ID",
+                sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+        }
     }
 
 

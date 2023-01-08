@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "574636637575-g3e7pn4tjo9j575l0m9kcrni1r573jp6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.SigmaDating.app",
+            "certificate_hash": "c552614b56db5379a2d7a8cbd64e78494ff5c492"
+          }
+        },
+        {
           "client_id": "574636637575-gt64iersihk0j2o8ulm5idon8trcbr8a.apps.googleusercontent.com",
           "client_type": 3
         }
