@@ -81,7 +81,6 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         ad_main.visibility=View.GONE
         subscribe_app_ads()
 
-
         //Ad view
         progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)

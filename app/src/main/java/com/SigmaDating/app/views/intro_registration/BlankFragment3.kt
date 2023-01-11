@@ -200,7 +200,7 @@ class BlankFragment3 : Fragment() {
                         it.data?.let { res ->
                             if (res.status) {
                                 Log.d("TAG@123","status ${res.message}")
-                                (activity as OnBoardingActivity?)?.setCurrentItem(4, true)
+                                (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
                             } else {
                                 Log.d("TAG@123","status ${res.message}")
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()

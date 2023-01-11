@@ -93,7 +93,7 @@ class Password : Fragment(), TextWatcher {
                     editText_password_confirm.text.toString()
                 )
 
-                (activity as OnBoardingActivity?)?.setCurrentItem(7, true)
+                (activity as OnBoardingActivity?)?.setCurrentItem(8, true)
             }
 
         }

@@ -55,6 +55,7 @@ class SettingsFragment : Fragment() {
     lateinit var _binding: FragmentSettingsBinding
     private val binding get() = _binding
     var notification_flag = 1;
+    var advertisement_flag = 1;
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
     var location_text = ""
@@ -169,6 +170,14 @@ class SettingsFragment : Fragment() {
 
         })
 
+
+        _binding.addSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            advertisement_flag = if(isChecked) 1 else 0
+
+            Log.d("TAG@123","advertisement_flag :"+advertisement_flag)
+
+        })
+
         _binding.updateSetting.setOnClickListener {
 
             (activity as Home).homeviewmodel.setting_update_details =
@@ -191,6 +200,9 @@ class SettingsFragment : Fragment() {
            // jsonObject.addProperty("show_me", show_me)
          //   jsonObject.addProperty("interested_in", interested_in)
             jsonObject.addProperty("notifications", notification_flag)
+            jsonObject.addProperty("ads", advertisement_flag)
+
+
             Log.d("TAG@123", "interested_in :" + jsonObject.toString())
             (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
         }
@@ -287,7 +299,7 @@ class SettingsFragment : Fragment() {
                                 location_text = it.data.user.location.toString()
                             }
                             _binding.switch1.isChecked = it.data?.user?.notifications == 1
-
+                            _binding.addSwitch.isChecked = it.data?.user?.advertisement == 1
 
 
 

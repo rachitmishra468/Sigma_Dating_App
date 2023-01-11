@@ -28,6 +28,7 @@ data class User(
     val post_message:String,
     val is_private:String,
     val notifications:Int,
+    val advertisement:Int,
     var photos:ArrayList<String> = arrayListOf()
 
 

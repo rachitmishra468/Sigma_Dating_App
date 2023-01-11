@@ -96,6 +96,10 @@ class User_Register @Inject constructor(
                 "longitude",
                 sharedPreferencesStorage.getString(AppConstants.longitude)
             )
+            jsonObject.addProperty(
+                "show_me",
+                sharedPreferencesStorage.getString(AppConstants.showme)
+            )
             jsonObject.addProperty("isSocialLogin", "")
             jsonObject.addProperty("upload_image", bitmap)
             jsonObject.addProperty("device_token", Sigmadatingapp.fcm_token)

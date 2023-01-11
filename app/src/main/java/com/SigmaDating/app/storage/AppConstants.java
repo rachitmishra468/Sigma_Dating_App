@@ -40,6 +40,7 @@ public class AppConstants {
     public static final String email="Email";
     public static final String facebookId="facebookId";
     public static final String gender="gender";
+    public static final String showme="showme";
     public static final String appleId="appleId";
 
     public static final String interested_in="interested_in";

@@ -111,7 +111,7 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
                     ).show()
 
                 }else {
-                    (activity as OnBoardingActivity?)?.setCurrentItem(6, true)
+                    (activity as OnBoardingActivity?)?.setCurrentItem(7, true)
                 }
 
         }
