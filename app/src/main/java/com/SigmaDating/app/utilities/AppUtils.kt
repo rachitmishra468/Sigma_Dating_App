@@ -60,7 +60,7 @@ object AppUtils {
         dialog?.getWindow()?.setDimAmount(0f);
         dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
         dialog = builder.create()
-        (dialog as AlertDialog?)?.setCancelable(false)
+        (dialog as AlertDialog?)?.setCancelable(true)
         val groupcreate: LottieAnimationView =
             view.findViewById<View>(R.id.email) as LottieAnimationView
         groupcreate.setAnimation(R.raw.loader)

@@ -69,6 +69,7 @@
         <action
             android:id="@+id/action_SecondFragment_to_Full_Screen_Fragment"
             app:destination="@id/fullScreenImageFragment" />
+
         <action
             android:id="@+id/action_SecondFragment_to_postlist"
             app:destination="@id/postList" />
@@ -76,6 +77,7 @@
         <action
             android:id="@+id/action_SecondFragment_to_Report_feb"
             app:destination="@id/reportUserFragment" />
+
     </fragment>
 
 
@@ -186,11 +188,21 @@
         android:name="com.SigmaDating.app.views.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
+        <argument
+            android:name="Url_Link"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
+        <argument
+            android:name="Hadder_text"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null"
+            />
         <action
             android:id="@+id/action_settings_frag_to_SecondFragment"
             app:destination="@id/SecondFragment" />
-
-
         <action
             android:id="@+id/action_settings_frag_to_ContactUs"
             app:destination="@id/contactUs" />
@@ -241,8 +253,6 @@
             android:id="@+id/action_userChatFragment_to_notificationSettingsFragment"
             app:destination="@id/notificationSettingsFragment" />
     </fragment>
-
-
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.SigmaDating.app.NotificationSettingsFragment"

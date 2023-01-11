@@ -73,7 +73,6 @@ class Home : AppCompatActivity() {
 
     fun initializeGoogleSignIn() {
         try {
-
             mGoogleSignInClient =
                 GoogleSignIn.getClient(this, AppReseources.getGoogleSignInOptions()!!)
             mGoogleSignInClient.signOut().addOnCompleteListener {
@@ -127,18 +126,14 @@ class Home : AppCompatActivity() {
 
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
-                var page = pages.get(i)
+                val page = pages.get(i)
                 if (alias.equals(page.alias)) {
                     return page
                 }
             }
             return null
         }
-
-
-
     }
-
 
     override fun onResume() {
         super.onResume()

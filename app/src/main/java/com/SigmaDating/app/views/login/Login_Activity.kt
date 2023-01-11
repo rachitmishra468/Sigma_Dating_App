@@ -51,6 +51,7 @@ class Login_Activity : AppCompatActivity() {
     private val Public_profile="public_profile"
     private var mCallbackManager: CallbackManager? = null
     val mainViewModel: LoginViewModel by viewModels()
+    private var phone_otp_send:Boolean=false
 
 
 
@@ -299,6 +300,13 @@ class Login_Activity : AppCompatActivity() {
         emailLayoutLayout.visibility = View.GONE
         button_login_email_phone_both.setText(R.string.send_otp_text)
         PHONE_LOGIN = true
+        if(phone_otp_send){
+            phone_number_layout.visibility = View.GONE
+            button_login_email_phone_both.visibility = View.GONE
+            verfie_otp?.visibility = View.VISIBLE
+            editText_otp?.visibility = View.VISIBLE
+        }
+
     }
 
     fun sign_up(view: View) {
@@ -515,6 +523,10 @@ class Login_Activity : AppCompatActivity() {
                             button_login_email_phone_both.visibility = View.GONE
                             verfie_otp?.visibility = View.VISIBLE
                             editText_otp?.visibility = View.VISIBLE
+
+                            if (PHONE_LOGIN) {
+                                phone_otp_send =true
+                            }
 
                         } else {
                             Toast.makeText(this@Login_Activity, res!!.message, Toast.LENGTH_LONG)

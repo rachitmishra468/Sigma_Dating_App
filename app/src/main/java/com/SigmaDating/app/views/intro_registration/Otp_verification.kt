@@ -25,6 +25,8 @@ class Otp_verification : Fragment() {
     private lateinit var _binding:FragmentOtpVerificationBinding
     private var mUser_Verification:Boolean=false
     private var email=""
+    private var phone_otp_send:Boolean=false
+    private var email_otp_send:Boolean=false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentOtpVerificationBinding.inflate(inflater, container, false)
@@ -37,10 +39,18 @@ class Otp_verification : Fragment() {
             _binding.phoneNumberVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.black))
             _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.white))
-            (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
-            (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(false)
+
             email="email"
-            sent_otp()
+            if(!email_otp_send){
+
+                (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
+                (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(false)
+                sent_otp()
+            }else{
+                Toast.makeText(requireContext(),"Already OTP Sent to Your Email .",Toast.LENGTH_SHORT).show()
+
+            }
+
         }
 
 
@@ -50,10 +60,16 @@ class Otp_verification : Fragment() {
             _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             _binding.phoneNumberVerification.setTextColor(this.getResources().getColor(R.color.black))
             _binding.emailButtonVerification.setTextColor(this.getResources().getColor(R.color.white))
-            (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
-            (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(true)
             email="phone"
-            sent_otp()
+            if(!phone_otp_send){
+                (activity as OnBoardingActivity?)?.userRegister?.sent_otp = MutableLiveData<Resource<Loginmodel>>()
+                (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(true)
+                sent_otp()
+            }else{
+                Toast.makeText(requireContext(),"Already OTP Sent to Your Phone Number.",Toast.LENGTH_SHORT).show()
+
+            }
+
         }
 
         _binding.verificationDone.setOnClickListener {
@@ -94,6 +110,13 @@ class Otp_verification : Fragment() {
                             _binding.editTextOtpVerification.visibility=View.VISIBLE
                             _binding.verfieOtp.visibility=View.VISIBLE
 
+                            if(  email.equals("email")){
+
+                                email_otp_send= true
+                            }else{
+                                phone_otp_send = true
+                            }
+
                         } else {
                             Log.d("TAG@123",res!!.message)
                             Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
@@ -121,6 +144,8 @@ class Otp_verification : Fragment() {
                         if (res?.status == true) {
                             try {
                                 mUser_Verification=true
+                                phone_otp_send = false
+                                email_otp_send = false
                                 (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
                               //  _binding.verificationDone.setBackgroundResource(R.drawable.signup_circle_bg)
                               //  _binding.verificationDone.setTextColor(resources.getColor(R.color.white))

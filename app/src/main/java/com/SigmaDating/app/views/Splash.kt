@@ -17,9 +17,7 @@ import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.views.login.Login_Activity
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import java.security.MessageDigest
 import javax.inject.Inject
