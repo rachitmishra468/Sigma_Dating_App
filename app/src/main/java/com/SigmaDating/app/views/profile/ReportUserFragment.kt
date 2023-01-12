@@ -118,10 +118,18 @@ class ReportUserFragment : Fragment() {
 
         userID = getArguments()?.getString("user_id")
 
+        try {
+            if (Home.show_block) {
+                tv_report_to_user.visibility = View.GONE
+                tv_block.visibility = View.GONE
+            }
+        } catch (e: Exception) {
+        }
 
-        if(userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))){
-            tv_report_to_user.visibility=View.GONE
-            tv_block.visibility=View.GONE
+
+        if (userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
+            tv_report_to_user.visibility = View.GONE
+            tv_block.visibility = View.GONE
         }
         _binding!!.grideReportFg.setOnClickListener {
             val bundle = Bundle()
@@ -152,7 +160,8 @@ class ReportUserFragment : Fragment() {
 
         }
         tv_block.setOnClickListener {
-            (activity as Home).homeviewmodel.report_block_user= MutableLiveData<Resource<Loginmodel>>()
+            (activity as Home).homeviewmodel.report_block_user =
+                MutableLiveData<Resource<Loginmodel>>()
             subscribe_report_block_user()
             val jsonObject = JsonObject()
             Log.d(
@@ -216,12 +225,11 @@ class ReportUserFragment : Fragment() {
                                     it.tvLocation.setText(res.user.location)
                                     it.tvDescription.setText(res.user.about)
                                     it.universityText.setText(res.user.university)
-                                    if(res.user.greekletter.length>0) {
+                                    if (res.user.greekletter.length > 0) {
                                         it.reportGreek.text = res.user.greekletter
-                                        it.reportGreek.visibility=View.VISIBLE
-                                    }
-                                    else{
-                                        it.reportGreek.visibility=View.GONE
+                                        it.reportGreek.visibility = View.VISIBLE
+                                    } else {
+                                        it.reportGreek.visibility = View.GONE
                                     }
                                     it.textAge.setText("" + res.user.age)
 
@@ -297,7 +305,7 @@ class ReportUserFragment : Fragment() {
         try {
             rootContainer.removeAllViews()
             for (i in list.indices) {
-                if(list.get(i).length>0){
+                if (list.get(i).length > 0) {
                     rootContainer.addView(createChip(list.get(i), i))
                 }
             }
@@ -388,7 +396,8 @@ class ReportUserFragment : Fragment() {
             if (editText_password.text.isEmpty()) {
                 editText_password.error = "Enter Your Reason.."
             } else {
-                (activity as Home).homeviewmodel.report_block_user= MutableLiveData<Resource<Loginmodel>>()
+                (activity as Home).homeviewmodel.report_block_user =
+                    MutableLiveData<Resource<Loginmodel>>()
                 subscribe_report_block_user()
                 val jsonObject = JsonObject()
                 Log.d(

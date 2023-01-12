@@ -132,9 +132,9 @@ class SecondFragment : Fragment() {
         }
 
         _binding?.comments?.setOnClickListener {
-            throw RuntimeException("Test Crash")
             val bundle = Bundle()
             bundle.putString("user_id", userID)
+            bundle.putString("navigate", "Home")
             findNavController().navigate(R.id.action_SecondFragment_to_Report_feb, bundle)
 
         }

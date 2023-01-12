@@ -91,6 +91,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         Log.d("TAG@123", "FirstFragment onCreateView")
         Home.mCurrent_user_token = ""
         Home.mVideoGrant_user_token = ""
+        Home.show_block = true
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         editProfile = binding.root.findViewById(R.id.edit_profile)
         notificationIcon = binding.root.findViewById(R.id.notification)
@@ -104,6 +105,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             val bundle = Bundle()
             userId = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
             bundle.putString("user_id", userId)
+            bundle.putString("navigate", "Home")
             findNavController().navigate(
                 R.id.action_FirstFragment_to_SecondFragment,
                 bundle,
@@ -260,6 +262,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 extras?.let {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
+                    bundle.putString("navigate", "Home")
                     findNavController().navigate(
                         R.id.action_FirstFragment_to_reportUserFragment,
                         bundle,
@@ -269,6 +272,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 } ?: run {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
+                    bundle.putString("navigate", "Home")
                     findNavController().navigate(
                         R.id.action_FirstFragment_to_reportUserFragment,
                         bundle,
@@ -284,6 +288,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 extras?.let {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
+
                     findNavController().navigate(
                         R.id.action_FirstFragment_to_SecondFragment,
                         bundle,
@@ -293,6 +298,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 } ?: run {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
+                    bundle.putString("navigate", "Home")
                     findNavController().navigate(
                         R.id.action_FirstFragment_to_SecondFragment,
                         bundle,

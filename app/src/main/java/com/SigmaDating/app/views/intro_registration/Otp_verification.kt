@@ -1,6 +1,4 @@
 package com.SigmaDating.app.views.intro_registration
-
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,9 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.SigmaDating.R
 import com.SigmaDating.app.model.Loginmodel
-import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
-import com.SigmaDating.app.views.Home
 import com.SigmaDating.databinding.FragmentOtpVerificationBinding
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status

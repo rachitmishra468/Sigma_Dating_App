@@ -122,6 +122,7 @@ class Home : AppCompatActivity() {
         var  match_id:String=""
         var sender_id:String=""
         var chatFlag:Boolean=false
+        var show_block:Boolean=false
         var ads_list_index:Int=0
 
         fun get_settingpage_data(alias: String): Pages? {

@@ -92,6 +92,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         savedInstanceState: Bundle?
     ): View? {
         chatFlag = false
+        Home.show_block=false
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
 
