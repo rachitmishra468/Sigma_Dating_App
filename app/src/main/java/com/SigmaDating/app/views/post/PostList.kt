@@ -32,10 +32,15 @@ import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PostList : Fragment(), PostAdapter.OnItemClickListener {
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private var _binding: FragmentPostListBinding? = null
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
@@ -113,7 +118,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>, mess: String) {
+    private fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>, mess: String) {
 
         if (dataListuser.size == 0) {
             empty_text_view.text = mess
@@ -272,9 +277,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 bundle.putString("comment_title", position.title)
                 bundle.putString("media", position.media)
                 findNavController().navigate(R.id.action_FirstFragment_to_comment, bundle)
+                do_sent_firebaselog("comment_post",position.first_name + " " + position.last_name)
+
             }
             2 -> {
                 save_post_like(position.id)
+                do_sent_firebaselog("like_post",position.first_name + " " + position.id)
+
             }
             3 -> {
                 alertDeletepopup(position)
@@ -513,6 +522,16 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         }, 0)
     }
 
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(
+                event_name,
+                event_log
+            )
+        }
+    }
 
 
 }

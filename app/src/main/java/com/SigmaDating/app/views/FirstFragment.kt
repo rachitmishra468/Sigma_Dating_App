@@ -42,6 +42,8 @@ import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
@@ -72,6 +74,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,6 +162,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "dislike")
                         Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+                        do_sent_firebaselog("do_swipe", "Left")
                     }
                 }
             }
@@ -171,8 +175,14 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "like")
                         Toast.makeText(requireContext(), "Like", Toast.LENGTH_SHORT).show()
+                        do_sent_firebaselog("do_swipe", "Right")
                     } else {
                         Log.d("TAG@123", "open this link " + (dataObject as Bids).ad_link)
+                        do_sent_firebaselog(
+                            "ad view",
+                            "Video ad link :" + (dataObject as Bids).ad_link
+                        )
+
                         requireContext().let { open_ad_link((dataObject as Bids).ad_link, it) }
                     }
                 }
@@ -200,6 +210,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "superlike")
                         Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+                        do_sent_firebaselog("do_swipe", "Top")
                     }
                 }
             }
@@ -279,7 +290,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         null,
                         null
                     )
-
                 }
             }
             2 -> cardViewChanger?.throwRight()
@@ -299,6 +309,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     val bundle = Bundle()
                     bundle.putString("user_id", position?.id)
                     bundle.putString("navigate", "Home")
+
                     findNavController().navigate(
                         R.id.action_FirstFragment_to_SecondFragment,
                         bundle,
@@ -310,9 +321,15 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
 
             5 -> cardViewChanger?.throwLeft()
-            7->{
+            7 -> {
                 requireContext().let {
                     position?.ad_link?.let { it1 -> AppUtils.open_ad_link(it1, it) }
+                }
+
+                if (position?.type.equals("image")) {
+                    do_sent_firebaselog("ad view", "image ad link :" + position?.ad_link)
+                } else {
+                    do_sent_firebaselog("ad view", "Video ad link :" + position?.ad_link)
                 }
             }
             6 -> findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
@@ -377,9 +394,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         })
 
     }
-
-
-
 
     fun subscribe_bids() {
         (activity as Home?)?.homeviewmodel?.user_bids?.observe(viewLifecycleOwner, Observer {
@@ -455,7 +469,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-
                             try {
                                 Log.d("TAG@123", it.data?.user.toString())
                                 (activity as Home).sharedPreferencesStorage.setValue(
@@ -483,12 +496,9 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 } else {
 
                                 }
-
-
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :-" + e.message.toString())
                             }
-
                         } else {
                             Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_SHORT)
                                 .show()
@@ -507,7 +517,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     }
 
-
     fun swipe_update(id: String, key: String) {
         val jsonObject = JsonObject()
         jsonObject.addProperty(
@@ -521,6 +530,16 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
     }
+
+
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(event_name, event_log)
+        }
+    }
+
 
 }
 

@@ -36,6 +36,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.http.HttpMethod
 import java.util.*
@@ -52,7 +54,7 @@ class Login_Activity : AppCompatActivity() {
     private var mCallbackManager: CallbackManager? = null
     val mainViewModel: LoginViewModel by viewModels()
     private var phone_otp_send:Boolean=false
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
     @Inject
@@ -390,6 +392,7 @@ class Login_Activity : AppCompatActivity() {
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
                             startActivity(Intent(this, Home::class.java))
+                            do_sent_firebaselog("Login", res.user.id)
                             finish()
                         } else {
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, false)
@@ -626,6 +629,19 @@ class Login_Activity : AppCompatActivity() {
             }
         })
     }
+
+
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(
+                event_name,
+                event_log
+            )
+        }
+    }
+
 
 
 }

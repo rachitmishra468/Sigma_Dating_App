@@ -57,6 +57,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -115,7 +117,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var age_range = ""
     var distance = ""
     var gender = ""
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -437,9 +439,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
+
+                                do_sent_firebaselog("profile_update",  (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
 
                                 Update_edit_Profile_info()
+
                             } catch (e: Exception) {
                             }
                         } else {
@@ -1142,6 +1147,20 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         }
 
     }
+
+
+
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(
+                event_name,
+                event_log
+            )
+        }
+    }
+
 }
 
 

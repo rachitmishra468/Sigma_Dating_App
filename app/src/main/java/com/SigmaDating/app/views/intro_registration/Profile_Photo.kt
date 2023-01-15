@@ -38,6 +38,8 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import de.hdodenhof.circleimageview.CircleImageView
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
@@ -72,6 +74,7 @@ class Profile_Photo : Fragment() {
     lateinit var constraint_f1: ConstraintLayout
     lateinit var bitmap_string: String
     var currentPhotoPath: String? = null
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -364,6 +367,7 @@ class Profile_Photo : Fragment() {
                                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                     AppConstants.USER_ID, res.user.id)
                                 startActivity(Intent(context, Home::class.java))
+                                do_sent_firebaselog("Sign Up",res.user.id)
                                 (activity as OnBoardingActivity?)?.finish()
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
                                     .show()
@@ -383,5 +387,19 @@ class Profile_Photo : Fragment() {
                 }
             })
     }
+
+
+
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(
+                event_name,
+                event_log
+            )
+        }
+    }
+
 
 }

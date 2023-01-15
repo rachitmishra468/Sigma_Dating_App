@@ -65,7 +65,7 @@ class Home : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)){
+        if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) {
             finish()
         }
         super.onBackPressed()
@@ -94,36 +94,36 @@ class Home : AppCompatActivity() {
     }
 
 
-   /* override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
-                InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
-            )
-        }
-        return super.onKeyUp(keyCode, event)
-    }
+    /* override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+         if (keyCode == KeyEvent.KEYCODE_BACK) {
+             (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                 InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
+             )
+         }
+         return super.onKeyUp(keyCode, event)
+     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
-                InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
-            )
-        }
-        return super.onKeyDown(keyCode, event)
-    }*/
+     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+         if (keyCode == KeyEvent.KEYCODE_BACK) {
+             (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                 InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
+             )
+         }
+         return super.onKeyDown(keyCode, event)
+     }*/
 
     companion object {
         lateinit var pages: ArrayList<Pages>
         lateinit var ads_list: ArrayList<advertising_model>
-        var notifications_count: String="0"
-        var current_user_profile: String=""
-        var mCurrent_user_token:String=""
-        var mVideoGrant_user_token:String=""
-        var  match_id:String=""
-        var sender_id:String=""
-        var chatFlag:Boolean=false
-        var show_block:Boolean=false
-        var ads_list_index:Int=0
+        var notifications_count: String = "0"
+        var current_user_profile: String = ""
+        var mCurrent_user_token: String = ""
+        var mVideoGrant_user_token: String = ""
+        var match_id: String = ""
+        var sender_id: String = ""
+        var chatFlag: Boolean = false
+        var show_block: Boolean = false
+        var ads_list_index: Int = 0
 
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
@@ -138,13 +138,17 @@ class Home : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        do_sent_firebaselog("USER_ID", sharedPreferencesStorage.getString(AppConstants.USER_ID))
+    }
+
+
+    private fun do_sent_firebaselog(event_name: String, event_log: String) {
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseAnalytics.setAnalyticsCollectionEnabled(true);
-       // firebaseAnalytics = Firebase.analytics
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
             param(
-                "USER_ID",
-                sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                event_name,
+                event_log
             )
         }
     }

@@ -63,6 +63,8 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.delay as delay
 
 
@@ -588,4 +590,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             LocationManager.NETWORK_PROVIDER
         )
     }
+
+
+
 }
