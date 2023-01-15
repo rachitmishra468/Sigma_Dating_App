@@ -140,4 +140,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun deletenotification(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.deletenotification(jsonObject)
 
+    override suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.contact_form(jsonObject)
+
 }

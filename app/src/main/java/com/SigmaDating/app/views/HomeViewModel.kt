@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
     lateinit var All_comment: MutableLiveData<Resource<Comment_model>>
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
-
+    lateinit var contact_responce: MutableLiveData<Resource<Loginmodel>>
     lateinit var subscriptionPlans: MutableLiveData<Resource<SubscriptionPlanData>>
     lateinit var subscription_post: MutableLiveData<Resource<SubscriptionPlanData>>
     val user_bids: MutableLiveData<Resource<home_model>>
@@ -687,6 +687,21 @@ class HomeViewModel @Inject constructor(
                     subscription_post.postValue(Resource.success(it.body()))
                 } else {
                     subscription_post.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
+
+
+
+    fun post_Contact_form(id: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "Contact_form"+id)
+            mainRepository.contact_form(id).let {
+                if (it.isSuccessful) {
+                    contact_responce.postValue(Resource.success(it.body()))
+                } else {
+                    contact_responce.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
         }

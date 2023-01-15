@@ -163,6 +163,10 @@ class SettingsFragment : Fragment() {
             findNavController().navigate(R.id.action_setting_to_planslist)
         }
 
+        _binding.contactFrom.setOnClickListener {
+            findNavController().navigate(R.id.action_setting_to_contact_from)
+        }
+
         _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             notification_flag = if(isChecked) 1 else 0
 

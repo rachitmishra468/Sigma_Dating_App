@@ -53,6 +53,7 @@ class MainRepository @Inject constructor(
 
 
 
+    suspend fun contact_form(jsonObject: JsonObject) = apiHelper.contact_form(jsonObject)
 
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)
 

@@ -143,4 +143,8 @@ interface ApiService {
     suspend fun email_otp_verification(@Body jsonObject: JsonObject): Response<Loginmodel>
 
 
+    @POST("common/contact")
+    suspend fun contact_form(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+
 }

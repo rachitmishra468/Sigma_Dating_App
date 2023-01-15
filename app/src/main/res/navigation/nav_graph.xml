@@ -213,6 +213,12 @@
             android:id="@+id/action_setting_to_planslist"
             app:destination="@id/subscriptionPlanList" />
 
+        <action
+            android:id="@+id/action_setting_to_contact_from"
+            app:destination="@id/contact_from" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/editProfile"
@@ -416,6 +422,18 @@
             />
 
     </fragment>
+
+
+    <fragment
+        android:id="@+id/contact_from"
+        android:name="com.SigmaDating.app.views.contactUS.ContactFormFragment"
+        android:label="contact_form" >
+
+    </fragment>
+
+
+
+
 
 
 
