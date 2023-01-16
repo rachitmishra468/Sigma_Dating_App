@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.SigmaDating.app.utilities.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,11 +7,20 @@
     android:background="@drawable/splash_bg"
     android:fillViewport="true">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@color/white_with_opecity"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_with_opecity"
+
         tools:context=".app.views.settings.SettingsFragment">
 
 
@@ -61,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
-            android:text="Contact Form"
+            android:text="Contact Us"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintHorizontal_bias="0.448"
@@ -100,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="12dp"
-                android:paddingTop="65dp"
+                android:paddingTop="55dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="16dp">
 
@@ -113,9 +122,10 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:gravity="center"
-                    android:text=""
-                    android:visibility="gone"
-                    style="@style/QText"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:text="Send us your query"
+                    android:visibility="visible"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +183,6 @@
                     android:hint="Subject"
                     android:inputType="textEmailAddress|textCapSentences"
                     android:letterSpacing="0.10"
-
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:textSize="14sp"
@@ -181,26 +190,28 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/editText_email" />
 
-
                 <EditText
                     android:id="@+id/editText_message"
                     android:layout_width="0dp"
-                    android:layout_height="124dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginRight="6dp"
+                    android:letterSpacing="0.10"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/login_field_border_bg"
                     android:drawablePadding="10dp"
                     android:hint="Message"
-                    android:inputType="textEmailAddress|textCapSentences"
-                    android:letterSpacing="0.10"
+                    android:gravity="top|left"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:minLines="5"
                     android:paddingTop="15dp"
+                    android:maxLength="150"
                     android:paddingBottom="15dp"
-
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/editText_subject" />
+                    app:layout_constraintTop_toBottomOf="@id/editText_subject"  />
+
+
 
 
 
@@ -230,30 +241,29 @@
                         android:visibility="visible"
                         />
 
-
-
-
-
                 </FrameLayout>
 
-
-
-
-
-
-
-
-
-
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.SigmaDating.app.utilities.BounceScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginBottom="0dp"
+                android:layout_height="match_parent">
+
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginTop="5dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>
 

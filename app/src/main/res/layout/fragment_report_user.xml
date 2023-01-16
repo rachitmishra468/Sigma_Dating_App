@@ -379,6 +379,7 @@
             android:alpha=".8"
             android:layout_height="wrap_content"/>
         <View
+            android:id="@+id/first_view"
             android:layout_width="match_parent"
             android:alpha=".2"
             android:layout_marginTop="8dp"
@@ -399,7 +400,9 @@
 
             android:gravity="center"
             android:layout_height="30dp"/>
+
         <View
+            android:id="@+id/second_view"
             android:layout_width="match_parent"
             android:alpha=".2"
             android:layout_marginTop="8dp"
@@ -420,6 +423,7 @@
             android:gravity="center"
             android:layout_height="30dp"/>
         <View
+            android:id="@+id/thired_view"
             android:layout_width="match_parent"
             android:alpha=".2"
             android:layout_marginTop="8dp"

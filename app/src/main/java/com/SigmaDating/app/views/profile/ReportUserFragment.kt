@@ -65,6 +65,9 @@ class ReportUserFragment : Fragment() {
     lateinit var sigma_list: ImageView
     lateinit var tv_report_to_user: Button
     lateinit var tv_block: Button
+    lateinit var first_view: View
+    lateinit var second_view: View
+    lateinit var thired_view: View
 
     lateinit var tvCounter: TextView
     private val args: ReportUserFragmentArgs by navArgs()
@@ -96,6 +99,10 @@ class ReportUserFragment : Fragment() {
         tvCounter = _binding!!.root.findViewById(R.id.tvCounter)
         tv_report_to_user = _binding!!.root.findViewById(R.id.tv_report_to_user)
         tv_block = _binding!!.root.findViewById(R.id.tv_block)
+        first_view = _binding!!.root.findViewById(R.id.first_view)
+        second_view = _binding!!.root.findViewById(R.id.second_view)
+        thired_view = _binding!!.root.findViewById(R.id.thired_view)
+
         //_binding.
         footer_transition()
 
@@ -122,6 +129,9 @@ class ReportUserFragment : Fragment() {
             if (Home.show_block) {
                 tv_report_to_user.visibility = View.GONE
                 tv_block.visibility = View.GONE
+                first_view.visibility = View.GONE
+                second_view.visibility = View.GONE
+                thired_view.visibility = View.GONE
             }
         } catch (e: Exception) {
         }

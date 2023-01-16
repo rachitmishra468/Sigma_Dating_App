@@ -107,7 +107,7 @@ class SettingsFragment : Fragment() {
             link.let {
                 bundle.putString("Url_Link", link?.url)
                 bundle.putString("Hadder_text", link?.title)
-                findNavController().navigate(R.id.action_settings_frag_to_ContactUs, bundle)
+                findNavController().navigate(R.id.action_setting_to_contact_from, bundle)
             }
         }
 

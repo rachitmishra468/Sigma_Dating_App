@@ -1,10 +1,13 @@
 package com.SigmaDating.app.views.contactUS
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -21,6 +24,8 @@ import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.gson.JsonObject
 
+private const val ARG_PARAM1 = "Url_Link"
+private const val ARG_PARAM2 = "Hadder_text"
 
 class ContactFormFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -34,6 +39,10 @@ class ContactFormFragment : Fragment() {
     lateinit var editText_subject: EditText
     lateinit var editText_message: EditText
     lateinit var buttonSubmit: Button
+
+    private var mURL: String? = null
+    private var mHadder: String? = null
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +62,20 @@ class ContactFormFragment : Fragment() {
         editText_subject = view.findViewById(R.id.editText_subject)
         editText_message = view.findViewById(R.id.editText_message)
         buttonSubmit = view.findViewById(R.id.buttonSubmit)
-
+        webView = view.findViewById(R.id.webView)
         imageView2.setOnClickListener {
             (activity as Home).onBackPressed()
         }
+
+        arguments?.let {
+            mURL = it.getString(ARG_PARAM1)
+            mHadder = it.getString(ARG_PARAM2)
+            Log.d("TAG@123", "URL $mURL Hadder $mHadder")
+        }
+
+        webView.webViewClient = WebViewClient()
+
+
 
         buttonSubmit.setOnClickListener {
 
@@ -111,18 +130,12 @@ class ContactFormFragment : Fragment() {
 
                 (activity as Home).homeviewmodel.post_Contact_form(jsonObject)
                 subscribe_create_post()
-
-
-
-
-
-
             }
-
 
         }
 
-
+        AppUtils.showLoader(requireContext())
+        mURL?.let { webView.loadUrl(it) }
         return view
     }
 
@@ -135,7 +148,11 @@ class ContactFormFragment : Fragment() {
                 when (res.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        Toast.makeText(requireContext(), res.data?.message.toString(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            requireContext(),
+                            res.data?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
                         (activity as Home).onBackPressed()
                     }
                     Status.LOADING -> {
@@ -149,9 +166,6 @@ class ContactFormFragment : Fragment() {
     }
 
 
-
-
-
     companion object {
 
         @JvmStatic
@@ -160,4 +174,21 @@ class ContactFormFragment : Fragment() {
 
             }
     }
+
+
+    inner class WebViewClient : android.webkit.WebViewClient() {
+
+        // Load the URL
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            view.loadUrl(url)
+            return false
+        }
+
+        // ProgressBar will disappear once page is loaded
+        override fun onPageFinished(view: WebView, url: String) {
+            super.onPageFinished(view, url)
+            AppUtils.hideLoader()
+        }
+    }
+
 }

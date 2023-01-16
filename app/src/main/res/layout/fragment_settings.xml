@@ -955,14 +955,6 @@
                 android:text="Contact Us"
                 android:textSize="18sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:background="@color/hint_text_color"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left" />
 
 
             <TextView
@@ -976,6 +968,7 @@
                 android:gravity="start|center"
                 android:layout_marginTop="6dp"
                 android:paddingRight="5dp"
+                android:visibility="gone"
                 android:text="Contact Form"
                 android:textSize="18sp" />
 

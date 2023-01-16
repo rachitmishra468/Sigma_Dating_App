@@ -182,7 +182,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                             "ad view",
                             "Video ad link :" + (dataObject as Bids).ad_link
                         )
-
                         requireContext().let { open_ad_link((dataObject as Bids).ad_link, it) }
                     }
                 }
@@ -422,7 +421,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     tvCounter.setText(notifications_count)
                                 }
 
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
                                     .show()
 
 

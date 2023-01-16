@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.SigmaDating.R
 import com.SigmaDating.app.model.Postdata
+import com.SigmaDating.app.views.Home
 
 
 class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapter.ViewHolder>() {
@@ -52,9 +53,15 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
         Glide.with(context).load(data.media).into(holder.image);
 
         holder.image.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("user_id",data.user_id)
-            holder.image.findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
+
+            try {
+                if (!Home.show_block) {
+                    val bundle = Bundle()
+                    bundle.putString("user_id",data.user_id)
+                    holder.image.findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
+                }
+            } catch (e: Exception) {
+            }
         }
 
     }

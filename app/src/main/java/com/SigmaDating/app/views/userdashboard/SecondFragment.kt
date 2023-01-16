@@ -104,6 +104,7 @@ class SecondFragment : Fragment() {
             _binding?.profileImg?.visibility = View.VISIBLE
         } else {
             _binding?.profileImg?.visibility = View.INVISIBLE
+            Home.show_block = false
         }
         _binding?.fab?.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_createpost)
@@ -127,7 +128,6 @@ class SecondFragment : Fragment() {
                         null,
                         null
                     );
-
             }
         }
 
