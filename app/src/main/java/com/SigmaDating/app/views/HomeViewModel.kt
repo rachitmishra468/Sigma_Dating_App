@@ -379,9 +379,11 @@ class HomeViewModel @Inject constructor(
     fun get_Login_User_bids(id: String) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             user_bids.postValue(Resource.loading(null))
+
             Log.d("TAG@123", "get_Login_User_bids")
             mainRepository.get_user_bids(id).let {
                 if (it.isSuccessful) {
+                    Home.toastflag=true
                     Log.d("TAG@123", "get_Login_User_bids  isSuccessful")
                     user_bids.postValue(Resource.success(it.body()))
                 } else {
