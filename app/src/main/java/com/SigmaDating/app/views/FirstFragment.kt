@@ -1,15 +1,12 @@
 package com.SigmaDating.app.views
 
-import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -62,7 +59,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
     lateinit var toast_layout: LinearLayout
-    lateinit var images_toast : ImageView
+    lateinit var images_toast: ImageView
+    lateinit var images_toast_nah: ImageView
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
@@ -94,12 +92,14 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
         toast_layout = binding.root.findViewById(R.id.toast_view)
         images_toast = binding.root.findViewById(R.id.images_toast)
+        images_toast_nah = binding.root.findViewById(R.id.images_toast_nah)
         empty_item_layout.visibility = View.GONE
         val show_disclamer = binding.root.findViewById<LinearLayout>(R.id.show_disclamer)
         val webView = binding.root.findViewById<WebView>(R.id.webView_diclamer)
         val logout = binding.root.findViewById<Button>(R.id.logout)
         val cancle = binding.root.findViewById<Button>(R.id.cancel)
         if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) {
+            AppUtils.showLoader(requireContext())
             webView.webViewClient = WebViewClient()
             show_disclamer.visibility = View.VISIBLE
             webView.loadUrl(Constants.disclaimer)
@@ -158,7 +158,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "dislike")
-                       // Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+                        // Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
 
                         do_sent_firebaselog("do_swipe", "Left")
                     }
@@ -207,7 +207,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "superlike")
-                       // Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+                        // Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
 
                         do_sent_firebaselog("do_swipe", "Top")
                     }
@@ -519,6 +519,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
         // Load the URL
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            if (url.contains("sigmadating")) {
+                requireContext().let { open_ad_link(url, it) }
+                view.reload()
+                return true
+            }
             view.loadUrl(url)
             return false
         }
@@ -549,17 +554,24 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     }
 
 
-    fun showToast(like:String) {
-        if(like.equals("dislike")){
-            images_toast.setImageDrawable(getResources().getDrawable(R.drawable.nah));
-        }
-        else if(like.equals("like")){
-            images_toast.setImageDrawable(getResources().getDrawable(R.drawable.yep));
-        }
-        else{
+    fun showToast(like: String) {
+        toast_layout.visibility = View.VISIBLE
+        if (like.equals("dislike")) {
+            images_toast.visibility = View.GONE
+            images_toast_nah.visibility = View.VISIBLE
+            images_toast_nah.setImageDrawable(getResources().getDrawable(R.drawable.nah));
+
+        } else if (like.equals("like")) {
+            images_toast.visibility = View.GONE
+            images_toast_nah.visibility = View.VISIBLE
+            images_toast_nah.setImageDrawable(getResources().getDrawable(R.drawable.yep));
+
+        } else {
+            images_toast.visibility = View.VISIBLE
+            images_toast_nah.visibility = View.GONE
             images_toast.setImageDrawable(getResources().getDrawable(R.drawable.vibing));
         }
-        toast_layout.visibility = View.VISIBLE
+
         Handler().postDelayed(
             java.lang.Runnable {
                 toast_layout.visibility = View.GONE

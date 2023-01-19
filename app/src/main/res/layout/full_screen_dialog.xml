@@ -16,13 +16,41 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 
-        <WebView
-            android:id="@+id/webView_diclamer"
+
+        <androidx.cardview.widget.CardView
+            style="@style/CustomCardViewStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="120dp"
-            android:layout_marginTop="25dp"
-           />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardElevation="5dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/web_scrollview"
+                    android:layout_marginBottom="6dp"
+                    android:scrollbars="vertical">
+                    <WebView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/webView_diclamer"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:padding="4dp">
+                    </WebView>
+                </ScrollView>
 
 
         <LinearLayout
@@ -30,7 +58,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             android:weightSum="2">
 
 
@@ -62,8 +92,8 @@
 
         </LinearLayout>
 
-
-
+            </LinearLayout>
+</androidx.cardview.widget.CardView>
 
     </FrameLayout>
 </ScrollView>

@@ -81,33 +81,30 @@
         android:id="@+id/images_toast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nah"
-        android:layout_marginTop="220dp"
+        android:src="@drawable/vibing"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
     </ImageView>
 
 
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="150dp"
-        android:text="Nah"
-        android:textSize="44dp"
+    <ImageView
+        android:id="@+id/images_toast_nah"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/nah"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/red"
+        android:layout_marginBottom="150dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        >
 
-        ></TextView>
-
+    </ImageView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
