@@ -55,8 +55,8 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     //Ad
 
     lateinit var ad_video: VideoView
-    lateinit var close_ad_img:ImageView
-    lateinit var ad_main:ConstraintLayout
+    lateinit var close_ad_img: ImageView
+    lateinit var ad_main: ConstraintLayout
     lateinit var ads_image_view: ImageView
     lateinit var progress_bar_ads: ProgressBar
     lateinit var skip_text: TextView
@@ -82,16 +82,16 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
         (activity as Home).homeviewmodel.get_ads_list("feedscreen")
-        ad_main=binding.root.findViewById(R.id.ad_main)
-        ad_main.visibility=View.GONE
+        ad_main = binding.root.findViewById(R.id.ad_main)
+        ad_main.visibility = View.GONE
         subscribe_app_ads()
 
         //Ad view
         progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         skip_text = binding.root.findViewById(R.id.skip_text)
-        ad_main.visibility=View.VISIBLE
-        close_ad_img=binding.root.findViewById(R.id.close_ad_img)
+        ad_main.visibility = View.VISIBLE
+        close_ad_img = binding.root.findViewById(R.id.close_ad_img)
         ad_video = binding.root.findViewById(R.id.videoview)
 
         _binding!!.userProfilePhoto.setOnClickListener {
@@ -99,10 +99,10 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         }
 
         close_ad_img.setOnClickListener {
-            if(ad_video.isPlaying){
+            if (ad_video.isPlaying) {
                 ad_video.stopPlayback()
             }
-            ad_main.visibility=View.GONE
+            ad_main.visibility = View.GONE
         }
 
         return binding.root
@@ -118,7 +118,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()
     }
 
-    private fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<Postdata>, mess: String) {
+    private fun setAdapterListData(
+        booleantype: Boolean,
+        dataListuser: ArrayList<Postdata>,
+        mess: String
+    ) {
+
+        var list :ArrayList<Postdata> = arrayListOf()
 
         if (dataListuser.size == 0) {
             empty_text_view.text = mess
@@ -126,14 +132,22 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             Log.d("TAG@123", " empty_text  Show")
         }
 
-
+        if (!booleantype) {
+            dataListuser.forEach {
+                if(it.isPrivate!="0"){
+                    list.add(it)
+                }
+            }
+        }else{
+            list.addAll(dataListuser)
+        }
         _binding?.postRecyclerview?.layoutManager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL, false
         )
         photoAdapter = PostAdapter(booleantype, this, requireContext())
         _binding?.postRecyclerview?.adapter = photoAdapter
-        photoAdapter.setDataList(dataListuser)
+        photoAdapter.setDataList(list)
         photoAdapter.notifyDataSetChanged()
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
@@ -189,6 +203,8 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                                     )
                                 )
                             ) {
+
+
                                 setAdapterListData(
                                     false,
                                     it.data.data as ArrayList<Postdata>,
@@ -206,7 +222,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                         } else {
 
 
-                            empty_text_view.text =  it.data.message
+                            empty_text_view.text = it.data.message
                             empty_item_layout.visibility = View.VISIBLE
                             Log.d("TAG@123", " empty_text  Show")
 
@@ -224,8 +240,6 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     }
 
 
-
-
     fun PostStatusObserverResponse() {
         (activity as Home?)?.homeviewmodel?.change_status_post?.observe(
             viewLifecycleOwner,
@@ -233,7 +247,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        Log.d("TAG@123", "Poast Hide Status :-"+it.message)
+                        Log.d("TAG@123", "Poast Hide Status :-" + it.message)
                         get_postdata()
                     }
                     Status.LOADING -> {
@@ -254,7 +268,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 when (it.status) {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
-                        Log.d("TAG@123", "Delete Post Status :-"+it.message)
+                        Log.d("TAG@123", "Delete Post Status :-" + it.message)
                         get_postdata()
                     }
                     Status.LOADING -> {
@@ -277,12 +291,12 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 bundle.putString("comment_title", position.title)
                 bundle.putString("media", position.media)
                 findNavController().navigate(R.id.action_FirstFragment_to_comment, bundle)
-                do_sent_firebaselog("comment_post",position.first_name + " " + position.last_name)
+                do_sent_firebaselog("comment_post", position.first_name + " " + position.last_name)
 
             }
             2 -> {
                 save_post_like(position.id)
-                do_sent_firebaselog("like_post",position.first_name + " " + position.id)
+                do_sent_firebaselog("like_post", position.first_name + " " + position.id)
 
             }
             3 -> {
@@ -292,24 +306,32 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             4 -> {
                 val jsonObject = JsonObject()
                 Log.d("TAG@123", position.id + "")
-                (activity as Home).homeviewmodel.change_status_post = MutableLiveData<Resource<delelepost>>()
+                (activity as Home).homeviewmodel.change_status_post =
+                    MutableLiveData<Resource<delelepost>>()
                 PostStatusObserverResponse()
-                jsonObject.addProperty("user_id", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) )
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
                 jsonObject.addProperty("post_id", position.id)
                 jsonObject.addProperty("isPrivate", "1")
-                Log.d("TAG@123", "Poast Status :-"+jsonObject.toString())
+                Log.d("TAG@123", "Poast Status :-" + jsonObject.toString())
                 (activity as Home).homeviewmodel.PostStatusChange(jsonObject)
 
             }
             5 -> {
                 val jsonObject = JsonObject()
                 Log.d("TAG@123", position.id + "")
-                (activity as Home).homeviewmodel.change_status_post = MutableLiveData<Resource<delelepost>>()
+                (activity as Home).homeviewmodel.change_status_post =
+                    MutableLiveData<Resource<delelepost>>()
                 PostStatusObserverResponse()
-                jsonObject.addProperty("user_id", (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) )
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
                 jsonObject.addProperty("post_id", position.id)
                 jsonObject.addProperty("isPrivate", "0")
-                Log.d("TAG@123", "Poast Status :-"+jsonObject.toString())
+                Log.d("TAG@123", "Poast Status :-" + jsonObject.toString())
                 (activity as Home).homeviewmodel.PostStatusChange(jsonObject)
 
             }
@@ -410,7 +432,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    ad_main.visibility=View.VISIBLE
+                    ad_main.visibility = View.VISIBLE
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -428,17 +450,16 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                     }
                 }
                 Status.LOADING -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
 
                 }
             }
         })
 
     }
-
 
 
     fun start_ads_listing(list: ArrayList<advertising_model>) {

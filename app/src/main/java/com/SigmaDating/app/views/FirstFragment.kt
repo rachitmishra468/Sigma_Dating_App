@@ -1,9 +1,6 @@
 package com.SigmaDating.app.views
 
 import android.app.Dialog
-import android.graphics.drawable.Drawable
-import android.provider.Settings
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,45 +8,36 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.*
-
-import com.SigmaDating.app.adapters.ProfileMatch
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.SigmaDating.R
+import com.SigmaDating.app.adapters.ProfileMatch
 import com.SigmaDating.app.model.*
 import com.SigmaDating.app.storage.AppConstants
-import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.utilities.AppUtils.open_ad_link
 import com.SigmaDating.app.views.CardManager.CardViewChanger
-import com.SigmaDating.app.views.Home.Companion.ads_list_index
 import com.SigmaDating.app.views.Home.Companion.notifications_count
 import com.SigmaDating.app.views.Home.Companion.pages
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import com.example.demoapp.other.Constants
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.*
-import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
@@ -73,16 +61,17 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     lateinit var tvCounter: TextView
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
-
+    lateinit var toast_layout: LinearLayout
+    lateinit var images_toast : ImageView
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
-        if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
-                Disclaimer()
-                )
+        /*  if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
+                  Disclaimer()
+                  )*/
     }
 
 
@@ -103,7 +92,40 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         tvCounter = binding.root.findViewById(R.id.tvCounter)
         empty_text_view = binding.root.findViewById(R.id.empty_text_view)
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        toast_layout = binding.root.findViewById(R.id.toast_view)
+        images_toast = binding.root.findViewById(R.id.images_toast)
         empty_item_layout.visibility = View.GONE
+        val show_disclamer = binding.root.findViewById<LinearLayout>(R.id.show_disclamer)
+        val webView = binding.root.findViewById<WebView>(R.id.webView_diclamer)
+        val logout = binding.root.findViewById<Button>(R.id.logout)
+        val cancle = binding.root.findViewById<Button>(R.id.cancel)
+        if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) {
+            webView.webViewClient = WebViewClient()
+            show_disclamer.visibility = View.VISIBLE
+            webView.loadUrl(Constants.disclaimer)
+        } else {
+            show_disclamer.visibility = View.GONE
+            callApis()
+        }
+
+        logout.setOnClickListener {
+            (activity as Home).sharedPreferencesStorage.setValue(
+                AppConstants.Disclaimer,
+                true
+            )
+            show_disclamer.visibility = View.GONE
+            callApis()
+        }
+
+
+        cancle.setOnClickListener {
+            (activity as Home).sharedPreferencesStorage.setValue(
+                AppConstants.Disclaimer,
+                false
+            )
+            (activity as Home).onBackPressed()
+        }
+
         editProfile.setOnClickListener {
             val bundle = Bundle()
             userId = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
@@ -120,34 +142,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_all_activity)
         }
 
-        (activity as Home).homeviewmodel.get_Login_User_bids(
-            (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        )
-
-        (activity as Home).homeviewmodel.get_Login_User_details(
-            (activity as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_ID
-            )
-        )
-
-
-        subscribe_bids()
-        subscribe_Login_User_details()
-
-
         footer_transition()
-
-
-        //Ad view
-
-
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -158,10 +154,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Log.d("TAG@123", "onCardExitLeft")
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
+                        showToast("dislike")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "dislike")
-                        Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+                       // Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
+
                         do_sent_firebaselog("do_swipe", "Left")
                     }
                 }
@@ -171,10 +169,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Log.d("TAG@123", "onCardExitRight")
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
+                        showToast("like")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "like")
-                        Toast.makeText(requireContext(), "Like", Toast.LENGTH_SHORT).show()
                         do_sent_firebaselog("do_swipe", "Right")
                     } else {
                         Log.d("TAG@123", "open this link " + (dataObject as Bids).ad_link)
@@ -205,10 +203,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
+                        showToast("superlike")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "superlike")
-                        Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+                       // Toast.makeText(requireContext(), "Super Like", Toast.LENGTH_SHORT).show()
+
                         do_sent_firebaselog("do_swipe", "Top")
                     }
                 }
@@ -337,35 +337,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     }
 
-    private fun Disclaimer() {
-        val dialog = Dialog(requireContext(), R.style.AppBaseTheme)
-        dialog.setContentView(R.layout.full_screen_dialog)
-        val logout = dialog.findViewById<Button>(R.id.logout)
-        val cancle = dialog.findViewById<Button>(R.id.cancel)
-        dialog.setOnKeyListener { dialog, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_UP) {
-                (activity as Home).onBackPressed()
-                dialog.dismiss()
-            }
-            true
-        }
-        logout.setOnClickListener {
-            (activity as Home).sharedPreferencesStorage.setValue(
-                AppConstants.Disclaimer,
-                true
-            )
-            dialog.dismiss()
-        }
-        cancle.setOnClickListener {
-            (activity as Home).sharedPreferencesStorage.setValue(
-                AppConstants.Disclaimer,
-                false
-            )
-            (activity as Home).onBackPressed()
-        }
-
-        dialog.show()
-    }
 
     fun subscribe_swipe() {
         (activity as Home?)?.homeviewmodel?.profile_swipe?.observe(viewLifecycleOwner, Observer {
@@ -421,10 +392,14 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     tvCounter.setText(notifications_count)
                                 }
 
-                                if(Home.toastflag){
-                                    Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
+                                if (Home.toastflag) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        res.message,
+                                        Toast.LENGTH_SHORT
+                                    )
                                         .show()
-                                    Home.toastflag=false
+                                    Home.toastflag = false
                                 }
                                 if (courseModalArrayList!!.size == 0) {
                                     empty_text_view.text = it.data.message
@@ -433,7 +408,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 } else {
                                     empty_item_layout.visibility = View.GONE
                                 }
-
                                 adapter =
                                     ProfileMatch(courseModalArrayList!!, requireActivity(), this)
                                 cardViewChanger?.setAdapter(adapter)
@@ -527,8 +501,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         jsonObject.addProperty(key, "yes")
         Log.d("TAG@123", jsonObject.toString())
         (activity as Home).homeviewmodel.profile_swipe = MutableLiveData<Resource<Loginmodel>>()
-        subscribe_swipe()
         (activity as Home).homeviewmodel.profile_swipe_details(jsonObject)
+        subscribe_swipe()
     }
 
 
@@ -538,6 +512,61 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
             param(event_name, event_log)
         }
+    }
+
+
+    inner class WebViewClient : android.webkit.WebViewClient() {
+
+        // Load the URL
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            view.loadUrl(url)
+            return false
+        }
+
+        // ProgressBar will disappear once page is loaded
+        override fun onPageFinished(view: WebView, url: String) {
+            super.onPageFinished(view, url)
+            AppUtils.hideLoader()
+        }
+    }
+
+
+    private fun callApis() {
+        (activity as Home).homeviewmodel.get_Login_User_bids(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
+
+        (activity as Home).homeviewmodel.get_Login_User_details(
+            (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
+
+        subscribe_bids()
+        subscribe_Login_User_details()
+    }
+
+
+    fun showToast(like:String) {
+        if(like.equals("dislike")){
+            images_toast.setImageDrawable(getResources().getDrawable(R.drawable.nah));
+        }
+        else if(like.equals("like")){
+            images_toast.setImageDrawable(getResources().getDrawable(R.drawable.yep));
+        }
+        else{
+            images_toast.setImageDrawable(getResources().getDrawable(R.drawable.vibing));
+        }
+        toast_layout.visibility = View.VISIBLE
+        Handler().postDelayed(
+            java.lang.Runnable {
+                toast_layout.visibility = View.GONE
+            },
+            1200
+        )
+
     }
 
 

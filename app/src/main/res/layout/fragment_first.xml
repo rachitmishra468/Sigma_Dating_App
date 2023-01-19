@@ -6,150 +6,170 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white_with_opecity"
-    android:orientation="vertical"
-    android:weightSum="10"
-    tools:context="com.SigmaDating.app.views.FirstFragment">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="bottom"
-        android:layout_weight="1.1"
-        android:background="@drawable/toolbar_bg_img"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <include
-            layout="@layout/toolbar_hadder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp"></include>
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7.9"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_height="match_parent"
+        android:background="@color/white_with_opecity"
+        android:orientation="vertical"
+        android:weightSum="10"
+        tools:context="com.SigmaDating.app.views.FirstFragment">
 
         <LinearLayout
-            android:id="@+id/empty_item_layout"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent">
-            <include
-                layout="@layout/empty_item"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.1"
+            android:background="@drawable/toolbar_bg_img"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-            </include>
+            <include
+                layout="@layout/toolbar_hadder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"></include>
         </LinearLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/credentials_card"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:padding="5dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_logo">
-
-            <!--on below line we are creating a swipe
-                frame layout for providing a swipe action-->
-
-
-            <com.SigmaDating.app.views.CardManager.CardViewChanger
-                android:id="@+id/card_stack_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                app:bottom_swipe_detect="false"
-                app:rotation_degrees="15.5"
-                tools:layout_editor_absoluteX="15dp"
-                tools:layout_editor_absoluteY="16dp">
-
-            </com.SigmaDating.app.views.CardManager.CardViewChanger>
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/broken_heart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/broken_heart" />
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/heart_loading"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/heart_loading" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardBackgroundColor="@color/white"
-            app:cardUseCompatPadding="false">
-
+            android:layout_height="0dp"
+            android:layout_weight="7.9"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <LinearLayout
+                android:id="@+id/empty_item_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:visibility="gone">
 
                 <include
-                    layout="@layout/footer_layout"
+                    layout="@layout/empty_item"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardUseCompatPadding="false">
-
+                    android:layout_gravity="center">
 
                 </include>
             </LinearLayout>
 
 
-        </androidx.cardview.widget.CardView>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/credentials_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:padding="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_logo">
+
+                <!--on below line we are creating a swipe
+                    frame layout for providing a swipe action-->
+
+
+                <com.SigmaDating.app.views.CardManager.CardViewChanger
+                    android:id="@+id/card_stack_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    app:bottom_swipe_detect="false"
+                    app:rotation_degrees="15.5"
+                    tools:layout_editor_absoluteX="15dp"
+                    tools:layout_editor_absoluteY="16dp">
+
+                </com.SigmaDating.app.views.CardManager.CardViewChanger>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/broken_heart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/broken_heart" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/heart_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@+id/credentials_card"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/heart_loading" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/white"
+                app:cardUseCompatPadding="false">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <include
+                        layout="@layout/footer_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:cardUseCompatPadding="false">
+
+
+                    </include>
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
+    <LinearLayout
+        android:id="@+id/show_disclamer"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+    <include
+
+        layout="@layout/full_screen_dialog"
+        />
+    </LinearLayout>
 
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/toast_view"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/toast_messages"
+            />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

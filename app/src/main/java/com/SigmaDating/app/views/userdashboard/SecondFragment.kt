@@ -141,7 +141,7 @@ class SecondFragment : Fragment() {
 
 
         ad_main = binding.root.findViewById(R.id.ad_main)
-        ad_main.visibility=View.GONE
+        ad_main.visibility = View.GONE
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
         (activity as Home).homeviewmodel.get_ads_list("mainscreen")
@@ -220,7 +220,21 @@ class SecondFragment : Fragment() {
         _binding?.recyclerView?.layoutManager = GridLayoutManager(AppReseources.getAppContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
-        photoAdapter.setDataList(dataListuser)
+        val list: ArrayList<Postdata> = arrayListOf()
+
+
+        if (!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
+            dataListuser.forEach {
+                if (it.isPrivate != "0") {
+                    list.add(it)
+                }
+            }
+
+        } else {
+            list.addAll(dataListuser)
+        }
+
+        photoAdapter.setDataList(list)
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
 
@@ -238,8 +252,6 @@ class SecondFragment : Fragment() {
                                     it.nameText.setText(res.user.first_name + " " + res.user.last_name)
                                     it.addresText.setText(res.user.university)
                                     it.ageText.setText("" + res.user.age)
-
-
                                 }
 
                                 if (it.data!!.user.greekletter.length > 0) {
@@ -248,9 +260,6 @@ class SecondFragment : Fragment() {
                                 } else {
                                     greekLatter.visibility = View.GONE
                                 }
-
-
-
                                 it.data.user.upload_image.let {
                                     Glide.with(AppReseources.getAppContext()!!).load(it)
                                         .error(R.drawable.profile_img)
@@ -322,7 +331,7 @@ class SecondFragment : Fragment() {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    ad_main.visibility=View.VISIBLE
+                    ad_main.visibility = View.VISIBLE
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -340,17 +349,16 @@ class SecondFragment : Fragment() {
                     }
                 }
                 Status.LOADING -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
 
                 }
             }
         })
 
     }
-
 
 
     fun start_ads_listing(list: ArrayList<advertising_model>) {

@@ -96,6 +96,14 @@ class PostAdapter(
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.white_heart))
         }
 
+        if (!booleantype) {
+            holder.postDelet.visibility = View.GONE
+            holder.post_visility.visibility = View.GONE
+        } else {
+            holder.postDelet.visibility = View.VISIBLE
+            holder.post_visility.visibility = View.VISIBLE
+        }
+
        if(!data.isPrivate.isNullOrEmpty()){
            if (data.isPrivate.equals("0")) {
                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
@@ -175,13 +183,7 @@ class PostAdapter(
         }
 
 
-        if (!booleantype) {
-            holder.postDelet.visibility = View.GONE
-            holder.post_visility.visibility = View.GONE
-        } else {
-            holder.postDelet.visibility = View.VISIBLE
-            holder.post_visility.visibility = View.VISIBLE
-        }
+
         holder.postDelet.setOnClickListener { listener.onDelete(data, 3) }
 
     }

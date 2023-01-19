@@ -169,9 +169,9 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 map.put("description", _binding?.postDiscription?.text.toString())
                 map.put("location", location_text)
                 if(_binding!!.postPublic.isChecked){
-                    map.put("isPrivate", "1")
-                }else{
                     map.put("isPrivate", "0")
+                }else{
+                    map.put("isPrivate", "1")
                 }
                 map.put("tag_users", user_tag_id.joinToString(","))
 

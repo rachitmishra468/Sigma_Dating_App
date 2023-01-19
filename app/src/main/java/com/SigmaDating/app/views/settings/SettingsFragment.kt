@@ -10,44 +10,44 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.telephony.SmsManager
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.text.InputType
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.demoapp.other.Status
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.SigmaDating.BuildConfig
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
+import com.SigmaDating.app.advertising.view.AdvertisingActivity
+import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.utilities.PhoneTextWatcher
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.app.views.Splash
+import com.SigmaDating.databinding.FragmentSettingsBinding
+import com.example.demoapp.other.Resource
+import com.example.demoapp.other.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tvi.webrtc.ContextUtils.getApplicationContext
 import java.util.*
-
-import com.SigmaDating.app.utilities.PhoneTextWatcher
-import android.text.InputFilter
-import android.text.InputFilter.LengthFilter
-import android.widget.*
-import androidx.lifecycle.MutableLiveData
-import com.SigmaDating.app.model.Loginmodel
-import com.SigmaDating.databinding.FragmentSettingsBinding
-import com.example.demoapp.other.Resource
-
-import android.widget.CompoundButton
-import com.SigmaDating.app.advertising.view.AdvertisingActivity
 
 
 class SettingsFragment : Fragment() {
@@ -61,6 +61,7 @@ class SettingsFragment : Fragment() {
     var location_text = ""
     var latitude = ""
     var longitude = ""
+    var phone_number = ""
 
 
     fun Call_links() {
@@ -144,8 +145,34 @@ class SettingsFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         Call_links()
+        _binding.textViewShareApp.text = "Share Sigma Dating"
+        _binding.textViewShareApp.setOnClickListener {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
+                var shareMessage = "\nLet me recommend you this application\n\n"
+                shareMessage =
+                    """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
+                    """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(Intent.createChooser(shareIntent, "choose one"))
+            } catch (e: java.lang.Exception) {
+                //e.toString();
+            }
+        }
         _binding.passwordUpdate.setOnClickListener {
             Update_password(false);
+        }
+        _binding.seftyButton.setOnClickListener {
+            if (checkPermissions()) {
+            sendSMS(phone_number,"Test Message")
+            }else {
+                requestPermissions()
+            }
+        }
+        _binding.seftyUpdate.setOnClickListener {
+            Update_sefty_contact_number()
         }
         _binding.phoneNumberText.setOnClickListener {
             Update_phone_location(true);
@@ -168,17 +195,17 @@ class SettingsFragment : Fragment() {
         }
 
         _binding.switch1.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            notification_flag = if(isChecked) 1 else 0
+            notification_flag = if (isChecked) 1 else 0
 
-            Log.d("TAG@123","notification_flag :"+notification_flag)
+            Log.d("TAG@123", "notification_flag :" + notification_flag)
 
         })
 
 
         _binding.addSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            advertisement_flag = if(isChecked) 1 else 0
+            advertisement_flag = if (isChecked) 1 else 0
 
-            Log.d("TAG@123","advertisement_flag :"+advertisement_flag)
+            Log.d("TAG@123", "advertisement_flag :" + advertisement_flag)
 
         })
 
@@ -197,12 +224,12 @@ class SettingsFragment : Fragment() {
                 (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
             )
             //jsonObject.addProperty("age_range", age_range)
-          //  jsonObject.addProperty("distance", distance)
+            //  jsonObject.addProperty("distance", distance)
             jsonObject.addProperty("location", _binding.locationText.text.toString())
             jsonObject.addProperty("latitude", latitude)
             jsonObject.addProperty("longitude", longitude)
-           // jsonObject.addProperty("show_me", show_me)
-         //   jsonObject.addProperty("interested_in", interested_in)
+            // jsonObject.addProperty("show_me", show_me)
+            //   jsonObject.addProperty("interested_in", interested_in)
             jsonObject.addProperty("notifications", notification_flag)
             jsonObject.addProperty("ads", advertisement_flag)
 
@@ -236,7 +263,8 @@ class SettingsFragment : Fragment() {
             )
         )
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
         getLocation()
         return binding.root
     }
@@ -304,9 +332,6 @@ class SettingsFragment : Fragment() {
                             }
                             _binding.switch1.isChecked = it.data?.user?.notifications == 1
                             _binding.addSwitch.isChecked = it.data?.user?.advertisement == 1
-
-
-
 
 
                         } else {
@@ -542,7 +567,8 @@ class SettingsFragment : Fragment() {
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
                     jsonObject.addProperty("phone", "+1" + current_value.text.toString())
-                    (activity as Home).homeviewmodel.setting_update_details = MutableLiveData<Resource<Loginmodel>>()
+                    (activity as Home).homeviewmodel.setting_update_details =
+                        MutableLiveData<Resource<Loginmodel>>()
                     (activity as Home).homeviewmodel.get_setting_update_details(jsonObject)
                     _binding.phoneNumberText.text = current_value.text.toString()
                     dialog.dismiss()
@@ -556,8 +582,8 @@ class SettingsFragment : Fragment() {
                         "user_id",
                         (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
                     )
-                   // jsonObject.addProperty("age_range", age_range)
-                  //  jsonObject.addProperty("distance", distance)
+                    // jsonObject.addProperty("age_range", age_range)
+                    //  jsonObject.addProperty("distance", distance)
                     jsonObject.addProperty("location", current_value.text.toString())
                     jsonObject.addProperty("latitude", latitude)
                     jsonObject.addProperty("longitude", longitude)
@@ -635,6 +661,10 @@ class SettingsFragment : Fragment() {
             ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.SEND_SMS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             return true
@@ -647,7 +677,8 @@ class SettingsFragment : Fragment() {
             requireActivity(),
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.SEND_SMS
             ),
             permissionId
         )
@@ -665,5 +696,42 @@ class SettingsFragment : Fragment() {
             }
         }
     }
+
+
+    fun Update_sefty_contact_number() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.update_sefty_sheet_dialog, null)
+        val editText_one = view.findViewById<EditText>(R.id.editText_one)
+        val editText_two = view.findViewById<EditText>(R.id.editText_two)
+        val editText_three = view.findViewById<EditText>(R.id.editText_three)
+        val save_contact = view.findViewById<Button>(R.id.save_contact)
+
+        save_contact.setOnClickListener {
+            phone_number = editText_one.text.toString()
+            dialog.dismiss()
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    fun sendSMS(phoneNo: String?, msg: String?) {
+        try {
+            val smsManager: SmsManager = SmsManager.getDefault()
+            val uri = "http://maps.google.com/?q=$latitude,$longitude"
+            smsManager.sendTextMessage(phoneNo, null, uri, null, null)
+            Toast.makeText(
+                requireContext(), "Message Send",
+                Toast.LENGTH_LONG
+            ).show()
+        } catch (ex: java.lang.Exception) {
+            Toast.makeText(
+               requireContext(), ex.message.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            ex.printStackTrace()
+        }
+    }
+
 
 }

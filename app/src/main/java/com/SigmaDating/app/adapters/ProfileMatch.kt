@@ -275,13 +275,11 @@ class ProfileMatch(
                             courseData[position], 2, null, mageview
                         )
                     }
-
                     @SuppressLint("ClickableViewAccessibility")
                     override fun onSwipeUp() {
                         super.onSwipeUp()
 
                     }
-
                     override fun onSwipeDown() {
                         super.onSwipeDown()
                     }

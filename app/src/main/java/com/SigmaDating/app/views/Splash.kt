@@ -9,12 +9,14 @@ import android.os.Handler
 import android.util.Base64
 import android.util.Log
 import android.view.KeyEvent
+import android.webkit.WebView
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.SigmaDating.R
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.views.login.Login_Activity
+import com.example.demoapp.other.Constants
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -64,9 +66,9 @@ class Splash : AppCompatActivity() {
                 if (sharedPreferencesStorage.getBoolean(AppConstants.IS_AUTHENTICATED)) {
 
 
-                    if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) {
+                  /*  if (!sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) {
                         Disclaimer()
-                    } else {
+                    } else {*/
                         val bundle = Bundle()
                         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "my_item_id")
                         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
@@ -88,7 +90,7 @@ class Splash : AppCompatActivity() {
                        // throw RuntimeException("Test Crash")
                         startActivity(Intent(this, Home::class.java))
                         finish()
-                    }
+
 
                 } else {
                     firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
@@ -140,6 +142,9 @@ class Splash : AppCompatActivity() {
         dialog.setContentView(R.layout.full_screen_dialog)
         val logout = dialog.findViewById<Button>(R.id.logout)
         val cancle = dialog.findViewById<Button>(R.id.cancel)
+        val webView = dialog.findViewById<WebView>(R.id.webView_diclamer)
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(Constants.BASE_URL+ Constants.disclaimer)
         dialog.setOnKeyListener { dialog, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action === KeyEvent.ACTION_UP) {
                 finish()
