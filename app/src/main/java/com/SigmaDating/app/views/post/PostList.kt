@@ -60,6 +60,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     lateinit var ads_image_view: ImageView
     lateinit var progress_bar_ads: ProgressBar
     lateinit var skip_text: TextView
+    var ads_close: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,12 +99,17 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
-        close_ad_img.setOnClickListener {
-            if (ad_video.isPlaying) {
+
+        skip_text.setOnClickListener {
+            if (ads_close) {
                 ad_video.stopPlayback()
+                ad_main.visibility = View.GONE
             }
-            ad_main.visibility = View.GONE
         }
+
+
+
+
 
         return binding.root
     }
@@ -441,6 +447,22 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                                 if (Home.ads_list.isNotEmpty()) {
                                     Home.ads_list_index = 0
                                     start_ads_listing(Home.ads_list)
+                                    var i = 1
+                                    val handler = Handler()
+                                    handler.postDelayed(object : Runnable {
+                                        override fun run() {
+                                            if (i <= 6) {
+                                                skip_text.setText("" + i + " Skip Ads ")
+                                                i += 1
+                                            } else {
+                                                ads_close = true
+                                                skip_text.setText(" Skip Ads ")
+                                                handler.removeCallbacksAndMessages(null);
+                                            }
+                                            handler.postDelayed(this, 1000)//1 sec delay
+                                        }
+                                    }, 0)
+
                                 }
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())
@@ -474,7 +496,6 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 if (list[Home.ads_list_index].type.equals("image")) {
                     ads_image_view.visibility = View.VISIBLE
                     ad_video.visibility = View.GONE
-                    skip_text.visibility = View.GONE
 
                     Log.d("TAG@123", "start_ads_listing" + list[Home.ads_list_index].filename)
                     // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
@@ -523,10 +544,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                         ad_video.start()
                     }
 
-                    skip_text.setOnClickListener {
-                        Home.ads_list_index++
-                        start_ads_listing(Home.ads_list)
-                    }
+
 
                     ad_video.setOnCompletionListener {
                         ad_video.start()

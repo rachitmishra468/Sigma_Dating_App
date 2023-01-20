@@ -11,6 +11,8 @@ import com.SigmaDating.model.SchoolCommunityResponse
 import com.SigmaDating.app.repository.MainRepository
 import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.views.Home.Companion.safety_message_text
+import com.SigmaDating.app.views.Home.Companion.share_app_text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -53,6 +55,7 @@ class HomeViewModel @Inject constructor(
     lateinit var all_match_bids: MutableLiveData<Resource<Match_bids>>
     lateinit var ctrateToken_data: MutableLiveData<Resource<Token_data>>
     lateinit var contact_responce: MutableLiveData<Resource<Loginmodel>>
+    lateinit var info_update: MutableLiveData<Resource<contactinfoModel>>
     lateinit var subscriptionPlans: MutableLiveData<Resource<SubscriptionPlanData>>
     lateinit var subscription_post: MutableLiveData<Resource<SubscriptionPlanData>>
     val user_bids: MutableLiveData<Resource<home_model>>
@@ -83,7 +86,7 @@ class HomeViewModel @Inject constructor(
             mainRepository.ctrateToken(id).let {
                 if (it.isSuccessful) {
                     Resource.success(it.body()).data.let {
-                        Log.d("TAG@123", " token call :"+it)
+                        Log.d("TAG@123", " token call :" + it)
                         Home.mCurrent_user_token = it?.token.toString()
                         Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
@@ -108,8 +111,8 @@ class HomeViewModel @Inject constructor(
 
 
                     Resource.success(it.body()).data.let {
-                        Log.d("TAG@123", " token call :"+it)
-                       // Home.mCurrent_user_token = it?.token.toString()
+                        Log.d("TAG@123", " token call :" + it)
+                        // Home.mCurrent_user_token = it?.token.toString()
                         Home.mVideoGrant_user_token = it?.token.toString()
                         Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)
 
@@ -122,8 +125,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
-
 
 
     fun get_user_match_bids(id: String) = viewModelScope.launch {
@@ -293,9 +294,6 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
-
-
     fun report_user(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             report_block_user.postValue(Resource.loading(null))
@@ -326,6 +324,7 @@ class HomeViewModel @Inject constructor(
     fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             profile_swipe.postValue(Resource.loading(null))
+/*
             mainRepository.get_profile_swipe_details(jsonObject).let {
                 if (it.isSuccessful) {
                     profile_swipe.postValue(Resource.success(it.body()))
@@ -333,6 +332,7 @@ class HomeViewModel @Inject constructor(
                     profile_swipe.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
+*/
         }
     }
 
@@ -375,7 +375,6 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     fun get_Login_User_bids(id: String) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             user_bids.postValue(Resource.loading(null))
@@ -383,7 +382,7 @@ class HomeViewModel @Inject constructor(
             Log.d("TAG@123", "get_Login_User_bids")
             mainRepository.get_user_bids(id).let {
                 if (it.isSuccessful) {
-                    Home.toastflag=true
+                    Home.toastflag = true
                     Log.d("TAG@123", "get_Login_User_bids  isSuccessful")
                     user_bids.postValue(Resource.success(it.body()))
                 } else {
@@ -518,14 +517,26 @@ class HomeViewModel @Inject constructor(
         interests: String,
         about: String,
         is_private: String,
-        interested_in:String,
-        show_me:String,
-        age_range:String,
-        distance:String,
-        gender:String
+        interested_in: String,
+        show_me: String,
+        age_range: String,
+        distance: String,
+        gender: String
     ) {
 
-        update_profile(id, university, community, interests, about, is_private,interested_in,show_me,age_range,distance,gender)
+        update_profile(
+            id,
+            university,
+            community,
+            interests,
+            about,
+            is_private,
+            interested_in,
+            show_me,
+            age_range,
+            distance,
+            gender
+        )
 
 
     }
@@ -592,11 +603,11 @@ class HomeViewModel @Inject constructor(
         interests: String,
         about: String,
         is_private: String,
-        interested_in:String,
-        show_me:String,
-        age_range:String,
-        distance:String,
-        gender:String
+        interested_in: String,
+        show_me: String,
+        age_range: String,
+        distance: String,
+        gender: String
     ) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             update_profile.postValue(Resource.loading(null))
@@ -683,7 +694,7 @@ class HomeViewModel @Inject constructor(
 
     fun postSubscriptionData(id: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
-            Log.d("TAG@123", "postSubscriptionData"+id)
+            Log.d("TAG@123", "postSubscriptionData" + id)
             mainRepository.postSubscriptionPlansdata(id).let {
                 if (it.isSuccessful) {
                     subscription_post.postValue(Resource.success(it.body()))
@@ -695,10 +706,9 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     fun post_Contact_form(id: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
-            Log.d("TAG@123", "Contact_form"+id)
+            Log.d("TAG@123", "Contact_form" + id)
             mainRepository.contact_form(id).let {
                 if (it.isSuccessful) {
                     contact_responce.postValue(Resource.success(it.body()))
@@ -709,6 +719,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+
+    fun get_contact_info() = viewModelScope.launch(Dispatchers.Default) {
+        if (AppUtils.isNetworkAvailable()) {
+            mainRepository.contact_info().let {
+                if (it.isSuccessful) {
+
+                    info_update.postValue(Resource.success(it.body()))
+
+                } else {
+                    info_update.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+
+        }
+    }
 
 
 }

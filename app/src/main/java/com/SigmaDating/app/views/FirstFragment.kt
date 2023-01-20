@@ -24,6 +24,8 @@ import com.SigmaDating.app.utilities.AppUtils.open_ad_link
 import com.SigmaDating.app.views.CardManager.CardViewChanger
 import com.SigmaDating.app.views.Home.Companion.notifications_count
 import com.SigmaDating.app.views.Home.Companion.pages
+import com.SigmaDating.app.views.Home.Companion.safety_message_text
+import com.SigmaDating.app.views.Home.Companion.share_app_text
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -67,9 +69,6 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG@123", "FirstFragment onCreate")
-        /*  if (!(activity as Home).sharedPreferencesStorage.getBoolean(AppConstants.Disclaimer)) (
-                  Disclaimer()
-                  )*/
     }
 
 
@@ -222,6 +221,48 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     }
 
+
+    override fun onResume() {
+        super.onResume()
+
+        (activity as Home).homeviewmodel.info_update =
+            MutableLiveData<Resource<contactinfoModel>>()
+        (activity as Home).homeviewmodel.get_contact_info()
+        update_data()
+    }
+
+
+    fun update_data() {
+        (activity as Home?)?.homeviewmodel?.info_update?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it.data.let { res ->
+                        if (res?.status == true) {
+                            try {
+                                share_app_text =
+                                    it.data?.data?.share_app_text.toString()
+                                safety_message_text = it.data?.data?.safety_message_text.toString()
+                                Log.d(
+                                    "TAG@123",
+                                    "share_app_text $share_app_text  : $safety_message_text"
+                                )
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", "Exception ::" + e.message.toString())
+                            }
+                        } else {
+
+                        }
+
+                    }
+                }
+                Status.LOADING -> {
+                }
+                Status.ERROR -> {
+
+                }
+            }
+        })
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

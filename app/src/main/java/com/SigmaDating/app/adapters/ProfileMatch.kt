@@ -97,20 +97,6 @@ class ProfileMatch(
         mageview.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
-                /* broken_heart.setVisibility(View.VISIBLE)
-                 broken_heart.playAnimation()
-                 Handler().postDelayed(
-                     java.lang.Runnable {
-                         broken_heart.setVisibility(View.GONE)
-
-                         listener.onCategoryClick(
-                             courseData[position],5,null, mageview
-                         )
-                     },
-                     1200
-                 )*/
-
-
                 listener.onCategoryClick(
                     courseData[position], 5, null, mageview
                 )

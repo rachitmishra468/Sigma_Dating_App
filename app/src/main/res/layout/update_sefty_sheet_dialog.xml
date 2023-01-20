@@ -35,7 +35,7 @@
         android:layout_marginTop="20dp"
         android:alpha=".8"
         android:paddingLeft="8dp"
-        android:text="Add your emergency contact number"
+        android:text="Save your emergency contact number"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/guideline5"

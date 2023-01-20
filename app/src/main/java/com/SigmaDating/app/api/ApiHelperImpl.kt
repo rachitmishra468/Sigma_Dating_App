@@ -54,6 +54,11 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun getSubscriptionPlanslist(): Response<SubscriptionPlanData> =
         apiService.getSubscriptionPlanslist()
 
+
+    override suspend fun contact_info(): Response<contactinfoModel> =
+        apiService.contact_info()
+
+
     override suspend fun PostSubscriptionPlansdata(jsonObject: JsonObject): Response<SubscriptionPlanData> =
         apiService.PostSubscriptionPlansdata(jsonObject)
 

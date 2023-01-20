@@ -287,7 +287,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
                     android:gravity="start|center"
-                    android:text="Sefty " />
+                    android:text="Safety " />
 
                 <TextView
                     android:id="@+id/sefty_update"
@@ -296,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
                     android:gravity="end|center"
-                    android:text="Add your emergency contact number" />
+                    android:text="Save your emergency contact number" />
 
                 <ImageView
                     android:layout_width="0dp"
@@ -325,16 +325,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="6dp"
+               android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:weightSum="1">
-
-
 
                 <TextView
                     android:id="@+id/textView_share_app"
                     style="@style/NormalText"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="start|center"
                     android:layout_weight=".9"

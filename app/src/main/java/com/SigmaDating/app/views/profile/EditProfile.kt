@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -72,7 +73,8 @@ private const val ARG_PARAM2 = "param2"
 
 
 class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
-    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener,InterestAdapter.OnItemClickListener {
+    SearchView.OnQueryTextListener, SchoolAdapter.OnItemClickListener,
+    InterestAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
 
     private val permissions = arrayOf(
@@ -92,15 +94,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var schoolList: List<UniversityList>? = null
     var interest: List<Interest>? = null
     lateinit var fraternity_Spinner: EditText
-    lateinit var interests_text:TextView
+    lateinit var interests_text: TextView
     private var schoolAct_spinner: EditText? = null
     lateinit var rootContainer: ChipGroup
-    lateinit var rootContainer_intrest:ChipGroup
+    lateinit var rootContainer_intrest: ChipGroup
     var sororitiesList: List<UniversityList>? = null
     var university: String? = null
     var community: String? = null
     var about: String? = null
-    var is_private:String="0"
+    var is_private: String = "0"
     var currentPhotoPath: String? = null
     private var mUri: Uri? = null
     private val OPERATION_CAPTURE_PHOTO = 1
@@ -110,10 +112,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var searchRecyclerView: RecyclerView? = null
     private var Socority_button: Button? = null
     private var fraternity_button: Button? = null
-    private var independent:Button?=null
+    private var independent: Button? = null
 
     var interested_in = ""
-    var show_me=""
+    var show_me = ""
     var age_range = ""
     var distance = ""
     var gender = ""
@@ -135,62 +137,66 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         _binding = FragmentEditProfileBinding.inflate(inflater, container, false)
         Socority_button = _binding?.root?.findViewById(R.id.Socority_button)
-        independent= _binding?.root?.findViewById(R.id.independent)
+        independent = _binding?.root?.findViewById(R.id.independent)
         fraternity_button = _binding?.root?.findViewById(R.id.fraternity_button)
-        fraternity_button!!.isSelected=true
+        fraternity_button!!.isSelected = true
         schoolAct_spinner = _binding?.root?.findViewById(R.id.school_data)
         fraternity_Spinner = _binding?.root?.findViewById(R.id.et_type)!!
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
-        interests_text= _binding?.root?.findViewById(R.id.interests_text)!!
+        interests_text = _binding?.root?.findViewById(R.id.interests_text)!!
         _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
         _binding?.imageView2?.setOnClickListener {
             (activity as Home).onBackPressed()
         }
         _binding?.done?.setOnClickListener {
-            if(community.isNullOrEmpty()){
-                Toast.makeText(requireContext(), "Please Select Fraternity/Sorority data", Toast.LENGTH_LONG)
+            if (community.isNullOrEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Select Fraternity/Sorority data",
+                    Toast.LENGTH_LONG
+                )
                     .show()
 
-            }else{
-            (activity as Home).homeviewmodel.update_profile =
-                MutableLiveData<Resource<Loginmodel>>()
-            subscribe_edit_profile()
-            var t = interestsList.joinToString(",")
-            university?.let { it1 ->
-                community?.let { it2 ->
-                    (activity as Home).homeviewmodel.Update_edit_page_data(
-                        (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
-                        it1,
-                        it2,
-                        t,
-                        _binding!!.userAbout.text.toString(),
-                        is_private,
-                        interested_in,
-                        show_me,
-                        age_range,
-                        distance,
-                        gender
-                    )
-                }
+            } else {
+                (activity as Home).homeviewmodel.update_profile =
+                    MutableLiveData<Resource<Loginmodel>>()
+                subscribe_edit_profile()
+                var t = interestsList.joinToString(",")
+                university?.let { it1 ->
+                    community?.let { it2 ->
+                        (activity as Home).homeviewmodel.Update_edit_page_data(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID),
+                            it1,
+                            it2,
+                            t,
+                            _binding!!.userAbout.text.toString(),
+                            is_private,
+                            interested_in,
+                            show_me,
+                            age_range,
+                            distance,
+                            gender
+                        )
+                    }
 
-            }}
+                }
+            }
         }
 
 
         fraternity_button?.setOnClickListener {
-            if (!fraternity_button!!.isSelected){
+            if (!fraternity_button!!.isSelected) {
                 fraternity_Spinner.setText("Select Fraternity")
-                community=null
-                Log.d("TAG@123","Community :"+community)
-                fraternity_button!!.isSelected=true
-                Socority_button!!.isSelected=false
-            }
-            else{
+                community = null
+                Log.d("TAG@123", "Community :" + community)
+                fraternity_button!!.isSelected = true
+                Socority_button!!.isSelected = false
+            } else {
 
             }
             fraternity_Spinner?.setText("Select Fraternity")
 
-            fraternity_Spinner.visibility=View.VISIBLE
+            fraternity_Spinner.visibility = View.VISIBLE
 
             independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.white))
@@ -210,14 +216,14 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
         Socority_button?.setOnClickListener {
-            if (!Socority_button!!.isSelected){
-                fraternity_button!!.isSelected=false
-                Socority_button!!.isSelected=true
-                community=null
+            if (!Socority_button!!.isSelected) {
+                fraternity_button!!.isSelected = false
+                Socority_button!!.isSelected = true
+                community = null
                 fraternity_Spinner.setText("Select Sorority")
             }
 
-            fraternity_Spinner.visibility=View.VISIBLE
+            fraternity_Spinner.visibility = View.VISIBLE
             independent?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.white))
 
@@ -237,12 +243,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 AppConstants.community,
                 "Independent"
             )
-            community="Independent"
+            community = "Independent"
             Socority_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
             Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
             fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
-            fraternity_Spinner.visibility=View.INVISIBLE
+            fraternity_Spinner.visibility = View.INVISIBLE
             independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.black))
         }
@@ -261,15 +267,15 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         _binding?.profileCreationGroup?.setOnCheckedChangeListener { group, checkedId ->
             val rb = _binding?.root!!.findViewById(checkedId) as RadioButton
-            when(rb.text.toString()){
-               "Public"->{
-                   is_private ="0"
-               }
-                "Private"->{
-                    is_private ="1"
+            when (rb.text.toString()) {
+                "Public" -> {
+                    is_private = "0"
+                }
+                "Private" -> {
+                    is_private = "1"
                 }
             }
-             Log.d("TAG@123", "profile : "+rb.text.toString())
+            Log.d("TAG@123", "profile : " + rb.text.toString())
 
         }
 
@@ -313,12 +319,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             if (event.action == MotionEvent.ACTION_UP) {
                 schoolList = ArrayList<UniversityList>()
                 schoolList = fraternitiesList
-                if (fraternity_button!!.isSelected){
-                    openSchoolSearchDialog(AppConstants.Fraternity, fraternitiesList as List<UniversityList>
+                if (fraternity_button!!.isSelected) {
+                    openSchoolSearchDialog(
+                        AppConstants.Fraternity, fraternitiesList as List<UniversityList>
                     )
-                }
-                else if (Socority_button!!.isSelected){
-                    openSchoolSearchDialog(AppConstants.Fraternity, sororitiesList as List<UniversityList>
+                } else if (Socority_button!!.isSelected) {
+                    openSchoolSearchDialog(
+                        AppConstants.Fraternity, sororitiesList as List<UniversityList>
                     )
                 }
                 true
@@ -373,7 +380,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
 
-
     @SuppressLint("NotifyDataSetChanged")
     private fun openinterestsSearchDialog(stringtype: String, passDataList: List<Interest>) {
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
@@ -383,9 +389,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         val titleText = dialog.findViewById<TextView>(R.id.title_layout)
         val searchVieww = dialog.findViewById<SearchView>(R.id.search_view)
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
-        val done_interset= dialog.findViewById<Button>(R.id.done_interset)
-        rootContainer_intrest=dialog.findViewById<ChipGroup>(R.id.rootContainer_intrest)
-        setupChipGroupDynamically(interestsList!!,rootContainer_intrest,true)
+        val done_interset = dialog.findViewById<Button>(R.id.done_interset)
+        rootContainer_intrest = dialog.findViewById<ChipGroup>(R.id.rootContainer_intrest)
+        setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
         searchRecyclerView!!.layoutManager = GridLayoutManager(requireContext(), 2)
         intrestAdapter = InterestAdapter(this, stringtype)
         searchRecyclerView!!.adapter = intrestAdapter
@@ -405,13 +411,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 schoolAct_spinner!!.isEnabled = true
                 fraternity_Spinner.isEnabled = true
             }
-            setupChipGroupDynamically(interestsList!!,rootContainer,false)
+            setupChipGroupDynamically(interestsList!!, rootContainer, false)
         }
 
         dialog.setOnDismissListener {
             schoolAct_spinner!!.isEnabled = true
             fraternity_Spinner.isEnabled = true
-            setupChipGroupDynamically(interestsList!!,rootContainer,false)
+            setupChipGroupDynamically(interestsList!!, rootContainer, false)
         }
     }
 
@@ -425,6 +431,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 }
             }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
@@ -440,15 +447,22 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         if (res?.status == true) {
                             try {
 
-                                do_sent_firebaselog("profile_update",  (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                                do_sent_firebaselog(
+                                    "profile_update",
+                                    (activity as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.USER_ID
+                                    )
+                                )
+                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                    .show()
 
                                 Update_edit_Profile_info()
 
                             } catch (e: Exception) {
                             }
                         } else {
-                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
                         }
 
                     }
@@ -619,12 +633,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         set_default_button(it)
                                     }
                                     res.user.is_private.let {
-                                        when(it){
-                                            "0"->{
+                                        when (it) {
+                                            "0" -> {
                                                 _binding?.profilePublic?.setChecked(true);
                                                 _binding?.profilePrivate?.setChecked(false);
                                             }
-                                            "1"->{
+                                            "1" -> {
                                                 _binding?.profilePublic?.setChecked(false);
                                                 _binding?.profilePrivate?.setChecked(true);
                                             }
@@ -697,11 +711,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         _binding?.userAbout?.setText(about)
                                     }
                                     if (res.user.interests.contains(",")) {
-                                        interestsList = res.user.interests.split(",") as ArrayList<String>
+                                        interestsList =
+                                            res.user.interests.split(",") as ArrayList<String>
                                     } else {
                                         interestsList.add(res.user.interests)
                                     }
-                                    setupChipGroupDynamically(interestsList!!,rootContainer,false)
+                                    setupChipGroupDynamically(interestsList!!, rootContainer, false)
 
                                 } catch (e: Exception) {
                                     Log.d(
@@ -755,7 +770,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
 
-
     private fun checkGallerypermission() {
         if (ContextCompat.checkSelfPermission(
                 requireActivity(),
@@ -780,7 +794,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             popup()
         }
     }
-
 
 
     private fun popup() {
@@ -865,16 +878,20 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
             OPERATION_CAPTURE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-                    val mUri= Uri.fromFile(File(currentPhotoPath))
+                    val mUri = Uri.fromFile(File(currentPhotoPath))
                     Glide.with(this)
                         .asBitmap()
                         .load(mUri)
-                        .into(object : CustomTarget<Bitmap>(300,300){
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        .into(object : CustomTarget<Bitmap>(300, 300) {
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap>?
+                            ) {
 
                                 Bitmap.createScaledBitmap(resource, 250, 250, true);
-                                convertBitmapToBase64(resource,true)
+                                convertBitmapToBase64(resource, true)
                             }
+
                             override fun onLoadCleared(placeholder: Drawable?) {
 
                             }
@@ -888,19 +905,28 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
                             Glide.with(this)
                                 .asBitmap()
-                                .load(File(URIPathHelper().getPath(requireContext(), data!!.data!!)))
-                                .into(object : CustomTarget<Bitmap>(300,300){
-                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                       // imageProfile?.setImageBitmap(resource)
+                                .load(
+                                    File(
+                                        URIPathHelper().getPath(
+                                            requireContext(),
+                                            data!!.data!!
+                                        )
+                                    )
+                                )
+                                .into(object : CustomTarget<Bitmap>(300, 300) {
+                                    override fun onResourceReady(
+                                        resource: Bitmap,
+                                        transition: Transition<in Bitmap>?
+                                    ) {
+                                        // imageProfile?.setImageBitmap(resource)
                                         Bitmap.createScaledBitmap(resource, 250, 250, true);
-                                        convertBitmapToBase64(resource,false)
+                                        convertBitmapToBase64(resource, false)
                                     }
+
                                     override fun onLoadCleared(placeholder: Drawable?) {
 
                                     }
                                 })
-
-
 
 
                             /* val bitmap = MediaStore.Images.Media.getBitmap(
@@ -941,33 +967,37 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             (activity as Home).homeviewmodel.User_upload_images(
                 (activity as Home).sharedPreferencesStorage.getString(
                     AppConstants.USER_ID
-                ), "data:image/png;base64," + encoded
+                ), "data:image/png;base64,$encoded"
             )
-            Log.d("TAG@123", "  images  --------- " + encoded)
+            Log.d("TAG@123", "  images  --------- $encoded")
             progressDialog.dismiss()
         }
 
     }
 
-    private fun setupChipGroupDynamically(list: List<String>, rootContainer:ChipGroup ,flag:Boolean) {
-        if(list.size>0){
-        try {
-            rootContainer.removeAllViews()
-            for (i in list.indices) {
-                Log.d("TAG@123", "ChipGroup : "+list.get(i))
-                if(list.get(i).length>0){
-                    rootContainer.addView(createChip(list.get(i), i,flag))
-                }
+    private fun setupChipGroupDynamically(
+        list: List<String>,
+        rootContainer: ChipGroup,
+        flag: Boolean
+    ) {
+        if (list.isNotEmpty()) {
+            try {
+                rootContainer.removeAllViews()
+                for (i in list.indices) {
+                    Log.d("TAG@123", "ChipGroup : " + list.get(i))
+                    if (list[i].isNotEmpty()) {
+                        rootContainer.addView(createChip(list.get(i), i, flag))
+                    }
 
+                }
+            } catch (e: Exception) {
             }
-        } catch (e: Exception) {
-        }}
+        }
     }
 
     @SuppressLint("ResourceType")
     private fun createChip(label: String, index: Int, flag: Boolean): Chip {
-
-        val chip = Chip(requireContext(), null)
+        val chip = Chip(requireContext(), null, R.style.chip_style)
         chip.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -975,50 +1005,44 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         chip.text = label
 
-        chip.setBackgroundColor(
-            if (interestsList.contains(label)) {
-                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.light_blue_900)
-            } else {
-                ContextCompat.getColor(AppReseources.getAppContext()!!, R.color.teal_200)
-            }
-        )
-
-
-        chip.chipCornerRadius = 1.0F
-
-        if(flag){
+        if (flag) {
             chip.isCloseIconVisible = true
             chip.isChipIconVisible = true
             chip.isCheckable = true
             chip.isClickable = true
-
+            chip.chipStrokeWidth=3f
+            chip.chipCornerRadius=10f
+            chip.setChipBackgroundColorResource(android.R.color.transparent)
 
             chip.setOnCloseIconClickListener {
                 Log.d("TAG@123", interestsList.toString())
-                    if (interestsList.contains(label)) {
-                        interestsList.remove(label)
-                        setupChipGroupDynamically(interestsList!!,rootContainer_intrest, true)
+                if (interestsList.contains(label)) {
+                    interestsList.remove(label)
+                    setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
                 }
                 Log.d("TAG@123", interestsList.toString())
 
             }
-        }
-        else{
+        } else {
             chip.isCloseIconVisible = false
             chip.isChipIconVisible = false
             chip.isCheckable = false
-            chip.isClickable = false
+            chip.isChecked=true
+            chip.chipStrokeWidth=7f
+            chip.chipCornerRadius=50f
+            chip.setTextColor(getColorStateList(requireContext(), R.color.blue))
+          //  chip.setTextSize(14f)
+            chip.setChipStrokeColorResource(R.color.blue)
+            chip.setChipBackgroundColorResource(android.R.color.transparent)
         }
-
         return chip
-
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
-        if(this::schoolAdapter.isInitialized){
+        if (this::schoolAdapter.isInitialized) {
             schoolAdapter.filter.filter(p0)
         }
-        if(this::intrestAdapter.isInitialized){
+        if (this::intrestAdapter.isInitialized) {
             intrestAdapter.filter.filter(p0)
         }
 
@@ -1026,10 +1050,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {
-        if(this::schoolAdapter.isInitialized){
+        if (this::schoolAdapter.isInitialized) {
             schoolAdapter.filter.filter(p0)
         }
-        if(this::intrestAdapter.isInitialized){
+        if (this::intrestAdapter.isInitialized) {
             intrestAdapter.filter.filter(p0)
         }
         return false
@@ -1084,27 +1108,26 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
         var clickItemData = position.interest
-          if(interestsList.size<=6){
-              if(interestsList.contains(clickItemData)==false){
-                  interestsList.add(clickItemData)
-                  setupChipGroupDynamically(interestsList!!,rootContainer_intrest,true)
-              }else{
-                  Toast.makeText(requireContext(), "Already added", Toast.LENGTH_LONG)
-                      .show()
-              }
-          }
-        else{
-              Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
-                  .show()
+        if (interestsList.size <= 6) {
+            if (interestsList.contains(clickItemData) == false) {
+                interestsList.add(clickItemData)
+                setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
+            } else {
+                Toast.makeText(requireContext(), "Already added", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
+                .show()
 
         }
 
 
     }
 
-    fun set_default_button(name:String){
-        when(name){
-            "Sorority"->{
+    fun set_default_button(name: String) {
+        when (name) {
+            "Sorority" -> {
 
                 Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
                 Socority_button?.setTextColor(this.resources.getColor(R.color.black))
@@ -1117,7 +1140,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
             }
-            "Fraternity"->{
+            "Fraternity" -> {
 
                 fraternity_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
                 fraternity_button?.setTextColor(this.resources.getColor(R.color.black))
@@ -1129,7 +1152,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 Socority_button?.setTextColor(this.getResources().getColor(R.color.white))
 
             }
-            "Independent"->{
+            "Independent" -> {
 
 
                 independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
@@ -1141,13 +1164,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
                 fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
 
-                fraternity_Spinner.visibility=View.INVISIBLE
+                fraternity_Spinner.visibility = View.INVISIBLE
             }
 
         }
 
     }
-
 
 
     private fun do_sent_firebaselog(event_name: String, event_log: String) {

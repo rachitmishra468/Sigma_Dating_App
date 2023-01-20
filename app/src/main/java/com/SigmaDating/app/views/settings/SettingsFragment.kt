@@ -151,7 +151,7 @@ class SettingsFragment : Fragment() {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
-                var shareMessage = "\nLet me recommend you this application\n\n"
+                var shareMessage = Home.share_app_text +"\n"
                 shareMessage =
                     """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
                     """.trimIndent()
@@ -165,11 +165,11 @@ class SettingsFragment : Fragment() {
             Update_password(false);
         }
         _binding.seftyButton.setOnClickListener {
-            if (checkPermissions()) {
-            sendSMS(phone_number,"Test Message")
+          /*  if (checkPermissions()) {
+            sendSMS(phone_number, Home.safety_message_text)
             }else {
                 requestPermissions()
-            }
+            }*/
         }
         _binding.seftyUpdate.setOnClickListener {
             Update_sefty_contact_number()
@@ -718,7 +718,7 @@ class SettingsFragment : Fragment() {
     fun sendSMS(phoneNo: String?, msg: String?) {
         try {
             val smsManager: SmsManager = SmsManager.getDefault()
-            val uri = "http://maps.google.com/?q=$latitude,$longitude"
+            val uri = msg+"\n "+"http://maps.google.com/?q=$latitude,$longitude"
             smsManager.sendTextMessage(phoneNo, null, uri, null, null)
             Toast.makeText(
                 requireContext(), "Message Send",

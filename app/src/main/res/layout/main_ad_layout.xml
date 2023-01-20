@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:clickable="true"
     android:id="@+id/ad_main"
-    android:visibility="gone"
+    android:visibility="visible"
     android:background="@color/white"
     android:layout_height="wrap_content">
 
@@ -42,6 +42,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="5dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/card_ad"
         app:layout_constraintTop_toTopOf="@+id/card_ad"
         android:src="@drawable/close_ad">
@@ -67,20 +68,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/black_bg"
+        android:background="@drawable/skip_bg"
         android:clickable="true"
         android:gravity="center|right"
-        android:paddingLeft="10dp"
+        android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:visibility="gone"
-        android:text="Skip Ads"
-        android:layout_marginRight="5dp"
+        android:visibility="visible"
+        android:text=""
+        android:layout_marginRight="-2dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/card_ad"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textStyle="normal"/>
+        android:textStyle="bold"/>
 
 
 

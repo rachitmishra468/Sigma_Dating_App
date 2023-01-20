@@ -57,6 +57,10 @@ interface ApiService {
     @GET("users/plans")
     suspend fun getSubscriptionPlanslist(): Response<SubscriptionPlanData>
 
+    @GET("common/contact_info")
+    suspend fun contact_info(): Response<contactinfoModel>
+
+
     @POST("common/ads")
     suspend fun listads(@Body jsonObject: JsonObject): Response<advertisingData>
 

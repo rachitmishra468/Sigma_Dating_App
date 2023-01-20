@@ -36,6 +36,7 @@ interface ApiHelper {
     suspend fun getlistads(jsonObject: JsonObject): Response<advertisingData>
 
     suspend fun getSubscriptionPlanslist(): Response<SubscriptionPlanData>
+    suspend fun contact_info(): Response<contactinfoModel>
 
     suspend fun PostSubscriptionPlansdata(jsonObject: JsonObject): Response<SubscriptionPlanData>
 

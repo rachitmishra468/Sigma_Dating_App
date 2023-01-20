@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingTop="5dp"
-    android:clickable="false"
     android:background="@color/white"
-    android:paddingRight="10dp">
+    android:clickable="false">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="10"
         android:clickable="false"
         android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
         android:visibility="gone"
-        android:id="@+id/main_layout"
         android:weightSum="10">
 
         <LinearLayout
@@ -150,8 +151,6 @@
                 android:layout_height="match_parent">
 
 
-
-
                 <LinearLayout
                     android:id="@+id/container"
                     android:layout_width="match_parent"
@@ -185,9 +184,9 @@
                                 android:id="@+id/img_hide"
                                 android:layout_width="108dp"
                                 android:layout_height="108dp"
-                                android:visibility="invisible"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
+                                android:visibility="invisible"
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
                                 app:lottie_rawRes="@raw/super_like" />
@@ -196,9 +195,9 @@
                                 android:id="@+id/broken_heart"
                                 android:layout_width="108dp"
                                 android:layout_height="108dp"
-                                android:visibility="invisible"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
+                                android:visibility="invisible"
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
                                 app:lottie_rawRes="@raw/broken_heart" />
@@ -207,13 +206,12 @@
                                 android:id="@+id/heart_loading"
                                 android:layout_width="108dp"
                                 android:layout_height="108dp"
-                                android:visibility="invisible"
                                 android:layout_gravity="center"
                                 android:scaleType="centerCrop"
+                                android:visibility="invisible"
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
                                 app:lottie_rawRes="@raw/heart_loading" />
-
 
 
                             <ProgressBar
@@ -229,14 +227,11 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
 
-
                         </androidx.cardview.widget.CardView>
 
                     </FrameLayout>
 
                 </LinearLayout>
-
-
 
 
                 <LinearLayout
@@ -329,12 +324,12 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:clickable="true"
         android:id="@+id/ad_main"
-        android:visibility="visible"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true">
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible">
 
 
         <LinearLayout
@@ -342,31 +337,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:padding="5dp"
+            android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/ad_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                android:src="@drawable/dummy_imf">
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dummy_imf"
+                android:visibility="visible">
 
             </ImageView>
-
-
-
 
             <VideoView
                 android:id="@+id/ad_videoview"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:visibility="gone"
-                android:layout_height="match_parent"/>
+
+                />
 
         </LinearLayout>
 
@@ -382,8 +381,9 @@
             android:text="AD"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/card_ad"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/card_ad" />
 
 
         <ProgressBar

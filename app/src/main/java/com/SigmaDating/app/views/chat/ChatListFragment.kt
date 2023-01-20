@@ -75,6 +75,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     lateinit var ads_image_view: ImageView
     lateinit var progress_bar_ads: ProgressBar
     lateinit var skip_text: TextView
+    var ads_close: Boolean = false
+
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -142,16 +144,18 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         skip_text = binding.root.findViewById(R.id.skip_text)
-
-
         close_ad_img=binding.root.findViewById(R.id.close_ad_img)
         ad_main.visibility=View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
-        close_ad_img.setOnClickListener {
-            if(ad_video.isPlaying){
-                ad_video.stopPlayback()
+
+
+        skip_text.setOnClickListener {
+            if (ads_close) {
+                if(ad_video.isPlaying){
+                    ad_video.stopPlayback()
+                }
+                ad_main.visibility=View.GONE
             }
-            ad_main.visibility=View.GONE
         }
 
         return binding.root;
@@ -400,6 +404,21 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                                 if (Home.ads_list.isNotEmpty()) {
                                     Home.ads_list_index = 0
                                     start_ads_listing(Home.ads_list)
+                                    var i = 1
+                                    val handler = Handler()
+                                    handler.postDelayed(object : Runnable {
+                                        override fun run() {
+                                            if (i <= 6) {
+                                                skip_text.setText("" + i + " Skip Ads ")
+                                                i += 1
+                                            } else {
+                                                ads_close = true
+                                                skip_text.setText(" Skip Ads ")
+                                                handler.removeCallbacksAndMessages(null);
+                                            }
+                                            handler.postDelayed(this, 1000)//1 sec delay
+                                        }
+                                    }, 0)
                                 }
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())
@@ -439,7 +458,6 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                 if (list[Home.ads_list_index].type.equals("image")) {
                     ads_image_view.visibility = View.VISIBLE
                     ad_video.visibility = View.GONE
-                    skip_text.visibility = View.GONE
 
                     Log.d("TAG@123", "start_ads_listing" + list[Home.ads_list_index].filename)
                     // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
@@ -488,10 +506,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         ad_video.start()
                     }
 
-                    skip_text.setOnClickListener {
-                        Home.ads_list_index++
-                        start_ads_listing(Home.ads_list)
-                    }
+
 
                     ad_video.setOnCompletionListener {
                         ad_video.start()

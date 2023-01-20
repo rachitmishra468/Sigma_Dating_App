@@ -1,8 +1,17 @@
 package com.SigmaDating.app.views.userdashboard
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.telephony.SmsManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -35,7 +45,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -52,18 +67,23 @@ class SecondFragment : Fragment() {
     private var dataList = mutableListOf<EditProfiledata>()
     private var dataListuser = listOf<Postdata>()
 
+    private val permissionId = 2
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
+    lateinit var safety_icon: ImageView
     lateinit var greekLatter: TextView
     private var userID: String? = null
     private var name: String? = null
     private var photo: String? = null
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
-
+    var latitude = ""
+    var longitude = ""
+    var phone_number = ""
 
     //Ad
     lateinit var ad_video: VideoView
@@ -72,6 +92,8 @@ class SecondFragment : Fragment() {
     lateinit var ads_image_view: ImageView
     lateinit var progress_bar_ads: ProgressBar
     lateinit var skip_text: TextView
+
+    var ads_close: Boolean = false
 
 
     override fun onCreateView(
@@ -83,6 +105,18 @@ class SecondFragment : Fragment() {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         empty_text_view = binding.root.findViewById(R.id.empty_text_view)
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        safety_icon = binding.root.findViewById(R.id.safety_icon)
+        safety_icon.setOnClickListener {
+            if (phone_number.isNullOrEmpty()) {
+                Update_sefty_contact_number()
+            } else {
+                if (checkPermissions()) {
+                    sendSMS(phone_number, Home.safety_message_text)
+                } else {
+                    requestPermissions()
+                }
+            }
+        }
         empty_item_layout.visibility = View.GONE
         footer_transition()
         userID = getArguments()?.getString("user_id")
@@ -152,10 +186,18 @@ class SecondFragment : Fragment() {
         skip_text = binding.root.findViewById(R.id.skip_text)
         ad_main.visibility = View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
-        close_ad_img.setOnClickListener {
-            ad_video.stopPlayback()
-            ad_main.visibility = View.GONE
+        skip_text.setOnClickListener {
+            if (ads_close) {
+                ad_video.stopPlayback()
+                ad_main.visibility = View.GONE
+            }
         }
+
+
+
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        getLocation()
 
         return binding.root
     }
@@ -215,8 +257,6 @@ class SecondFragment : Fragment() {
     }
 
     fun setAdapterListData(dataListuser: ArrayList<Postdata>) {
-
-
         _binding?.recyclerView?.layoutManager = GridLayoutManager(AppReseources.getAppContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
@@ -340,12 +380,26 @@ class SecondFragment : Fragment() {
                                 if (Home.ads_list.isNotEmpty()) {
                                     Home.ads_list_index = 0
                                     start_ads_listing(Home.ads_list)
+                                    val handler = Handler()
+                                    var i = 1
+                                    handler.postDelayed(object : Runnable {
+                                        override fun run() {
+                                            if (i <= 6) {
+                                                skip_text.setText("" + i + " Skip Ads ")
+                                                i += 1
+                                            } else {
+                                                ads_close = true
+                                                skip_text.setText(" Skip Ads ")
+                                                handler.removeCallbacksAndMessages(null);
+                                            }
+                                            handler.postDelayed(this, 1000)//1 sec delay
+                                        }
+                                    }, 0)
                                 }
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())
                             }
                         }
-
                     }
                 }
                 Status.LOADING -> {
@@ -353,7 +407,6 @@ class SecondFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     ad_main.visibility = View.GONE
-
                 }
             }
         })
@@ -364,8 +417,8 @@ class SecondFragment : Fragment() {
     fun start_ads_listing(list: ArrayList<advertising_model>) {
         Log.d("TAG@123", "start_ads_listing")
 
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
+        val handlert = Handler()
+        handlert.postDelayed(object : Runnable {
             override fun run() {
                 if (Home.ads_list_index == list.size) {
                     Home.ads_list_index = 0
@@ -373,7 +426,7 @@ class SecondFragment : Fragment() {
                 if (list[Home.ads_list_index].type.equals("image")) {
                     ads_image_view.visibility = View.VISIBLE
                     ad_video.visibility = View.GONE
-                    skip_text.visibility = View.GONE
+                    //  skip_text.visibility = View.GONE
 
                     Log.d("TAG@123", "start_ads_listing" + list[Home.ads_list_index].filename)
                     // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
@@ -410,7 +463,7 @@ class SecondFragment : Fragment() {
                     }
 
                     Home.ads_list_index++
-                    handler.postDelayed(this, 10000)//1 sec delay
+                    handlert.postDelayed(this, 10000)//10 sec delay
                 } else {
                     skip_text.visibility = View.VISIBLE
                     ad_video.visibility = View.VISIBLE
@@ -422,10 +475,6 @@ class SecondFragment : Fragment() {
                         ad_video.start()
                     }
 
-                    skip_text.setOnClickListener {
-                        Home.ads_list_index++
-                        start_ads_listing(Home.ads_list)
-                    }
 
                     ad_video.setOnCompletionListener {
                         ad_video.start()
@@ -441,5 +490,136 @@ class SecondFragment : Fragment() {
             }
         }, 0)
     }
+
+
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.SEND_SMS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.SEND_SMS
+            ),
+            permissionId
+        )
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionId) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getLocation()
+            }
+        }
+    }
+
+
+    fun Update_sefty_contact_number() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.update_sefty_sheet_dialog, null)
+        val editText_one = view.findViewById<EditText>(R.id.editText_one)
+        val editText_two = view.findViewById<EditText>(R.id.editText_two)
+        val editText_three = view.findViewById<EditText>(R.id.editText_three)
+        val save_contact = view.findViewById<Button>(R.id.save_contact)
+
+        save_contact.setOnClickListener {
+            phone_number = editText_one.text.toString()
+            dialog.dismiss()
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    val location: Location? = task.result
+                    if (location != null) {
+
+                        try {
+                            val geocoder =
+                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                            val list: List<Address> =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(500)
+                                latitude = "${list[0].latitude}"
+                                longitude = "${list[0].longitude}"
+                                Log.d("TAG@123", "location name" + latitude)
+
+                            }
+
+                        } catch (e: Exception) {
+                            Log.e("TAG@123", "Location Exception : ${e.message}")
+                        }
+                    }
+
+                }
+
+            } else {
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+
+
+    fun sendSMS(phoneNo: String?, msg: String?) {
+        try {
+            val smsManager: SmsManager = SmsManager.getDefault()
+            val uri = msg + "\n " + "http://maps.google.com/?q=$latitude,$longitude"
+            smsManager.sendTextMessage(phoneNo, null, uri, null, null)
+            Toast.makeText(
+                requireContext(), "Message Send",
+                Toast.LENGTH_LONG
+            ).show()
+        } catch (ex: java.lang.Exception) {
+            Toast.makeText(
+                requireContext(), ex.message.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            ex.printStackTrace()
+        }
+    }
+
 
 }

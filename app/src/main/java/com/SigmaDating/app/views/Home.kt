@@ -119,6 +119,9 @@ class Home : AppCompatActivity() {
         var current_user_profile: String = ""
         var mCurrent_user_token: String = ""
         var mVideoGrant_user_token: String = ""
+        var share_app_text: String = ""
+        var safety_message_text: String = ""
+
         var match_id: String = ""
         var sender_id: String = ""
         var chatFlag: Boolean = false

@@ -51,7 +51,7 @@ class MainRepository @Inject constructor(
     suspend fun  getSubscriptionPlanslist()=apiHelper.getSubscriptionPlanslist()
     suspend fun  postSubscriptionPlansdata(jsonObject: JsonObject)=apiHelper.PostSubscriptionPlansdata(jsonObject)
 
-
+    suspend fun  contact_info()=apiHelper.contact_info()
 
     suspend fun contact_form(jsonObject: JsonObject) = apiHelper.contact_form(jsonObject)
 
