@@ -119,6 +119,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var age_range = ""
     var distance = ""
     var gender = ""
+
+
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -392,7 +394,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         val done_interset = dialog.findViewById<Button>(R.id.done_interset)
         rootContainer_intrest = dialog.findViewById<ChipGroup>(R.id.rootContainer_intrest)
         setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
-        searchRecyclerView!!.layoutManager = GridLayoutManager(requireContext(), 2)
+        searchRecyclerView!!.layoutManager = GridLayoutManager(requireContext(), 1)
         intrestAdapter = InterestAdapter(this, stringtype)
         searchRecyclerView!!.adapter = intrestAdapter
         intrestAdapter.addData(passDataList)
@@ -1012,8 +1014,9 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             chip.isClickable = true
             chip.chipStrokeWidth=3f
             chip.chipCornerRadius=10f
+            chip.setTextColor(getColorStateList(requireContext(), R.color.blue))
             chip.setChipBackgroundColorResource(android.R.color.transparent)
-
+            chip.setChipStrokeColorResource(R.color.blue)
             chip.setOnCloseIconClickListener {
                 Log.d("TAG@123", interestsList.toString())
                 if (interestsList.contains(label)) {
@@ -1028,8 +1031,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             chip.isChipIconVisible = false
             chip.isCheckable = false
             chip.isChecked=true
-            chip.chipStrokeWidth=7f
-            chip.chipCornerRadius=50f
+            chip.chipStrokeWidth=3f
+            chip.chipCornerRadius=5f
             chip.setTextColor(getColorStateList(requireContext(), R.color.blue))
           //  chip.setTextSize(14f)
             chip.setChipStrokeColorResource(R.color.blue)
@@ -1095,12 +1098,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     fun Update_edit_Profile_info() {
         (activity as Home).homeviewmodel.get_user_edit_user =
             MutableLiveData<Resource<Loginmodel>>()
-        subscribe_Login_User_details()
         (activity as Home).homeviewmodel.get_Edit_User_details(
             (activity as Home).sharedPreferencesStorage.getString(
                 AppConstants.USER_ID
             )
         )
+        subscribe_Login_User_details()
     }
 
     override fun onIntrestClick(position: Interest, stringtype: String) {

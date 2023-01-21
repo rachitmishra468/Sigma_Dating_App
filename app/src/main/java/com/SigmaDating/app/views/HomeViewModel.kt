@@ -736,4 +736,20 @@ class HomeViewModel @Inject constructor(
     }
 
 
+
+    fun post_users_updatecontacts(id: JsonObject) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            Log.d("TAG@123", "Contact_form" + id)
+            mainRepository.post_users_updatecontacts(id).let {
+                if (it.isSuccessful) {
+                    contact_responce.postValue(Resource.success(it.body()))
+                } else {
+                    contact_responce.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
+
+
+
 }

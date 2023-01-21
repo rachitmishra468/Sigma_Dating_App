@@ -29,14 +29,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="14dp" />
+            app:layout_constraintGuide_end="4dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="14dp" />
+            app:layout_constraintGuide_begin="4dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_bottom"
@@ -69,10 +69,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="110dp"
+            android:layout_height="90dp"
             android:orientation="vertical"
             android:layout_centerInParent="true"
             tools:ignore="MissingConstraints"
+            android:gravity="center"
             android:background="@color/black_bg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -120,7 +121,7 @@
             android:layout_marginTop="15sp"
             android:text="Rachit Mishra"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/profile_post_img"
             app:layout_constraintTop_toTopOf="@+id/guideline_top" />
@@ -141,10 +142,10 @@
 
         <ImageView
             android:id="@+id/img_like"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="1dp"
             android:padding="7dp"
             android:scaleType="centerCrop"
@@ -156,8 +157,8 @@
 
         <ImageView
             android:id="@+id/comment_img"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:padding="7dp"
             android:src="@drawable/comment_icon"
             app:layout_constraintEnd_toStartOf="@id/guideline_right"
@@ -165,11 +166,11 @@
 
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/title_hadder"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="1"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@+id/post_img">
 
@@ -177,40 +178,29 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7"
+                android:layout_weight=".8"
                 android:orientation="vertical">
 
 
                 <TextView
                     android:id="@+id/post_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_marginTop="5sp"
-                    android:text=""
+                    android:text="Test"
+                    android:gravity="left|center"
                     android:singleLine="true"
                     android:visibility="visible"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/dis_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5sp"
-                    android:text=""
-                    android:textColor="@color/light_text_color"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    app:layout_constraintEnd_toStartOf="@+id/post_img"
-                    app:layout_constraintStart_toEndOf="@+id/post_img"
-                    app:layout_constraintTop_toBottomOf="@+id/post_title" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_weight=".2"
                 android:gravity="center"
                 android:padding="2dp"
                 android:orientation="horizontal">
@@ -220,19 +210,33 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:padding="5dp"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/visibility_off_post" />
 
                 <ImageView
                     android:id="@+id/post_delete_img"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:src="@drawable/delete_icon" />
 
             </LinearLayout>
+
+
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/dis_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
+            android:text=""
+            android:textColor="@color/light_text_color"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/title_hadder"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

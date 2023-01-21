@@ -148,4 +148,7 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.contact_form(jsonObject)
 
+    override suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.post_users_updatecontacts(jsonObject)
+
 }

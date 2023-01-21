@@ -6,6 +6,8 @@ import com.SigmaDating.model.SchoolCommunityResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 
 interface ApiHelper {
@@ -68,6 +70,9 @@ interface ApiHelper {
 
     //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel>
+    suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel>
+
+
 
 
 }

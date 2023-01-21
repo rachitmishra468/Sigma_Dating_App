@@ -150,5 +150,8 @@ interface ApiService {
     @POST("common/contact")
     suspend fun contact_form(@Body jsonObject: JsonObject): Response<Loginmodel>
 
+    @POST("user/post_users_updatecontacts")
+    suspend fun post_users_updatecontacts(@Body jsonObject: JsonObject): Response<Loginmodel>
+
 
 }

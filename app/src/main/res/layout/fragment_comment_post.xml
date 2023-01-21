@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4.5"
-        app:cardElevation="4dp"
         app:cardMaxElevation="6dp"
         app:cardUseCompatPadding="false">
 
@@ -129,7 +128,7 @@
                     android:text="Comments "
                     android:textSize="16sp"
                     android:padding="2dp"
-                    android:layout_marginLeft="2sp"
+                    android:layout_marginLeft="16sp"
                     android:textColor="@color/black"
                     android:textStyle="normal"
                     android:layout_height="match_parent"/>
@@ -181,8 +180,6 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="3dp"
             app:cardUseCompatPadding="false">
 
 
@@ -190,7 +187,7 @@
                 android:id="@+id/messageInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_background"
+                android:background="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -203,9 +200,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="1dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="17dp"
-                    android:layout_marginBottom="17dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:hint="Add Comment"
                     app:boxBackgroundColor="@color/white"
                     app:endIconDrawable="@drawable/ic_send_message"
@@ -213,7 +210,7 @@
                     app:endIconTint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_goneMarginTop="17dp">
+                    app:layout_goneMarginTop="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/commentInput"

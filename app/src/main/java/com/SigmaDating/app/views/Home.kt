@@ -122,6 +122,11 @@ class Home : AppCompatActivity() {
         var share_app_text: String = ""
         var safety_message_text: String = ""
 
+        var emergency_contact1: String = ""
+        var emergency_contact2: String = ""
+        var emergency_contact3: String = ""
+
+
         var match_id: String = ""
         var sender_id: String = ""
         var chatFlag: Boolean = false

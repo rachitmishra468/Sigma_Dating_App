@@ -28,15 +28,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.adapters.Profile_Adapter
+import com.SigmaDating.app.model.*
 
 
-import com.SigmaDating.app.model.EditProfiledata
-import com.SigmaDating.app.model.Postdata
-import com.SigmaDating.app.model.advertisingData
-import com.SigmaDating.app.model.advertising_model
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
+import com.SigmaDating.app.views.Home.Companion.emergency_contact1
+import com.SigmaDating.app.views.Home.Companion.emergency_contact2
+import com.SigmaDating.app.views.Home.Companion.emergency_contact3
 import com.SigmaDating.databinding.FragmentSecondBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -48,6 +48,7 @@ import com.example.demoapp.other.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -66,7 +67,6 @@ class SecondFragment : Fragment() {
     private lateinit var photoAdapter: Profile_Adapter
     private var dataList = mutableListOf<EditProfiledata>()
     private var dataListuser = listOf<Postdata>()
-
     private val permissionId = 2
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val binding get() = _binding!!
@@ -107,11 +107,30 @@ class SecondFragment : Fragment() {
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
         safety_icon = binding.root.findViewById(R.id.safety_icon)
         safety_icon.setOnClickListener {
-            if (phone_number.isNullOrEmpty()) {
+            Log.d(
+                "TAG@123",
+                "emergency_contact3  :-$emergency_contact1 : ${Home.emergency_contact2} :${Home.emergency_contact3}"
+            )
+
+
+            if (
+                emergency_contact1.equals("null")
+                && emergency_contact2.equals("null")
+                && emergency_contact3.equals("null")
+            ) {
                 Update_sefty_contact_number()
             } else {
                 if (checkPermissions()) {
-                    sendSMS(phone_number, Home.safety_message_text)
+                    if (!emergency_contact1.isNullOrEmpty()) {
+                        sendSMS(emergency_contact1, Home.safety_message_text)
+                    }
+                    if (!emergency_contact2.isNullOrEmpty()) {
+                        sendSMS(emergency_contact2, Home.safety_message_text)
+                    }
+                    if (!emergency_contact3.isNullOrEmpty()) {
+                        sendSMS(emergency_contact3, Home.safety_message_text)
+                    }
+
                 } else {
                     requestPermissions()
                 }
@@ -547,6 +566,30 @@ class SecondFragment : Fragment() {
 
         save_contact.setOnClickListener {
             phone_number = editText_one.text.toString()
+            (activity as Home).homeviewmodel.contact_responce =
+                MutableLiveData<Resource<Loginmodel>>()
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "user_id",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            jsonObject.addProperty(
+                "emergency_contact1",
+                editText_one.text.toString()
+            )
+
+            jsonObject.addProperty(
+                "emergency_contact2",
+                editText_two.text.toString()
+            )
+
+            jsonObject.addProperty(
+                "emergency_contact3",
+                editText_three.text.toString()
+            )
+
+            (activity as Home).homeviewmodel.post_users_updatecontacts(jsonObject)
+            subscribe_create_post()
             dialog.dismiss()
         }
         dialog.setCancelable(true)
@@ -619,6 +662,32 @@ class SecondFragment : Fragment() {
             ).show()
             ex.printStackTrace()
         }
+    }
+
+
+    fun subscribe_create_post() {
+        AppUtils.showLoader(requireContext())
+        (activity as Home?)?.homeviewmodel?.contact_responce?.observe(
+            viewLifecycleOwner,
+            Observer { res ->
+                when (res.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+                        Toast.makeText(
+                            requireContext(),
+                            res.data?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
     }
 
 

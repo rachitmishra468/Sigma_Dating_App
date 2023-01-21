@@ -29,9 +29,9 @@ data class User(
     val is_private:String,
     val notifications:Int,
     val advertisement:Int,
+    val emergency_contact1:String,
+    val emergency_contact2:String,
+    val emergency_contact3:String,
     var photos:ArrayList<String> = arrayListOf()
-
-
-
     )
 
