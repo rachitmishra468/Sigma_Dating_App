@@ -56,7 +56,6 @@ class Login_Activity : AppCompatActivity() {
     private var phone_otp_send:Boolean=false
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
 

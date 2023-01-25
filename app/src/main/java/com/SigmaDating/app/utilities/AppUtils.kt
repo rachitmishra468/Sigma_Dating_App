@@ -51,24 +51,36 @@ object AppUtils {
 
     }
 
-    fun showLoader(context: Context?) {
-        context?.javaClass?.name?.let { Log.d("TAG@123", it) }
-        val builder = AlertDialog.Builder(context, R.style.NewDialog)
-        val inflater = LayoutInflater.from(context)
-        val view: View = inflater.inflate(R.layout.custom_loader, null, false)
-        builder.setView(view)
-        dialog?.getWindow()?.setDimAmount(0f);
-        dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
-        dialog = builder.create()
-        (dialog as AlertDialog?)?.setCancelable(true)
-        val groupcreate: LottieAnimationView =
-            view.findViewById<View>(R.id.email) as LottieAnimationView
-        groupcreate.setAnimation(R.raw.loader)
-        groupcreate.playAnimation()
-        (dialog as AlertDialog?)?.getWindow()!!
-            .setBackgroundDrawableResource(R.color.hint_text_color)
-        (dialog as AlertDialog?)?.show()
+    fun loader(): Boolean {
+        try {
+            return dialog!!.isShowing
+        } catch (e: Exception) {
 
+            false
+        }
+        return false
+    }
+
+    fun showLoader(context: Context?) {
+        if(loader()){}
+        else {
+            context?.javaClass?.name?.let { Log.d("TAG@123", it) }
+            val builder = AlertDialog.Builder(context, R.style.NewDialog)
+            val inflater = LayoutInflater.from(context)
+            val view: View = inflater.inflate(R.layout.custom_loader, null, false)
+            builder.setView(view)
+            dialog?.getWindow()?.setDimAmount(0f);
+            dialog?.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent);
+            dialog = builder.create()
+            (dialog as AlertDialog?)?.setCancelable(true)
+            val groupcreate: LottieAnimationView =
+                view.findViewById<View>(R.id.email) as LottieAnimationView
+            groupcreate.setAnimation(R.raw.loader)
+            groupcreate.playAnimation()
+            (dialog as AlertDialog?)?.getWindow()!!
+                .setBackgroundDrawableResource(R.color.hint_text_color)
+            (dialog as AlertDialog?)?.show()
+        }
     }
 
     fun isValidEmail(email: String?): Boolean {

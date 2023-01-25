@@ -19,12 +19,10 @@ import com.SigmaDating.R
 import com.SigmaDating.app.adapters.ProfileMatch
 import com.SigmaDating.app.model.*
 import com.SigmaDating.app.storage.AppConstants
+import com.SigmaDating.app.storage.AppConstants.*
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.utilities.AppUtils.open_ad_link
 import com.SigmaDating.app.views.CardManager.CardViewChanger
-import com.SigmaDating.app.views.Home.Companion.emergency_contact1
-import com.SigmaDating.app.views.Home.Companion.emergency_contact2
-import com.SigmaDating.app.views.Home.Companion.emergency_contact3
 import com.SigmaDating.app.views.Home.Companion.notifications_count
 import com.SigmaDating.app.views.Home.Companion.pages
 import com.SigmaDating.app.views.Home.Companion.safety_message_text
@@ -501,16 +499,21 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 )
                                 Home.current_user_profile = it.data?.user?.upload_image.toString()
 
-                                Home.emergency_contact1 =
+                                (activity as Home).sharedPreferencesStorage.setValue(
+                                    emergency_contact_one,
                                     it.data?.user?.emergency_contact1.toString()
-                                Home.emergency_contact2 =
-                                    it.data?.user?.emergency_contact2.toString()
-                                Home.emergency_contact3 =
-                                    it.data?.user?.emergency_contact3.toString()
-                                Log.d(
-                                    "TAG@123",
-                                    "emergency_contact3  :-$emergency_contact1 : $emergency_contact2 :$emergency_contact3"
                                 )
+
+                                (activity as Home).sharedPreferencesStorage.setValue(
+                                    emergency_contact_two,
+                                    it.data?.user?.emergency_contact2.toString()
+                                )
+
+                                (activity as Home).sharedPreferencesStorage.setValue(
+                                    emergency_contact_three,
+                                    it.data?.user?.emergency_contact3.toString()
+                                )
+
                                 if (it.data?.user?.upload_image?.length == 0 || it.data?.user?.upload_image == null) {
                                     Glide.with(requireContext()).load(
                                         (activity as Home?)?.sharedPreferencesStorage!!.getString(

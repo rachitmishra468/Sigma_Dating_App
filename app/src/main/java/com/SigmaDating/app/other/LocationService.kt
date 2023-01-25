@@ -23,100 +23,105 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
-open  class LocationService {
+open class LocationService {
 
 
-companion object {
+    companion object {
 
-    private val permissionId = 2
-    var latitude = ""
-    var longitude = ""
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    fun get_location(requireActivity: FragmentActivity) {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
-        getLocation(requireActivity)
-    }
+        private val permissionId = 2
+        var latitude = ""
+        var longitude = ""
+        private lateinit var mFusedLocationClient: FusedLocationProviderClient
+        fun get_location(requireActivity: FragmentActivity) {
+            mFusedLocationClient =
+                LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+            getLocation(requireActivity)
+        }
+
+        @SuppressLint("MissingPermission", "SetTextI18n")
+        fun getLocation(requireActivity: FragmentActivity) {
+            if (checkPermissions(requireActivity)) {
+                if (isLocationEnabled(requireActivity)) {
+                    mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity) { task ->
+                        val location: Location? = task.result
+                        if (location != null) {
+                            val geocoder =
+                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                            val list: List<Address> =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(500)
+                                (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.latitude,
+                                    "${list[0].latitude}"
+                                )
+                                (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.longitude,
+                                    "${list[0].longitude}"
+                                )
+
+                                (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.location,
+                                    "${list[0].locality}"
+                                )
+                                Log.d(
+                                    "TAG@123",
+                                    "Location :- ${list[0].latitude} , ${list[0].longitude}"
+                                )
 
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
-    fun getLocation(requireActivity : FragmentActivity) {
-        if (checkPermissions(requireActivity)) {
-            if (isLocationEnabled(requireActivity)) {
-
-                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity) { task ->
-                    val location: Location? = task.result
-                    if (location != null) {
-                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
-                        val list: List<Address> =
-                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(500)
-                            (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                AppConstants.latitude,
-                                "${list[0].latitude}"
-                            )
-                            (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                AppConstants.longitude,
-                                "${list[0].longitude}"
-                            )
-
-                            (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                AppConstants.location,
-                                "${list[0].locality}"
-                            )
-                            Log.d("TAG@123","Location :- ${list[0].latitude} , ${list[0].longitude}")
+                            }
 
 
                         }
-
-
                     }
+
+                } else {
+                    Toast.makeText(requireActivity, "Please turn on location", Toast.LENGTH_LONG)
+                        .show()
                 }
-
             } else {
-                Toast.makeText(requireActivity, "Please turn on location", Toast.LENGTH_LONG)
-                    .show()
+                requestPermissions(requireActivity)
             }
-        } else {
-            requestPermissions(requireActivity)
         }
-    }
-    private fun requestPermissions(requireActivity :FragmentActivity) {
-        ActivityCompat.requestPermissions(
-            requireActivity,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            permissionId
-        )
-    }
-    private fun checkPermissions(requireContext:FragmentActivity): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
+
+        private fun requestPermissions(requireActivity: FragmentActivity) {
+            ActivityCompat.requestPermissions(
+                requireActivity,
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                permissionId
+            )
         }
-        return false
-    }
-    private fun isLocationEnabled(requireContext:FragmentActivity): Boolean {
-        val locationManager: LocationManager =
-            AppReseources.getAppContext()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
+
+        private fun checkPermissions(requireContext: FragmentActivity): Boolean {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    requireContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                return true
+            }
+            return false
+        }
+
+        private fun isLocationEnabled(requireContext: FragmentActivity): Boolean {
+            val locationManager: LocationManager =
+                AppReseources.getAppContext()
+                    ?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+            )
+        }
 
 
-}
+    }
 
 
 }

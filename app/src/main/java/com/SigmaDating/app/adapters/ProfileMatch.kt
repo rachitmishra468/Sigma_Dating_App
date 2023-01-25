@@ -55,20 +55,19 @@ class ProfileMatch(
         var mageview = (v.findViewById<View>(R.id.idIVCourse) as ImageView)
         var idIV_actiontyp = (v.findViewById<LottieAnimationView>(R.id.img_hide))
         var progressBar = (v.findViewById<ProgressBar>(R.id.progress_bar))
-        var progress_bar_ads= (v.findViewById<ProgressBar>(R.id.progress_bar_ads))
+        var progress_bar_ads = (v.findViewById<ProgressBar>(R.id.progress_bar_ads))
         var greek_latter = (v.findViewById<TextView>(R.id.greek_latter))
         var broken_heart = (v.findViewById<LottieAnimationView>(R.id.broken_heart))
         var heart_loading = (v.findViewById<LottieAnimationView>(R.id.heart_loading))
-
-        var mConstraintLayout=(v.findViewById<ConstraintLayout>(R.id.ad_main))
-        var main_layout=(v.findViewById<LinearLayout>(R.id.main_layout))
-        var ad_image_view=(v.findViewById<ImageView>(R.id.ad_image_view))
-        var ad_videoview=(v.findViewById<VideoView>(R.id.ad_videoview))
+        var mConstraintLayout = (v.findViewById<ConstraintLayout>(R.id.ad_main))
+        var main_layout = (v.findViewById<LinearLayout>(R.id.main_layout))
+        var ad_image_view = (v.findViewById<ImageView>(R.id.ad_image_view))
+        var ad_videoview = (v.findViewById<VideoView>(R.id.ad_videoview))
+        var video_main_relative = (v.findViewById<RelativeLayout>(R.id.video_main_relative))
 
         mageview.apply {
             transitionName = courseData[position].upload_image
         }
-
         progressBar.visibility = View.VISIBLE
         Glide.with(context).load(courseData[position].upload_image)
             .listener(object : RequestListener<Drawable> {
@@ -82,6 +81,7 @@ class ProfileMatch(
                     progressBar.visibility = View.GONE
                     return false;
                 }
+
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -126,8 +126,8 @@ class ProfileMatch(
 
 
         if (courseData[position].record_type.equals("bid")) {
-            mConstraintLayout.visibility=View.GONE
-            main_layout.visibility=View.VISIBLE
+            mConstraintLayout.visibility = View.GONE
+            main_layout.visibility = View.VISIBLE
             if (courseData[position].greekletter.length > 0) {
                 greek_latter.visibility = View.VISIBLE
                 greek_latter.text = courseData[position].greekletter
@@ -168,12 +168,13 @@ class ProfileMatch(
 
             }
         } else {
-            mConstraintLayout.visibility=View.VISIBLE
-            main_layout.visibility=View.GONE
-            if(courseData[position].type.equals("image")){
-                ad_image_view.visibility=View.VISIBLE
-                ad_videoview.visibility=View.GONE
-                progress_bar_ads.visibility=View.VISIBLE
+            mConstraintLayout.visibility = View.VISIBLE
+            main_layout.visibility = View.GONE
+            if (courseData[position].type.equals("image")) {
+                ad_image_view.visibility = View.VISIBLE
+                ad_videoview.visibility = View.GONE
+                video_main_relative.visibility = View.GONE
+                progress_bar_ads.visibility = View.VISIBLE
                 Glide.with(context).load(courseData[position].filename)
                     .listener(object : RequestListener<Drawable> {
                         override fun onResourceReady(
@@ -186,6 +187,7 @@ class ProfileMatch(
                             progress_bar_ads.visibility = View.GONE
                             return false;
                         }
+
                         override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
@@ -209,6 +211,7 @@ class ProfileMatch(
                             courseData[position], 5, null, mageview
                         )
                     }
+
                     override fun onSwipeRight() {
                         super.onSwipeRight()
                         listener.onCategoryClick(
@@ -229,18 +232,19 @@ class ProfileMatch(
                 })
 
 
-            }else{
-                progress_bar_ads.visibility=View.VISIBLE
-                ad_image_view.visibility=View.GONE
-                ad_videoview.visibility=View.VISIBLE
+            } else {
+                progress_bar_ads.visibility = View.VISIBLE
+                ad_image_view.visibility = View.GONE
+                ad_videoview.visibility = View.VISIBLE
+                video_main_relative.visibility = View.VISIBLE
                 ad_videoview.setVideoPath(courseData[position].filename);
 
                 ad_videoview.setOnCompletionListener {
                     ad_videoview.start()
                 }
                 ad_videoview.setOnPreparedListener {
-                    progress_bar_ads.visibility=View.GONE
-                    it.setVolume(0f,0f)
+                    progress_bar_ads.visibility = View.GONE
+                    it.setVolume(0f, 0f)
                     ad_videoview.start()
                 }
 
@@ -255,17 +259,20 @@ class ProfileMatch(
                             courseData[position], 5, null, mageview
                         )
                     }
+
                     override fun onSwipeRight() {
                         super.onSwipeRight()
                         listener.onCategoryClick(
                             courseData[position], 2, null, mageview
                         )
                     }
+
                     @SuppressLint("ClickableViewAccessibility")
                     override fun onSwipeUp() {
                         super.onSwipeUp()
 
                     }
+
                     override fun onSwipeDown() {
                         super.onSwipeDown()
                     }

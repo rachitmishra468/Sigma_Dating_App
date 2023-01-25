@@ -61,7 +61,7 @@ class SettingsFragment : Fragment() {
     var location_text = ""
     var latitude = ""
     var longitude = ""
-    var phone_number = ""
+    var show_dilog = false
 
 
     fun Call_links() {
@@ -151,7 +151,7 @@ class SettingsFragment : Fragment() {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
-                var shareMessage = Home.share_app_text +"\n"
+                var shareMessage = Home.share_app_text + "\n"
                 shareMessage =
                     """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
                     """.trimIndent()
@@ -165,14 +165,12 @@ class SettingsFragment : Fragment() {
             Update_password(false);
         }
         _binding.seftyButton.setOnClickListener {
-          /*  if (checkPermissions()) {
-            sendSMS(phone_number, Home.safety_message_text)
-            }else {
-                requestPermissions()
-            }*/
         }
         _binding.seftyUpdate.setOnClickListener {
-            Update_sefty_contact_number()
+            if (!show_dilog) {
+                Update_sefty_contact_number()
+            }
+
         }
         _binding.phoneNumberText.setOnClickListener {
             Update_phone_location(true);
@@ -332,6 +330,20 @@ class SettingsFragment : Fragment() {
                             }
                             _binding.switch1.isChecked = it.data?.user?.notifications == 1
                             _binding.addSwitch.isChecked = it.data?.user?.advertisement == 1
+                            (activity as Home).sharedPreferencesStorage.setValue(
+                                AppConstants.emergency_contact_one,
+                                it.data?.user?.emergency_contact1.toString()
+                            )
+
+                            (activity as Home).sharedPreferencesStorage.setValue(
+                                AppConstants.emergency_contact_two,
+                                it.data?.user?.emergency_contact2.toString()
+                            )
+
+                            (activity as Home).sharedPreferencesStorage.setValue(
+                                AppConstants.emergency_contact_three,
+                                it.data?.user?.emergency_contact3.toString()
+                            )
 
 
                         } else {
@@ -699,16 +711,60 @@ class SettingsFragment : Fragment() {
 
 
     fun Update_sefty_contact_number() {
+        show_dilog = true
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.update_sefty_sheet_dialog, null)
         val editText_one = view.findViewById<EditText>(R.id.editText_one)
         val editText_two = view.findViewById<EditText>(R.id.editText_two)
         val editText_three = view.findViewById<EditText>(R.id.editText_three)
         val save_contact = view.findViewById<Button>(R.id.save_contact)
-
+        editText_one.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one))
+        editText_two.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two))
+        editText_three.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three))
         save_contact.setOnClickListener {
-            phone_number = editText_one.text.toString()
-            dialog.dismiss()
+            if (editText_one.text.isEmpty()
+                && editText_two.text.isEmpty()
+                && editText_three.text.isEmpty()
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Contact Number",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                (activity as Home).homeviewmodel.contact_responce =
+                    MutableLiveData<Resource<Loginmodel>>()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty(
+                    "emergency_contact1",
+                    editText_one.text.toString()
+                )
+
+                jsonObject.addProperty(
+                    "emergency_contact2",
+                    editText_two.text.toString()
+                )
+
+                jsonObject.addProperty(
+                    "emergency_contact3",
+                    editText_three.text.toString()
+                )
+
+                (activity as Home).homeviewmodel.post_users_updatecontacts(jsonObject)
+                subscribe_create_post(
+                    editText_one.text.toString(),
+                    editText_two.text.toString(), editText_three.text.toString()
+                )
+                show_dilog = false
+                dialog.dismiss()
+            }
+        }
+        dialog.setOnDismissListener {
+            show_dilog = false
         }
         dialog.setCancelable(true)
         dialog.setContentView(view)
@@ -718,7 +774,7 @@ class SettingsFragment : Fragment() {
     fun sendSMS(phoneNo: String?, msg: String?) {
         try {
             val smsManager: SmsManager = SmsManager.getDefault()
-            val uri = msg+"\n "+"http://maps.google.com/?q=$latitude,$longitude"
+            val uri = msg + "\n " + "http://maps.google.com/?q=$latitude,$longitude"
             smsManager.sendTextMessage(phoneNo, null, uri, null, null)
             Toast.makeText(
                 requireContext(), "Message Send",
@@ -726,11 +782,50 @@ class SettingsFragment : Fragment() {
             ).show()
         } catch (ex: java.lang.Exception) {
             Toast.makeText(
-               requireContext(), ex.message.toString(),
+                requireContext(), ex.message.toString(),
                 Toast.LENGTH_LONG
             ).show()
             ex.printStackTrace()
         }
+    }
+
+    fun subscribe_create_post(editText_one: String, editText_two: String, editText_three: String) {
+        (activity as Home?)?.homeviewmodel?.contact_responce?.observe(
+            viewLifecycleOwner,
+            Observer { res ->
+                when (res.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_one,
+                            editText_one
+                        )
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_two,
+                            editText_two
+                        )
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_three,
+                            editText_three
+                        )
+
+                        Toast.makeText(
+                            requireContext(),
+                            res.data?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
     }
 
 

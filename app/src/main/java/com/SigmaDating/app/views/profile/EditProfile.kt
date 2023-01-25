@@ -215,8 +215,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
 
         }
-
-
         Socority_button?.setOnClickListener {
             if (!Socority_button!!.isSelected) {
                 fraternity_button!!.isSelected = false
@@ -254,8 +252,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
             independent?.setTextColor(this.resources.getColor(R.color.black))
         }
-
-
         schoolAct_spinner!!.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 openSchoolSearchDialog(AppConstants.School, schoolList as List<UniversityList>)
@@ -1012,8 +1008,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             chip.isChipIconVisible = true
             chip.isCheckable = true
             chip.isClickable = true
-            chip.chipStrokeWidth=3f
-            chip.chipCornerRadius=10f
+            chip.chipStrokeWidth = 3f
+            chip.chipCornerRadius = 10f
             chip.setTextColor(getColorStateList(requireContext(), R.color.blue))
             chip.setChipBackgroundColorResource(android.R.color.transparent)
             chip.setChipStrokeColorResource(R.color.blue)
@@ -1030,11 +1026,11 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             chip.isCloseIconVisible = false
             chip.isChipIconVisible = false
             chip.isCheckable = false
-            chip.isChecked=true
-            chip.chipStrokeWidth=3f
-            chip.chipCornerRadius=5f
+            chip.isChecked = true
+            chip.chipStrokeWidth = 3f
+            chip.chipCornerRadius = 10f
             chip.setTextColor(getColorStateList(requireContext(), R.color.blue))
-          //  chip.setTextSize(14f)
+            //  chip.setTextSize(14f)
             chip.setChipStrokeColorResource(R.color.blue)
             chip.setChipBackgroundColorResource(android.R.color.transparent)
         }
@@ -1107,11 +1103,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     override fun onIntrestClick(position: Interest, stringtype: String) {
-        //interestsList
-
-
+        Log.d("TAG@123", "interestsList " + interestsList.size)
         var clickItemData = position.interest
-        if (interestsList.size <= 6) {
+        if (interestsList.size == 6) {
+            Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
+                .show()
+        } else if (interestsList.size <= 6) {
             if (interestsList.contains(clickItemData) == false) {
                 interestsList.add(clickItemData)
                 setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
@@ -1122,7 +1119,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         } else {
             Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
                 .show()
-
         }
 
 

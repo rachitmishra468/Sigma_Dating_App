@@ -477,6 +477,17 @@
 
 </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/main_ad_layout"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+    </LinearLayout>
+
     <include
         layout="@layout/main_ad_layout"
         android:layout_width="140dp"

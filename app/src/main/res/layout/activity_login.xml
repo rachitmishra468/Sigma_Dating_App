@@ -251,6 +251,7 @@
                                     android:drawablePadding="10dp"
                                     android:hint="@string/phone_xx"
                                     android:inputType="number"
+                                    android:background="@null"
                                     android:letterSpacing="0.10"
                                     android:maxLength="12"
                                     android:textColorHint="@color/hint_text_color"

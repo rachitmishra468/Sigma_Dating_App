@@ -58,4 +58,9 @@ public class AppConstants {
     public static final String university="university";
     public static final String community="Community";
 
+    public static final String emergency_contact_one="emergency_contact_one";
+    public static final String emergency_contact_two="emergency_contact_two";
+    public static final String emergency_contact_three="emergency_contact_three";
+
+
 }

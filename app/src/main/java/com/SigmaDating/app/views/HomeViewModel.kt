@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
     lateinit var profile_swipe: MutableLiveData<Resource<Loginmodel>>
     val get_user_data: MutableLiveData<Resource<Loginmodel>>
     lateinit var get_user_edit_user: MutableLiveData<Resource<Loginmodel>>
-    val get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
+    lateinit var get_secound_feb_data: MutableLiveData<Resource<Loginmodel>>
     val get_UserReportdata: MutableLiveData<Resource<Loginmodel>>
     val change_password: MutableLiveData<Resource<Loginmodel>>
     lateinit var upload_images: MutableLiveData<Resource<Loginmodel>>
@@ -66,7 +66,6 @@ class HomeViewModel @Inject constructor(
         //  =MutableLiveData<Resource<Loginmodel>>()
         get_UserReportdata = MutableLiveData<Resource<Loginmodel>>()
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
-        get_secound_feb_data = MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
         user_bids = MutableLiveData<Resource<home_model>>()
         // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
@@ -324,7 +323,6 @@ class HomeViewModel @Inject constructor(
     fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             profile_swipe.postValue(Resource.loading(null))
-/*
             mainRepository.get_profile_swipe_details(jsonObject).let {
                 if (it.isSuccessful) {
                     profile_swipe.postValue(Resource.success(it.body()))
@@ -332,7 +330,6 @@ class HomeViewModel @Inject constructor(
                     profile_swipe.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
-*/
         }
     }
 

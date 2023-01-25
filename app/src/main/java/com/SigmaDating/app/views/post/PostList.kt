@@ -303,11 +303,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             2 -> {
                 save_post_like(position.id)
                 do_sent_firebaselog("like_post", position.first_name + " " + position.id)
-
             }
             3 -> {
                 alertDeletepopup(position)
-
             }
             4 -> {
                 val jsonObject = JsonObject()
@@ -447,13 +445,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                                 if (Home.ads_list.isNotEmpty()) {
                                     Home.ads_list_index = 0
                                     start_ads_listing(Home.ads_list)
-                                    var i = 1
+                                    var i = 6
                                     val handler = Handler()
                                     handler.postDelayed(object : Runnable {
                                         override fun run() {
-                                            if (i <= 6) {
+                                            if (1 <= i) {
                                                 skip_text.setText("" + i + " Skip Ads ")
-                                                i += 1
+                                                i -= 1
                                             } else {
                                                 ads_close = true
                                                 skip_text.setText(" Skip Ads ")

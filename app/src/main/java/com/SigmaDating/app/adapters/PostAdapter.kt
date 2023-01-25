@@ -105,7 +105,7 @@ class PostAdapter(
         }
 
        if(!data.isPrivate.isNullOrEmpty()){
-           if (data.isPrivate.equals("0")) {
+           if (data.isPrivate.equals("1")) {
                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_off_post))
            } else {
                holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
