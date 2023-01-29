@@ -27,6 +27,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_baseline_perm_identity_24.xml" value="0.15833333333333333" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_call_end_white_24px.xml" value="0.142" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_close_white_24dp.xml" value="0.127" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_failed_message.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/ic_send_message.xml" value="0.13914473684210527" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/drawable/interested_in_main_drwable.xml" value="0.1" />
@@ -81,7 +82,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_contact_us.xml" value="0.12" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_create_post.xml" value="0.335042735042735" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_edit_profile.xml" value="0.2" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.1" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_first2.xml" value="0.1675925925925926" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_gender.xml" value="0.12894736842105264" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/fragment_noticication_view.xml" value="0.12894736842105264" />
@@ -124,7 +125,7 @@
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/selectcamera_gallery_layout.xml" value="0.15" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/toast_messages.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/toolbar_backpress_header.xml" value="0.15" />
-        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/toolbar_hadder.xml" value="0.1" />
+        <entry key="..\:/Sigma Dating App/app/src/main/res/layout/toolbar_hadder.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_password_sheet_dialog.xml" value="0.22" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_phone_location.xml" value="0.1" />
         <entry key="..\:/Sigma Dating App/app/src/main/res/layout/update_photo.xml" value="0.1" />

@@ -67,6 +67,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.appcompat.widget.SearchView;
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -346,9 +347,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.search_dialog_school)
         dialog.findViewById<SearchView>(R.id.search_view).setOnQueryTextListener(this)
+
         searchRecyclerView = dialog.findViewById<RecyclerView>(R.id.recycler_view_school)
         val titleText = dialog.findViewById<TextView>(R.id.title_layout)
         val searchVieww = dialog.findViewById<SearchView>(R.id.search_view)
+        searchVieww.setOnClickListener {
+            searchVieww.setIconified(false);
+        }
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         searchRecyclerView!!.layoutManager = LinearLayoutManager(
             requireActivity(),

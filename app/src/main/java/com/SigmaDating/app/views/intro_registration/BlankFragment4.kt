@@ -22,6 +22,7 @@ import com.SigmaDating.app.utilities.EmptyDataObserver
 import com.SigmaDating.databinding.FragmentSchoolInputBinding
 import com.example.demoapp.other.Status
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.appcompat.widget.SearchView;
 
 
 private const val ARG_PARAM1 = "param1"
@@ -204,7 +205,9 @@ class BlankFragment4 : Fragment(), SearchView.OnQueryTextListener,
         title_layout.text=title
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         val searchVieww=dialog.findViewById<SearchView>(R.id.search_view)
-
+        searchVieww.setOnClickListener {
+            searchVieww.setIconified(false);
+        }
 
         if (stringtype.equals(AppConstants.School)){
 
