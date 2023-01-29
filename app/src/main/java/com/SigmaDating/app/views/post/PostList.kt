@@ -545,7 +545,8 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
 
                     ad_video.setOnCompletionListener {
-                        ad_video.start()
+                        Home.ads_list_index++
+                        start_ads_listing(Home.ads_list)
                     }
 
                     ad_video.setOnClickListener {

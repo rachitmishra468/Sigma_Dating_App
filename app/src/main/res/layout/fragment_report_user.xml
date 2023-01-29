@@ -387,19 +387,20 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_height="1px"/>
-        <Button
-            android:id="@+id/tv_report_to_user"
-            android:layout_width="match_parent"
-            android:drawableTint="@color/blue"
-            android:text="Report User"
-            android:layout_marginTop="6dp"
-            android:textAllCaps="false"
-            android:background="?attr/selectableItemBackground"
-            style="@style/NormalText"
-            android:textSize="16sp"
 
-            android:gravity="center"
-            android:layout_height="30dp"/>
+
+           <Button
+               android:id="@+id/tv_block"
+               android:layout_width="match_parent"
+               android:drawableTint="@color/blue"
+               android:text="Block User"
+               android:layout_marginTop="6dp"
+               android:background="?attr/selectableItemBackground"
+               style="@style/NormalText"
+               android:textAllCaps="false"
+               android:textSize="16sp"
+               android:gravity="center"
+               android:layout_height="30dp"/>
 
         <View
             android:id="@+id/second_view"
@@ -410,18 +411,21 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_height="4px"/>
-        <Button
-            android:id="@+id/tv_block"
-            android:layout_width="match_parent"
-            android:drawableTint="@color/blue"
-            android:text="Block User"
-            android:layout_marginTop="6dp"
-            android:background="?attr/selectableItemBackground"
-            style="@style/NormalText"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:layout_height="30dp"/>
+
+           <Button
+               android:id="@+id/tv_report_to_user"
+               android:layout_width="match_parent"
+               android:drawableTint="@color/blue"
+               android:text="Report User"
+               android:layout_marginTop="6dp"
+               android:textAllCaps="false"
+               android:background="?attr/selectableItemBackground"
+               style="@style/NormalText"
+               android:textSize="16sp"
+
+               android:gravity="center"
+               android:layout_height="30dp"/>
+
         <View
             android:id="@+id/thired_view"
             android:layout_width="match_parent"

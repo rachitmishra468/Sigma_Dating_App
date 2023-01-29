@@ -1,6 +1,7 @@
 package com.SigmaDating.app.adapters
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -55,6 +56,15 @@ class All_Activity_Adapter(var context: Context, private var listener: OnCategor
         var data = dataList[position]
 
 
+        if(data.is_read.equals("0")){
+            holder.notification_title.setTypeface(null, Typeface.BOLD)
+            holder.notification_message.setTypeface(null, Typeface.BOLD)
+        }
+        else{
+            holder.notification_title.setTypeface(null, Typeface.NORMAL)
+            holder.notification_message.setTypeface(null, Typeface.NORMAL)
+
+        }
         holder.notification_title.text=data.title
         holder.notification_message.text=data.description
 

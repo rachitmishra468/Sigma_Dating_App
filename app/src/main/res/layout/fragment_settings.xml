@@ -598,6 +598,7 @@
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 android:padding="6dp"
+                android:visibility="gone"
                 android:weightSum="1">
 
                 <TextView
@@ -621,6 +622,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="4dp"
+                android:visibility="gone"
                 android:background="@color/hint_text_color"
                 app:layout_constraintEnd_toEndOf="@id/guideline_right"
                 app:layout_constraintStart_toStartOf="@id/guideline_left" />
@@ -630,6 +632,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="6dp"
+                android:layout_marginTop="16dp"
                 android:weightSum="1">
 
                 <TextView

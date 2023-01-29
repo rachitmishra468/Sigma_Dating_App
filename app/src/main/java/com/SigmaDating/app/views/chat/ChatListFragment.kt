@@ -70,8 +70,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
     //Ad
 
     lateinit var ad_video: VideoView
-    lateinit var close_ad_img:ImageView
-    lateinit var ad_main:ConstraintLayout
+    lateinit var close_ad_img: ImageView
+    lateinit var ad_main: ConstraintLayout
     lateinit var ads_image_view: ImageView
     lateinit var progress_bar_ads: ProgressBar
     lateinit var skip_text: TextView
@@ -94,7 +94,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         savedInstanceState: Bundle?
     ): View? {
         chatFlag = false
-        Home.show_block=false
+        Home.show_block = false
         // Inflate the layout for this fragment
         _binding = FragmentChatListBinding.inflate(inflater, container, false)
 
@@ -137,24 +137,24 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             MutableLiveData<Resource<advertisingData>>()
         (activity as Home).homeviewmodel.get_ads_list("chatscreen")
         ad_main = binding.root.findViewById(R.id.ad_main)
-        ad_main.visibility=View.GONE
+        ad_main.visibility = View.GONE
         subscribe_app_ads()
 
         //Ad view
         progress_bar_ads = binding.root.findViewById(R.id.progress_bar_ads)
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         skip_text = binding.root.findViewById(R.id.skip_text)
-        close_ad_img=binding.root.findViewById(R.id.close_ad_img)
-        ad_main.visibility=View.VISIBLE
+        close_ad_img = binding.root.findViewById(R.id.close_ad_img)
+        ad_main.visibility = View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
 
 
         skip_text.setOnClickListener {
             if (ads_close) {
-                if(ad_video.isPlaying){
+                if (ad_video.isPlaying) {
                     ad_video.stopPlayback()
                 }
-                ad_main.visibility=View.GONE
+                ad_main.visibility = View.GONE
             }
         }
 
@@ -395,7 +395,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    ad_main.visibility=View.VISIBLE
+                    ad_main.visibility = View.VISIBLE
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
@@ -428,22 +428,15 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                     }
                 }
                 Status.LOADING -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
                 }
                 Status.ERROR -> {
-                    ad_main.visibility=View.GONE
+                    ad_main.visibility = View.GONE
                 }
             }
         })
 
     }
-
-
-
-
-
-
-
 
 
     fun start_ads_listing(list: ArrayList<advertising_model>) {
@@ -509,7 +502,8 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
 
                     ad_video.setOnCompletionListener {
-                        ad_video.start()
+                        Home.ads_list_index++
+                        start_ads_listing(Home.ads_list)
                     }
 
                     ad_video.setOnClickListener {
@@ -522,7 +516,6 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             }
         }, 0)
     }
-
 
 
 }

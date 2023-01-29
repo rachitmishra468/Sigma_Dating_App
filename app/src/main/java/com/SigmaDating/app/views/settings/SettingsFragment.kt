@@ -46,7 +46,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import tvi.webrtc.ContextUtils.getApplicationContext
 import java.util.*
 
 
@@ -721,6 +720,11 @@ class SettingsFragment : Fragment() {
         editText_one.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one))
         editText_two.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two))
         editText_three.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three))
+        editText_one.addTextChangedListener(PhoneTextWatcher(editText_one))
+        editText_two.addTextChangedListener(PhoneTextWatcher(editText_two))
+        editText_three.addTextChangedListener(PhoneTextWatcher(editText_three))
+
+
         save_contact.setOnClickListener {
             if (editText_one.text.isEmpty()
                 && editText_two.text.isEmpty()

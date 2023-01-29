@@ -33,6 +33,7 @@ import com.SigmaDating.app.model.*
 
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.utilities.PhoneTextWatcher
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.databinding.FragmentSecondBinding
 import com.bumptech.glide.Glide
@@ -394,6 +395,7 @@ class SecondFragment : Fragment() {
                                 Home.ads_list = it.data?.ads as ArrayList<advertising_model>
                                 if (Home.ads_list.isNotEmpty()) {
                                     Home.ads_list_index = 0
+                                    handleSkip()
                                     start_ads_listing(Home.ads_list)
 
                                 }
@@ -415,7 +417,7 @@ class SecondFragment : Fragment() {
     }
 
 
-    fun start_ads_listing(list: ArrayList<advertising_model>) {
+    fun handleSkip(){
         main_ad_layout.visibility = View.VISIBLE
         val handler = Handler()
         var i = 6
@@ -433,8 +435,10 @@ class SecondFragment : Fragment() {
             }
         }, 0)
 
+    }
 
 
+    fun start_ads_listing(list: ArrayList<advertising_model>) {
         Log.d("TAG@123", "start_ads_listing")
 
         val handlert = Handler()
@@ -497,7 +501,9 @@ class SecondFragment : Fragment() {
 
 
                     ad_video.setOnCompletionListener {
-                        ad_video.start()
+                       // ad_video.start()
+                        Home.ads_list_index++
+                        start_ads_listing(Home.ads_list)
                     }
 
                     ad_video.setOnClickListener {
@@ -567,6 +573,9 @@ class SecondFragment : Fragment() {
         editText_one.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one))
         editText_two.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two))
         editText_three.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three))
+        editText_one.addTextChangedListener(PhoneTextWatcher(editText_one))
+        editText_two.addTextChangedListener(PhoneTextWatcher(editText_two))
+        editText_three.addTextChangedListener(PhoneTextWatcher(editText_three))
         save_contact.setOnClickListener {
             if (editText_one.text.isEmpty()
                 && editText_two.text.isEmpty()
