@@ -426,6 +426,7 @@ class SecondFragment : Fragment() {
                 if (1 <= i) {
                     skip_text.setText("" + i + " Skip Ads ")
                     i -= 1
+                    ads_close = false
                 } else {
                     ads_close = true
                     skip_text.setText(" Skip Ads ")
@@ -688,7 +689,6 @@ class SecondFragment : Fragment() {
         }
     }
 
-
     fun subscribe_create_post(editText_one: String, editText_two: String, editText_three: String) {
         (activity as Home?)?.homeviewmodel?.contact_responce?.observe(
             viewLifecycleOwner,
@@ -727,6 +727,4 @@ class SecondFragment : Fragment() {
                 }
             })
     }
-
-
 }

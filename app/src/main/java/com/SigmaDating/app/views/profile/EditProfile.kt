@@ -394,7 +394,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         val empty_dataparent = dialog.findViewById<View>(R.id.empty_data_parent)
         val done_interset = dialog.findViewById<Button>(R.id.done_interset)
         rootContainer_intrest = dialog.findViewById<ChipGroup>(R.id.rootContainer_intrest)
-        setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
+        setupChipGroupDynamically(interestsList.filterNotNull(), rootContainer_intrest, true)
         searchRecyclerView!!.layoutManager = GridLayoutManager(requireContext(), 1)
         intrestAdapter = InterestAdapter(this, stringtype)
         searchRecyclerView!!.adapter = intrestAdapter
@@ -414,13 +414,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 schoolAct_spinner!!.isEnabled = true
                 fraternity_Spinner.isEnabled = true
             }
-            setupChipGroupDynamically(interestsList!!, rootContainer, false)
+            setupChipGroupDynamically(interestsList.filterNotNull(), rootContainer, false)
         }
 
         dialog.setOnDismissListener {
             schoolAct_spinner!!.isEnabled = true
             fraternity_Spinner.isEnabled = true
-            setupChipGroupDynamically(interestsList!!, rootContainer, false)
+            setupChipGroupDynamically(interestsList.filterNotNull(), rootContainer, false)
         }
     }
 
@@ -611,6 +611,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     dataList.clear()
                                     interestsList = ArrayList()
                                     interestsList.clear()
+
                                     Log.d(
                                         "TAG@123",
                                         "Login_User_details : " + it.data?.user.toString()
@@ -714,12 +715,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         _binding?.userAbout?.setText(about)
                                     }
                                     if (res.user.interests.contains(",")) {
-                                        interestsList =
-                                            res.user.interests.split(",") as ArrayList<String>
+                                        interestsList = res.user.interests.split(",") as ArrayList<String>
                                     } else {
                                         interestsList.add(res.user.interests)
                                     }
-                                    setupChipGroupDynamically(interestsList!!, rootContainer, false)
+
+                                    if(interestsList[0].equals("")){
+                                        interestsList.removeAt(0)
+                                    }
+                                    Log.d("TAG@123", "interestsList "+interestsList.size)
+                                    setupChipGroupDynamically(interestsList!!.filterNotNull(), rootContainer, false)
 
                                 } catch (e: Exception) {
                                     Log.d(
@@ -1108,9 +1113,12 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
     override fun onIntrestClick(position: Interest, stringtype: String) {
+        interestsList.filterNotNull()
+
         Log.d("TAG@123", "interestsList " + interestsList.size)
+
         var clickItemData = position.interest
-        if (interestsList.size == 6) {
+        if (interestsList.size > 5) {
             Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
                 .show()
         } else if (interestsList.size <= 6) {

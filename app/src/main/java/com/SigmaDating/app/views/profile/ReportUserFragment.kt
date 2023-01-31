@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -53,6 +55,7 @@ class ReportUserFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var edit_profile: CircleImageView
+    lateinit var notification_Icon : ImageView
     private var userID: String? = null
     lateinit var interestsList: ArrayList<String>
     private var _binding: FragmentReportUserBinding? = null
@@ -76,8 +79,7 @@ class ReportUserFragment : Fragment() {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(
-                android.R.transition.move
-            )
+                android.R.transition.move)
         }
 
         arguments?.let {
@@ -102,6 +104,7 @@ class ReportUserFragment : Fragment() {
         first_view = _binding!!.root.findViewById(R.id.first_view)
         second_view = _binding!!.root.findViewById(R.id.second_view)
         thired_view = _binding!!.root.findViewById(R.id.thired_view)
+        notification_Icon= _binding!!.root.findViewById(R.id.notification_Icon)
 
         //_binding.
         footer_transition()
@@ -140,6 +143,10 @@ class ReportUserFragment : Fragment() {
         if (userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
             tv_report_to_user.visibility = View.GONE
             tv_block.visibility = View.GONE
+            first_view.visibility = View.GONE
+            thired_view.visibility = View.GONE
+            second_view.visibility = View.GONE
+
         }
         _binding!!.grideReportFg.setOnClickListener {
             val bundle = Bundle()
@@ -197,6 +204,12 @@ class ReportUserFragment : Fragment() {
 
 
         }
+
+
+        notification_Icon.setOnClickListener {
+            findNavController().navigate(R.id.action_reportUserFragment_to_notification)
+        }
+
         return _binding!!.root
     }
 
@@ -326,7 +339,15 @@ class ReportUserFragment : Fragment() {
 
     private fun createChip(label: String, index: Int): Chip {
 
+
+
+
+
         val chip = Chip(requireContext(), null)
+
+
+
+
         chip.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -336,6 +357,11 @@ class ReportUserFragment : Fragment() {
         chip.isChipIconVisible = false
         chip.isCheckable = false
         chip.isClickable = true
+        chip.chipStrokeWidth = 3f
+        chip.chipCornerRadius = 10f
+        chip.setTextColor(AppCompatResources.getColorStateList(requireContext(), R.color.blue))
+        chip.setChipStrokeColorResource(R.color.blue)
+        chip.setChipBackgroundColorResource(android.R.color.transparent)
         return chip
 
     }

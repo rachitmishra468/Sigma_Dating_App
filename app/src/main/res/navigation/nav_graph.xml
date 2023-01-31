@@ -265,6 +265,7 @@
         android:id="@+id/notificationSettingsFragment"
         android:name="com.SigmaDating.app.NotificationSettingsFragment"
         android:label="NotificationSettingsFragment" />
+
     <fragment
         android:id="@+id/reportUserFragment"
         android:name="com.SigmaDating.app.views.profile.ReportUserFragment"
@@ -293,6 +294,10 @@
         </action>
 
         <action
+            android:id="@+id/action_reportUserFragment_to_notification"
+            app:destination="@id/all_Activitys" />
+
+        <action
             android:id="@+id/action_reportUserFragment_to_userChatFragment"
             app:destination="@id/chatListFragment" >
         </action>
@@ -301,6 +306,7 @@
             android:id="@+id/action_reportUserFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/all_Activitys"
         android:name="com.SigmaDating.app.views.all_activity.All_Activitys"
