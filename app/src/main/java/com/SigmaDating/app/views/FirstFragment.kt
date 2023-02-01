@@ -154,12 +154,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Log.d("TAG@123", "onCardExitLeft")
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
-                        showToast("dislike")
+                        // showToast("dislike")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "dislike")
                         // Toast.makeText(requireContext(), "Nah", Toast.LENGTH_SHORT).show()
-
                         do_sent_firebaselog("do_swipe", "Left")
                     }
                 }
@@ -169,7 +168,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 Log.d("TAG@123", "onCardExitRight")
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
-                        showToast("like")
+                        // showToast("like")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "like")
@@ -195,7 +194,14 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             }
 
             override fun onScroll(v: Float) {
-                Log.d("TAG@123", "onScroll")
+                Log.d("TAG@123", "onScroll" + v)
+                if (v < 0) {
+                    showToast("dislike")
+                } else if (v >= 0 && v <= 1) {
+                    showToast("like")
+                } else if (v >= 1) {
+                    showToast("superlike")
+                }
             }
 
             override fun onCardExitTop(dataObject: Any) {
@@ -203,7 +209,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
                 if (dataObject is Bids) {
                     if ((dataObject as Bids).record_type.equals("bid")) {
-                        showToast("superlike")
+                        ///showToast("superlike")
                         idUserConnected = (dataObject as Bids).id
                         Log.d("TAG@123", "idUserConnected " + idUserConnected)
                         swipe_update(idUserConnected, "superlike")
@@ -216,6 +222,21 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
             override fun onCardExitBottom(dataObject: Any?) {
                 Log.d("TAG@123", "onCardExitBottom")
+
+            }
+
+            override fun onCardanimatiotop(dataObject: Any?) {
+                Log.d("TAG@123", "onCardanimatiotop")
+
+            }
+
+            override fun onCardanimatioright(dataObject: Any?) {
+                Log.d("TAG@123", "onCardanimatioright")
+
+            }
+
+            override fun onCardanimatioleft(dataObject: Any?) {
+                Log.d("TAG@123", "onCardanimatioleft")
 
             }
         })
@@ -332,8 +353,19 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                     )
                 }
             }
-            2 -> cardViewChanger?.throwRight()
-            3 -> cardViewChanger?.throwTop()
+            2 -> {
+                if ((position as Bids).record_type.equals("bid")) {
+                    showToast("like")
+                }
+                cardViewChanger?.throwRight()
+            }
+            3 -> {
+                if ((position as Bids).record_type.equals("bid")) {
+                    showToast("superlike")
+                }
+
+                cardViewChanger?.throwTop()
+            }
             4 -> {
                 extras?.let {
                     val bundle = Bundle()
@@ -360,7 +392,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 }
             }
 
-            5 -> cardViewChanger?.throwLeft()
+            5 -> {
+                if ((position as Bids).record_type.equals("bid")) {
+                    showToast("dislike")
+                }
+
+                cardViewChanger?.throwLeft()
+            }
             7 -> {
                 requireContext().let {
                     position?.ad_link?.let { it1 -> AppUtils.open_ad_link(it1, it) }

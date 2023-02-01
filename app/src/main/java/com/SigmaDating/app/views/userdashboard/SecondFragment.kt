@@ -353,8 +353,6 @@ class SecondFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-
     }
 
 
@@ -587,6 +585,33 @@ class SecondFragment : Fragment() {
                     "Please Enter Contact Number",
                     Toast.LENGTH_LONG
                 ).show()
+            }else if (editText_one.text.isNotEmpty()
+                && editText_one.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else if (editText_two.text.isNotEmpty()
+                && editText_two.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else if (editText_three.text.isNotEmpty()
+                && editText_three.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
             } else {
             (activity as Home).homeviewmodel.contact_responce =
                 MutableLiveData<Resource<Loginmodel>>()

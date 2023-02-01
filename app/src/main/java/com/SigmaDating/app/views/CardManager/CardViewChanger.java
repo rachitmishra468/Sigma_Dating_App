@@ -441,6 +441,10 @@ public class CardViewChanger extends BaseFlingAdapterView {
         void onCardExitTop(Object dataObject);
 
         void onCardExitBottom(Object dataObject);
+
+        void onCardanimatiotop(Object dataObject);
+        void onCardanimatioright(Object dataObject);
+        void onCardanimatioleft(Object dataObject);
     }
 
     private class AdapterDataSetObserver extends DataSetObserver {
