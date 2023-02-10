@@ -82,7 +82,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
-        (activity as Home).homeviewmodel.get_ads_list("feedscreen")
+        (activity as Home).homeviewmodel.get_ads_list("feedscreen", (activity as Home).sharedPreferencesStorage.getString(
+            AppConstants.USER_ID
+        ))
         ad_main = binding.root.findViewById(R.id.ad_main)
         ad_main.visibility = View.GONE
         subscribe_app_ads()
@@ -436,13 +438,14 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         (activity as Home?)?.homeviewmodel?.app_ads?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    ad_main.visibility = View.VISIBLE
+
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
                                 Log.d("TAG@123", "ads data count  :" + it.data.toString())
                                 Home.ads_list = it.data?.ads as ArrayList<advertising_model>
                                 if (Home.ads_list.isNotEmpty()) {
+                                    ad_main.visibility = View.VISIBLE
                                     Home.ads_list_index = 0
                                     start_ads_listing(Home.ads_list)
                                     var i = 6
@@ -461,6 +464,8 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                                         }
                                     }, 0)
 
+                                }else{
+                                    ad_main.visibility=View.GONE
                                 }
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())

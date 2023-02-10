@@ -352,11 +352,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun get_ads_list(id: String) = viewModelScope.launch {
+    fun get_ads_list(id: String,user_id:String) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             val jsonObject = JsonObject()
             Log.d("TAG@123", id)
             jsonObject.addProperty("position", id)
+            jsonObject.addProperty("user_id", user_id)
             app_ads.postValue(Resource.loading(null))
             Log.d("TAG@123", "get_app_ads_list")
             mainRepository.getlistads(jsonObject).let {

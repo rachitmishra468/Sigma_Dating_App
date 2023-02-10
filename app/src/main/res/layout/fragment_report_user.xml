@@ -416,7 +416,7 @@
                android:id="@+id/tv_report_to_user"
                android:layout_width="match_parent"
                android:drawableTint="@color/blue"
-               android:text="Report User"
+               android:text="Report Concerns"
                android:layout_marginTop="6dp"
                android:textAllCaps="false"
                android:background="?attr/selectableItemBackground"

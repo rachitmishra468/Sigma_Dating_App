@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -120,6 +121,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     var age_range = ""
     var distance = ""
     var gender = ""
+    private var toast_flag: Boolean = true
 
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -715,16 +717,21 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         _binding?.userAbout?.setText(about)
                                     }
                                     if (res.user.interests.contains(",")) {
-                                        interestsList = res.user.interests.split(",") as ArrayList<String>
+                                        interestsList =
+                                            res.user.interests.split(",") as ArrayList<String>
                                     } else {
                                         interestsList.add(res.user.interests)
                                     }
 
-                                    if(interestsList[0].equals("")){
+                                    if (interestsList[0].equals("")) {
                                         interestsList.removeAt(0)
                                     }
-                                    Log.d("TAG@123", "interestsList "+interestsList.size)
-                                    setupChipGroupDynamically(interestsList!!.filterNotNull(), rootContainer, false)
+                                    Log.d("TAG@123", "interestsList " + interestsList.size)
+                                    setupChipGroupDynamically(
+                                        interestsList!!.filterNotNull(),
+                                        rootContainer,
+                                        false
+                                    )
 
                                 } catch (e: Exception) {
                                     Log.d(
@@ -1119,28 +1126,54 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
         var clickItemData = position.interest
         if (interestsList.size > 5) {
-            Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
-                .show()
+            if (toast_flag) {
+                Toast.makeText(
+                    requireContext(),
+                    "You can only choose maximum 6.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                toast_flag = false
+                toast()
+            }
         } else if (interestsList.size <= 6) {
             if (interestsList.contains(clickItemData) == false) {
                 interestsList.add(clickItemData)
                 setupChipGroupDynamically(interestsList!!, rootContainer_intrest, true)
             } else {
-                Toast.makeText(requireContext(), "Already added", Toast.LENGTH_LONG)
-                    .show()
+                if (toast_flag) {
+                    Toast.makeText(requireContext(), "Already added", Toast.LENGTH_SHORT)
+                        .show()
+                    toast_flag = false
+                    toast()
+                }
             }
         } else {
-            Toast.makeText(requireContext(), "You can only choose maximum 6.", Toast.LENGTH_LONG)
-                .show()
+            if (toast_flag) {
+                Toast.makeText(
+                    requireContext(),
+                    "You can only choose maximum 6.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                toast_flag = false
+                toast()
+            }
         }
+    }
 
-
+    fun toast() {
+        Handler().postDelayed(
+            java.lang.Runnable {
+                toast_flag = true
+            },
+            2000
+        )
     }
 
     fun set_default_button(name: String) {
         when (name) {
             "Sorority" -> {
-
                 Socority_button?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
                 Socority_button?.setTextColor(this.resources.getColor(R.color.black))
 

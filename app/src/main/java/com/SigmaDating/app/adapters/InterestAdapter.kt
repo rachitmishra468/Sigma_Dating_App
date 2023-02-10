@@ -70,8 +70,6 @@ open class InterestAdapter (private var listener: InterestAdapter.OnItemClickLis
                     photosList.filter { (it.interest.toLowerCase().startsWith(filterPattern))
                     }.forEach { filteredList.add(it) }
                     photosListFiltered = filteredList
-
-
                 }
 
                 val results = FilterResults()
