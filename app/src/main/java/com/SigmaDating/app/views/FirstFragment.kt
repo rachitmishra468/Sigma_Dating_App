@@ -670,7 +670,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             java.lang.Runnable {
                 toast_layout.visibility = View.GONE
             },
-            1200
+            100
         )
 
     }

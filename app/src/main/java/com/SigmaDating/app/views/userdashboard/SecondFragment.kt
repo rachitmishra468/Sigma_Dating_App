@@ -3,6 +3,7 @@ package com.SigmaDating.app.views.userdashboard
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.location.Address
@@ -25,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.SigmaDating.BuildConfig
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.adapters.Profile_Adapter
@@ -109,26 +111,47 @@ class SecondFragment : Fragment() {
         safety_icon.setOnClickListener {
 
             if (
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one).equals("null")
-                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two).equals("null")
-                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three).equals("null")
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                    .equals("null")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                    .equals("null")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                    .equals("null")
             ) {
                 Update_sefty_contact_number()
-            } else if ((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one).equals("")
-                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two).equals("")
-                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three).equals("")
+            } else if ((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                    .equals("")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                    .equals("")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                    .equals("")
             ) {
                 Update_sefty_contact_number()
             } else {
                 if (checkPermissions()) {
-                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one).isNullOrEmpty()) {
-                        sendSMS((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one), Home.safety_message_text)
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one),
+                            Home.safety_message_text
+                        )
                     }
-                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two).isNullOrEmpty()) {
-                        sendSMS((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two), Home.safety_message_text)
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two),
+                            Home.safety_message_text
+                        )
                     }
-                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three).isNullOrEmpty()) {
-                        sendSMS((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three), Home.safety_message_text)
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three),
+                            Home.safety_message_text
+                        )
                     }
 
                 } else {
@@ -164,6 +187,23 @@ class SecondFragment : Fragment() {
         _binding?.movetonotification?.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
+        _binding?.shareIcon?.setOnClickListener {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
+                var shareMessage = Home.share_app_text + "\n"
+                shareMessage =
+                    """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
+                    """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(Intent.createChooser(shareIntent, "choose one"))
+            } catch (e: java.lang.Exception) {
+                //e.toString();
+            }
+        }
+
+
         _binding?.profileImg?.setOnClickListener {
             if (Home.mCurrent_user_token.equals("")) {
 
@@ -193,7 +233,6 @@ class SecondFragment : Fragment() {
         ads_image_view = binding.root.findViewById(R.id.ads_image_view)
         close_ad_img = binding.root.findViewById(R.id.close_ad_img)
         skip_text = binding.root.findViewById(R.id.skip_text)
-        ad_main.visibility = View.VISIBLE
         ad_video = binding.root.findViewById(R.id.videoview)
         skip_text.setOnClickListener {
             if (ads_close) {
@@ -211,9 +250,11 @@ class SecondFragment : Fragment() {
         subscribe_Login_User_details()
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
-        (activity as Home).homeviewmodel.get_ads_list("mainscreen",(activity as Home).sharedPreferencesStorage.getString(
-            AppConstants.USER_ID
-        ))
+        (activity as Home).homeviewmodel.get_ads_list(
+            "mainscreen", (activity as Home).sharedPreferencesStorage.getString(
+                AppConstants.USER_ID
+            )
+        )
         subscribe_app_ads()
         mFusedLocationClient =
             LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
@@ -394,8 +435,8 @@ class SecondFragment : Fragment() {
                                     Home.ads_list_index = 0
                                     handleSkip()
                                     start_ads_listing(Home.ads_list)
-                                }else{
-                                    ad_main.visibility=View.GONE
+                                } else {
+                                    ad_main.visibility = View.GONE
                                 }
                             } catch (e: Exception) {
                                 Log.d("TAG@123", "Exception  :" + e.message.toString())
@@ -415,7 +456,7 @@ class SecondFragment : Fragment() {
     }
 
 
-    fun handleSkip(){
+    fun handleSkip() {
         main_ad_layout.visibility = View.VISIBLE
         val handler = Handler()
         var i = 6
@@ -500,7 +541,7 @@ class SecondFragment : Fragment() {
 
 
                     ad_video.setOnCompletionListener {
-                       // ad_video.start()
+                        // ad_video.start()
                         Home.ads_list_index++
                         start_ads_listing(Home.ads_list)
                     }
@@ -585,7 +626,7 @@ class SecondFragment : Fragment() {
                     "Please Enter Contact Number",
                     Toast.LENGTH_LONG
                 ).show()
-            }else if (editText_one.text.isNotEmpty()
+            } else if (editText_one.text.isNotEmpty()
                 && editText_one.text.length != 12
             ) {
                 Toast.makeText(
@@ -613,35 +654,36 @@ class SecondFragment : Fragment() {
                 ).show()
 
             } else {
-            (activity as Home).homeviewmodel.contact_responce =
-                MutableLiveData<Resource<Loginmodel>>()
-            val jsonObject = JsonObject()
-            jsonObject.addProperty(
-                "user_id",
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-            )
-            jsonObject.addProperty(
-                "emergency_contact1",
-                editText_one.text.toString()
-            )
+                (activity as Home).homeviewmodel.contact_responce =
+                    MutableLiveData<Resource<Loginmodel>>()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty(
+                    "emergency_contact1",
+                    editText_one.text.toString()
+                )
 
-            jsonObject.addProperty(
-                "emergency_contact2",
-                editText_two.text.toString()
-            )
+                jsonObject.addProperty(
+                    "emergency_contact2",
+                    editText_two.text.toString()
+                )
 
-            jsonObject.addProperty(
-                "emergency_contact3",
-                editText_three.text.toString()
-            )
+                jsonObject.addProperty(
+                    "emergency_contact3",
+                    editText_three.text.toString()
+                )
 
-            (activity as Home).homeviewmodel.post_users_updatecontacts(jsonObject)
-            subscribe_create_post(
-                editText_one.text.toString(),
-                editText_two.text.toString(), editText_three.text.toString()
-            )
-            dialog.dismiss()
-        }}
+                (activity as Home).homeviewmodel.post_users_updatecontacts(jsonObject)
+                subscribe_create_post(
+                    editText_one.text.toString(),
+                    editText_two.text.toString(), editText_three.text.toString()
+                )
+                dialog.dismiss()
+            }
+        }
         dialog.setCancelable(true)
         dialog.setContentView(view)
         dialog.show()

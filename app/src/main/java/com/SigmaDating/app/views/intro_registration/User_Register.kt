@@ -214,13 +214,6 @@ class User_Register @Inject constructor(
     fun email_validation_check(email: String, phone: String) = viewModelScope.launch {
         email_validate?.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
-
-      /*  jsonObject.addProperty(
-            "phone",
-            sharedPreferencesStorage.getString(AppConstants.USER_COUNTRY_CODE) + "" + sharedPreferencesStorage.getString(
-                AppConstants.phone
-            )
-        )*/
         jsonObject.addProperty("phone", phone)
         jsonObject.addProperty("email", email)
         Log.d("TAG@123", jsonObject.toString())

@@ -1183,7 +1183,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 fraternity_button?.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
                 fraternity_button?.setTextColor(this.getResources().getColor(R.color.white))
 
-
             }
             "Fraternity" -> {
 
@@ -1198,8 +1197,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
             }
             "Independent" -> {
-
-
                 independent?.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
                 independent?.setTextColor(this.resources.getColor(R.color.black))
 

@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:background="@color/light_text_color"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

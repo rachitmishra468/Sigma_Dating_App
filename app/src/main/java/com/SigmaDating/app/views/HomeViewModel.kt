@@ -323,6 +323,7 @@ class HomeViewModel @Inject constructor(
     fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             profile_swipe.postValue(Resource.loading(null))
+/*
             mainRepository.get_profile_swipe_details(jsonObject).let {
                 if (it.isSuccessful) {
                     profile_swipe.postValue(Resource.success(it.body()))
@@ -330,6 +331,7 @@ class HomeViewModel @Inject constructor(
                     profile_swipe.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
+*/
         }
     }
 

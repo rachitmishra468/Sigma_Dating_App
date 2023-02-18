@@ -113,7 +113,7 @@ class BlankFragment3 : Fragment() {
                     )
                     /*Todo Remove +91 to +1 when we done testing */
                     (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.phone, "+91" + edit_text_phone.text.toString()
+                        AppConstants.phone,   country_spinner.selectedItem.toString() + edit_text_phone.text.toString()
                     )
 
                     val ee = AppUtils.getAgeDiffernce(editbirthday.text.toString())
@@ -124,7 +124,7 @@ class BlankFragment3 : Fragment() {
 
                     (activity as OnBoardingActivity?)?.userRegister?.email_validation_check(
                         email_id.text.toString(),
-                        edit_text_phone.text.toString()
+                        country_spinner.selectedItem.toString()+edit_text_phone.text.toString()
                     )
 
                     checkEmailValidation()

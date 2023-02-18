@@ -144,7 +144,7 @@ class SettingsFragment : Fragment() {
     ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         Call_links()
-        _binding.textViewShareApp.text = "Share Sigma Dating"
+      //  _binding.textViewShareApp.text = "Share Sigma Social"
         _binding.textViewShareApp.setOnClickListener {
             try {
                 val shareIntent = Intent(Intent.ACTION_SEND)

@@ -1,10 +1,20 @@
 package com.SigmaDating.app.views.post
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.telephony.SmsManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,15 +23,19 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.SigmaDating.BuildConfig
 import com.SigmaDating.R
+import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.adapters.PostAdapter
 import com.SigmaDating.app.model.*
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
+import com.SigmaDating.app.utilities.PhoneTextWatcher
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.databinding.FragmentPostListBinding
 import com.bumptech.glide.Glide
@@ -31,11 +45,20 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
@@ -51,7 +74,12 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
     private lateinit var photoAdapter: PostAdapter
     lateinit var empty_text_view: TextView
     lateinit var empty_item_layout: LinearLayout
+    lateinit var safety_icon: ImageView
+    private val permissionId = 2
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
+    var latitude = ""
+    var longitude = ""
     //Ad
 
     lateinit var ad_video: VideoView
@@ -76,6 +104,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         empty_text_view = binding.root.findViewById(R.id.empty_text_view)
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
         empty_item_layout.visibility = View.GONE
+        safety_icon = binding.root.findViewById(R.id.safety_icon)
 
         footer_transition()
         get_postdata()
@@ -109,12 +138,176 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
             }
         }
 
+        _binding?.shareIcon?.setOnClickListener {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
+                var shareMessage = Home.share_app_text + "\n"
+                shareMessage =
+                    """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
+                    """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(Intent.createChooser(shareIntent, "choose one"))
+            } catch (e: java.lang.Exception) {
+                //e.toString();
+            }
+        }
 
+        safety_icon.setOnClickListener {
 
+            if (
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                    .equals("null")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                    .equals("null")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                    .equals("null")
+            ) {
+                Update_sefty_contact_number()
+            } else if ((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                    .equals("")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                    .equals("")
+                && (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                    .equals("")
+            ) {
+                Update_sefty_contact_number()
+            } else {
+                if (checkPermissions()) {
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one),
+                            Home.safety_message_text
+                        )
+                    }
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two),
+                            Home.safety_message_text
+                        )
+                    }
+                    if (!(activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three)
+                            .isNullOrEmpty()
+                    ) {
+                        sendSMS(
+                            (activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three),
+                            Home.safety_message_text
+                        )
+                    }
+
+                } else {
+                    requestPermissions()
+                }
+            }
+        }
+        mFusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(AppReseources.getAppContext()!!)
+        getLocation()
 
 
         return binding.root
     }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.SEND_SMS
+            ),
+            permissionId
+        )
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == permissionId) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                getLocation()
+            }
+        }
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.SEND_SMS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    private fun getLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+
+                mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
+                    val location: Location? = task.result
+                    if (location != null) {
+
+                        try {
+                            val geocoder =
+                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                            val list: List<Address> =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(500)
+                                latitude = "${list[0].latitude}"
+                                longitude = "${list[0].longitude}"
+                                Log.d("TAG@123", "location name" + latitude)
+
+                            }
+
+                        } catch (e: Exception) {
+                            Log.e("TAG@123", "Location Exception : ${e.message}")
+                        }
+                    }
+
+                }
+
+            } else {
+                Toast.makeText(requireContext(), "Please turn on location", Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -576,5 +769,148 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         }
     }
 
+
+    fun sendSMS(phoneNo: String?, msg: String?) {
+        try {
+            val smsManager: SmsManager = SmsManager.getDefault()
+            val uri = msg + "\n " + "http://maps.google.com/?q=$latitude,$longitude"
+            smsManager.sendTextMessage(phoneNo, null, uri, null, null)
+            Toast.makeText(
+                requireContext(), "Message has been sent.",
+                Toast.LENGTH_LONG
+            ).show()
+        } catch (ex: java.lang.Exception) {
+            Toast.makeText(
+                requireContext(), ex.message.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            ex.printStackTrace()
+        }
+    }
+
+    fun Update_sefty_contact_number() {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.update_sefty_sheet_dialog, null)
+        val editText_one = view.findViewById<EditText>(R.id.editText_one)
+        val editText_two = view.findViewById<EditText>(R.id.editText_two)
+        val editText_three = view.findViewById<EditText>(R.id.editText_three)
+        val save_contact = view.findViewById<Button>(R.id.save_contact)
+        editText_one.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_one))
+        editText_two.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_two))
+        editText_three.setText((activity as Home).sharedPreferencesStorage.getString(AppConstants.emergency_contact_three))
+        editText_one.addTextChangedListener(PhoneTextWatcher(editText_one))
+        editText_two.addTextChangedListener(PhoneTextWatcher(editText_two))
+        editText_three.addTextChangedListener(PhoneTextWatcher(editText_three))
+        save_contact.setOnClickListener {
+            if (editText_one.text.isEmpty()
+                && editText_two.text.isEmpty()
+                && editText_three.text.isEmpty()
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Contact Number",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else if (editText_one.text.isNotEmpty()
+                && editText_one.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else if (editText_two.text.isNotEmpty()
+                && editText_two.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else if (editText_three.text.isNotEmpty()
+                && editText_three.text.length != 12
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter Correct Number",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else {
+                (activity as Home).homeviewmodel.contact_responce =
+                    MutableLiveData<Resource<Loginmodel>>()
+                val jsonObject = JsonObject()
+                jsonObject.addProperty(
+                    "user_id",
+                    (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+                )
+                jsonObject.addProperty(
+                    "emergency_contact1",
+                    editText_one.text.toString()
+                )
+
+                jsonObject.addProperty(
+                    "emergency_contact2",
+                    editText_two.text.toString()
+                )
+
+                jsonObject.addProperty(
+                    "emergency_contact3",
+                    editText_three.text.toString()
+                )
+
+                (activity as Home).homeviewmodel.post_users_updatecontacts(jsonObject)
+                upate_contact(
+                    editText_one.text.toString(),
+                    editText_two.text.toString(), editText_three.text.toString()
+                )
+                dialog.dismiss()
+            }
+        }
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    fun upate_contact(editText_one: String, editText_two: String, editText_three: String) {
+        (activity as Home?)?.homeviewmodel?.contact_responce?.observe(
+            viewLifecycleOwner,
+            Observer { res ->
+                when (res.status) {
+                    Status.SUCCESS -> {
+                        AppUtils.hideLoader()
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_one,
+                            editText_one
+                        )
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_two,
+                            editText_two
+                        )
+
+                        (activity as Home).sharedPreferencesStorage.setValue(
+                            AppConstants.emergency_contact_three,
+                            editText_three
+                        )
+
+                        Toast.makeText(
+                            requireContext(),
+                            res.data?.message.toString(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    Status.LOADING -> {
+                        AppUtils.showLoader(requireContext())
+                    }
+                    Status.ERROR -> {
+                        AppUtils.hideLoader()
+                    }
+                }
+            })
+    }
 
 }

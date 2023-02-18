@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="left|center"
                 android:layout_marginLeft="0dp"
-                android:layout_weight="2.5"
+                android:layout_weight="1.8"
                 android:gravity="left"
                 android:orientation="horizontal">
 
@@ -59,10 +59,34 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center"
                 android:layout_marginLeft="0dp"
-                android:layout_weight="1.5"
+                android:layout_weight="2.2"
                 android:gravity="right"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="5">
+
+                <ImageView
+                    android:id="@+id/share_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center"
+                    android:layout_weight=".8"
+                    android:alpha=".8"
+                    android:layout_marginRight="2dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/share_icon"></ImageView>
+
+                <ImageView
+                    android:id="@+id/safety_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center"
+                    android:layout_weight=".8"
+                    android:alpha=".8"
+                    android:layout_marginRight="2dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/saftey_icom"></ImageView>
 
 
                 <ImageView
@@ -70,7 +94,10 @@
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right|center"
-                    android:layout_weight="1"
+                    android:layout_weight=".8"
+                    android:alpha=".8"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:src="@drawable/edit_profile"></ImageView>
 
                 <ImageView
@@ -79,20 +106,23 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
                     android:src="@drawable/settings_icon"></ImageView>
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/movetonotification"
                     android:layout_width="0dp"
+                    android:layout_marginRight="3dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1.1">
 
                     <ImageView
                         android:id="@+id/notification_Icon"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="5dp"
                         android:background="@drawable/white_circle"
                         android:src="@drawable/notifications_24"
                         app:layout_constraintBottom_toBottomOf="parent"

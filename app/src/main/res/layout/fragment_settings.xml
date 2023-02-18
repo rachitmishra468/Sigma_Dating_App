@@ -321,50 +321,6 @@
                 app:layout_constraintStart_toStartOf="@id/guideline_left" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-               android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textView_share_app"
-                    style="@style/NormalText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="start|center"
-                    android:layout_weight=".9"
-                    android:text="Share "
-                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@+id/main_linear" />
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="22dp"
-                    android:layout_weight=".1"
-                    android:gravity="start|center"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
-
-
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="4dp"
-                android:background="@color/hint_text_color"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -557,6 +513,47 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/v31"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:alpha=".7"
+            android:background="@color/hint_text_color"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/ll2" />
+
+
+        <LinearLayout
+            android:id="@+id/ll21"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:weightSum="1"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/v31">
+
+            <TextView
+                android:id="@+id/textView_share_app"
+                style="@style/NormalText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:paddingRight="8dp"
+                android:text="Share Sigma Social "
+                android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
+                app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                app:layout_constraintTop_toBottomOf="@+id/main_linear" />
+
+        </LinearLayout>
+
+        <View
             android:id="@+id/v4"
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -566,7 +563,7 @@
             android:background="@color/hint_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll2" />
+            app:layout_constraintTop_toBottomOf="@id/ll21" />
 
         <TextView
             android:id="@+id/textView10"
