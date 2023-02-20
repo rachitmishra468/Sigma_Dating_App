@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.SigmaDating.R
 import com.SigmaDating.app.model.User_bids_list
@@ -27,6 +28,7 @@ class User_Tag_Adapter (var context: Context, private var listener: OnCategoryCl
         var univercity_name: TextView
         var date_text: TextView
         var back_tag_user:LinearLayout
+        var card_view :CardView
 
         init {
             image = itemView.findViewById(R.id.image)
@@ -34,7 +36,7 @@ class User_Tag_Adapter (var context: Context, private var listener: OnCategoryCl
             univercity_name = itemView.findViewById(R.id.univercity_name)
             date_text= itemView.findViewById(R.id.date_text)
             back_tag_user= itemView.findViewById(R.id.back_tag_user)
-
+            card_view= itemView.findViewById(R.id.card_view)
         }
 
     }
@@ -67,7 +69,7 @@ class User_Tag_Adapter (var context: Context, private var listener: OnCategoryCl
             holder.back_tag_user.setBackgroundColor(context.getResources().getColor(R.color.bel_grey_text))
         }
 
-        holder.image.setOnClickListener {
+        holder.card_view.setOnClickListener {
             holder.back_tag_user.setBackgroundColor(context.getResources().getColor(R.color.bel_grey_text))
             listener.onCategoryClick(data);
         }

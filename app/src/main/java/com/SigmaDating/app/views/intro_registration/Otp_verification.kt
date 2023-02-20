@@ -1,4 +1,5 @@
 package com.SigmaDating.app.views.intro_registration
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.SigmaDating.R
 import com.SigmaDating.app.model.Loginmodel
+import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.databinding.FragmentOtpVerificationBinding
 import com.example.demoapp.other.Resource
@@ -23,6 +25,8 @@ class Otp_verification : Fragment() {
     private var email = ""
     private var phone_otp_send: Boolean = false
     private var email_otp_send: Boolean = false
+    private var email_old = ""
+    private var phone_old = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -212,9 +216,44 @@ class Otp_verification : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (email_old.equals(
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                    AppConstants.email
+                )
+            )
+        ) {
+            email_old = (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                AppConstants.email
+            ).toString()
+
+        } else {
+
+            mUser_Verification = false
+            email = ""
+            phone_otp_send = false
+            email_otp_send = false
+
+        }
+        if (phone_old.equals(
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                    AppConstants.phone
+                )
+            )
+        ) {
+            phone_old =
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(AppConstants.phone)
+                    .toString()
+        } else {
+
+            mUser_Verification = false
+            email = ""
+            phone_otp_send = false
+            email_otp_send = false
+        }
+
+
+
         mUser_Verification = false
-        // _binding.verificationDone.setBackgroundResource(R.drawable.white_circle_bg)
-        //  _binding.verificationDone.setTextColor(resources.getColor(R.color.hint_text_color))
         _binding.editTextOtpVerification.setText("")
         _binding.editTextOtpVerification.visibility = View.INVISIBLE
         _binding.verfieOtp.visibility = View.INVISIBLE

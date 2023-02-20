@@ -72,7 +72,7 @@ class BlankFragment : Fragment() {
 
 
             } else {
-                Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()
+               // Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()
             }
         }
         return binding!!.root

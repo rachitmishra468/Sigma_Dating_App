@@ -323,7 +323,7 @@ class HomeViewModel @Inject constructor(
     fun profile_swipe_details(jsonObject: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             profile_swipe.postValue(Resource.loading(null))
-/*
+
             mainRepository.get_profile_swipe_details(jsonObject).let {
                 if (it.isSuccessful) {
                     profile_swipe.postValue(Resource.success(it.body()))
@@ -331,7 +331,7 @@ class HomeViewModel @Inject constructor(
                     profile_swipe.postValue(Resource.error(it.errorBody().toString(), null))
                 }
             }
-*/
+
         }
     }
 
@@ -354,7 +354,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun get_ads_list(id: String,user_id:String) = viewModelScope.launch {
+    fun get_ads_list(id: String, user_id: String) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             val jsonObject = JsonObject()
             Log.d("TAG@123", id)
@@ -736,7 +736,6 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     fun post_users_updatecontacts(id: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             Log.d("TAG@123", "Contact_form" + id)
@@ -749,7 +748,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
 
 }
