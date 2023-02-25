@@ -113,6 +113,8 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.Disclaimer,
                 true
             )
+
+
             show_disclamer.visibility = View.GONE
             callApis()
         }
@@ -123,7 +125,9 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.Disclaimer,
                 false
             )
-            (activity as Home).onBackPressed()
+           // (activity as Home).onBackPressed()
+            Toast.makeText(requireContext(), "You cannot continue until you agree to terms", Toast.LENGTH_LONG)
+                .show()
         }
 
         editProfile.setOnClickListener {

@@ -75,7 +75,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
-
+    lateinit var schoolAdapter : User_Tag_Adapter
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
     var location_text = ""
@@ -518,7 +518,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             LinearLayoutManager.VERTICAL, false
         )
 
-        var schoolAdapter = User_Tag_Adapter(requireContext(), this)
+        schoolAdapter = User_Tag_Adapter(requireContext(), this)
         searchRecyclerView!!.adapter = schoolAdapter
         schoolAdapter.setDataList(passDataList)
         schoolAdapter.notifyDataSetChanged()
@@ -526,21 +526,19 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         if (dialog.isShowing) {
             doneBtn.setOnClickListener { dialog.dismiss() }
         }
-        /* schoolAct_spinner!!.isEnabled = false
-         fraternity_Spinner.isEnabled = false
-         dialog.setOnDismissListener {
-             schoolAct_spinner!!.isEnabled = true
-             fraternity_Spinner.isEnabled = true
-         }*/
+
     }
 
     override fun onCategoryClick(position: User_bids_list) {
         if (!user_tag_id.contains(position.id)) {
             position.tag_add = true
             user_tag_id.add(position.id)
-            Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show()
+          // Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(requireContext(), "Already Tag", Toast.LENGTH_LONG).show()
+            position.tag_add = false
+            user_tag_id.remove(position.id)
+            schoolAdapter.notifyDataSetChanged()
+           // Toast.makeText(requireContext(), "Already Tag", Toast.LENGTH_SHORT).show()
         }
     }
 

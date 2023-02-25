@@ -398,6 +398,10 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                     Status.SUCCESS -> {
                         AppUtils.hideLoader()
                         if (it.data!!.status) {
+
+                            var list :ArrayList<Postdata> = arrayListOf()
+                            list=it.data.data as ArrayList<Postdata>
+                            list.reversed()
                             if (!userID.equals(
                                     (activity as Home).sharedPreferencesStorage.getString(
                                         AppConstants.USER_ID
@@ -408,13 +412,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
                                 setAdapterListData(
                                     false,
-                                    it.data.data as ArrayList<Postdata>,
+                                    list,
                                     it.data.message
                                 )
                             } else {
                                 setAdapterListData(
                                     true,
-                                    it.data.data as ArrayList<Postdata>,
+                                    list,
                                     it.data.message
                                 )
 

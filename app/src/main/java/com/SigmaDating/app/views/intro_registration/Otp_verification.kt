@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.SigmaDating.R
@@ -27,16 +28,14 @@ class Otp_verification : Fragment() {
     private var email_otp_send: Boolean = false
     private var email_old = ""
     private var phone_old = ""
-
+    lateinit var constraint_f1: ConstraintLayout
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentOtpVerificationBinding.inflate(inflater, container, false)
-
-
-
+        constraint_f1 = _binding!!.root.findViewById(R.id.constraint_f1)
         _binding.emailButtonVerification.setOnClickListener {
             _binding.editTextOtpVerification.setText("")
             _binding.emailButtonVerification.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
@@ -47,26 +46,22 @@ class Otp_verification : Fragment() {
             _binding.phoneNumberVerification.setTextColor(
                 this.getResources().getColor(R.color.white)
             )
-
             email = "email"
             if (!email_otp_send) {
-
                 (activity as OnBoardingActivity?)?.userRegister?.sent_otp =
                     MutableLiveData<Resource<Loginmodel>>()
                 (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(false)
-                email_otp_send = true
-                sent_otp()
+                sent_otp(false)
             } else {
-                Toast.makeText(
+                _binding.editTextOtpVerification.visibility = View.VISIBLE
+                _binding.verfieOtp.visibility = View.VISIBLE
+                AppUtils.showErrorSnackBar(
                     requireContext(),
-                    "Already OTP Sent to Your Email .",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                    constraint_f1,
+                    "Already OTP Sent to Your Email ."
+                )
             }
-
         }
-
 
         _binding.phoneNumberVerification.setOnClickListener {
             _binding.editTextOtpVerification.setText("")
@@ -83,34 +78,38 @@ class Otp_verification : Fragment() {
                 (activity as OnBoardingActivity?)?.userRegister?.sent_otp =
                     MutableLiveData<Resource<Loginmodel>>()
                 (activity as OnBoardingActivity?)?.userRegister?.verification_phone_email(true)
-                phone_otp_send = true
-                sent_otp()
+                sent_otp(true)
             } else {
-                Toast.makeText(
+                _binding.editTextOtpVerification.visibility = View.VISIBLE
+                _binding.verfieOtp.visibility = View.VISIBLE
+                AppUtils.showErrorSnackBar(
                     requireContext(),
-                    "Already OTP Sent to Your Phone Number.",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                    constraint_f1,
+                    "Already OTP Sent to Your Phone Number ."
+                )
             }
-
         }
 
         _binding.verificationDone.setOnClickListener {
             if (mUser_Verification) {
                 (activity as OnBoardingActivity?)?.setCurrentItem(5, true)
             } else {
-                Toast.makeText(
+                AppUtils.showErrorSnackBar(
                     requireContext(),
+                    constraint_f1,
                     "OTP Verification not Completed!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                )
             }
         }
 
         _binding.verfieOtp.setOnClickListener {
             if (_binding.editTextOtpVerification.text.toString().equals("")) {
-                Toast.makeText(requireContext(), "Enter OTP ..", Toast.LENGTH_SHORT).show()
+
+                AppUtils.showErrorSnackBar(
+                    requireContext(),
+                    constraint_f1,
+                    "Enter OTP ..",
+                )
             } else {
                 (activity as OnBoardingActivity?)?.userRegister?.verifly_otp =
                     MutableLiveData<Resource<Loginmodel>>()
@@ -126,19 +125,12 @@ class Otp_verification : Fragment() {
                     )
                 }
                 verifly_otp()
-
             }
         }
-
-
-
-
-
-
         return _binding.root
     }
 
-    fun sent_otp() {
+    fun sent_otp(flag: Boolean) {
         (activity as OnBoardingActivity?)?.userRegister?.sent_otp?.observe(
             requireActivity(),
             Observer {
@@ -147,17 +139,31 @@ class Otp_verification : Fragment() {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+
+                                AppUtils.showErrorSnackBar(
+                                    requireContext(),
+                                    constraint_f1,
+                                    res.message,
+                                )
                                 Log.d("TAG@123", res.message)
                                 _binding.editTextOtpVerification.visibility = View.VISIBLE
                                 _binding.verfieOtp.visibility = View.VISIBLE
-
+                                if (flag) {
+                                    phone_otp_send = true
+                                } else {
+                                    email_otp_send = true
+                                }
 
                             } else {
                                 Log.d("TAG@123", res!!.message)
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                    .show()
+                                AppUtils.showErrorSnackBar(
+                                    requireContext(),
+                                    constraint_f1,
+                                    res!!.message
+                                )
+
+                                _binding.editTextOtpVerification.visibility = View.GONE
+                                _binding.verfieOtp.visibility = View.GONE
                             }
                         }
                     }
@@ -197,8 +203,12 @@ class Otp_verification : Fragment() {
                             } else {
                                 _binding.editTextOtpVerification.setText("")
                                 if (res != null) {
-                                    Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
-                                        .show()
+
+                                    AppUtils.showErrorSnackBar(
+                                        requireContext(),
+                                        constraint_f1,
+                                        res.message,
+                                    )
                                 }
                                 res?.let { it1 -> Log.d("TAG@123", it1.message) }
                             }
@@ -216,42 +226,40 @@ class Otp_verification : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (email_old.equals(
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
-                    AppConstants.email
-                )
-            )
-        ) {
-            email_old = (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
-                AppConstants.email
-            ).toString()
+        /*  if (email_old.equals(
+                  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                      AppConstants.email
+                  )
+              )
+          ) {
+              email_old = (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                  AppConstants.email
+              ).toString()
 
-        } else {
+          } else {
 
-            mUser_Verification = false
-            email = ""
-            phone_otp_send = false
-            email_otp_send = false
+              mUser_Verification = false
+              email = ""
+              phone_otp_send = false
+              email_otp_send = false
 
-        }
-        if (phone_old.equals(
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
-                    AppConstants.phone
-                )
-            )
-        ) {
-            phone_old =
-                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(AppConstants.phone)
-                    .toString()
-        } else {
+          }
+          if (phone_old.equals(
+                  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(
+                      AppConstants.phone
+                  )
+              )
+          ) {
+              phone_old =
+                  (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.getString(AppConstants.phone)
+                      .toString()
+          } else {
 
-            mUser_Verification = false
-            email = ""
-            phone_otp_send = false
-            email_otp_send = false
-        }
-
-
+              mUser_Verification = false
+              email = ""
+              phone_otp_send = false
+              email_otp_send = false
+          }*/
 
         mUser_Verification = false
         _binding.editTextOtpVerification.setText("")

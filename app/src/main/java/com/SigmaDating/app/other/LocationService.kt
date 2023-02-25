@@ -41,7 +41,9 @@ open class LocationService {
         @SuppressLint("MissingPermission", "SetTextI18n")
         fun getLocation(requireActivity: FragmentActivity) {
             if (checkPermissions(requireActivity)) {
+
                 if (isLocationEnabled(requireActivity)) {
+                    try{
                     mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity) { task ->
                         val location: Location? = task.result
                         if (location != null) {
@@ -74,6 +76,8 @@ open class LocationService {
 
 
                         }
+                    }}catch (e:Exception){
+
                     }
 
                 } else {

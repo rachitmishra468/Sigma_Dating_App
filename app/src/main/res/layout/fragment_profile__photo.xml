@@ -126,4 +126,17 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_card" />
 
 
+
+    <LinearLayout
+        android:id="@+id/show_disclamer"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+        <include
+
+            layout="@layout/full_screen_dialog"
+            />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -36,6 +38,7 @@ import com.SigmaDating.app.views.Home
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.demoapp.other.Constants
 import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -73,6 +76,13 @@ class Profile_Photo : Fragment() {
     private var text_termncon:TextView?=null
     lateinit var constraint_f1: ConstraintLayout
     lateinit var bitmap_string: String
+    lateinit var show_disclamer:LinearLayout
+    lateinit var webView :WebView
+    lateinit var logout:Button
+    lateinit var cancle:Button
+    lateinit var user:String
+
+
     var currentPhotoPath: String? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -97,7 +107,6 @@ class Profile_Photo : Fragment() {
         text_termncon=view.findViewById(R.id.text_termncon)
         constraint_f1 = view.findViewById(R.id.constraint_f1)
         imageProfile = view.findViewById(R.id.img_profile)
-
         bitmap_string = ""
         profile_continue.setOnClickListener {
                 if (tc_check.isChecked) {
@@ -131,7 +140,36 @@ class Profile_Photo : Fragment() {
             checkGallerypermission()
         }
 
+         show_disclamer = view.findViewById<LinearLayout>(R.id.show_disclamer)
+         webView = view.findViewById<WebView>(R.id.webView_diclamer)
+         logout = view.findViewById<Button>(R.id.logout)
+         cancle = view.findViewById<Button>(R.id.cancel)
+        show_disclamer.visibility = View.GONE
+        logout.setOnClickListener {
+            (activity as Home).sharedPreferencesStorage.setValue(
+                AppConstants.Disclaimer,
+                true
+            )
 
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.IS_AUTHENTICATED, true)
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.USER_ID, user)
+            (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.FLOW_TYPE, "Sign_UP")
+            startActivity(Intent(context, Home::class.java))
+            do_sent_firebaselog("Sign Up",user)
+            (activity as OnBoardingActivity?)?.finish()
+
+
+        }
+
+
+        cancle.setOnClickListener {
+             Toast.makeText(requireContext(), "You cannot continue until you agree to terms", Toast.LENGTH_LONG)
+                                    .show()
+
+        }
         Register()
         LocationService.get_location(requireActivity())
         return view;
@@ -362,13 +400,24 @@ class Profile_Photo : Fragment() {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
+
+                               /* AppUtils.showLoader(requireContext())
+                                webView.webViewClient = WebViewClient()
+                                show_disclamer.visibility = View.VISIBLE
+                                webView.loadUrl(Constants.disclaimer)*/
+                                user=res.user.id
+
                                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                     AppConstants.IS_AUTHENTICATED, true)
                                 (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                                    AppConstants.USER_ID, res.user.id)
+                                    AppConstants.USER_ID, user)
+                                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                                    AppConstants.FLOW_TYPE, "Sign_UP")
                                 startActivity(Intent(context, Home::class.java))
-                                do_sent_firebaselog("Sign Up",res.user.id)
+                                do_sent_firebaselog("Sign Up",user)
                                 (activity as OnBoardingActivity?)?.finish()
+
+
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
                                     .show()
                             } else {

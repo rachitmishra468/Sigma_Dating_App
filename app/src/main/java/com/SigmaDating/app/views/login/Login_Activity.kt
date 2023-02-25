@@ -50,10 +50,10 @@ class Login_Activity : AppCompatActivity() {
     private val USER_POSTS = "user_posts"
     private val USER_photos = "user_photos"
     private val AUTH_TYPE = "rerequest"
-    private val Public_profile="public_profile"
+    private val Public_profile = "public_profile"
     private var mCallbackManager: CallbackManager? = null
     val mainViewModel: LoginViewModel by viewModels()
-    private var phone_otp_send:Boolean=false
+    private var phone_otp_send: Boolean = false
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @Inject
@@ -71,13 +71,12 @@ class Login_Activity : AppCompatActivity() {
     lateinit var edittext_phone_no: EditText
     lateinit var mLoginButton: LoginButton
     lateinit var signInButton: ImageView
-    lateinit var fb_sign_in_button:ImageView
+    lateinit var fb_sign_in_button: ImageView
     lateinit var gso: GoogleSignInOptions
     lateinit var textforgot: TextView
 
     var editText_otp: EditText? = null
     var verfie_otp: Button? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,9 +85,9 @@ class Login_Activity : AppCompatActivity() {
         mCallbackManager = CallbackManager.Factory.create();
         initialize_view()
         AppReseources.setGoogleSignInOptions()
-        gso= AppReseources.getGoogleSignInOptions()!!
+        gso = AppReseources.getGoogleSignInOptions()!!
         signInButton = findViewById(R.id.sign_in_button)
-        fb_sign_in_button=findViewById(R.id.fb_sign_in_button)
+        fb_sign_in_button = findViewById(R.id.fb_sign_in_button)
         fb_sign_in_button.setOnClickListener {
             mLoginButton.performClick();
         }
@@ -100,14 +99,14 @@ class Login_Activity : AppCompatActivity() {
         textforgot.setOnClickListener {
             openforgotPasswordDialog()
         }
-        mLoginButton.setPermissions(Arrays.asList(EMAIL,Public_profile,USER_POSTS,USER_photos));
+        mLoginButton.setPermissions(Arrays.asList(EMAIL, Public_profile, USER_POSTS, USER_photos));
         mLoginButton.setAuthType(AUTH_TYPE);
         mLoginButton.registerCallback(
             mCallbackManager,
             object : FacebookCallback<LoginResult?> {
                 override fun onCancel() {
                     setResult(RESULT_CANCELED)
-                   // finish()
+                    // finish()
                 }
 
                 override fun onError(@NonNull e: FacebookException) {
@@ -116,15 +115,15 @@ class Login_Activity : AppCompatActivity() {
 
                 override fun onSuccess(result: LoginResult?) {
                     setResult(RESULT_OK);
-                    Log.d("TAG@123","result"+result)
-                    Log.d("TAG@123", "accessToken :"+result?.accessToken)
+                    Log.d("TAG@123", "result" + result)
+                    Log.d("TAG@123", "accessToken :" + result?.accessToken)
 
                     val request = GraphRequest.newMeRequest(
                         result?.accessToken
                     ) { jsonObject, response ->
-                        Log.d("TAG@123", "accessToken :"+result?.accessToken)
-                        Log.d("TAG@123", ""+jsonObject?.get("email"))
-                        Log.d("TAG@123", "jsonObject : "+jsonObject.toString())
+                        Log.d("TAG@123", "accessToken :" + result?.accessToken)
+                        Log.d("TAG@123", "" + jsonObject?.get("email"))
+                        Log.d("TAG@123", "jsonObject : " + jsonObject.toString())
                         getphotos(jsonObject?.get("id").toString())
                         disconnectFromFacebook()
                         sharedPreferencesStorage.setValue(
@@ -156,12 +155,12 @@ class Login_Activity : AppCompatActivity() {
 
                     }
                     val parameters = Bundle()
-                    parameters.putString("fields", "id,name,link,email,picture,user_photos,user_posts")
+                    parameters.putString(
+                        "fields",
+                        "id,name,link,email,picture,user_photos,user_posts"
+                    )
                     request.parameters = parameters
                     request.executeAsync()
-
-
-
 
 
                 }
@@ -170,16 +169,15 @@ class Login_Activity : AppCompatActivity() {
     }
 
 
-
-    private fun getphotos( user_id:String){
+    private fun getphotos(user_id: String) {
         GraphRequest(
             AccessToken.getCurrentAccessToken(),
             "/$user_id/photos",
             null,
             com.facebook.HttpMethod.GET,
-           GraphRequest.Callback {
+            GraphRequest.Callback {
                 fun onCompleted(response: GraphResponse) {
-                    Log.d("TAG@123", "accessTresponse :"+response)
+                    Log.d("TAG@123", "accessTresponse :" + response)
 
                 }
             }
@@ -188,7 +186,7 @@ class Login_Activity : AppCompatActivity() {
 
     fun disconnectFromFacebook() {
         if (AccessToken.getCurrentAccessToken() == null) {
-            Log.d("TAG@123", "getCurrentAccessToken Logout" )
+            Log.d("TAG@123", "getCurrentAccessToken Logout")
             return  // already logged out
         }
         GraphRequest(
@@ -197,11 +195,10 @@ class Login_Activity : AppCompatActivity() {
             null,
             com.facebook.HttpMethod.DELETE,
             GraphRequest.Callback {
-                Log.d("TAG@123", "DELETE Logout" )
+                Log.d("TAG@123", "DELETE Logout")
                 LoginManager.getInstance().logOut()
             }).executeAsync()
     }
-
 
 
     private fun openforgotPasswordDialog() {
@@ -275,8 +272,6 @@ class Login_Activity : AppCompatActivity() {
     }
 
 
-
-
     fun email_button_click(view: View) {
         email_button.setBackground(resources.getDrawable(R.drawable.white_radius_bg))
         phone_number_button.setBackground(resources.getDrawable(R.drawable.gray_circle_radius_bg))
@@ -301,7 +296,7 @@ class Login_Activity : AppCompatActivity() {
         emailLayoutLayout.visibility = View.GONE
         button_login_email_phone_both.setText(R.string.send_otp_text)
         PHONE_LOGIN = true
-        if(phone_otp_send){
+        if (phone_otp_send) {
             phone_number_layout.visibility = View.GONE
             button_login_email_phone_both.visibility = View.GONE
             verfie_otp?.visibility = View.VISIBLE
@@ -324,51 +319,50 @@ class Login_Activity : AppCompatActivity() {
 
     fun login_call(view: View) {
         if (PHONE_LOGIN) {
-                if (!AppUtils.isValid_phone_number(edittext_phone_no.text.toString())) {
-                    edittext_phone_no.error = "Invalid Phone Number"
-                    return
-                } else {
-                    sharedPreferencesStorage.setValue(
-                        AppConstants.phone,
-                        edittext_phone_no.text.toString()
-                    )
-
-                    sharedPreferencesStorage.setValue(
-                        AppConstants.USER_COUNTRY_CODE,
-                       country_spinner.selectedItem.toString()
-                    )
-
-                    sharedPreferencesStorage.setValue(
-                        AppConstants.isSocialLogin,
-                        false
-                    )
-                    mainViewModel.login_phone()
-                }
+            if (!AppUtils.isValid_phone_number(edittext_phone_no.text.toString())) {
+                edittext_phone_no.error = "Invalid Phone Number"
+                return
             } else {
-                if (AppUtils.checkIfEmailIsValid(editText_email.text.toString()) != null) {
-                    editText_email.error = "Invalid Email Address"
-                    return
-                }
-                if (!AppUtils.isValid_password(editText_password.text.toString())) {
-                    editText_password.error = "Invalid Password "
-                    return
-                }
+                sharedPreferencesStorage.setValue(
+                    AppConstants.phone,
+                    edittext_phone_no.text.toString()
+                )
+
+                sharedPreferencesStorage.setValue(
+                    AppConstants.USER_COUNTRY_CODE,
+                    country_spinner.selectedItem.toString()
+                )
+
                 sharedPreferencesStorage.setValue(
                     AppConstants.isSocialLogin,
                     false
                 )
-
-                sharedPreferencesStorage.setValue(
-                    AppConstants.email,
-                    editText_email.text.toString()
-                )
-                sharedPreferencesStorage.setValue(
-                    AppConstants.password,
-                    editText_password.text.toString()
-                )
-                mainViewModel.User_1_login()
+                mainViewModel.login_phone()
             }
+        } else {
+            if (AppUtils.checkIfEmailIsValid(editText_email.text.toString()) != null) {
+                editText_email.error = "Invalid Email Address"
+                return
+            }
+            if (!AppUtils.isValid_password(editText_password.text.toString())) {
+                editText_password.error = "Invalid Password "
+                return
+            }
+            sharedPreferencesStorage.setValue(
+                AppConstants.isSocialLogin,
+                false
+            )
 
+            sharedPreferencesStorage.setValue(
+                AppConstants.email,
+                editText_email.text.toString()
+            )
+            sharedPreferencesStorage.setValue(
+                AppConstants.password,
+                editText_password.text.toString()
+            )
+            mainViewModel.User_1_login()
+        }
 
 
     }
@@ -381,12 +375,18 @@ class Login_Activity : AppCompatActivity() {
                     AppUtils.hideLoader()
                     it.data.let { res ->
                         if (res?.status == true) {
-                            Log.d("TAG@123",it.data?.user.toString())
+                            Log.d("TAG@123", it.data?.user.toString())
                             sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
                             sharedPreferencesStorage.setValue(AppConstants.USER_ID, res.user.id)
-                            sharedPreferencesStorage.setValue(AppConstants.USER_NAME, res.user.first_name+" "+res.user.last_name)
-                           // sharedPreferencesStorage.setValue(AppConstants.upload_image, res.user.upload_image)
+                            sharedPreferencesStorage.setValue(
+                                AppConstants.USER_NAME,
+                                res.user.first_name + " " + res.user.last_name
+                            )
+                            // sharedPreferencesStorage.setValue(AppConstants.upload_image, res.user.upload_image)
 
+                            sharedPreferencesStorage?.setValue(
+                                AppConstants.FLOW_TYPE, "Login"
+                            )
                             Log.d("TAG@123", res.user.id)
                             Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
                                 .show()
@@ -428,7 +428,8 @@ class Login_Activity : AppCompatActivity() {
                         } else {
                             dialog.dismiss()
                             Log.d("TAG123", "tags")
-                             Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@Login_Activity, res?.message, Toast.LENGTH_LONG)
+                                .show()
                         }
                     }
                 }
@@ -459,15 +460,15 @@ class Login_Activity : AppCompatActivity() {
         try {
             val account = completedTask.getResult(ApiException::class.java)
 
-            Log.d("TAG@123",""+account.email)
-            Log.d("TAG@123",""+account.id)
-            Log.d("TAG@123",""+account.idToken)
-            Log.d("TAG@123",""+account.photoUrl)
-            Log.d("TAG@123",""+account.displayName)
+            Log.d("TAG@123", "" + account.email)
+            Log.d("TAG@123", "" + account.id)
+            Log.d("TAG@123", "" + account.idToken)
+            Log.d("TAG@123", "" + account.photoUrl)
+            Log.d("TAG@123", "" + account.displayName)
 
             sharedPreferencesStorage.setValue(
                 AppConstants.upload_image,
-                ""+account.photoUrl.toString()
+                "" + account.photoUrl.toString()
             )
 
             sharedPreferencesStorage.setValue(
@@ -527,7 +528,7 @@ class Login_Activity : AppCompatActivity() {
                             editText_otp?.visibility = View.VISIBLE
 
                             if (PHONE_LOGIN) {
-                                phone_otp_send =true
+                                phone_otp_send = true
                             }
 
                         } else {
@@ -547,7 +548,7 @@ class Login_Activity : AppCompatActivity() {
     }
 
 
-    fun sosicl_login(){
+    fun sosicl_login() {
         mainViewModel.registration?.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -555,19 +556,34 @@ class Login_Activity : AppCompatActivity() {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Log.d("TAG@123",it.data?.user.toString())
-                                if (it.data?.user==null){
+                                Log.d("TAG@123", it.data?.user.toString())
+                                if (it.data?.user == null) {
                                     startActivity(Intent(this, OnBoardingActivity::class.java))
                                     finish()
-                                }else{
-                                    sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
-                                    sharedPreferencesStorage.setValue(AppConstants.USER_ID,  res.user.id)
-                                    Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
+                                } else {
+                                    sharedPreferencesStorage.setValue(
+                                        AppConstants.IS_AUTHENTICATED,
+                                        true
+                                    )
+                                    sharedPreferencesStorage.setValue(
+                                        AppConstants.USER_ID,
+                                        res.user.id
+                                    )
+
+                                    sharedPreferencesStorage?.setValue(
+                                        AppConstants.FLOW_TYPE, "Login"
+                                    )
+                                    Toast.makeText(
+                                        this@Login_Activity,
+                                        res.message,
+                                        Toast.LENGTH_LONG
+                                    )
                                         .show()
                                     startActivity(Intent(this, Home::class.java))
-                                    finish()}
-                            }catch (e:Exception){
-                                Log.d("TAG@123",e.message.toString())
+                                    finish()
+                                }
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", e.message.toString())
                             }
 
                         } else {
@@ -596,20 +612,35 @@ class Login_Activity : AppCompatActivity() {
                     it.data.let { res ->
                         if (res?.status == true) {
                             try {
-                                Log.d("TAG@123",it.data?.user.toString())
-                                if (it.data?.user==null){
+                                Log.d("TAG@123", it.data?.user.toString())
+                                if (it.data?.user == null) {
                                     startActivity(Intent(this, OnBoardingActivity::class.java))
                                     finish()
-                                }else{
-                                sharedPreferencesStorage.setValue(AppConstants.IS_AUTHENTICATED, true)
-                                sharedPreferencesStorage.setValue(AppConstants.USER_ID,  res.user.id)
+                                } else {
+                                    sharedPreferencesStorage.setValue(
+                                        AppConstants.IS_AUTHENTICATED,
+                                        true
+                                    )
+                                    sharedPreferencesStorage.setValue(
+                                        AppConstants.USER_ID,
+                                        res.user.id
+                                    )
 
-                                    Toast.makeText(this@Login_Activity, res.message, Toast.LENGTH_LONG)
-                                    .show()
-                                startActivity(Intent(this, Home::class.java))
-                                finish()}
-                            }catch (e:Exception){
-                                Log.d("TAG@123",e.message.toString())
+                                    sharedPreferencesStorage?.setValue(
+                                        AppConstants.FLOW_TYPE, "Login"
+                                    )
+
+                                    Toast.makeText(
+                                        this@Login_Activity,
+                                        res.message,
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                    startActivity(Intent(this, Home::class.java))
+                                    finish()
+                                }
+                            } catch (e: Exception) {
+                                Log.d("TAG@123", e.message.toString())
                             }
 
                         } else {
@@ -640,7 +671,6 @@ class Login_Activity : AppCompatActivity() {
             )
         }
     }
-
 
 
 }

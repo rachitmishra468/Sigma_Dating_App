@@ -364,7 +364,7 @@ class SecondFragment : Fragment() {
                                 name = res.user.first_name + " " + res.user.last_name
                                 photo = it.data.user.upload_image
                                 if (!res.posts.isNullOrEmpty()) {
-                                    dataListuser = res.posts
+                                    dataListuser = res.posts.reversed()
                                     setAdapterListData(dataListuser as ArrayList<Postdata>)
                                 } else {
                                     empty_text_view.text = res.post_message

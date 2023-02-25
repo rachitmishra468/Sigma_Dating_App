@@ -38,8 +38,8 @@ class BlankFragment : Fragment() {
     lateinit var constraint_f1: ConstraintLayout
     private var binding: AboutYourselfLayoutBinding? = null
 
-   /* @Inject
-    lateinit var sharedPreferencesStorage: SharedPreferencesStorage*/
+    /* @Inject
+     lateinit var sharedPreferencesStorage: SharedPreferencesStorage*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,23 +56,29 @@ class BlankFragment : Fragment() {
         binding = AboutYourselfLayoutBinding.inflate(inflater, container, false)
         continue_first = binding!!.root.findViewById(R.id.continue_first)
         constraint_f1 = binding!!.root.findViewById(R.id.constraint_f1)
-        editName=binding!!.root.findViewById(R.id.editText_name)
-        editlastName=binding!!.root.findViewById(R.id.et_lastname)
+        editName = binding!!.root.findViewById(R.id.editText_name)
+        editlastName = binding!!.root.findViewById(R.id.et_lastname)
 
         continue_first.setOnClickListener {
 
-                if (AppUtils.checkValidationOnFisrtStep(requireActivity(), constraint_f1, editName.text.toString(), editlastName.text.toString())) {
-                    AppUtils.hideSoftKeyboard(requireActivity(), constraint_f1)
-                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.fisrtname, editName.text.toString())
-                    (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
-                        AppConstants.Lastname, editlastName.text.toString())
-                    (activity as OnBoardingActivity?)?.setCurrentItem(1, false)
-
-
+            if (AppUtils.checkValidationOnFisrtStep(
+                    requireActivity(),
+                    constraint_f1,
+                    editName.text.toString(),
+                    editlastName.text.toString()
+                )
+            ) {
+                AppUtils.hideSoftKeyboard(requireActivity(), constraint_f1)
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                    AppConstants.fisrtname, editName.text.toString()
+                )
+                (activity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
+                    AppConstants.Lastname, editlastName.text.toString()
+                )
+                (activity as OnBoardingActivity?)?.setCurrentItem(1, false)
 
             } else {
-               // Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity, "Check internet connection", Toast.LENGTH_LONG).show()
             }
         }
         return binding!!.root
@@ -84,19 +90,23 @@ class BlankFragment : Fragment() {
             val editName: String = editName?.getText().toString()
             val editlastName: String = editlastName?.getText().toString()
             // check whether both the fields are empty or not
-            if (!editName.isEmpty() && !editlastName.isEmpty()){
+            if (!editName.isEmpty() && !editlastName.isEmpty()) {
                 continue_first!!.setEnabled(!editName.isEmpty() && !editlastName.isEmpty())
-                Log.d("SIGMA_APP","valid condition")
+                Log.d("SIGMA_APP", "valid condition")
+            } else {
+                continue_first!!.setEnabled(false)
             }
-            else{ continue_first!!.setEnabled(false)}
 
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
         }
     }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

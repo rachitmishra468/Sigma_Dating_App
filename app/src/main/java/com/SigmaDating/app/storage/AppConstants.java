@@ -20,6 +20,7 @@ public class AppConstants {
     public static String IS_VIDEO_PROFILED = "is_video_profiled";
     public static String IS_PROFILED_APPROVED = "is_profiled_approved";
     public static String USER_ID = "user_id";
+    public static String FLOW_TYPE = "Flow_type";
     public static String USER_NAME = "user_name";
     public static String USER_COUNTRY_CODE = "user_country_code";
     public static String USER_DATA = "user_data";
