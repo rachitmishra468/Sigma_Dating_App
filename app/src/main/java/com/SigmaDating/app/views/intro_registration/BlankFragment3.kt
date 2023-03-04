@@ -170,10 +170,10 @@ class BlankFragment3 : Fragment() {
 
         }, mCalendar[Calendar.YEAR], mCalendar[Calendar.MONTH], mCalendar[Calendar.DAY_OF_MONTH])
 
-        val minDay = 1
-        val minMonth = 1
+        val minDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)  //31
+        val minMonth = Calendar.getInstance().get(Calendar.MONTH)
         val minYear = Calendar.getInstance().get(Calendar.YEAR) - 30;
-        mCalendar.set(minYear, minMonth - 1, minDay)
+        mCalendar.set(minYear, minMonth, minDay)
         mDialog.datePicker.minDate = mCalendar.timeInMillis
 
         // Changing mCalendar date from current to
@@ -181,7 +181,7 @@ class BlankFragment3 : Fragment() {
         val maxDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)  //31
         val maxMonth = Calendar.getInstance().get(Calendar.MONTH)  //12
         val maxYear = Calendar.getInstance().get(Calendar.YEAR) - 18;
-        mCalendar.set(maxYear, maxMonth - 1, maxDay)
+        mCalendar.set(maxYear, maxMonth , maxDay)
         mDialog.datePicker.maxDate = mCalendar.timeInMillis
 
         // Display the calendar dialog
