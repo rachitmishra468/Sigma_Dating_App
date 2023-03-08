@@ -240,13 +240,13 @@ class SecondFragment : Fragment() {
                 ad_main.visibility = View.GONE
             }
         }
+        (activity as Home).homeviewmodel.get_secound_feb_data =
+            MutableLiveData<Resource<Loginmodel>>()
         if (userID != null) {
             (activity as Home).homeviewmodel.get_secound_feb_User_details(
                 userID!!
             )
         }
-        (activity as Home).homeviewmodel.get_secound_feb_data =
-            MutableLiveData<Resource<Loginmodel>>()
         subscribe_Login_User_details()
         (activity as Home).homeviewmodel.app_ads =
             MutableLiveData<Resource<advertisingData>>()
@@ -492,8 +492,16 @@ class SecondFragment : Fragment() {
                     ad_video.visibility = View.GONE
                     //  skip_text.visibility = View.GONE
 
-                    Log.d("TAG@123", "start_ads_listing" + list[Home.ads_list_index].filename)
-                    // Glide.with(requireContext()).load(list[ads_list_index].filename).into(ads_image_view)
+                    Log.d("TAG@123", "start_ads_listing :" + list[Home.ads_list_index].filename)
+                    Log.d("TAG@123", "start ads Click Link :" + list[Home.ads_list_index].ad_link)
+                    var link = list[Home.ads_list_index].ad_link
+                    ads_image_view.setOnClickListener {
+                        Log.d("TAG@123", "start ads Click Link :" + link)
+                        if(!link.isNullOrEmpty()) {
+                            AppUtils.open_ad_link(link, requireContext())
+                        }
+
+                    }
                     progress_bar_ads.visibility = View.VISIBLE
                     Glide.with(requireContext()).load(list[Home.ads_list_index].filename)
                         .listener(object : RequestListener<Drawable> {
@@ -520,11 +528,6 @@ class SecondFragment : Fragment() {
 
                         }).into(ads_image_view);
 
-                    ads_image_view.setOnClickListener {
-                        requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
-                        }
-                    }
 
                     Home.ads_list_index++
                     handlert.postDelayed(this, 10000)//10 sec delay
@@ -545,10 +548,12 @@ class SecondFragment : Fragment() {
                         Home.ads_list_index++
                         start_ads_listing(Home.ads_list)
                     }
-
+                    var link = list[Home.ads_list_index].ad_link
                     ad_video.setOnClickListener {
                         requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            if(!link.isNullOrEmpty()) {
+                                AppUtils.open_ad_link(link, it)
+                            }
                         }
                     }
                 }

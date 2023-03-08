@@ -183,7 +183,13 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                             "ad view",
                             "Video ad link :" + (dataObject as Bids).ad_link
                         )
-                        requireContext().let { open_ad_link((dataObject as Bids).ad_link, it) }
+                        requireContext().let {
+
+                            if(!(dataObject as Bids).ad_link.isNullOrEmpty()) {
+                                open_ad_link((dataObject as Bids).ad_link, it)
+                            }
+
+                        }
                     }
                 }
             }
@@ -618,7 +624,12 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
         // Load the URL
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
             if (url.contains("sigmadating")) {
-                requireContext().let { open_ad_link(url, it) }
+                requireContext().let {
+                    if(!url.isNullOrEmpty()) {
+                        open_ad_link(url, it)
+                    }
+
+                }
                 view.reload()
                 return true
             }

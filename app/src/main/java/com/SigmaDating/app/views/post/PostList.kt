@@ -727,7 +727,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
                     ads_image_view.setOnClickListener {
                         requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            if(!list[Home.ads_list_index].ad_link.isNullOrEmpty()) {
+                                AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            }
                         }
                     }
 
@@ -753,11 +755,12 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
 
                     ad_video.setOnClickListener {
                         requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            if(!list[Home.ads_list_index].ad_link.isNullOrEmpty()) {
+                                AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            }
                         }
                     }
                 }
-
             }
         }, 0)
     }

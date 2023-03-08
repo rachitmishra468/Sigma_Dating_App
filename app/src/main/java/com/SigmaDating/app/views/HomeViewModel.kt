@@ -68,6 +68,8 @@ class HomeViewModel @Inject constructor(
         get_user_data = MutableLiveData<Resource<Loginmodel>>()
         change_password = MutableLiveData<Resource<Loginmodel>>()
         user_bids = MutableLiveData<Resource<home_model>>()
+        get_secound_feb_data =
+            MutableLiveData<Resource<Loginmodel>>()
         // profile_swipe=MutableLiveData<Resource<Loginmodel>>()
     }
 

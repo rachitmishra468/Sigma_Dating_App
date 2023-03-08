@@ -668,9 +668,11 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
 
                         }).into(ads_image_view);
 
+                    var link = list[Home.ads_list_index].ad_link
                     ads_image_view.setOnClickListener {
                         requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            if(!link.isNullOrEmpty()){
+                            AppUtils.open_ad_link(link, it)}
                         }
                     }
 
@@ -693,14 +695,15 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         Home.ads_list_index++
                         start_ads_listing(Home.ads_list)
                     }
-
+                    var link = list[Home.ads_list_index].ad_link
                     ad_video.setOnClickListener {
                         requireContext().let {
-                            AppUtils.open_ad_link(list[Home.ads_list_index].ad_link, it)
+                            if(!link.isNullOrEmpty()) {
+                                AppUtils.open_ad_link(link, it)
+                            }
                         }
                     }
                 }
-
             }
         }, 0)
     }

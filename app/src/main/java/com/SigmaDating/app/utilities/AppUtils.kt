@@ -1,14 +1,13 @@
 package com.SigmaDating.app.utilities
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.media.MediaPlayer
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -18,11 +17,13 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.widget.ContentLoadingProgressBar
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.airbnb.lottie.LottieAnimationView
@@ -62,8 +63,8 @@ object AppUtils {
     }
 
     fun showLoader(context: Context?) {
-        if(loader()){}
-        else {
+        if (loader()) {
+        } else {
             context?.javaClass?.name?.let { Log.d("TAG@123", it) }
             val builder = AlertDialog.Builder(context, R.style.NewDialog)
             val inflater = LayoutInflater.from(context)
@@ -380,9 +381,72 @@ object AppUtils {
 
 
     fun open_ad_link(url: String, context: Context) {
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(url)
-        context.startActivity(i)
+        try {
+
+            open_web_view(context, url)
+            /* Log.d("TAG@123", "url -:" + url)
+             val i = Intent(Intent.ACTION_VIEW)
+             i.data = Uri.parse(url)
+             context.startActivity(i)*/
+        } catch (e: Exception) {
+            Log.d("TAG@123", "Exception -:" + e.message.toString())
+        }
+    }
+
+    private fun open_web_view(context: Context, url: String) {
+        try {
+            var dialog = Dialog(context, R.style.AppBaseTheme2)
+            dialog.setContentView(R.layout.web_view_layout)
+            val link = dialog.findViewById<TextView>(R.id.link_text)
+            val progress_bar = dialog.findViewById<ProgressBar>(R.id.progress_bar)
+
+            val webView = dialog.findViewById<WebView>(R.id.webView_add)
+            val close_ad = dialog.findViewById<ImageView>(R.id.close_ad)
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.setWebViewClient(object : WebViewClient() {
+                override fun onReceivedError(
+                    view: WebView,
+                    errorCode: Int,
+                    description: String,
+                    failingUrl: String
+                ) {
+                }
+
+                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                    link.text = url
+                    view.loadUrl(url)
+                    return false
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    progress_bar.visibility=View.GONE
+                }
+
+                @TargetApi(Build.VERSION_CODES.M)
+                override fun onReceivedError(
+                    view: WebView,
+                    req: WebResourceRequest,
+                    rerr: WebResourceError
+                ) {
+                    // Redirect to deprecated method, so you can use it in all SDK versions
+                    onReceivedError(
+                        view,
+                        rerr.errorCode,
+                        rerr.description.toString(),
+                        req.url.toString()
+                    )
+                }
+            })
+            link.text = url
+            webView.loadUrl(url)
+            close_ad.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        } catch (e: Exception) {
+            Log.d("TAG@123", "Exception -:" + e.message.toString())
+        }
     }
 
 }
