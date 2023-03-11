@@ -1,18 +1,24 @@
 package com.SigmaDating.app.fcm
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.SigmaDating.R
 import com.SigmaDating.app.utilities.AppUtils
-import com.SigmaDating.app.video.IncomingVideoCall
 import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.app.views.Splash
@@ -33,6 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     var user_name=""
     var user_images=""
     var sender_id=""
+    lateinit var  builder :NotificationCompat.Builder
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.size>0) {
@@ -44,12 +51,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             user_images = remoteMessage.data["image"].toString()
             sender_id= remoteMessage.data["sender_id"].toString()
             if(type.equals("close_video")){
+                NotificationManagerCompat.from(this).cancelAll()
                 AppUtils.stopPhoneCallRing()
                 Log.d(TAG, "call_cut Notification recived user id : $user_ID  sender id : $sender_id : ${remoteMessage.from}")
                 LocalBroadcastManager.getInstance(this)
                     .sendBroadcast(Intent("BROADCAST_FOR_CLOSE_VIDEO"))
             }else{
                 showNotification(remoteMessage.data["title"].toString(), remoteMessage.data["body"].toString())
+
             if (type.equals("video")) {
                 Home.sender_id=sender_id
                 Home.match_id = match_ID
@@ -59,11 +68,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }}
     }
 
-
     companion object {
         private const val TAG = "TAG@123"
     }
-
 
     private fun showNotification(title: String, body: String) {
         createNotificationChannel()
@@ -91,14 +98,47 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         } else {
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         }
-        val builder = NotificationCompat.Builder(this, "all_notifications")
-            .setSmallIcon(R.drawable.app_logo)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setContentIntent(pendingIntent)
-            .addAction(R.drawable.app_logo, getString(R.string.app_name),
-                pendingIntent)
+
+
+
+
+        if (type.equals("video")) {
+             builder = NotificationCompat.Builder(this, "all_notifications")
+                .setContentText(title)
+                .setContentTitle(body)
+                .setSmallIcon(R.drawable.app_logo)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .addAction(
+                    R.drawable.call_red,
+                    getActionText(R.string.reject, R.color.red),
+                    pendingIntent
+                )
+                .addAction(
+                    R.drawable.call_green,
+                    getActionText(R.string.accept, R.color.green),
+                    pendingIntent
+                )
+                .setAutoCancel(false)
+                .setSound(
+                    Uri.parse(
+                        "android.resource://" + this.getPackageName()
+                            .toString() + "/" + R.raw.phone_ringing_sound
+                    )
+                )
+                .setFullScreenIntent(pendingIntent, true)
+        }else {
+            builder = NotificationCompat.Builder(this, "all_notifications")
+                .setSmallIcon(R.drawable.app_logo)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentIntent(pendingIntent)
+                .addAction(
+                    R.drawable.app_logo, getString(R.string.app_name),
+                    pendingIntent
+                )
+        }
         val manager = NotificationManagerCompat.from(this)
         manager.apply {
             cancelAll()
@@ -148,4 +188,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+
+    private fun getActionText(@StringRes stringRes: Int, @ColorRes colorRes: Int): Spannable? {
+        val spannable: Spannable = SpannableString(applicationContext.getText(stringRes))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            spannable.setSpan(
+                ForegroundColorSpan(applicationContext.getColor(colorRes)), 0, spannable.length, 0
+            )
+        }
+        return spannable
+    }
 }

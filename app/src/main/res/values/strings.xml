@@ -59,7 +59,8 @@
     <string name="new_message">New message</string>
     <string name="message_send_error">An error has occurred. Tap for more info.</string>
     <string name="title_activity_advertising">AdvertisingActivity</string>
-
+    <string name="reject">Decline</string>
+    <string name="accept">Answer</string>
 
     <!-- https://api.instagram.com/oauth/authorize?client_id=3446740358985126&
     redirect_uri=https://medium.com//200&scope=user_profile,user_media&response_type=code-->

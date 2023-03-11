@@ -72,7 +72,4 @@ interface ApiHelper {
     suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel>
 
-
-
-
 }
