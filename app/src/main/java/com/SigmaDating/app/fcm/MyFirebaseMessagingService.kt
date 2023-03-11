@@ -1,6 +1,5 @@
 package com.SigmaDating.app.fcm
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -33,6 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     val VIDEO_NOTIFICATION_MatchID = "MATCHID"
     val USER_NAME = "NAME"
     val USER_IMAGE = "IMAGE"
+    val CALL_ACTION = "ACTION"
     var user_ID = ""
     var type = ""
     var match_ID = ""
@@ -75,6 +75,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun showNotification(title: String, body: String) {
         createNotificationChannel()
         Log.d(TAG, "Message Notification showNotification")
+     /////////////////
         var intent: Intent? = null
         if (type.equals("video")) {
              intent = Intent(this, VideoActivity::class.java).apply {
@@ -98,8 +99,63 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         } else {
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         }
+//////////////////////
 
+        var intent_accept: Intent? = null
+        if (type.equals("video")) {
+            intent_accept = Intent(this, VideoActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            AppUtils.playPhoneCallRing(this)
+        } else {
+            intent_accept = Intent(this, Splash::class.java)
+        }
+        intent_accept.putExtra("TYPE", 1)
+        intent_accept.putExtra("SENDERID", sender_id)
+        intent_accept.putExtra(VIDEO_USERID, user_ID)
+        intent_accept.putExtra(VIDEO_NOTIFICATION_MatchID, match_ID)
+        intent_accept.putExtra(USER_NAME, user_name)
+        intent_accept.putExtra(USER_IMAGE, user_images)
+        intent_accept.putExtra(CALL_ACTION, "accept")
+        intent_accept.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent_accept.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent_accept.setAction("RECEIVE_CALL");
 
+        var pendingIntent_accept: PendingIntent? = null
+        pendingIntent_accept = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(this, 0, intent_accept, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, intent_accept, PendingIntent.FLAG_ONE_SHOT)
+        }
+       ///////////////////////////
+
+        var intent_reject: Intent? = null
+        if (type.equals("video")) {
+            intent_reject = Intent(this, VideoActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            AppUtils.playPhoneCallRing(this)
+        } else {
+            intent_reject = Intent(this, Splash::class.java)
+        }
+        intent_reject.putExtra("TYPE", 1)
+        intent_reject.putExtra("SENDERID", sender_id)
+        intent_reject.putExtra(VIDEO_USERID, user_ID)
+        intent_reject.putExtra(VIDEO_NOTIFICATION_MatchID, match_ID)
+        intent_reject.putExtra(USER_NAME, user_name)
+        intent_reject.putExtra(USER_IMAGE, user_images)
+        intent_reject.putExtra(USER_IMAGE, user_images)
+        intent_accept.putExtra(CALL_ACTION, "reject")
+        intent_reject.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent_reject.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent_reject.setAction("CANCEL_CALL");
+        var pendingIntent_reject: PendingIntent? = null
+        pendingIntent_reject = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(this, 0, intent_reject, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(this, 0, intent_reject, PendingIntent.FLAG_ONE_SHOT)
+        }
+        ///////////////////////////
 
 
         if (type.equals("video")) {
@@ -112,12 +168,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .addAction(
                     R.drawable.call_red,
                     getActionText(R.string.reject, R.color.red),
-                    pendingIntent
+                    pendingIntent_reject
                 )
                 .addAction(
                     R.drawable.call_green,
                     getActionText(R.string.accept, R.color.green),
-                    pendingIntent
+                    pendingIntent_accept
                 )
                 .setAutoCancel(false)
                 .setSound(
@@ -126,7 +182,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                             .toString() + "/" + R.raw.phone_ringing_sound
                     )
                 )
-                .setFullScreenIntent(pendingIntent, true)
+                .setFullScreenIntent(pendingIntent_accept, true)
         }else {
             builder = NotificationCompat.Builder(this, "all_notifications")
                 .setSmallIcon(R.drawable.app_logo)
@@ -155,6 +211,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             intent.putExtra(USER_NAME, user_name)
             intent.putExtra(USER_IMAGE, user_images)
             intent.putExtra("TYPE", 1)
+            intent.putExtra(CALL_ACTION, "OPEN")
             intent.putExtra("SENDERID", sender_id)
             startActivity(intent)
         } catch (e: Exception) {

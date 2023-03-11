@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -77,7 +78,7 @@ class VideoActivity : AppCompatActivity() {
     var user_name = ""
     var user_images = ""
     var sender_id = ""
-
+    var CALL_ACTION = ""
     lateinit var call_pick: FloatingActionButton
     lateinit var call_cut: FloatingActionButton
     lateinit var nameTextView: TextView
@@ -265,6 +266,7 @@ class VideoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showWhenLockedAndTurnScreenOn()
         setContentView(R.layout.activity_video)
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(
@@ -284,10 +286,20 @@ class VideoActivity : AppCompatActivity() {
         manager.apply {
             cancelAll()
         }
+         CALL_ACTION = intent.getStringExtra("ACTION").toString()
+        if(CALL_ACTION.equals("accept")){
+           // main_window.visibility = View.GONE
+        }
+        else if(CALL_ACTION.equals("OPEN")){
+        }
+        else{
+           // main_window.visibility = View.GONE
+        }
+
         Log.d("TAG@123", "Video identity : ----- " + intent.getIntExtra("TYPE", 100))
         when (intent.getIntExtra("TYPE", 100)) {
             1 -> {
-
+                Log.d("TAG@123", "CALL_ACTION CALL_ACTION : " + CALL_ACTION)
                 user_ID = intent.getStringExtra("USERID").toString()
                 match_ID = intent.getStringExtra("MATCHID").toString()
                 user_name = intent.getStringExtra("NAME").toString()
@@ -306,6 +318,7 @@ class VideoActivity : AppCompatActivity() {
                 )
                 subscribe_Login_User_details()
                 from_notification()
+
             }
             0 -> {
                 main_window.visibility = View.GONE
@@ -367,7 +380,16 @@ class VideoActivity : AppCompatActivity() {
 
                     setAccessToken()
                     //  connectToRoom(DEFAULT_CONVERSATION_NAME,false)
-                    AppUtils.stopPhoneCallRing()
+
+                    if(CALL_ACTION.equals("accept")){
+                        call_pick()
+                    }
+                    else if(CALL_ACTION.equals("OPEN")){
+
+                    }
+                    else{
+                       // cut_call()
+                    }
                 }
                 Status.LOADING -> {
                     AppUtils.showLoader(this)
@@ -393,54 +415,64 @@ class VideoActivity : AppCompatActivity() {
         nameTextView.setText("Video call " + user_name)
         call_pick.isEnabled = false
         call_pick.setOnClickListener {
-            main_window.visibility = View.GONE
-            if (!checkPermissionForCameraAndMicrophone()) {
-                requestPermissionForCameraMicrophoneAndBluetooth()
-            } else {
-                audioSwitch.start { audioDevices, audioDevice ->
-                    updateAudioDeviceIcon(
-                        audioDevice
-                    )
-                }
-            }
-            initializeUI()
-            connectToRoom(DEFAULT_CONVERSATION_NAME, true)
-            connectvideoTrack(false)
+            call_pick()
         }
         call_cut.setOnClickListener {
-            onBackPressed()
-            //sharedPreferencesStorage.getString(AppConstants.USER_ID)
-            val jsonObject = JsonObject()
-            jsonObject.addProperty(
-                "user_id",
-                Home.sender_id
-            )
-            jsonObject.addProperty(
-                "match_id",
-                match_ID
-            )
-            jsonObject.addProperty(
-                "type",
-                "close_video"
-            )
-            jsonObject.addProperty(
-                "name",
-                sharedPreferencesStorage.getString(
-                AppConstants.USER_NAME
-            )
-            )
-            jsonObject.addProperty(
-                "image",
-                user_images
-            )
-
-            Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
-            viewModel.sendChatNotification(jsonObject)
-            onBackPressed()
-
+            cut_call()
         }
     }
 
+
+    fun call_pick(){
+        AppUtils.stopPhoneCallRing()
+        main_window.visibility = View.GONE
+        if (!checkPermissionForCameraAndMicrophone()) {
+            requestPermissionForCameraMicrophoneAndBluetooth()
+        } else {
+            audioSwitch.start { audioDevices, audioDevice ->
+                updateAudioDeviceIcon(
+                    audioDevice
+                )
+            }
+        }
+        initializeUI()
+        connectToRoom(DEFAULT_CONVERSATION_NAME, true)
+        connectvideoTrack(false)
+
+    }
+    fun cut_call(){
+        AppUtils.stopPhoneCallRing()
+        onBackPressed()
+        //sharedPreferencesStorage.getString(AppConstants.USER_ID)
+        val jsonObject = JsonObject()
+        jsonObject.addProperty(
+            "user_id",
+            Home.sender_id
+        )
+        jsonObject.addProperty(
+            "match_id",
+            match_ID
+        )
+        jsonObject.addProperty(
+            "type",
+            "close_video"
+        )
+        jsonObject.addProperty(
+            "name",
+            sharedPreferencesStorage.getString(
+                AppConstants.USER_NAME
+            )
+        )
+        jsonObject.addProperty(
+            "image",
+            user_images
+        )
+
+        Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
+        viewModel.sendChatNotification(jsonObject)
+        onBackPressed()
+
+    }
 
     fun from_chat() {
         connectActionFab.setOnClickListener { onBackPressed() }
@@ -848,6 +880,9 @@ class VideoActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        Log.d("TAG@123", "onPause onPause onPause : " + CALL_ACTION)
+
+        CALL_ACTION = "open"
         /*
          * If this local video track is being shared in a Room, remove from local
          * participant before releasing the video track. Participants will be notified that
@@ -1258,5 +1293,18 @@ class VideoActivity : AppCompatActivity() {
 
         Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
         viewModel.sendChatNotification(jsonObject)
+    }
+
+
+    private fun showWhenLockedAndTurnScreenOn() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            )
+        }
     }
 }

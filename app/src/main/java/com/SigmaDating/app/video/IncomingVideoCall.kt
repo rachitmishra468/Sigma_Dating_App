@@ -35,6 +35,7 @@ class IncomingVideoCall : AppCompatActivity() {
     var match_ID = ""
     var user_name=""
     var user_images=""
+    var CALL_ACTION = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_incoming_video_call)
@@ -46,6 +47,8 @@ class IncomingVideoCall : AppCompatActivity() {
         match_ID = intent.getStringExtra("MATCHID").toString()
         user_name = intent.getStringExtra("NAME").toString()
         user_images = intent.getStringExtra("IMAGE").toString()
+        CALL_ACTION = intent.getStringExtra("ACTION").toString()
+        Log.d("TAG@123", "CALL_ACTION CALL_ACTION : " + CALL_ACTION)
         Log.d("TAG@123", "identity IncomingVideoCall : " + match_ID)
         Home.match_id = match_ID
         homeviewmodel.ctrateToken_data =
