@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -90,19 +91,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             Glide.with(requireActivity()).load(it).into(headerImg as ImageView)
         }
         mTextInputLayout?.setEndIconOnClickListener {
-            Log.d("TAG@123", "EndIconOnClickListener : ")
-
-            val jsonObject = JsonObject()
-            jsonObject.addProperty(
-                "identity",
-                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-            )
-
-            val messageBody = writeMessageEditText?.text.toString()
-            if (messageBody.length > 0) {
-                Log.d("TAG@123", "EndIconOnClickListener : " + messageBody)
-                quickstartConversationsManager.sendMessage(messageBody, jsonObject)
-            }
+            sent_message()
         }
         chat_settings_img = view.findViewById(R.id.chat_settings)
         chat_settings_img?.setOnClickListener {
@@ -437,9 +426,42 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                 AppConstants.upload_image
             )
         )
-        Log.d("TAG@123", "send Notification data  " + jsonObject.toString())
+        Log.d("TAG@123", "send Notification data  $jsonObject")
         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
     }
 
-
+    private fun sent_message(){
+        val messageBody = writeMessageEditText?.text.toString()
+        var flag = false
+        var word = ""
+        val words = Home.prohibited_words.lowercase().split(",")
+        for (x in words) {
+            if ((messageBody.lowercase().contains(x))) {
+                word=x
+                flag =true
+                Log.d("TAG@123" , "this word .... $word")
+                break
+            }else{
+                flag=false
+            }
+        }
+        if (flag) {
+            Toast.makeText(
+                requireContext(),
+                "$word : This word not allowed in chat message",
+                Toast.LENGTH_LONG
+            ).show() }
+        else{
+            Log.d("TAG@123", "EndIconOnClickListener : ")
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "identity",
+                (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            )
+            if (messageBody.length > 0) {
+                Log.d("TAG@123", "EndIconOnClickListener : " + messageBody)
+                quickstartConversationsManager.sendMessage(messageBody, jsonObject)
+            }
+        }
+    }
 }

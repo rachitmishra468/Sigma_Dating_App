@@ -311,7 +311,7 @@ class SecondFragment : Fragment() {
 
     }
 
-    fun setAdapterListData(dataListuser: ArrayList<Postdata>) {
+    fun setAdapterListData(dataListuser: List<Postdata>) {
         _binding?.recyclerView?.layoutManager = GridLayoutManager(AppReseources.getAppContext(), 3)
         photoAdapter = Profile_Adapter(requireContext())
         _binding?.recyclerView?.adapter = photoAdapter
@@ -365,7 +365,7 @@ class SecondFragment : Fragment() {
                                 photo = it.data.user.upload_image
                                 if (!res.posts.isNullOrEmpty()) {
                                     dataListuser = res.posts.reversed()
-                                    setAdapterListData(dataListuser as ArrayList<Postdata>)
+                                    setAdapterListData(dataListuser)
                                 } else {
                                     empty_text_view.text = res.post_message
                                     empty_item_layout.visibility = View.VISIBLE

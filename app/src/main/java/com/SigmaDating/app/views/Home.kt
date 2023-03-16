@@ -121,6 +121,7 @@ class Home : AppCompatActivity() {
         var mVideoGrant_user_token: String = ""
         var share_app_text: String = ""
         var safety_message_text: String = ""
+        var prohibited_words: String = ""
 
         var match_id: String = ""
         var sender_id: String = ""

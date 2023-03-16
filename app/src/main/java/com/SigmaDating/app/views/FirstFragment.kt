@@ -25,6 +25,7 @@ import com.SigmaDating.app.utilities.AppUtils.open_ad_link
 import com.SigmaDating.app.views.CardManager.CardViewChanger
 import com.SigmaDating.app.views.Home.Companion.notifications_count
 import com.SigmaDating.app.views.Home.Companion.pages
+import com.SigmaDating.app.views.Home.Companion.prohibited_words
 import com.SigmaDating.app.views.Home.Companion.safety_message_text
 import com.SigmaDating.app.views.Home.Companion.share_app_text
 import com.SigmaDating.databinding.FragmentFirstBinding
@@ -273,6 +274,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                 share_app_text =
                                     it.data?.data?.share_app_text.toString()
                                 safety_message_text = it.data?.data?.safety_message_text.toString()
+                                prohibited_words = it.data?.data?.prohibited_words.toString()
                                 Log.d(
                                     "TAG@123",
                                     "share_app_text $share_app_text  : $safety_message_text"
