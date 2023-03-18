@@ -122,6 +122,8 @@ class Home : AppCompatActivity() {
         var share_app_text: String = ""
         var safety_message_text: String = ""
         var prohibited_words: String = ""
+        var filter_offensive_text: String = ""
+
 
         var match_id: String = ""
         var sender_id: String = ""

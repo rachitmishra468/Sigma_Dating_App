@@ -275,6 +275,7 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                                     it.data?.data?.share_app_text.toString()
                                 safety_message_text = it.data?.data?.safety_message_text.toString()
                                 prohibited_words = it.data?.data?.prohibited_words.toString()
+                                Home.filter_offensive_text = it.data?.data?.filter_offensive_text.toString()
                                 Log.d(
                                     "TAG@123",
                                     "share_app_text $share_app_text  : $safety_message_text"

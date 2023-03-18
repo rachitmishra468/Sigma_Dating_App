@@ -23,6 +23,7 @@ import com.SigmaDating.app.storage.SharedPreferencesStorage
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.views.Home
+import com.SigmaDating.app.views.Home.Companion.filter_offensive_text
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
@@ -434,9 +435,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         val messageBody = writeMessageEditText?.text.toString()
         var flag = false
         var word = ""
+        val wordsmessageBody = writeMessageEditText?.text.toString().lowercase().split(" ")
         val words = Home.prohibited_words.lowercase().split(",")
         for (x in words) {
-            if ((messageBody.lowercase().contains(x))) {
+            for(mess in wordsmessageBody){
+            if ((mess.equals(x))) {
                 word=x
                 flag =true
                 Log.d("TAG@123" , "this word .... $word")
@@ -444,11 +447,15 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             }else{
                 flag=false
             }
+            }
+            if (flag){
+                break
+            }
         }
         if (flag) {
             Toast.makeText(
                 requireContext(),
-                "$word : This word not allowed in chat message",
+                filter_offensive_text,
                 Toast.LENGTH_LONG
             ).show() }
         else{
