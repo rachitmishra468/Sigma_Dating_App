@@ -23,6 +23,7 @@ data class User_bids_list(
     val interested_in:String,
     val greekletter:String,
     val age:String,
+    val is_vibe:String,
     val match_id:String,
     var tag_add:Boolean=false
 

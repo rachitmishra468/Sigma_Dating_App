@@ -78,7 +78,7 @@ class VideoActivity : AppCompatActivity() {
     var user_name = ""
     var user_images = ""
     var sender_id = ""
-    var CALL_ACTION = ""
+    var CALL_ACTION: String? = null
     lateinit var call_pick: FloatingActionButton
     lateinit var call_cut: FloatingActionButton
     lateinit var nameTextView: TextView
@@ -376,8 +376,6 @@ class VideoActivity : AppCompatActivity() {
                     /*
                      * Set access token
                      */
-
-
                     setAccessToken()
                     //  connectToRoom(DEFAULT_CONVERSATION_NAME,false)
 
@@ -387,8 +385,11 @@ class VideoActivity : AppCompatActivity() {
                     else if(CALL_ACTION.equals("OPEN")){
 
                     }
+                    else if(CALL_ACTION == null){
+                        cut_call()
+                    }
                     else{
-                       // cut_call()
+                        cut_call()
                     }
                 }
                 Status.LOADING -> {
@@ -471,6 +472,14 @@ class VideoActivity : AppCompatActivity() {
         Log.d("TAG@123", "video Cut data  Send : -" + jsonObject.toString())
         viewModel.sendChatNotification(jsonObject)
         onBackPressed()
+        if(Build.VERSION.SDK_INT >= 21)
+        {
+            finishAndRemoveTask();
+        }
+        else
+        {
+            finish();
+        }
 
     }
 
@@ -882,7 +891,7 @@ class VideoActivity : AppCompatActivity() {
     override fun onPause() {
         Log.d("TAG@123", "onPause onPause onPause : " + CALL_ACTION)
 
-        CALL_ACTION = "open"
+        CALL_ACTION = "OPEN"
         /*
          * If this local video track is being shared in a Room, remove from local
          * participant before releasing the video track. Participants will be notified that

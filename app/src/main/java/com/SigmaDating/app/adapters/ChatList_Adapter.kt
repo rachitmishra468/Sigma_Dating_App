@@ -28,12 +28,14 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
         var textname: TextView
         var univercity_name: TextView
         var date_text:TextView
+        var is_vipe :ImageView
 
         init {
             image = itemView.findViewById(R.id.image)
             textname = itemView.findViewById(R.id.chat_text_name)
             univercity_name = itemView.findViewById(R.id.univercity_name)
             date_text= itemView.findViewById(R.id.date_text)
+            is_vipe= itemView.findViewById(R.id.is_vipe)
 
         }
 
@@ -68,12 +70,14 @@ class ChatList_Adapter(var context: Context, private var listener: OnCategoryCli
             Home.match_id=data.match_id
             listener.onCategoryClick(data,false);
         }
+        if(data.is_vibe.equals("1")){
+            holder.is_vipe.visibility=View.VISIBLE
+        }else{
+            holder.is_vipe.visibility=View.GONE
+        }
         holder.textname.text = data.first_name + " " + data.last_name
         holder.univercity_name.text = data.university
         holder.date_text.text = data.dob
-
-
-
     }
 
     override fun getItemCount() = dataList.size

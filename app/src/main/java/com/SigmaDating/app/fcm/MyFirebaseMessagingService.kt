@@ -145,7 +145,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent_reject.putExtra(USER_NAME, user_name)
         intent_reject.putExtra(USER_IMAGE, user_images)
         intent_reject.putExtra(USER_IMAGE, user_images)
-        intent_accept.putExtra(CALL_ACTION, "reject")
+        intent_reject.putExtra(CALL_ACTION, "reject")
         intent_reject.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent_reject.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         intent_reject.setAction("CANCEL_CALL");

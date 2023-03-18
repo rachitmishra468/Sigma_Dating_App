@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,10 +33,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 import com.twilio.conversations.Message
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONObject
+import java.lang.Runnable
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -55,6 +55,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     lateinit var layoutManager: LinearLayoutManager
     var headerImg: CircleImageView? = null
     private var userChatname: TextView? = null
+    lateinit var toast_mes: TextView
+
 
     private val quickstartConversationsManager = QuickstartConversationsManager()
     private var username: String? = null
@@ -79,6 +81,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         mTextInputLayout = view.findViewById(R.id.messageInputHolder)
         headerImg = view.findViewById(R.id.header_img)
         userChatname = view.findViewById<TextView>(R.id.chat_user_name)
+        toast_mes = view.findViewById<TextView>(R.id.toast_mess)
+        toast_mes.text= (filter_offensive_text)
         // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
         username = getArguments()?.getString("user_name")
@@ -215,7 +219,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                 }
                 5 -> {
                     Log.d("TAG@123", "showLoader 5: ")
-                    AppUtils.showLoader(requireContext())
+                   // AppUtils.showLoader(requireContext())
                 }
             }
         })
@@ -389,7 +393,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
 
                 }
                 Status.LOADING -> {
-                    AppUtils.showLoader(requireContext())
+                   // AppUtils.showLoader(reqxuireContet())
                 }
                 Status.ERROR -> {
                     AppUtils.hideLoader()
@@ -453,6 +457,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             }
         }
         if (flag) {
+            //show_toast()
             Toast.makeText(
                 requireContext(),
                 filter_offensive_text,
@@ -471,4 +476,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             }
         }
     }
+
+    fun show_toast(){
+        CoroutineScope(Dispatchers.Main).launch {
+            toast_mes.visibility =View.VISIBLE
+            delay(3000)
+            toast_mes.visibility =View.GONE
+    }}
 }

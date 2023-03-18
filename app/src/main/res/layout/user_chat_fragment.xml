@@ -147,4 +147,23 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/toast_mess"
+        android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:padding="15dp"
+        android:layout_marginBottom="150dp"
+        style="@style/QText"
+        android:textColor="@color/blue"
+        android:background="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:text=""
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
