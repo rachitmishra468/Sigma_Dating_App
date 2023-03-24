@@ -59,6 +59,7 @@ interface ApiHelper {
     suspend fun deletepost(jsonObject: JsonObject): Response<delelepost>
     suspend fun PostStatusChange(jsonObject: JsonObject): Response<delelepost>
     suspend fun showmyposts(jsonObject: JsonObject): Response<post>
+    suspend fun showmylikeposts(jsonObject: JsonObject): Response<post>
     suspend fun getallcomment(jsonObject: JsonObject): Response<Comment_model>
     suspend fun get_user_match_bids(jsonObject: String): Response<Match_bids>
     suspend fun ctrateToken(jsonObject: JsonObject): Response<Token_data>
@@ -67,7 +68,6 @@ interface ApiHelper {
     suspend fun save_like_post_data(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun get_notification(jsonObject: String): Response<Notification_model>
     suspend fun deletenotification(jsonObject: JsonObject): Response<Loginmodel>
-
     //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel>

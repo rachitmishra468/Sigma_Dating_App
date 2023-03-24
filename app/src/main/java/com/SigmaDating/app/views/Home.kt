@@ -14,6 +14,7 @@ import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.model.Bids
 import com.SigmaDating.app.model.Pages
+import com.SigmaDating.app.model.TaggedUsers
 import com.SigmaDating.app.model.advertising_model
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.storage.SharedPreferencesStorage
@@ -123,8 +124,7 @@ class Home : AppCompatActivity() {
         var safety_message_text: String = ""
         var prohibited_words: String = ""
         var filter_offensive_text: String = ""
-
-
+        lateinit var tags_user: List<TaggedUsers>
         var match_id: String = ""
         var sender_id: String = ""
         var chatFlag: Boolean = false

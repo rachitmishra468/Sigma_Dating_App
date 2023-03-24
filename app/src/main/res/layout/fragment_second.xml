@@ -155,7 +155,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -308,16 +307,16 @@
                             app:layout_constraintEnd_toEndOf="parent" />
 
                         <ImageView
-                            android:id="@+id/heart_solid"
+                            android:id="@+id/like_post"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
                             android:layout_marginRight="6dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:padding="5dp"
-                            android:visibility="gone"
-                            android:src="@drawable/star_img"
+                            android:padding="2dp"
+                            android:visibility="visible"
+                            android:src="@drawable/star"
                             android:tintMode="src_in"
                             app:layout_constraintBottom_toBottomOf="@+id/profile_img"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -335,10 +334,10 @@
                             android:clickable="true"
                             android:padding="5dp"
                             android:src="@drawable/heart_solid"
-                            app:layout_constraintBottom_toBottomOf="@+id/profile_img"
+                            app:layout_constraintBottom_toBottomOf="@+id/like_post"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/profile_img"
-                            app:layout_constraintTop_toTopOf="@+id/profile_img"></ImageView>
+                            app:layout_constraintEnd_toStartOf="@+id/like_post"
+                            app:layout_constraintTop_toTopOf="@+id/like_post"></ImageView>
 
 
                         <ImageView

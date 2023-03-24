@@ -427,6 +427,11 @@
             android:defaultValue="null"
             />
 
+
+        <action
+            android:id="@+id/comment_post_action_SecondFragment"
+            app:destination="@id/SecondFragment" />
+
     </fragment>
 
 

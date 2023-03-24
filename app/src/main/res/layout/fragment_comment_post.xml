@@ -13,7 +13,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.5"
+        android:layout_weight="5.5"
         app:cardMaxElevation="6dp"
         app:cardUseCompatPadding="false">
 
@@ -123,6 +123,36 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tags_text"
+                    android:layout_width="wrap_content"
+                    android:text="Tags"
+                    android:textSize="16sp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_height="match_parent"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tags_comeent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    tools:itemCount="2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/item_tags" />
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="Comments "
@@ -130,7 +160,7 @@
                     android:padding="2dp"
                     android:layout_marginLeft="16sp"
                     android:textColor="@color/black"
-                    android:textStyle="normal"
+                    android:textStyle="bold"
                     android:layout_height="match_parent"/>
 
                 <View
@@ -149,7 +179,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.5"
+        android:layout_weight="3.5"
         android:orientation="horizontal"
         android:weightSum="3"
         app:cardBackgroundColor="@color/white_with_opecity"

@@ -207,16 +207,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllPost(jsonObject: JsonObject) = viewModelScope.launch {
+    fun getAllPost(jsonObject: JsonObject, flag : Boolean) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             All_post.postValue(Resource.loading(null))
-            mainRepository.showmyposts(jsonObject).let {
-                if (it.isSuccessful) {
-                    All_post.postValue(Resource.success(it.body()))
-                } else {
-                    All_post.postValue(Resource.error(it.errorBody().toString(), null))
+            if(flag){
+                mainRepository.showmyposts(jsonObject).let {
+                    if (it.isSuccessful) {
+                        All_post.postValue(Resource.success(it.body()))
+                    } else {
+                        All_post.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
                 }
+
+            }else{
+                mainRepository.showmylikeposts(jsonObject).let {
+                    if (it.isSuccessful) {
+                        All_post.postValue(Resource.success(it.body()))
+                    } else {
+                        All_post.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
+                }
+
             }
+
         }
     }
 

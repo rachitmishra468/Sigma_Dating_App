@@ -58,6 +58,7 @@ class Profile_Adapter(var context: Context) : RecyclerView.Adapter<Profile_Adapt
                 if (!Home.show_block) {
                     val bundle = Bundle()
                     bundle.putString("user_id",data.user_id)
+                    bundle.putString("is_From","POST")
                     holder.image.findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
                 }
             } catch (e: Exception) {

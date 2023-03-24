@@ -81,31 +81,45 @@
 
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="3">
 
+        <TextView
+            android:id="@+id/notification_text"
+            android:layout_width="wrap_content"
+            style="@style/QText"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:background="@color/blue"
+            android:layout_gravity="top|center"
+            android:text="All Activity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
 
-
-
-
+            />
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alllist_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText_search"
+                app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
                 tools:itemCount="4"
                 tools:listitem="@layout/chat_lists_item" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

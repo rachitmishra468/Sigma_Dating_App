@@ -55,7 +55,6 @@ class All_Activity_Adapter(var context: Context, private var listener: OnCategor
         // Get the data model based on position
         var data = dataList[position]
 
-
         if(data.is_read.equals("0")){
             holder.notification_title.setTypeface(null, Typeface.BOLD)
             holder.notification_message.setTypeface(null, Typeface.BOLD)

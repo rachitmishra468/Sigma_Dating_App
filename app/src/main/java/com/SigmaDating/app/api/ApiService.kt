@@ -97,6 +97,10 @@ interface ApiService {
     @POST("post/showmyposts")
     suspend fun showmyposts(@Body jsonObject: JsonObject): Response<post>
 
+    @POST("post/mylikedposts")
+    suspend fun showmylikeposts(@Body jsonObject: JsonObject): Response<post>
+
+
     @Multipart
     @POST("post/save")
     suspend fun create_post(

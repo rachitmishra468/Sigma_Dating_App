@@ -28,6 +28,7 @@ import com.google.gson.JsonObject
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     private var param1: String? = null
     private var param2: String? = null
@@ -49,6 +50,7 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
 
     override fun onResume() {
         super.onResume()
+        AppConstants.toast = true
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 
@@ -165,16 +167,19 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             if (res?.status == true) {
+                                AppConstants.call_api= true
                                 get_Notification_data()
-                                Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
-                                    .show()
+                                if(AppConstants.toast){
+                                    Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
+                                        .show()
+                                }
                             } else {
                                 if (res != null) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        res.message,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    AppConstants.call_api= true
+                                    if(AppConstants.toast){
+                                        Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
                                 }
                             }
                         }
@@ -190,15 +195,23 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     }
 
     fun delete_Notification_data(id: String) {
-        (activity as Home).homeviewmodel.deletenotification =
-            MutableLiveData<Resource<Loginmodel>>()
-        subscribe_notification_delete()
-        var userID = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
-        Log.d("TAG@123", userID + "")
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("user_id", userID)
-        jsonObject.addProperty("id", id)
-        (activity as Home).homeviewmodel.user_deletenotification(jsonObject)
+        if(AppConstants.call_api) {
+            AppConstants.call_api = false
+            (activity as Home).homeviewmodel.deletenotification =
+                MutableLiveData<Resource<Loginmodel>>()
+            subscribe_notification_delete()
+            var userID = (activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID)
+            Log.d("TAG@123", userID + "")
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("user_id", userID)
+            jsonObject.addProperty("id", id)
+            (activity as Home).homeviewmodel.user_deletenotification(jsonObject)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppConstants.toast = false
     }
 
 }

@@ -116,6 +116,8 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun showmyposts(jsonObject: JsonObject): Response<post> =
         apiService.showmyposts(jsonObject)
 
+    override suspend fun showmylikeposts(jsonObject: JsonObject): Response<post> =
+        apiService.showmylikeposts(jsonObject)
 
     override suspend fun get_user_match_bids(id: String): Response<Match_bids> =
         apiService.get_user_match_bids(id)

@@ -324,15 +324,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         dataListuser: ArrayList<Postdata>,
         mess: String
     ) {
-
         var list :ArrayList<Postdata> = arrayListOf()
-
-        if (dataListuser.size == 0) {
-            empty_text_view.text = mess
-            empty_item_layout.visibility = View.VISIBLE
-            Log.d("TAG@123", " empty_text  Show")
-        }
-
         if (!booleantype) {
             dataListuser.forEach {
                 if(it.isPrivate!="0"){
@@ -350,9 +342,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         _binding?.postRecyclerview?.adapter = photoAdapter
         photoAdapter.setDataList(list)
         photoAdapter.notifyDataSetChanged()
+        if (list.size == 0) {
+            empty_text_view.text = mess
+            empty_item_layout.visibility = View.VISIBLE
+            Log.d("TAG@123", " empty_text  Show")
+        }
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
     }
-
 
     fun subscribe_save_post_like() {
         (activity as Home?)?.homeviewmodel?.like_post?.observe(
@@ -402,14 +398,14 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                             var list :ArrayList<Postdata> = arrayListOf()
                             list=it.data.data as ArrayList<Postdata>
                             list.reversed()
+
+                            Log.d("TAG@123", " POST DATA SIZE ${list.size}")
                             if (!userID.equals(
                                     (activity as Home).sharedPreferencesStorage.getString(
                                         AppConstants.USER_ID
                                     )
                                 )
                             ) {
-
-
                                 setAdapterListData(
                                     false,
                                     list,
@@ -425,12 +421,9 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                             }
 
                         } else {
-
-
                             empty_text_view.text = it.data.message
                             empty_item_layout.visibility = View.VISIBLE
                             Log.d("TAG@123", " empty_text  Show")
-
                         }
 
                     }
@@ -495,6 +488,8 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 bundle.putString("user_img", position.upload_image)
                 bundle.putString("comment_title", position.title)
                 bundle.putString("media", position.media)
+                Home.tags_user = position.tagged_users
+                bundle.putString("Tags", position.tagged_users.toString())
                 findNavController().navigate(R.id.action_FirstFragment_to_comment, bundle)
                 do_sent_firebaselog("comment_post", position.first_name + " " + position.last_name)
 
@@ -593,7 +588,13 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         }
         Log.d("TAG@123", userID + "")
         jsonObject.addProperty("user_id", userID)
-        (activity as Home).homeviewmodel.getAllPost(jsonObject)
+
+        if(getArguments()?.getString("is_From").equals("LIKE")){
+            (activity as Home).homeviewmodel.getAllPost(jsonObject,false)
+        }else{
+            (activity as Home).homeviewmodel.getAllPost(jsonObject,true)
+        }
+
     }
 
     fun save_post_like(post_id: String) {

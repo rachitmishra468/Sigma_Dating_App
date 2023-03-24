@@ -11,7 +11,8 @@ public class AppConstants {
     public static final int REQUEST_PICK_GALLERY_VIDEO = 202;
     public static final int REQUEST_VIDEO_CAPTURE = 203;
     public static  boolean PHONE_LOGIN = false;
-
+    public static  boolean toast = true;
+    public static  boolean call_api = true;
     public static String SHARED_PREF_NAME = "user_variable";
     public static String Disclaimer  = "disclaimer ";
 

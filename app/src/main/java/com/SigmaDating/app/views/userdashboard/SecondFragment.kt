@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.SigmaDating.BuildConfig
@@ -65,13 +66,11 @@ class SecondFragment : Fragment() {
     private var param2: String? = null
     private var _binding: FragmentSecondBinding? = null
     private lateinit var photoAdapter: Profile_Adapter
-    private var dataList = mutableListOf<EditProfiledata>()
     private var dataListuser = listOf<Postdata>()
     private val permissionId = 2
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val binding get() = _binding!!
     lateinit var chatIcon: ImageView
-    private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
     lateinit var safety_icon: ImageView
@@ -187,6 +186,14 @@ class SecondFragment : Fragment() {
         _binding?.movetonotification?.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_notification)
         }
+        _binding?.likePost?.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("user_id",userID)
+            bundle.putString("is_From","LIKE")
+            findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
+        }
+
+
         _binding?.shareIcon?.setOnClickListener {
             try {
                 val shareIntent = Intent(Intent.ACTION_SEND)
