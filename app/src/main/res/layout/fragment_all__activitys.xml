@@ -114,9 +114,33 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:itemCount="4"
                 tools:listitem="@layout/chat_lists_item" />
+
+        <TextView
+            android:id="@+id/notification_text_delete"
+            android:layout_width="wrap_content"
+            android:layout_weight="9"
+            style="@style/QText"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_gravity="center"
+            android:text=""
+            android:textStyle="normal"
+            android:drawableLeft="@drawable/delete"
+            android:drawablePadding="10dp"
+            android:background="@drawable/border_line_radius"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

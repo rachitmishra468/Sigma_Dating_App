@@ -24,6 +24,10 @@ import com.SigmaDating.databinding.FragmentAllActivitysBinding
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
 import com.google.gson.JsonObject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -38,6 +42,7 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     private val binding get() = _binding!!
     private var userID: String? = null
     lateinit var empty_text_view: TextView
+    lateinit var notification_text_delete : TextView
     lateinit var empty_item_layout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +73,7 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
         _binding = FragmentAllActivitysBinding.inflate(inflater, container, false)
         empty_text_view = binding.root.findViewById(R.id.empty_text_view)
         empty_item_layout = binding.root.findViewById(R.id.empty_item_layout)
+        notification_text_delete= binding.root.findViewById(R.id.notification_text_delete)
         empty_item_layout.visibility = View.GONE
 
         _binding.finishNotification.setOnClickListener {
@@ -170,15 +176,16 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
                                 AppConstants.call_api= true
                                 get_Notification_data()
                                 if(AppConstants.toast){
-                                    Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
-                                        .show()
+
+                                    show_hide(res.message)
+                                   // Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT).show()
                                 }
                             } else {
                                 if (res != null) {
                                     AppConstants.call_api= true
                                     if(AppConstants.toast){
-                                        Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT)
-                                            .show()
+                                       // show_hide(res.message)
+                                       // Toast.makeText(requireContext(), res.message, Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -212,6 +219,16 @@ class All_Activitys : Fragment(), All_Activity_Adapter.OnCategoryClickListener {
     override fun onPause() {
         super.onPause()
         AppConstants.toast = false
+    }
+
+
+    fun show_hide(mes: String){
+        notification_text_delete.text=mes
+        notification_text_delete.visibility=View.VISIBLE
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1500)
+            notification_text_delete.visibility=View.GONE
+        }
     }
 
 }
