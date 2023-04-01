@@ -20,6 +20,7 @@ import androidx.navigation.fragment.navArgs
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.adapters.UserReportInterestAdapter
+import com.SigmaDating.app.model.Bids
 import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
@@ -115,11 +116,15 @@ class ReportUserFragment : Fragment() {
         _binding!!.cancelReportfb.setOnClickListener {
             (activity as Home).onBackPressed()
         }
+
         _binding!!.superLikeRf.setOnClickListener {
             (activity as Home).onBackPressed()
         }
         _binding!!.starRf.setOnClickListener {
-            (activity as Home).onBackPressed()
+            val bundle = Bundle()
+            bundle.putString("user_id",userID)
+            bundle.putString("is_From","LIKE")
+            findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
         }
 
         Home.notifications_count.let {

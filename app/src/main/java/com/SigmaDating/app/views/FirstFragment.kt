@@ -367,10 +367,17 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 }
             }
             2 -> {
-                if ((position as Bids).record_type.equals("bid")) {
+               /* if ((position as Bids).record_type.equals("bid")) {
                     showToast("like")
                 }
-                cardViewChanger?.throwRight()
+                cardViewChanger?.throwRight()*/
+
+                val bundle = Bundle()
+                bundle.putString("user_id",(position as Bids).id)
+                bundle.putString("is_From","LIKE")
+                findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
+
+
             }
             3 -> {
                 if ((position as Bids).record_type.equals("bid")) {

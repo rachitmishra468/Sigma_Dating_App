@@ -34,6 +34,10 @@
         <action
             android:id="@+id/action_FirstFragment_to_all_activity"
             app:destination="@id/all_Activitys" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_postlist"
+            app:destination="@id/postList" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -305,6 +309,11 @@
         <action
             android:id="@+id/action_reportUserFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_SecondFragment_to_postlist"
+            app:destination="@id/postList" />
+
     </fragment>
 
     <fragment

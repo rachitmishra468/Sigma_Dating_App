@@ -201,16 +201,17 @@ class SecondFragment : Fragment() {
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "" + R.string.app_name)
                 var shareMessage = Home.share_app_text + "\n"
                 shareMessage =
-                    """ ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
+                    """ ${shareMessage} https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}                   
                     """.trimIndent()
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+               // shareIntent.setPackage("com.whatsapp" )
+               // shareIntent.setPackage("com.facebook.orca" )
+               // shareIntent.setPackage("com.facebook.katana" )
                 startActivity(Intent.createChooser(shareIntent, "choose one"))
             } catch (e: java.lang.Exception) {
-                //e.toString();
+
             }
         }
-
-
         _binding?.profileImg?.setOnClickListener {
             if (Home.mCurrent_user_token.equals("")) {
 
