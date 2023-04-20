@@ -41,6 +41,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     var sender_id=""
     lateinit var  builder :NotificationCompat.Builder
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        try {
         Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.size>0) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
@@ -66,6 +67,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
 
         }}
+
+        }
+        catch (e :Exception){}
     }
 
     companion object {
@@ -73,7 +77,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun showNotification(title: String, body: String) {
-        createNotificationChannel()
+        try {
+            createNotificationChannel()
         Log.d(TAG, "Message Notification showNotification")
      /////////////////
         var intent: Intent? = null
@@ -200,6 +205,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             cancelAll()
             notify(generateRandom(), builder.build())
         }
+        }
+        catch (e :Exception){}
     }
 
     private fun broadcastVideoNotification(title: String, roomName: String) {

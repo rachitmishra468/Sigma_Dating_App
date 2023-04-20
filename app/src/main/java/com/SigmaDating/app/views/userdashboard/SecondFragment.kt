@@ -328,7 +328,7 @@ class SecondFragment : Fragment() {
 
         if (!userID.equals((activity as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID))) {
             dataListuser.forEach {
-                if (it.isPrivate != "0") {
+                if (it.isPrivate != "1") {
                     list.add(it)
                 }
             }

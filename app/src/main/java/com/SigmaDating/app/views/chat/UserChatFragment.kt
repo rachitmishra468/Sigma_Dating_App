@@ -351,6 +351,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     }
 
     fun subscribe_Login_User_details() {
+        try{
         (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -402,9 +403,12 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         })
 
 
+        }
+        catch (e: Exception){}
     }
 
     override fun send() {
+       try{
         val jsonObject = JsonObject()
         jsonObject.addProperty(
             "user_id",
@@ -433,6 +437,9 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         )
         Log.d("TAG@123", "send Notification data  $jsonObject")
         (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+
+    }
+    catch (e: Exception){}
     }
 
     private fun sent_message(){

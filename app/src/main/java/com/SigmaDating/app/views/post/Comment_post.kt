@@ -2,20 +2,25 @@ package com.SigmaDating.app.views.post
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.SigmaDating.R
-import com.SigmaDating.app.adapters.All_Activity_Adapter
 import com.SigmaDating.app.adapters.Comment_Adapter
 import com.SigmaDating.app.adapters.TagsAdapter
-import com.SigmaDating.app.model.*
+import com.SigmaDating.app.model.Comment_model
+import com.SigmaDating.app.model.Loginmodel
+import com.SigmaDating.app.model.TaggedUsers
+import com.SigmaDating.app.model.comment_list
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.views.Home
@@ -39,6 +44,7 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
     private var writeMessageEditText: TextInputEditText? = null
 
     private var mTextInputLayout: TextInputLayout? = null
+    lateinit var layoutTest : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,17 +57,38 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
         _binding = FragmentCommentPostBinding.inflate(inflater, container, false)
         writeMessageEditText = binding.root.findViewById(R.id.commentInput)
         mTextInputLayout = binding.root.findViewById(R.id.commentsInputHolder)
+        layoutTest =  binding.root.findViewById(R.id.layoutTest)
+        val dim = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dim.setMargins(2,2,2,2)
+        Home.tags_user.let {
+            for (p in 0 until 8 ){
+            for (i in 0 until Home.tags_user.size){
+                val textView = TextView(requireContext())
+                textView.apply {
+                    text = Home.tags_user.get(i).name
+                    this.setLayoutParams(dim)
+                    this.textSize=9f
+                    this.setBackground(resources.getDrawable(R.drawable.border_line_radius))
+                    this.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag_icon_small, 0, 0, 0);
+                }
+                layoutTest.addView(textView)
+            }
+        }
+        }
         postID = getArguments()?.getString("post_id")
         _binding!!.userName.setText(getArguments()?.getString("user_name"))
         if (Home.tags_user.isNullOrEmpty()) {
             _binding!!.tagsComeent.visibility = View.GONE
             _binding!!.tagsText.visibility = View.GONE
         } else {
-          // _binding?.tagsComeent?.layoutManager = GridLayoutManager(requireContext(),4)
-            _binding?.tagsComeent?.layoutManager = LinearLayoutManager(
+           _binding?.tagsComeent?.layoutManager = GridLayoutManager(requireContext(),4)
+          /*  _binding?.tagsComeent?.layoutManager = LinearLayoutManager(
                 requireActivity(),
                 LinearLayoutManager.HORIZONTAL, false
-            )
+            )*/
             adapter = TagsAdapter(requireContext(), this)
             _binding?.tagsComeent?.adapter = adapter
             adapter.setDataList(Home.tags_user)

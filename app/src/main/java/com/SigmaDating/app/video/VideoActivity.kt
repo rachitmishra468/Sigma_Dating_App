@@ -84,22 +84,8 @@ class VideoActivity : AppCompatActivity() {
     lateinit var nameTextView: TextView
     lateinit var userImageView: CircleImageView
 
-    /*
-     * You must provide a Twilio Access Token to connect to the Video service
-     */
-    // private val TWILIO_ACCESS_TOKEN = BuildConfig.TWILIO_ACCESS_TOKEN
-    //  private val ACCESS_TOKEN_SERVER = BuildConfig.TWILIO_ACCESS_TOKEN_SERVER
-
-    /*
-     * Access token used to connect. This field will be set either from the console generated token
-     * or the request to the token server.
-     */
     private lateinit var accessToken: String
 
-
-    /*
-     * A Room represents communication between a local participant and one or more participants.
-     */
     private var room: Room? = null
     private var localParticipant: LocalParticipant? = null
 

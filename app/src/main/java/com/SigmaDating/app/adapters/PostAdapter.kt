@@ -166,8 +166,8 @@ class PostAdapter(
                     listener.onDelete(data, 4)
                 } else {
                     data.isPrivate="0"
-                    listener.onDelete(data, 5)
                     holder.post_visility.setImageDrawable(context.resources.getDrawable(R.drawable.visibility_post))
+                    listener.onDelete(data, 5)
                 }
             }else{
                 data.isPrivate="0"

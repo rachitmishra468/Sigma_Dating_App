@@ -58,7 +58,6 @@ public class QuickstartConversationsManager {
                                 Home.Companion.setChatFlag(true);
                                 Log.d("TAG@12345", "message send Notification first time ");
                                 sm.send();
-
                             }
                         }
                     });

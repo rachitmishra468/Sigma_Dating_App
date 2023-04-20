@@ -56,7 +56,7 @@ class ReportUserFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var edit_profile: CircleImageView
-    lateinit var notification_Icon : ImageView
+    lateinit var notification_Icon: ImageView
     private var userID: String? = null
     lateinit var interestsList: ArrayList<String>
     private var _binding: FragmentReportUserBinding? = null
@@ -80,7 +80,8 @@ class ReportUserFragment : Fragment() {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(
-                android.R.transition.move)
+                android.R.transition.move
+            )
         }
 
         arguments?.let {
@@ -105,7 +106,7 @@ class ReportUserFragment : Fragment() {
         first_view = _binding!!.root.findViewById(R.id.first_view)
         second_view = _binding!!.root.findViewById(R.id.second_view)
         thired_view = _binding!!.root.findViewById(R.id.thired_view)
-        notification_Icon= _binding!!.root.findViewById(R.id.notification_Icon)
+        notification_Icon = _binding!!.root.findViewById(R.id.notification_Icon)
 
         //_binding.
         footer_transition()
@@ -122,9 +123,9 @@ class ReportUserFragment : Fragment() {
         }
         _binding!!.starRf.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("user_id",userID)
-            bundle.putString("is_From","LIKE")
-            findNavController().navigate(R.id.action_SecondFragment_to_postlist,bundle)
+            bundle.putString("user_id", userID)
+            bundle.putString("is_From", "LIKE")
+            findNavController().navigate(R.id.action_SecondFragment_to_postlist, bundle)
         }
 
         Home.notifications_count.let {
@@ -271,10 +272,18 @@ class ReportUserFragment : Fragment() {
 
                                 interestsList = ArrayList<String>()
                                 //  interestsList = res.user.interests.split(",") as ArrayList<String>
-                                val interest = res.user.interests.split(",").toTypedArray()
-                                val dd = interest.toList()
 
-                                setupChipGroupDynamically(dd)
+                                res.user.interests.let {
+                                    try {
+                                        val interest = res.user.interests.split(",").toTypedArray()
+                                        val dd = interest.toList()
+                                        setupChipGroupDynamically(dd)
+
+                                    } catch (e: Exception) {
+                                    }
+
+                                }
+
                             } else {
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                     .show()
@@ -343,9 +352,6 @@ class ReportUserFragment : Fragment() {
     }
 
     private fun createChip(label: String, index: Int): Chip {
-
-
-
 
 
         val chip = Chip(requireContext(), null)

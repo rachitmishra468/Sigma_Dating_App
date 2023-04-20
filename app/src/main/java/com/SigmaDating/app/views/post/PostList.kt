@@ -327,7 +327,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
         var list :ArrayList<Postdata> = arrayListOf()
         if (!booleantype) {
             dataListuser.forEach {
-                if(it.isPrivate!="0"){
+                if(it.isPrivate!="1"){
                     list.add(it)
                 }
             }
@@ -398,7 +398,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                             var list :ArrayList<Postdata> = arrayListOf()
                             list=it.data.data as ArrayList<Postdata>
                             list.reversed()
-
+                            Log.d("TAG@123", " data ${list}")
                             Log.d("TAG@123", " POST DATA SIZE ${list.size}")
                             if (!userID.equals(
                                     (activity as Home).sharedPreferencesStorage.getString(

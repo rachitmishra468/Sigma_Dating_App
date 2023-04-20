@@ -145,7 +145,7 @@ class ProfileMatch(
             }
 
             (v.findViewById<View>(R.id.star_view) as ImageView).setOnClickListener {
-                listener.onCategoryClick(courseData[position], 2, null, mageview)
+                listener.onCategoryClick(courseData[position], 8, null, mageview)
             }
 
             (v.findViewById<View>(R.id.super_like) as ImageView).setOnClickListener {
