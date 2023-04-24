@@ -326,7 +326,7 @@
                 android:id="@+id/tv_Location"
                 android:layout_width="match_parent"
                 android:drawableTint="@color/blue"
-                android:text="lorem ipsum location"
+                android:text=""
                 android:textStyle="bold"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/blue"

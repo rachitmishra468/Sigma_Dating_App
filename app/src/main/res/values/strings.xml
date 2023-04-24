@@ -47,7 +47,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="internetdisconnect">internet not connected</string>
-    <string name="dummy_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+    <string name="dummy_text"> is simply dummy text of the printing and typesetting industry.  has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
     <string name="facebook_app_id">1153185138897679</string>
     <string name="fb_login_protocol_scheme">fb1153185138897679</string>
     <string name="facebook_client_token">2adb7bbfa0c7f0c103f8973c668d818c</string>

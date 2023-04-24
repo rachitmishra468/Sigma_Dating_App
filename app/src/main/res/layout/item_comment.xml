@@ -51,7 +51,7 @@
         <TextView
             android:id="@+id/date_comment"
             android:layout_width="wrap_content"
-            android:text="lorem ipsum"
+            android:text=""
             android:textSize="11sp"
             android:textStyle="normal"
             android:textColor="@color/hint_text_color"
@@ -64,7 +64,7 @@
             android:textSize="12sp"
             android:layout_marginTop="2dp"
             android:textStyle="normal"
-            android:text="lorem ipsum"
+            android:text=""
             android:textColor="@color/black"
             android:layout_gravity="bottom"
             android:layout_height="wrap_content"/>
