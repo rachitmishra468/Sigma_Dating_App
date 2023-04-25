@@ -4,7 +4,7 @@
     <item
         android:drawable="@drawable/tag_icon"
         android:width="12dp"
-        android:height="15dp"
+        android:height="12dp"
         />
 
 </layer-list >

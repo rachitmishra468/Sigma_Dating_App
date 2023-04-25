@@ -9,7 +9,6 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -27,7 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/messageList">
 
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_left"
                 android:layout_width="wrap_content"
@@ -35,14 +33,29 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="24dp" />
 
-
             <ImageView
                 android:id="@+id/image_profile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:padding="5dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/profile_view"/>
 
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true"
+                tools:ignore="MissingConstraints"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/profile_view"/>
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -55,6 +68,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
+                android:id="@+id/profile_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
@@ -140,18 +154,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     >
-                    <LinearLayout
-                    android:id="@+id/layoutTest"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    tools:ignore="Orientation">
-                </LinearLayout>
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/rootContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:clickable="false"
+                        app:chipSpacingVertical="-16dp"
+                        android:isScrollContainer="true"
+                        android:orientation="horizontal"
+                        app:singleSelection="false"
+                        app:singleLine="false"
+                        android:padding="2dp"
+                        android:clipToPadding="false"
+                        app:chipSpacing="10dp"
+                         />
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tags_comeent"
@@ -162,7 +184,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     tools:itemCount="2"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:scrollbars="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

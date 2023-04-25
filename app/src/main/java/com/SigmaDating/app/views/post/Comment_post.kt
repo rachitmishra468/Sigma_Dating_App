@@ -1,5 +1,6 @@
 package com.SigmaDating.app.views.post
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -28,23 +31,30 @@ import com.SigmaDating.databinding.FragmentCommentPostBinding
 import com.bumptech.glide.Glide
 import com.example.demoapp.other.Resource
 import com.example.demoapp.other.Status
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
 
 
-class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
+class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
 
     private var _binding: FragmentCommentPostBinding? = null
     private val binding get() = _binding!!
     private var postID: String? = null
+    private var videofile: String? = null
     private lateinit var commentAdapter: Comment_Adapter
     lateinit var adapter: TagsAdapter
-
+    lateinit var rootContainer: ChipGroup
     private var writeMessageEditText: TextInputEditText? = null
 
     private var mTextInputLayout: TextInputLayout? = null
-    lateinit var layoutTest : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,38 +67,35 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
         _binding = FragmentCommentPostBinding.inflate(inflater, container, false)
         writeMessageEditText = binding.root.findViewById(R.id.commentInput)
         mTextInputLayout = binding.root.findViewById(R.id.commentsInputHolder)
-        layoutTest =  binding.root.findViewById(R.id.layoutTest)
-        val dim = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        dim.setMargins(2,2,2,2)
+        rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
         Home.tags_user.let {
-            for (p in 0 until 8 ){
-            for (i in 0 until Home.tags_user.size){
-                val textView = TextView(requireContext())
-                textView.apply {
-                    text = Home.tags_user.get(i).name
-                    this.setLayoutParams(dim)
-                    this.textSize=9f
-                    this.setBackground(resources.getDrawable(R.drawable.border_line_radius))
-                    this.setCompoundDrawablesWithIntrinsicBounds(R.drawable.tag_icon_small, 0, 0, 0);
-                }
-                layoutTest.addView(textView)
-            }
-        }
+            setupChipGroupDynamically(it, rootContainer)
         }
         postID = getArguments()?.getString("post_id")
+        videofile = getArguments()?.getString("videofile")
+        var mPlayer = SimpleExoPlayer.Builder(requireContext()).build()
+        if (!videofile.isNullOrEmpty()) {
+            _binding!!.videoView.player = mPlayer
+            mPlayer.playWhenReady = false
+            _binding!!.videoView.visibility = View.VISIBLE
+            _binding!!.imageProfile.visibility = View.INVISIBLE
+            mPlayer.setMediaSource(buildMediaSource(videofile!!))
+            mPlayer.prepare()
+            mPlayer.pause()
+            if (mPlayer.isPlaying) {
+                mPlayer.pause()
+            }
+        } else {
+            _binding!!.videoView.visibility = View.INVISIBLE
+            _binding!!.imageProfile.visibility = View.VISIBLE
+        }
+
         _binding!!.userName.setText(getArguments()?.getString("user_name"))
         if (Home.tags_user.isNullOrEmpty()) {
             _binding!!.tagsComeent.visibility = View.GONE
             _binding!!.tagsText.visibility = View.GONE
         } else {
-           _binding?.tagsComeent?.layoutManager = GridLayoutManager(requireContext(),4)
-          /*  _binding?.tagsComeent?.layoutManager = LinearLayoutManager(
-                requireActivity(),
-                LinearLayoutManager.HORIZONTAL, false
-            )*/
+            _binding?.tagsComeent?.layoutManager = GridLayoutManager(requireContext(), 4)
             adapter = TagsAdapter(requireContext(), this)
             _binding?.tagsComeent?.adapter = adapter
             adapter.setDataList(Home.tags_user)
@@ -100,6 +107,11 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
         Glide.with(requireContext()).load(getArguments()?.getString("media"))
             .into(_binding!!.imageProfile);
         get_commentdata()
+
+        _binding!!.imageView2.setOnClickListener {
+            mPlayer.pause()
+            (activity as Home).onBackPressed()
+        }
         return binding.root
     }
 
@@ -135,14 +147,14 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
                         AppUtils.hideLoader()
                         it.data.let { res ->
                             Log.d("TAG@123", "112" + res.toString())
-                           try {
-                               setAdapterListData(
-                                   false,
-                                   res?.data?.reversed() as ArrayList<comment_list>
-                               )
-                           } catch (e:Exception){
+                            try {
+                                setAdapterListData(
+                                    false,
+                                    res?.data?.reversed() as ArrayList<comment_list>
+                                )
+                            } catch (e: Exception) {
 
-                           }
+                            }
                         }
                     }
                     Status.LOADING -> {
@@ -210,8 +222,73 @@ class Comment_post : Fragment() ,TagsAdapter.OnCategoryClickListener {
 
     override fun onCategoryClick(position: TaggedUsers) {
         val bundle = Bundle()
-        bundle.putString("user_id",position.id)
-        findNavController().navigate(R.id.comment_post_action_SecondFragment,bundle)
+        bundle.putString("user_id", position.id)
+        findNavController().navigate(R.id.comment_post_action_SecondFragment, bundle)
     }
+
+
+    private fun setupChipGroupDynamically(
+        list: List<TaggedUsers>,
+        rootContainer: ChipGroup,
+    ) {
+        if (list.isNotEmpty()) {
+            try {
+                rootContainer.removeAllViews()
+                for (i in list.indices) {
+                    Log.d("TAG@123", "ChipGroup : " + list.get(i))
+                    if (list[i].name.isNotEmpty()) {
+                        rootContainer.addView(createChip(list.get(i).name, i, list.get(i).id))
+                    }
+
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+
+    @SuppressLint("ResourceType")
+    private fun createChip(label: String, index: Int, ID: String): Chip {
+        val chip = Chip(requireContext(), null)
+        chip.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        chip.text = label
+        chip.isCloseIconVisible = false
+        chip.isChipIconVisible = true
+        chip.isCheckable = false
+        chip.isChecked = true
+        chip.chipStrokeWidth = 1f
+        chip.chipCornerRadius = 5f
+        chip.isChecked = true
+        chip.chipIconSize = 22f
+        chip.chipMinHeight = 60f
+        chip.setChipStartPadding(10f)
+        chip.setChipEndPadding(0f)
+        //chip.height= 19
+        chip.width = 35
+        chip.chipIcon = resources.getDrawable(R.drawable.tag_icon)
+        chip.setTextColor(AppCompatResources.getColorStateList(requireContext(), R.color.blue))
+        chip.setTextSize(11f)
+        chip.setChipStrokeColorResource(R.color.blue)
+        chip.setChipBackgroundColorResource(android.R.color.transparent)
+        chip.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("user_id", ID)
+            findNavController().navigate(R.id.comment_post_action_SecondFragment, bundle)
+
+        }
+
+        return chip
+    }
+
+    private fun buildMediaSource(videoURL: String): MediaSource {
+        val dataSourceFactory = DefaultHttpDataSource.Factory()
+        val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(MediaItem.fromUri(videoURL))
+        return mediaSource
+    }
+
 
 }

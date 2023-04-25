@@ -83,6 +83,13 @@
 
     </style>
 
+    <style name="chip_style_tag" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">50sp</item>
+        <item name ="android:background">@drawable/saftey_icom</item>
+
+    </style>
+
     <color name="colorContainer">#EAEBEA</color>
     <string name="search_schools">Search Schools</string>
 

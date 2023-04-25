@@ -488,6 +488,7 @@ class PostList : Fragment(), PostAdapter.OnItemClickListener {
                 bundle.putString("user_img", position.upload_image)
                 bundle.putString("comment_title", position.title)
                 bundle.putString("media", position.media)
+                bundle.putString("videofile", position.videofile)
                 Home.tags_user = position.tagged_users
                 bundle.putString("Tags", position.tagged_users.toString())
                 findNavController().navigate(R.id.action_FirstFragment_to_comment, bundle)

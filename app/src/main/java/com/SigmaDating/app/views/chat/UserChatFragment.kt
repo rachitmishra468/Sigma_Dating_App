@@ -274,7 +274,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
             Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
-            val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm aa")
+            val sdf = SimpleDateFormat("MMMM d,yyyy hh:mm aaa")
             val date: Date = message.dateCreatedAsDate
             val date_mess = sdf.format(date)
             Log.d("TAG@123", "Date :" + date_mess)

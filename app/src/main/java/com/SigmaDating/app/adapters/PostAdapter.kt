@@ -90,6 +90,9 @@ class PostAdapter(
         holder.commetest_name.text=data.first_name+" "+data.last_name
         holder.location_text.text=data.location
         Glide.with(context).load(data.upload_image).into(holder.profile_img);
+        var mPlayer = SimpleExoPlayer.Builder(context).build()
+        holder.videoView.player = mPlayer
+        mPlayer.playWhenReady = false
         if (data.like) {
             holder.img_like.setImageDrawable(context.resources.getDrawable(R.drawable.heart_solid))
         } else {
@@ -117,12 +120,15 @@ class PostAdapter(
             holder.videoView.visibility = View.VISIBLE
             holder.image.visibility = View.INVISIBLE
             holder.progressBar.visibility = View.GONE
-            var mPlayer = SimpleExoPlayer.Builder(context).build()
-            holder.videoView.player = mPlayer
-            mPlayer.playWhenReady = false
             mPlayer.setMediaSource(buildMediaSource(data.videofile))
             mPlayer.prepare()
             mPlayer.pause()
+            if (mPlayer.isPlaying){
+                notifyDataSetChanged()
+                mPlayer.pause()
+            }
+
+
         } else {
             holder.videoView.visibility = View.INVISIBLE
             holder.image.visibility = View.VISIBLE
@@ -179,12 +185,15 @@ class PostAdapter(
 
 
         holder.comment_img.setOnClickListener {
+            mPlayer.pause()
             listener.onDelete(data, 1)
         }
 
 
 
-        holder.postDelet.setOnClickListener { listener.onDelete(data, 3) }
+        holder.postDelet.setOnClickListener {
+            mPlayer.pause()
+            listener.onDelete(data, 3) }
 
     }
 
