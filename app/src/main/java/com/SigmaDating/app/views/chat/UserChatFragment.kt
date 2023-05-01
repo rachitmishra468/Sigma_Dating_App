@@ -63,6 +63,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     var imagedata: String? = null
     private var id: String? = null
     private var match_id: String? = null
+    private var IMAGE : String? =null
 
     @Inject
     lateinit var sharedPreferencesStorage: SharedPreferencesStorage
@@ -82,11 +83,12 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         headerImg = view.findViewById(R.id.header_img)
         userChatname = view.findViewById<TextView>(R.id.chat_user_name)
         toast_mes = view.findViewById<TextView>(R.id.toast_mess)
-        toast_mes.text= (filter_offensive_text)
+        toast_mes.text = (filter_offensive_text)
         // val imgdata= (activity as Home).sharedPreferencesStorage.getString(AppConstants.upload_image)
 
         username = getArguments()?.getString("user_name")
         match_id = getArguments()?.getString("match_ID")
+        IMAGE = getArguments()?.getString("user_image")
         id = getArguments()?.getString("user_ID")
         if (username != null) {
             userChatname?.text = username
@@ -114,31 +116,48 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
 
         make_videocall = view.findViewById(R.id.make_videocall)
         make_videocall?.setOnClickListener {
-            (activity as Home).homeviewmodel.ctrateToken_data =
-                MutableLiveData<Resource<Token_data>>()
             val jsonObject = JsonObject()
             jsonObject.addProperty(
-                "identity",
-                id+"00"
+                "user_id",
+                id
             )
-            Log.d("TAG@123", "identity : " + jsonObject.toString())
-            (activity as Home).homeviewmodel.get_User_video_token(
-                jsonObject
+            jsonObject.addProperty(
+                "match_id",
+                match_id
             )
-            subscribe_Login_User_details()
-
-
+            jsonObject.addProperty(
+                "type",
+                "video"
+            )
+            jsonObject.addProperty(
+                "name",
+                (context as Home).sharedPreferencesStorage.getString(
+                    AppConstants.USER_NAME
+                )
+            )
+            jsonObject.addProperty(
+                "image",
+                (context as Home).sharedPreferencesStorage.getString(
+                    AppConstants.upload_image
+                )
+            )
+            Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
+            (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+            val intent = Intent(activity, VideoActivity::class.java)
+            intent.putExtra("TYPE", 0)
+            intent.putExtra("USERID", id)
+            intent.putExtra("NAME", username)
+            intent.putExtra("MATCHID", match_id)
+            intent.putExtra("IMAGE", IMAGE)
+            startActivity(intent)
         }
-
-
-
-
 
         layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
 
         recyclerView!!.layoutManager = layoutManager
-        messagesAdapter = MessagesAdapter(imagedata, requireContext(), quickstartConversationsManager)
+        messagesAdapter =
+            MessagesAdapter(imagedata, requireContext(), quickstartConversationsManager)
         recyclerView!!.adapter = messagesAdapter
         recyclerView!!.scrollToPosition(quickstartConversationsManager.messages.size - 1)
         setListeners()
@@ -219,7 +238,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                 }
                 5 -> {
                     Log.d("TAG@123", "showLoader 5: ")
-                   // AppUtils.showLoader(requireContext())
+                    // AppUtils.showLoader(requireContext())
                 }
             }
         })
@@ -228,7 +247,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     }
 
 
-     class MessagesAdapter(
+    class MessagesAdapter(
         var imagedata: String?,
         var context: Context,
         var quickstartConversationsManager: QuickstartConversationsManager
@@ -242,7 +261,7 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             var textname: TextView
             var textTime: TextView
             var imageAvatar: CircleImageView
-            var imageAvatar_self:CircleImageView
+            var imageAvatar_self: CircleImageView
 
             init {
                 textname = itemView.findViewById(R.id.txtOtherMessage)
@@ -273,8 +292,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val message: Message = quickstartConversationsManager.getMessages().get(position)
-            Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
-            val sdf = SimpleDateFormat("MMMM d,yyyy hh:mm aaa")
+            Log.d(
+                "TAG@321",
+                "message  : -" + message.body + " atre :" + message.attributes.toString()
+            )
+            val sdf = SimpleDateFormat("MMMM d, yyyy hh:mm aaa")
             val date: Date = message.dateCreatedAsDate
             val date_mess = sdf.format(date)
             Log.d("TAG@123", "Date :" + date_mess)
@@ -309,8 +331,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
             val message = quickstartConversationsManager.messages.get(position)
             val dd = message.attributes
             try {
-                Log.d("TAG@123","message : "+message +" ...."+dd)
-                Log.d("TAG@321", "message  : -"+message.body+" atre :" + message.attributes.toString())
+                Log.d("TAG@123", "message : " + message + " ...." + dd)
+                Log.d(
+                    "TAG@321",
+                    "message  : -" + message.body + " atre :" + message.attributes.toString()
+                )
                 val jsonObject = JSONObject(dd.toString())
                 if ((context as Home).sharedPreferencesStorage.getString(AppConstants.USER_ID) == jsonObject.get(
                         "identity"
@@ -337,11 +362,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                         return VIEW_TYPE_OTHER_MESSAGE
                     }
                     booleanuser = true
-                    Log.d("TAG@321", "Exception  : -"+e.message.toString())
+                    Log.d("TAG@321", "Exception  : -" + e.message.toString())
                     return VIEW_TYPE_MY_MESSAGE
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     booleanuser = true
-                    Log.d("TAG@321", "Exception  : -"+e.message.toString())
+                    Log.d("TAG@321", "Exception  : -" + e.message.toString())
                     return VIEW_TYPE_MY_MESSAGE
                 }
 
@@ -351,115 +376,120 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
     }
 
     fun subscribe_Login_User_details() {
-        try{
-        (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    AppUtils.hideLoader()
-                    activity?.let {
-                        val intent = Intent(it, VideoActivity::class.java)
-                        intent.putExtra("TYPE", 0)
-                        intent.putExtra("USERID", id)
-                        intent.putExtra("NAME", username)
-                        it.startActivity(intent)
-                        val jsonObject = JsonObject()
-                        jsonObject.addProperty(
-                            "user_id",
-                            id
-                        )
-                        jsonObject.addProperty(
-                            "match_id",
-                            match_id
-                        )
-                        jsonObject.addProperty(
-                            "type",
-                            "video"
-                        )
-                        jsonObject.addProperty(
-                            "name",
-                            (context as Home).sharedPreferencesStorage.getString(
-                                AppConstants.USER_NAME
-                            )
-                        )
-                        jsonObject.addProperty(
-                            "image",
-                            (context as Home).sharedPreferencesStorage.getString(
-                                AppConstants.upload_image
-                            )
-                        )
-                        Log.d("TAG@123", "video Notification data  Send" + jsonObject.toString())
-                        (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+        try {
+            (activity as Home?)?.homeviewmodel?.ctrateToken_data?.observe(
+                viewLifecycleOwner,
+                Observer {
+                    when (it.status) {
+                        Status.SUCCESS -> {
+                            AppUtils.hideLoader()
+                            activity?.let {
+                                val intent = Intent(it, VideoActivity::class.java)
+                                intent.putExtra("TYPE", 0)
+                                intent.putExtra("USERID", id)
+                                intent.putExtra("NAME", username)
+                                intent.putExtra("MATCHID", match_id)
+                                it.startActivity(intent)
+                                val jsonObject = JsonObject()
+                                jsonObject.addProperty(
+                                    "user_id",
+                                    id
+                                )
+                                jsonObject.addProperty(
+                                    "match_id",
+                                    match_id
+                                )
+                                jsonObject.addProperty(
+                                    "type",
+                                    "video"
+                                )
+                                jsonObject.addProperty(
+                                    "name",
+                                    (context as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.USER_NAME
+                                    )
+                                )
+                                jsonObject.addProperty(
+                                    "image",
+                                    (context as Home).sharedPreferencesStorage.getString(
+                                        AppConstants.upload_image
+                                    )
+                                )
+                                Log.d(
+                                    "TAG@123",
+                                    "video Notification data  Send" + jsonObject.toString()
+                                )
+                                (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
 
+                            }
+                        }
+                        Status.LOADING -> {
+                            // AppUtils.showLoader(reqxuireContet())
+                        }
+                        Status.ERROR -> {
+                            AppUtils.hideLoader()
+                        }
                     }
-
-                }
-                Status.LOADING -> {
-                   // AppUtils.showLoader(reqxuireContet())
-                }
-                Status.ERROR -> {
-                    AppUtils.hideLoader()
-                }
-            }
-        })
+                })
 
 
+        } catch (e: Exception) {
         }
-        catch (e: Exception){}
     }
 
     override fun send() {
-       try{
-        val jsonObject = JsonObject()
-        jsonObject.addProperty(
-            "user_id",
-            id
-        )
-        jsonObject.addProperty(
-            "match_id",
-            match_id
-        )
-        jsonObject.addProperty(
-            "type",
-            "chat"
-        )
-        jsonObject.addProperty(
-            "name",
-            (context as Home).sharedPreferencesStorage.getString(
-                AppConstants.USER_NAME
+        try {
+            val jsonObject = JsonObject()
+            jsonObject.addProperty(
+                "user_id",
+                id
             )
-        )
-
-        jsonObject.addProperty(
-            "image",
-            (context as Home).sharedPreferencesStorage.getString(
-                AppConstants.upload_image
+            jsonObject.addProperty(
+                "match_id",
+                match_id
             )
-        )
-        Log.d("TAG@123", "send Notification data  $jsonObject")
-        (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+            jsonObject.addProperty(
+                "type",
+                "chat"
+            )
+            jsonObject.addProperty(
+                "name",
+                (context as Home).sharedPreferencesStorage.getString(
+                    AppConstants.USER_NAME
+                )
+            )
 
-    }
-    catch (e: Exception){}
+            jsonObject.addProperty(
+                "image",
+                (context as Home).sharedPreferencesStorage.getString(
+                    AppConstants.upload_image
+                )
+            )
+            Log.d("TAG@123", "send Notification data  $jsonObject")
+            (activity as Home).homeviewmodel.sendChatNotification(jsonObject)
+
+        } catch (e: Exception) {
+        }
     }
 
-    private fun sent_message(){
+    private fun sent_message() {
         val messageBody = writeMessageEditText?.text.toString()
         var flag = false
         var word = ""
         val wordsmessageBody = writeMessageEditText?.text.toString().lowercase().split(" ")
         val words = Home.prohibited_words.lowercase().split(",")
         for (x in words) {
-            for(mess in wordsmessageBody){
-            if ((mess.equals(x))) {
-                word=x
-                flag =true
-                Log.d("TAG@123" , "this word .... $word")
-                break
-            }else{
-                flag=false
+            for (mess in wordsmessageBody) {
+                if ((mess.equals(x))) {
+                    word = x
+                    flag = true
+                    Log.d("TAG@123", "this word .... $word")
+                    break
+                } else {
+                    flag = false
+                }
             }
-            }
-            if (flag){
+            if (flag) {
                 break
             }
         }
@@ -469,8 +499,8 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
                 requireContext(),
                 filter_offensive_text,
                 Toast.LENGTH_LONG
-            ).show() }
-        else{
+            ).show()
+        } else {
             Log.d("TAG@123", "EndIconOnClickListener : ")
             val jsonObject = JsonObject()
             jsonObject.addProperty(
@@ -484,10 +514,11 @@ class UserChatFragment : Fragment(), QuickstartConversationsManager.SendNotifica
         }
     }
 
-    fun show_toast(){
+    fun show_toast() {
         CoroutineScope(Dispatchers.Main).launch {
-            toast_mes.visibility =View.VISIBLE
+            toast_mes.visibility = View.VISIBLE
             delay(3000)
-            toast_mes.visibility =View.GONE
-    }}
+            toast_mes.visibility = View.GONE
+        }
+    }
 }

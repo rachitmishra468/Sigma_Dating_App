@@ -20,6 +20,7 @@ import com.SigmaDating.R
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.video.VideoActivity
 import com.SigmaDating.app.views.Home
+import com.SigmaDating.app.views.Home.Companion.incoming_call
 import com.SigmaDating.app.views.Splash
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -59,11 +60,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     .sendBroadcast(Intent("BROADCAST_FOR_CLOSE_VIDEO"))
             }else{
                 showNotification(remoteMessage.data["title"].toString(), remoteMessage.data["body"].toString())
-
             if (type.equals("video")) {
                 Home.sender_id=sender_id
                 Home.match_id = match_ID
-                broadcastVideoNotification("", "")
+                if(!incoming_call){
+                    broadcastVideoNotification("", "")
+                }
             }
 
         }}

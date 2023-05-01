@@ -45,8 +45,6 @@ class IncomingVideoCallViewModel @Inject constructor(
             ctrateToken_data.postValue(Resource.loading(null))
             mainRepository.ctrateToken(id).let {
                 if (it.isSuccessful) {
-
-
                     Resource.success(it.body()).data.let {
                         Home.mVideoGrant_user_token = it?.token.toString()
                         Log.d("TAG@123", "Token : " + Home.mCurrent_user_token)

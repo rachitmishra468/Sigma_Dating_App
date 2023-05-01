@@ -7,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -41,6 +39,8 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.JsonObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
@@ -148,12 +148,24 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
                         it.data.let { res ->
                             Log.d("TAG@123", "112" + res.toString())
                             try {
+                                if( res?.data?.size==0){
+                                    Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG)
+                                        .show()
+                                }
                                 setAdapterListData(
                                     false,
                                     res?.data?.reversed() as ArrayList<comment_list>
                                 )
                             } catch (e: Exception) {
-
+                                Log.d("TAG@123", "Exception" + e.message.toString())
+                                try {
+                                    setAdapterListData(
+                                        false,
+                                        res?.data as ArrayList<comment_list>
+                                    )
+                                } catch (e: Exception) {
+                                    Log.d("TAG@123", "Exception 111" + e.message.toString())
+                                }
                             }
                         }
                     }
@@ -167,8 +179,7 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
             })
     }
 
-
-    fun subscribe_sent_comment() {
+    private fun subscribe_sent_comment() {
         (activity as Home?)?.homeviewmodel?.sent_comment?.observe(
             viewLifecycleOwner,
             Observer { it ->
@@ -195,7 +206,6 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
             })
     }
 
-
     fun setAdapterListData(booleantype: Boolean, dataListuser: ArrayList<comment_list>) {
         _binding?.postComeent?.layoutManager = LinearLayoutManager(
             requireActivity(),
@@ -207,17 +217,17 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
         commentAdapter.setDataList(dataListuser)
         commentAdapter.notifyDataSetChanged()
         Log.d("TAG@123", " setAdapterListData  ${dataListuser.size}")
-    }
 
+
+    }
 
     fun get_all_comment_list() {
         (activity as Home).homeviewmodel.All_comment = MutableLiveData<Resource<Comment_model>>()
         subscribe_get_comment_list()
         val jsonObject = JsonObject()
-        Log.d("TAG@123", postID + "")
+        Log.d("TAG@123", postID + "-- postID")
         jsonObject.addProperty("post_id", postID)
         (activity as Home).homeviewmodel.getAllComment(jsonObject)
-
     }
 
     override fun onCategoryClick(position: TaggedUsers) {
@@ -249,12 +259,15 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
 
     @SuppressLint("ResourceType")
     private fun createChip(label: String, index: Int, ID: String): Chip {
+        val upperString: String =
+            label.substring(0, 1).uppercase(Locale.getDefault()) + label.substring(1)
+                .lowercase(Locale.getDefault())
         val chip = Chip(requireContext(), null)
         chip.layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        chip.text = label
+        chip.text = upperString
         chip.isCloseIconVisible = false
         chip.isChipIconVisible = true
         chip.isCheckable = false
@@ -262,24 +275,24 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
         chip.chipStrokeWidth = 1f
         chip.chipCornerRadius = 5f
         chip.isChecked = true
-        chip.chipIconSize = 22f
+        chip.chipIconSize = 26f
         chip.chipMinHeight = 60f
-        chip.setChipStartPadding(10f)
-        chip.setChipEndPadding(0f)
+       // chip.setChipStartPadding(10f)
+      //  chip.setChipEndPadding(15f)
         //chip.height= 19
-        chip.width = 35
+        //chip.width = 35
+        chip.textEndPadding=-18f
+        chip.textStartPadding=12f
         chip.chipIcon = resources.getDrawable(R.drawable.tag_icon)
-        chip.setTextColor(AppCompatResources.getColorStateList(requireContext(), R.color.blue))
-        chip.setTextSize(11f)
+        chip.setTextColor(AppCompatResources.getColorStateList(requireContext(), R.color.black))
+        chip.setTextSize(12f)
         chip.setChipStrokeColorResource(R.color.blue)
         chip.setChipBackgroundColorResource(android.R.color.transparent)
         chip.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("user_id", ID)
             findNavController().navigate(R.id.comment_post_action_SecondFragment, bundle)
-
         }
-
         return chip
     }
 
@@ -289,6 +302,5 @@ class Comment_post : Fragment(), TagsAdapter.OnCategoryClickListener {
             .createMediaSource(MediaItem.fromUri(videoURL))
         return mediaSource
     }
-
 
 }

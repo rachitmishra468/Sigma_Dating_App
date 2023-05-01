@@ -330,11 +330,6 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
             "identity",
             position.match_id
         )
-        /* jsonObject.addProperty(
-             "identity",
-             (activity as Home).sharedPreferencesStorage.getString(
-                 AppConstants.USER_ID
-             )        )*/
         Log.d("TAG@123", "identity : " + jsonObject.toString())
         (activity as Home).homeviewmodel.get_User_token(
             jsonObject
@@ -555,6 +550,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         bundle.putString("user_image", position.upload_image)
                         bundle.putString("user_ID", position.id)
                         bundle.putString("match_ID", position.match_id)
+
                         Navigation.findNavController(binding.root)
                             .navigate(
                                 R.id.action_chatListFragment_to_userChatFragment, bundle,

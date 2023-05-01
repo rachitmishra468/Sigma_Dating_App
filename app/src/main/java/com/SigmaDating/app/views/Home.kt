@@ -131,7 +131,7 @@ class Home : AppCompatActivity() {
         var toastflag: Boolean = false
         var show_block: Boolean = false
         var ads_list_index: Int = 0
-
+        var incoming_call: Boolean = false
         fun get_settingpage_data(alias: String): Pages? {
             for (i in 0..pages.size) {
                 val page = pages.get(i)
