@@ -125,7 +125,7 @@
                     android:textSize="22dp"
                     android:textStyle="bold"
                     android:text="Send us your query"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

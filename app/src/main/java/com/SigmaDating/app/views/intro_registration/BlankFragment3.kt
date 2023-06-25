@@ -124,7 +124,8 @@ class BlankFragment3 : Fragment() {
 
                     (activity as OnBoardingActivity?)?.userRegister?.email_validation_check(
                         email_id.text.toString(),
-                        country_spinner.selectedItem.toString()+edit_text_phone.text.toString()
+                        country_spinner.selectedItem.toString()+edit_text_phone.text.toString(),
+                        editbirthday.text.toString()
                     )
 
                     checkEmailValidation()
@@ -174,13 +175,13 @@ class BlankFragment3 : Fragment() {
         val minMonth = Calendar.getInstance().get(Calendar.MONTH)
         val minYear = Calendar.getInstance().get(Calendar.YEAR) - 30;
         mCalendar.set(minYear, minMonth, minDay)
-        mDialog.datePicker.minDate = mCalendar.timeInMillis
+        /*if we need min and max date please uncomment these lines*/
+       // mDialog.datePicker.minDate = mCalendar.timeInMillis
 
-        // Changing mCalendar date from current to
-        // some random MAX day 20/08/2021 20 Aug 2021
+
         val maxDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)  //31
         val maxMonth = Calendar.getInstance().get(Calendar.MONTH)  //12
-        val maxYear = Calendar.getInstance().get(Calendar.YEAR) - 18;
+        val maxYear = Calendar.getInstance().get(Calendar.YEAR) ;
         mCalendar.set(maxYear, maxMonth , maxDay)
         mDialog.datePicker.maxDate = mCalendar.timeInMillis
 
@@ -204,6 +205,12 @@ class BlankFragment3 : Fragment() {
                             } else {
                                 Log.d("TAG@123","status ${res.message}")
                                 Toast.makeText(requireContext(), res.message, Toast.LENGTH_LONG).show()
+                                if(res.message.contains("age")){
+                                    (activity as OnBoardingActivity?)?.finish()
+                                } else {
+                                    
+                                }
+
                             }
                         }
                     }

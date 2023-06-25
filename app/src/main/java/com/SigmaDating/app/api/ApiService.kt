@@ -158,4 +158,10 @@ interface ApiService {
     suspend fun post_users_updatecontacts(@Body jsonObject: JsonObject): Response<Loginmodel>
 
 
+    @POST("users/updateigauthtoken")
+    suspend fun updateigauthtoken(@Body jsonObject: JsonObject): Response<Loginmodel>
+
+    @POST("users/updatefbauthtoken")
+    suspend fun updatefbauthtoken(@Body jsonObject: JsonObject): Response<Loginmodel>
+
 }

@@ -1,26 +1,30 @@
 package com.SigmaDating.app.views.profile
 
+import android.app.ActionBar
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
+import com.SigmaDating.app.InstagramAppModule.InstagramSession
+import com.SigmaDating.app.adapters.Instagram_feed_Adapter
 import com.SigmaDating.app.adapters.UserReportInterestAdapter
-import com.SigmaDating.app.model.Bids
 import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
@@ -36,10 +40,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.JsonObject
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.URL
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,7 +56,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ReportUserFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ReportUserFragment : Fragment() {
+class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -61,6 +66,8 @@ class ReportUserFragment : Fragment() {
     lateinit var interestsList: ArrayList<String>
     private var _binding: FragmentReportUserBinding? = null
     private lateinit var photoAdapter: UserReportInterestAdapter
+    private lateinit var mInstagramfeedAdapter: Instagram_feed_Adapter
+    lateinit var dataList: java.util.ArrayList<String>
     private val binding get() = _binding!!
     lateinit var rootContainer: ChipGroup
     lateinit var chatIcon: ImageView
@@ -107,6 +114,8 @@ class ReportUserFragment : Fragment() {
         second_view = _binding!!.root.findViewById(R.id.second_view)
         thired_view = _binding!!.root.findViewById(R.id.thired_view)
         notification_Icon = _binding!!.root.findViewById(R.id.notification_Icon)
+        _binding?.updateImageView?.visibility=View.GONE
+        _binding?.profilePhoto?.visibility=View.GONE
 
         //_binding.
         footer_transition()
@@ -207,8 +216,6 @@ class ReportUserFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             delay(100)
             subscribe_User_details()
-
-
         }
 
 
@@ -216,6 +223,7 @@ class ReportUserFragment : Fragment() {
             findNavController().navigate(R.id.action_reportUserFragment_to_notification)
         }
 
+       // fetchUserImages("")
         return _binding!!.root
     }
 
@@ -254,6 +262,16 @@ class ReportUserFragment : Fragment() {
                                     it.tvLocation.setText(res.user.location)
                                     it.tvDescription.setText(res.user.about)
                                     it.universityText.setText(res.user.university)
+
+                                    res.user.ig_auth_token?.let {
+                                        fetchUserImages(it)
+                                    }
+
+                                    res.user.fb_auth_token?.let {
+                                    }
+
+
+
                                     if (res.user.greekletter.length > 0) {
                                         it.reportGreek.text = res.user.greekletter
                                         it.reportGreek.visibility = View.VISIBLE
@@ -291,17 +309,13 @@ class ReportUserFragment : Fragment() {
                         }
                     }
                     Status.LOADING -> {
-
-
                         Log.d("TAG@123", "LOADING is null")
                     }
                     Status.ERROR -> {
-
                     }
                 }
             })
     }
-
 
     fun subscribe_report_block_user() {
         (activity as Home?)?.homeviewmodel?.report_block_user?.observe(
@@ -432,7 +446,6 @@ class ReportUserFragment : Fragment() {
 
     }
 
-
     fun Update_password(profile: String) {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.report_user_popup, null)
@@ -469,6 +482,82 @@ class ReportUserFragment : Fragment() {
         dialog.setContentView(view)
         dialog.show()
     }
+
+    override fun onCategoryClick(url: String) {
+        showZoomImage(url)
+    }
+
+
+    private fun fetchUserImages(token : String) {
+        _binding?.updateImageView?.visibility=View.VISIBLE
+        _binding?.profilePhoto?.visibility=View.VISIBLE
+        _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
+        dataList = ArrayList()
+      //  var mSession: InstagramSession = InstagramSession(context)
+      //  var mAccessToken: String = mSession.getAccessToken()
+
+
+        mInstagramfeedAdapter = Instagram_feed_Adapter(requireContext(), this)
+        object : Thread() {
+            override fun run() {
+                Log.d("TAG@123", "Fetching user info")
+                try {
+                    val url = URL(
+                        "https://graph.instagram.com/me/media?fields=id,media_url"
+                                + "&access_token=" + token
+                    )
+                    var line: String?
+                    val urlConn = url.openConnection()
+                    val bufferedReader = BufferedReader(InputStreamReader(urlConn.getInputStream()))
+                    val stringBuffer = StringBuffer()
+                    while ((bufferedReader.readLine().also { line = it }) != null) {
+                        stringBuffer.append(line)
+                    }
+                    var response: String = stringBuffer.toString()
+                    Log.d("TAG@123", "response $response")
+                    Log.e("Userid", response)
+                    val jsonObj = JSONObject(response)
+                    val jsonArray = jsonObj.getJSONArray("data")
+                    for (i in 0 until jsonArray.length()) {
+                        val objects: JSONObject = jsonArray.getJSONObject(i)
+                        val name = objects["media_url"].toString()
+                        dataList.add(name)
+                        Log.d("TAG@123", "Images URL $name")
+                    }
+                    runBlocking(Dispatchers.Main) {
+                        Log.d("TAG@123", "runOnUiThread")
+                        _binding?.updateImageView?.adapter = mInstagramfeedAdapter
+                        dataList.let { mInstagramfeedAdapter.setDataList(it) }
+                        mInstagramfeedAdapter.notifyDataSetChanged()
+                    }
+
+                } catch (ex: java.lang.Exception) {
+                    Log.d("TAG@123", "Exception " + ex.message.toString())
+                    ex.printStackTrace()
+                    _binding?.updateImageView?.visibility=View.GONE
+                    _binding?.profilePhoto?.visibility=View.GONE
+
+                }
+            }
+        }.start()
+    }
+
+    fun showZoomImage(url:String){
+        var dialog =Dialog(requireContext(),android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setCancelable(true)
+        var webview =WebView(requireContext())
+        webview.layoutParams= ActionBar.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT
+        )
+        webview.loadUrl(url)
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setSupportZoom(true)
+        dialog.setContentView(webview);
+        dialog.show();
+    }
+
+
 
 
 }

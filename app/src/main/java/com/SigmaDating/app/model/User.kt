@@ -32,6 +32,10 @@ data class User(
     val emergency_contact1:String,
     val emergency_contact2:String,
     val emergency_contact3:String,
+    val ig_auth_token:String,
+    val ig_userid:String,
+    val fb_auth_token:String,
+    val fb_userid:String,
     var photos:ArrayList<String> = arrayListOf()
     )
 

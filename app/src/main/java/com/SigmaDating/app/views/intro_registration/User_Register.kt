@@ -211,11 +211,12 @@ class User_Register @Inject constructor(
 
     }
 
-    fun email_validation_check(email: String, phone: String) = viewModelScope.launch {
+    fun email_validation_check(email: String, phone: String, dob :String) = viewModelScope.launch {
         email_validate?.postValue(Resource.loading(null))
         val jsonObject = JsonObject()
         jsonObject.addProperty("phone", phone)
         jsonObject.addProperty("email", email)
+        jsonObject.addProperty("dob", dob)
         Log.d("TAG@123", jsonObject.toString())
         mainRepository.email_validation_check(jsonObject).let {
             if (it.isSuccessful) {

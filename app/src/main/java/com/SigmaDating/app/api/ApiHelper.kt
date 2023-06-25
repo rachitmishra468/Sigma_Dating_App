@@ -71,5 +71,9 @@ interface ApiHelper {
     //suspend fun getUserDashboardProfile(jsonObject: JsonObject):Response<Loginmodel>
     suspend fun contact_form(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel>
+    suspend fun updateigauthtoken(jsonObject: JsonObject): Response<Loginmodel>
+    suspend fun updatefbauthtoken(jsonObject: JsonObject): Response<Loginmodel>
+
+
 
 }

@@ -85,6 +85,12 @@ class MainRepository @Inject constructor(
     suspend fun post_users_updatecontacts(jsonObject: JsonObject) =
         apiHelper.post_users_updatecontacts(jsonObject)
 
+    suspend fun updateigauthtoken(jsonObject: JsonObject) =
+        apiHelper.updateigauthtoken(jsonObject)
+
+    suspend fun updatefbauthtoken(jsonObject: JsonObject) =
+        apiHelper.updatefbauthtoken(jsonObject)
+
     //suspend fun getUserDashboardData(jsonObject: JsonObject)=apiHelper.getUserDashboardProfile(jsonObject)
 
 }

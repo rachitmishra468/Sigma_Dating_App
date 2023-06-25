@@ -130,7 +130,7 @@
             android:inputType="textCapWords"
             android:maxLines="1"
             android:minLines="1"
-            android:visibility="visible"
+            android:visibility="gone"
             android:paddingTop="15dp"
             android:maxLength="35"
             android:paddingBottom="15dp"

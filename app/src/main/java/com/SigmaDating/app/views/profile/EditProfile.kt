@@ -8,11 +8,10 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -23,6 +22,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getColorStateList
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,11 +32,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.demoapp.other.Status
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.SigmaDating.R
-import com.SigmaDating.app.AppReseources
+import com.SigmaDating.app.InstagramAppModule.InstagramApp
+import com.SigmaDating.app.InstagramAppModule.InstagramApp.OAuthAuthenticationListener
+import com.SigmaDating.app.InstagramAppModule.InstagramSession
 import com.SigmaDating.app.adapters.Edit_Profile_Adapter
 import com.SigmaDating.app.adapters.InterestAdapter
 import com.SigmaDating.app.adapters.SchoolAdapter
@@ -54,21 +53,21 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.demoapp.other.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.demoapp.other.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import androidx.appcompat.widget.SearchView;
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -79,6 +78,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     InterestAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
 
+    private var instaObj: InstagramApp? = null
+    val CLIENT_ID = "8605825122768702"
+    val CLIENT_SECRET = "417afa3975760ff12c3d9634ec2ff29a"
+    val CALLBACK_URL = "https://www.sigmasocialapp.com/app/oauth/authorize"
+
+    var ig_flag: Boolean = false
+    var fb_flag: Boolean = false
     private val permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -150,6 +156,23 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
         interests_text = _binding?.root?.findViewById(R.id.interests_text)!!
         _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
+        _binding?.instragramText?.setOnClickListener {
+            if (ig_flag) {
+                show_dilog(true)
+            } else {
+                instaObj = InstagramApp(
+                    requireContext(), CLIENT_ID,
+                    CLIENT_SECRET, CALLBACK_URL
+                )
+                instaObj!!.setListener(listener)
+                instaObj!!.authorize()
+            }
+
+        }
+        _binding?.fbText?.setOnClickListener {
+            show_dilog(false)
+        }
+
         _binding?.imageView2?.setOnClickListener {
             (activity as Home).onBackPressed()
         }
@@ -635,6 +658,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                     } ?: run {
                                         university = ""
                                     }
+                                    res.user.ig_auth_token?.let {
+                                        ig_flag = true
+                                        _binding?.instragramText?.text = "Disconnect"
+                                    }
+
+                                    res.user.fb_auth_token?.let {
+                                        fb_flag = true
+                                        _binding?.fbText?.text = "Disconnect"
+                                    }
+
                                     res.user.orgType.let {
                                         set_default_button(it)
                                     }
@@ -686,6 +719,8 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                             "Both" -> _binding!!.rbboth.setChecked(true);
                                         }
                                     }
+
+
 
 
                                     if (it.data?.user?.age_range?.isEmpty() == false) {
@@ -955,7 +990,6 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                         }
                     }
 
-
                 }
         }
     }
@@ -1224,6 +1258,60 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             )
         }
     }
+
+
+    var listener: OAuthAuthenticationListener = object : OAuthAuthenticationListener {
+        override fun onSuccess() {
+
+            runBlocking(Dispatchers.Main) {
+                var mSession: InstagramSession = InstagramSession(context)
+                var mAccessToken: String = mSession.getAccessToken()
+                _binding?.instragramText?.text = "Disconnect"
+                ig_flag = true
+                (activity as Home).homeviewmodel.update_token(
+                    (activity as Home).sharedPreferencesStorage.getString(
+                        AppConstants.USER_ID
+                    ), mSession.getAccessToken(), mSession.id
+
+                )
+
+
+            }
+        }
+
+        override fun onFail(error: String) {
+            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+
+    fun show_dilog(flag: Boolean) {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(if (flag) "Disconnect Instagram" else "Disconnect Facebook")
+        builder.setIcon(R.mipmap.ic_launcher)
+        builder.setMessage(if (flag) "Your Instagram photos will be removed from Your profile." else "Your Facebook photos will be removed from Your profile.")
+        builder.background = ColorDrawable(
+            Color.parseColor("#FFFFFF")
+        )
+        builder.setPositiveButton("OK") { dialog, which ->
+            (activity as Home).homeviewmodel.update_token(
+                (activity as Home).sharedPreferencesStorage.getString(
+                    AppConstants.USER_ID
+                ), "", ""
+            )
+            _binding?.instragramText?.text = "Connect Instagram"
+            ig_flag = false
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("CANCEL") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
 
 }
 

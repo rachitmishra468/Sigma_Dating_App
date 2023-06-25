@@ -153,4 +153,10 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun post_users_updatecontacts(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.post_users_updatecontacts(jsonObject)
 
+    override suspend fun updateigauthtoken(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.updateigauthtoken(jsonObject)
+
+    override suspend fun updatefbauthtoken(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.updatefbauthtoken(jsonObject)
+
 }
