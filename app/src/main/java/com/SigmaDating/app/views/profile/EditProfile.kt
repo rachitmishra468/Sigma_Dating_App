@@ -659,8 +659,10 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                                         university = ""
                                     }
                                     res.user.ig_auth_token?.let {
-                                        ig_flag = true
-                                        _binding?.instragramText?.text = "Disconnect"
+                                        if (!res.user.ig_auth_token.isNullOrEmpty()) {
+                                            ig_flag = true
+                                            _binding?.instragramText?.text = "Disconnect"
+                                        }
                                     }
 
                                     res.user.fb_auth_token?.let {

@@ -21,12 +21,7 @@ import com.SigmaDating.app.utilities.PhoneTextWatcher
 import com.SigmaDating.app.views.Home
 import com.SigmaDating.app.views.intro_registration.OnBoardingActivity
 import com.example.demoapp.other.Status
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.GraphRequest
-import com.facebook.GraphResponse
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
@@ -42,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.internal.http.HttpMethod
 import java.util.*
 import javax.inject.Inject
+import javax.security.auth.callback.Callback
 
 
 @AndroidEntryPoint
@@ -117,14 +113,17 @@ class Login_Activity : AppCompatActivity() {
                     setResult(RESULT_OK);
                     Log.d("TAG@123", "result" + result)
                     Log.d("TAG@123", "accessToken :" + result?.accessToken)
-
+                    Log.d("TAG@123", "Token::" + (result?.accessToken?.token ?: "not token"));
+                    Log.d("TAG@123", "Token::" + (result?.accessToken?.token ?: "not token"));
+                    Log.d("TAG@123", "Token::" + (result?.accessToken?.userId ?: "not token"));
+                    result?.accessToken?.userId?.let { getphotos(it) }
                     val request = GraphRequest.newMeRequest(
                         result?.accessToken
                     ) { jsonObject, response ->
                         Log.d("TAG@123", "accessToken :" + result?.accessToken)
                         Log.d("TAG@123", "" + jsonObject?.get("email"))
                         Log.d("TAG@123", "jsonObject : " + jsonObject.toString())
-                        getphotos(jsonObject?.get("id").toString())
+                        //getphotos(jsonObject?.get("id").toString())
                         disconnectFromFacebook()
                         sharedPreferencesStorage.setValue(
                             AppConstants.upload_image,
@@ -671,6 +670,7 @@ class Login_Activity : AppCompatActivity() {
             )
         }
     }
+
 
 
 }

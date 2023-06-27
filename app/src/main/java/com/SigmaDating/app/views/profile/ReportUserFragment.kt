@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -264,13 +265,13 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
                                     it.universityText.setText(res.user.university)
 
                                     res.user.ig_auth_token?.let {
-                                        fetchUserImages(it)
+                                       if(res.user.ig_auth_token.isNotEmpty()){
+                                           fetchUserImages(it)
+                                       }
                                     }
 
                                     res.user.fb_auth_token?.let {
                                     }
-
-
 
                                     if (res.user.greekletter.length > 0) {
                                         it.reportGreek.text = res.user.greekletter
@@ -534,8 +535,13 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
                 } catch (ex: java.lang.Exception) {
                     Log.d("TAG@123", "Exception " + ex.message.toString())
                     ex.printStackTrace()
-                    _binding?.updateImageView?.visibility=View.GONE
-                    _binding?.profilePhoto?.visibility=View.GONE
+
+                    runBlocking(Dispatchers.Main) {
+                        Log.d("TAG@123", "runOnUiThread")
+                        _binding?.updateImageView?.visibility=View.GONE
+                        _binding?.profilePhoto?.visibility=View.GONE
+                    }
+
 
                 }
             }
@@ -543,17 +549,15 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     }
 
     fun showZoomImage(url:String){
-        var dialog =Dialog(requireContext(),android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val dialog =Dialog(requireContext(), R.style.AppBaseTheme2)
+        dialog.setContentView(R.layout.webview_dialog)
         dialog.setCancelable(true)
-        var webview =WebView(requireContext())
-        webview.layoutParams= ActionBar.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.MATCH_PARENT
-        )
-        webview.loadUrl(url)
-        webview.getSettings().setBuiltInZoomControls(true);
-        webview.getSettings().setSupportZoom(true)
-        dialog.setContentView(webview);
+        val im = dialog.findViewById<ImageView>(R.id.webView)
+        val close = dialog.findViewById<ImageView>(R.id.close)
+        close.setOnClickListener {
+            dialog.dismiss()
+        }
+        Glide.with(requireContext()).load(url).into(im)
         dialog.show();
     }
 
