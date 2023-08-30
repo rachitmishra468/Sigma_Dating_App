@@ -625,17 +625,18 @@ class SettingsFragment : Fragment() {
 
                         try {
                             val geocoder =
-                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
-                            val list: List<Address> =
-                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                AppReseources.getAppContext()
+                                    ?.let { Geocoder(it, Locale.getDefault()) }
+                            val list: MutableList<Address>? =
+                                geocoder?.getFromLocation(location.latitude, location.longitude, 1)
 
 
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(500)
-                                latitude = "${list[0].latitude}"
-                                longitude = "${list[0].longitude}"
+                                latitude = "${list?.get(0)?.latitude}"
+                                longitude = "${list?.get(0)?.longitude}"
 
-                                location_text = "${list[0].locality}"
+                                location_text = "${list?.get(0)?.locality}"
                                 Log.d("TAG@123", "location name" + location_text)
 
                             }

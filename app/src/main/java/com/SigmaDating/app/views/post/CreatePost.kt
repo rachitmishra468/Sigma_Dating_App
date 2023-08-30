@@ -270,16 +270,18 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                     val location: Location? = task.result
                     if (location != null) {
 
-                        val geocoder = Geocoder(AppReseources.getAppContext(), Locale.getDefault())
+                        val geocoder = AppReseources.getAppContext()
+                            ?.let { Geocoder(it, Locale.getDefault()) }
 
-                        val list: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        val list: MutableList<Address>? =
+                            geocoder?.getFromLocation(location.latitude, location.longitude, 1)
 
 
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(500)
-                            latitude = "${list[0].latitude}"
-                            longitude = "${list[0].longitude}"
-                            location_text = "${list[0].locality}"
+                            latitude = "${list?.get(0)?.latitude}"
+                            longitude = "${list?.get(0)?.longitude}"
+                            location_text = "${list?.get(0)?.locality}"
                             Log.d("TAG@123", "location name" + location_text)
                             _binding?.textUpdateLocation?.text= location_text
                             _binding?.textUpdateLocation?.visibility=View.VISIBLE

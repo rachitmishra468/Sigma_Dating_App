@@ -48,27 +48,28 @@ open class LocationService {
                         val location: Location? = task.result
                         if (location != null) {
                             val geocoder =
-                                Geocoder(AppReseources.getAppContext(), Locale.getDefault())
-                            val list: List<Address> =
-                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                AppReseources.getAppContext()
+                                    ?.let { Geocoder(it, Locale.getDefault()) }
+                            val list: MutableList<Address>? =
+                                geocoder?.getFromLocation(location.latitude, location.longitude, 1)
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(500)
                                 (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                     AppConstants.latitude,
-                                    "${list[0].latitude}"
+                                    "${list?.get(0)?.latitude}"
                                 )
                                 (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                     AppConstants.longitude,
-                                    "${list[0].longitude}"
+                                    "${list?.get(0)?.longitude}"
                                 )
 
                                 (requireActivity as OnBoardingActivity?)?.sharedPreferencesStorage?.setValue(
                                     AppConstants.location,
-                                    "${list[0].locality}"
+                                    "${list?.get(0)?.locality}"
                                 )
                                 Log.d(
                                     "TAG@123",
-                                    "Location :- ${list[0].latitude} , ${list[0].longitude}"
+                                    "Location :- ${list?.get(0)?.latitude} , ${list?.get(0)?.longitude}"
                                 )
 
 
