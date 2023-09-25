@@ -28,6 +28,7 @@ import com.SigmaDating.app.views.Home.Companion.pages
 import com.SigmaDating.app.views.Home.Companion.prohibited_words
 import com.SigmaDating.app.views.Home.Companion.safety_message_text
 import com.SigmaDating.app.views.Home.Companion.share_app_text
+import com.SigmaDating.app.views.login.Login_Activity
 import com.SigmaDating.databinding.FragmentFirstBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
@@ -126,9 +127,11 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 AppConstants.Disclaimer,
                 false
             )
-           // (activity as Home).onBackPressed()
-            Toast.makeText(requireContext(), "You cannot continue until you agree to terms", Toast.LENGTH_LONG)
-                .show()
+
+          //(activity as Home).onBackPressed()
+            Toast.makeText(requireContext(), "You cannot continue until you agree to terms", Toast.LENGTH_LONG).show()
+            startActivity(Intent(activity as Home, Login_Activity::class.java))
+            (activity as Home).finish()
         }
 
         editProfile.setOnClickListener {

@@ -151,9 +151,10 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
                 _binding?.postTitle?.error = "Enter Post Title .."
             }
             else*/
-            if (_binding?.postDiscription?.text.toString().equals("")) {
+           /* if (_binding?.postDiscription?.text.toString().equals("")) {
                 _binding?.postDiscription?.error = "Enter Post Caption .."
-            } else if (file == null) {
+            } else*/
+            if (file == null) {
                 Toast.makeText(requireContext(), "Please select a media to upload.", Toast.LENGTH_LONG).show()
             }
             else if (!_binding!!.postPublic.isChecked && !_binding!!.postPrivate.isChecked) {
