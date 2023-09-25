@@ -57,16 +57,33 @@
                         android:layout_height="match_parent"
                         app:cardCornerRadius="10dp">
 
-
-
                         <ImageView
                             android:id="@+id/idImgView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
+                            android:visibility="gone"
                             android:src="@drawable/dummy_imf"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"/>
+
+                        <com.smarteist.autoimageslider.SliderView
+                            android:id="@+id/slider"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            app:sliderAnimationDuration="600"
+                            app:sliderAutoCycleDirection="back_and_forth"
+                            app:sliderIndicatorAnimationDuration="600"
+                            app:sliderIndicatorEnabled="true"
+                            app:sliderIndicatorGravity="center_horizontal|top"
+                            app:sliderIndicatorMargin="50dp"
+                            app:sliderIndicatorOrientation="horizontal"
+                            app:sliderIndicatorPadding="3dp"
+                            app:sliderIndicatorRadius="2dp"
+                            app:sliderIndicatorSelectedColor="#5A5A5A"
+                            app:sliderIndicatorUnselectedColor="#FFF"
+                            app:sliderScrollTimeInSec="1" />
 
                     </androidx.cardview.widget.CardView>
 

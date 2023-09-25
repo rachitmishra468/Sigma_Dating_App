@@ -130,6 +130,9 @@ dependencies {
     implementation 'com.koushikdutta.ion:ion:2.1.8'
     implementation 'com.twilio:video-android-ktx:7.3.0'
 
+    // dependency for slider view
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
 //exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
 

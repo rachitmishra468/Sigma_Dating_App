@@ -75,6 +75,12 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
+    private val permissions33 = arrayOf(
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.READ_MEDIA_VIDEO,
+        Manifest.permission.READ_MEDIA_AUDIO
+    )
+
     lateinit var schoolAdapter : User_Tag_Adapter
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
@@ -192,7 +198,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
     fun Update_phone_location() {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.update_phone_location, null)
-
         val title_text = view.findViewById<TextView>(R.id.textView5)
         val current_value = view.findViewById<EditText>(R.id.editText_password)
         val update_value = view.findViewById<Button>(R.id.update_value)
@@ -227,31 +232,45 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
 
 
     private fun checkGallerypermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.CAMERA
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissions,
-                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            popup()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE)
+            } else {
+                popup()
+            }
+        }
+        else {
+
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                popup()
+            }
         }
     }
-
-
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
@@ -318,7 +337,6 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
         val button_camera = dialog.findViewById<ImageView>(R.id.button_camera)
         val button_gallery = dialog.findViewById<ImageView>(R.id.button_gallery)
 
-
         button_camera?.setOnClickListener {
             dialog.dismiss()
             capturePhoto()
@@ -340,6 +358,7 @@ class CreatePost : Fragment(), User_Tag_Adapter.OnCategoryClickListener {
             try {
                 photoFile = createImageFile()
             } catch (ex: IOException) {
+
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {

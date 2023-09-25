@@ -26,13 +26,14 @@ class Edit_Profile_Adapter(var context: Context, var listener: OnCategoryClickLi
     }
 
     interface OnCategoryClickListener {
-        fun onCategoryClick(position: Int, boolean: Boolean)
+        fun onCategoryClick(position: Int, boolean: Boolean, flag :Boolean)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView
         var camera_img: ImageView
         var delete_img: ImageView
+        var default_img: ImageView
         var progressBar: ProgressBar
 
         init {
@@ -40,6 +41,7 @@ class Edit_Profile_Adapter(var context: Context, var listener: OnCategoryClickLi
             camera_img = itemView.findViewById(R.id.camera_img)
             delete_img = itemView.findViewById(R.id.delete_img)
             progressBar = itemView.findViewById(R.id.progress_bar)
+            default_img = itemView.findViewById(R.id.default_img)
         }
 
     }
@@ -66,7 +68,10 @@ class Edit_Profile_Adapter(var context: Context, var listener: OnCategoryClickLi
             holder.image.visibility = View.INVISIBLE
             holder.delete_img.visibility = View.INVISIBLE
             holder.progressBar.visibility = View.GONE
+            holder.default_img.visibility = View.INVISIBLE
+
         } else {
+            holder.default_img.visibility = View.VISIBLE
             holder.camera_img.visibility = View.GONE
             holder.image.visibility = View.VISIBLE
             holder.delete_img.visibility = View.VISIBLE
@@ -98,14 +103,20 @@ class Edit_Profile_Adapter(var context: Context, var listener: OnCategoryClickLi
         }
 
 
+
+        holder.default_img.setOnClickListener {
+            Log.d("TAG@123", "setOnClick default_img")
+            listener.onCategoryClick(position, true,false)
+        }
+
         holder.camera_img.setOnClickListener {
             Log.d("TAG@123", "setOnClickListener")
-            listener.onCategoryClick(position, true)
+            listener.onCategoryClick(position, true,true)
         }
 
         holder.delete_img.setOnClickListener {
             Log.d("TAG@123", "setOnClickListener")
-            listener.onCategoryClick(position, false)
+            listener.onCategoryClick(position, false,true)
         }
 
     }

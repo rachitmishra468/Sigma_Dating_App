@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -178,27 +179,43 @@ class Profile_Photo : Fragment() {
 
 
     private fun checkGallerypermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.CAMERA
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissions,
-                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            Popup()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE)
+            } else {
+                Popup()
+            }
+        }
+        else {
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                Popup()
+            }
         }
     }
 

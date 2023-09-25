@@ -25,6 +25,7 @@ import com.SigmaDating.R
 import com.SigmaDating.app.AppReseources
 import com.SigmaDating.app.InstagramAppModule.InstagramSession
 import com.SigmaDating.app.adapters.Instagram_feed_Adapter
+import com.SigmaDating.app.adapters.SliderAdapter
 import com.SigmaDating.app.adapters.UserReportInterestAdapter
 import com.SigmaDating.app.model.Loginmodel
 import com.SigmaDating.app.storage.AppConstants
@@ -40,6 +41,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.gson.JsonObject
+import com.smarteist.autoimageslider.SliderView
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.*
 import org.json.JSONObject
@@ -81,6 +83,14 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     lateinit var second_view: View
     lateinit var thired_view: View
 
+    lateinit var imageUrl: ArrayList<String>
+
+    lateinit var sliderView: SliderView
+
+    // on below line we are creating
+    // a variable for our slider adapter.
+    lateinit var sliderAdapter: SliderAdapter
+
     lateinit var tvCounter: TextView
     private val args: ReportUserFragmentArgs by navArgs()
 
@@ -106,6 +116,14 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     ): View? {
 
         _binding = FragmentReportUserBinding.inflate(inflater, container, false)
+
+        sliderView = _binding!!.root.findViewById(R.id.slider)
+
+        // on below line we are initializing
+        // our image url array list.
+        imageUrl = ArrayList()
+
+
         edit_profile = _binding!!.root.findViewById(R.id.edit_profile)
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
         tvCounter = _binding!!.root.findViewById(R.id.tvCounter)
@@ -115,8 +133,8 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
         second_view = _binding!!.root.findViewById(R.id.second_view)
         thired_view = _binding!!.root.findViewById(R.id.thired_view)
         notification_Icon = _binding!!.root.findViewById(R.id.notification_Icon)
-        _binding?.updateImageView?.visibility=View.GONE
-        _binding?.profilePhoto?.visibility=View.GONE
+        _binding?.updateImageView?.visibility = View.GONE
+        _binding?.profilePhoto?.visibility = View.GONE
 
         //_binding.
         footer_transition()
@@ -224,7 +242,6 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
             findNavController().navigate(R.id.action_reportUserFragment_to_notification)
         }
 
-       // fetchUserImages("")
         return _binding!!.root
     }
 
@@ -265,9 +282,9 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
                                     it.universityText.setText(res.user.university)
 
                                     res.user.ig_auth_token?.let {
-                                       if(res.user.ig_auth_token.isNotEmpty()){
-                                           fetchUserImages(it)
-                                       }
+                                        if (res.user.ig_auth_token.isNotEmpty()) {
+                                            fetchUserImages(it)
+                                        }
                                     }
 
                                     res.user.fb_auth_token?.let {
@@ -284,9 +301,14 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
                                 }
                                 res.user.apply { }
                                 it.data?.user?.upload_image?.let {
+                                    imageUrl.add(it)
                                     Glide.with(AppReseources.getAppContext()!!).load(it)
                                         .error(R.drawable.profile_img)
                                         .into(_binding!!.idImgView);
+                                }
+
+                                if (!res.user.photos.isNullOrEmpty()) {
+                                    imageUrl.addAll(res.user.photos)
                                 }
 
                                 interestsList = ArrayList<String>()
@@ -303,15 +325,19 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
 
                                 }
 
+                                setProfileImagedata()
+
                             } else {
                                 Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
                                     .show()
                             }
                         }
                     }
+
                     Status.LOADING -> {
                         Log.d("TAG@123", "LOADING is null")
                     }
+
                     Status.ERROR -> {
                     }
                 }
@@ -342,10 +368,12 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
                             }
                         }
                     }
+
                     Status.LOADING -> {
                         AppUtils.showLoader(requireContext())
                         Log.d("TAG@123", "LOADING is null")
                     }
+
                     Status.ERROR -> {
                         AppUtils.hideLoader()
                     }
@@ -489,13 +517,13 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     }
 
 
-    private fun fetchUserImages(token : String) {
-        _binding?.updateImageView?.visibility=View.VISIBLE
-        _binding?.profilePhoto?.visibility=View.VISIBLE
+    private fun fetchUserImages(token: String) {
+        _binding?.updateImageView?.visibility = View.VISIBLE
+        _binding?.profilePhoto?.visibility = View.VISIBLE
         _binding?.updateImageView?.layoutManager = GridLayoutManager(requireContext(), 3)
         dataList = ArrayList()
-      //  var mSession: InstagramSession = InstagramSession(context)
-      //  var mAccessToken: String = mSession.getAccessToken()
+        //  var mSession: InstagramSession = InstagramSession(context)
+        //  var mAccessToken: String = mSession.getAccessToken()
 
 
         mInstagramfeedAdapter = Instagram_feed_Adapter(requireContext(), this)
@@ -538,8 +566,8 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
 
                     runBlocking(Dispatchers.Main) {
                         Log.d("TAG@123", "runOnUiThread")
-                        _binding?.updateImageView?.visibility=View.GONE
-                        _binding?.profilePhoto?.visibility=View.GONE
+                        _binding?.updateImageView?.visibility = View.GONE
+                        _binding?.profilePhoto?.visibility = View.GONE
                     }
 
 
@@ -548,8 +576,8 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
         }.start()
     }
 
-    fun showZoomImage(url:String){
-        val dialog =Dialog(requireContext(), R.style.AppBaseTheme2)
+    fun showZoomImage(url: String) {
+        val dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.webview_dialog)
         dialog.setCancelable(true)
         val im = dialog.findViewById<ImageView>(R.id.webView)
@@ -562,6 +590,33 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     }
 
 
+    fun setProfileImagedata() {
+
+        imageUrl.add("")
+        // on below line we are initializing our
+        // slider adapter and adding our list to it.
+        sliderAdapter = SliderAdapter(imageUrl)
+
+        // on below line we are setting auto cycle direction
+        // for our slider view from left to right.
+        sliderView.autoCycleDirection = SliderView.LAYOUT_DIRECTION_LTR
+
+        // on below line we are setting adapter for our slider.
+        sliderView.setSliderAdapter(sliderAdapter)
+
+        // on below line we are setting scroll time
+        // in seconds for our slider view.
+        sliderView.scrollTimeInSec = 3
+
+        // on below line we are setting auto cycle
+        // to true to auto slide our items.
+        sliderView.isAutoCycle = true
+
+        // on below line we are calling start
+        // auto cycle to start our cycle.
+        sliderView.startAutoCycle()
+
+    }
 
 
 }

@@ -68,5 +68,18 @@
             app:layout_constraintVertical_bias="1.0" />
 
 
+        <ImageView
+            android:id="@+id/default_img"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|left"
+            android:layout_margin="3dp"
+            android:gravity="bottom"
+            android:scaleType="centerCrop"
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

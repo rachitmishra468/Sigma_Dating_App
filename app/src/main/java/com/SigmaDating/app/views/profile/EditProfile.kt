@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -40,8 +41,10 @@ import com.SigmaDating.app.adapters.Edit_Profile_Adapter
 import com.SigmaDating.app.adapters.InterestAdapter
 import com.SigmaDating.app.adapters.SchoolAdapter
 import com.SigmaDating.app.model.Loginmodel
+import com.SigmaDating.app.model.Postdata
 import com.SigmaDating.app.model.communityModel.Interest
 import com.SigmaDating.app.model.communityModel.UniversityList
+import com.SigmaDating.app.model.delelepost
 import com.SigmaDating.app.storage.AppConstants
 import com.SigmaDating.app.utilities.AppUtils
 import com.SigmaDating.app.utilities.EmptyDataObserver
@@ -60,6 +63,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import org.jetbrains.anko.doAsync
 import java.io.ByteArrayOutputStream
@@ -805,45 +809,66 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
         photoAdapter.notifyDataSetChanged()
     }
 
-    override fun onCategoryClick(position: Int, boolean: Boolean) {
-        if (boolean) {
-            checkGallerypermission()
-        } else {
-            (activity as Home).homeviewmodel.delete_images = MutableLiveData<Resource<Loginmodel>>()
-            subscribe_delete_images()
-            (activity as Home).homeviewmodel.User_delete_images(
-                (activity as Home).sharedPreferencesStorage.getString(
-                    AppConstants.USER_ID
-                ), dataList.get(position)
-
-            )
+    override fun onCategoryClick(position: Int, boolean: Boolean,flag: Boolean) {
+        if(!flag){
+            setDefaultPhoto()
         }
+        else {
+            if (boolean) {
+                checkGallerypermission()
+            } else {
+                (activity as Home).homeviewmodel.delete_images =
+                    MutableLiveData<Resource<Loginmodel>>()
+                subscribe_delete_images()
+                (activity as Home).homeviewmodel.User_delete_images(
+                    (activity as Home).sharedPreferencesStorage.getString(
+                        AppConstants.USER_ID
+                    ), dataList.get(position)
 
+                )
+            }
+        }
     }
 
 
     private fun checkGallerypermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            != PackageManager.PERMISSION_GRANTED
-            || ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.CAMERA
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissions,
-                AppConstants.STORAGE_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            popup()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE)
+            } else {
+                popup()
+            }
+        }
+        else {
+
+            if (ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissions,
+                    AppConstants.STORAGE_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                popup()
+            }
         }
     }
 
@@ -1307,6 +1332,26 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             dialog.dismiss()
         }
         builder.setNegativeButton("CANCEL") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.setCancelable(false)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+
+    fun setDefaultPhoto() {
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(R.string.app_name)
+        builder.setIcon(R.mipmap.ic_launcher)
+        builder.setMessage("Are you sure make it default profile photo ?")
+        builder.background = ColorDrawable(
+            Color.parseColor("#FFFFFF")
+        )
+        builder.setPositiveButton("Yes") { dialog, which ->
+
+        }
+        builder.setNegativeButton("No") { dialog, which ->
             dialog.dismiss()
         }
         builder.setCancelable(false)
