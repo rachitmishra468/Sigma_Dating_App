@@ -592,7 +592,7 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
 
     fun setProfileImagedata() {
 
-        imageUrl.add("")
+
         // on below line we are initializing our
         // slider adapter and adding our list to it.
         sliderAdapter = SliderAdapter(imageUrl)
