@@ -10,7 +10,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-
 <include  android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_weight=".4"
@@ -75,7 +74,7 @@
                             app:sliderAnimationDuration="600"
                             app:sliderAutoCycleDirection="back_and_forth"
                             app:sliderIndicatorAnimationDuration="600"
-                            app:sliderIndicatorEnabled="true"
+                            app:sliderIndicatorEnabled="false"
                             app:sliderIndicatorGravity="center_horizontal|top"
                             app:sliderIndicatorMargin="50dp"
                             app:sliderIndicatorOrientation="horizontal"
@@ -84,6 +83,28 @@
                             app:sliderIndicatorSelectedColor="#5A5A5A"
                             app:sliderIndicatorUnselectedColor="#FFF"
                             app:sliderScrollTimeInSec="1" />
+
+                        <ImageView
+                            android:id="@+id/idImgPrv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:scaleType="centerCrop"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center|left"
+                            android:src="@drawable/previous_icon"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"/>
+
+                        <ImageView
+                            android:id="@+id/idImgNext"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:scaleType="centerCrop"
+                            android:layout_margin="10dp"
+                            android:layout_gravity="center|right"
+                            android:src="@drawable/next_icon"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"/>
 
                     </androidx.cardview.widget.CardView>
 
@@ -116,7 +137,6 @@
                     android:clickable="true"
                     android:src="@drawable/start_mark_group" />
 
-
                 <ImageView
                     android:id="@+id/profile_img_rf"
                     android:layout_width="0dp"
@@ -131,7 +151,6 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/blue_profile" />
 
-
                 <ImageView
                     android:id="@+id/super_like_rf"
                     android:layout_width="0dp"
@@ -143,7 +162,6 @@
                     android:clickable="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/red_heart_big" />
-
 
                 <ImageView
                     android:id="@+id/gride_report_fg"
@@ -157,7 +175,6 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:src="@drawable/change_grid" />
-
 
                 <ImageView
                     android:id="@+id/cancel_reportfb"
@@ -173,8 +190,6 @@
                     android:src="@drawable/cancle" />
 
             </LinearLayout>
-
-
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

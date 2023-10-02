@@ -546,6 +546,41 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
 
+
+    fun subscribe_default_images() {
+        (activity as Home?)?.homeviewmodel?.default_images?.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    AppUtils.hideLoader()
+                    it.data.let { res ->
+                        if (res?.status == true) {
+
+                            try {
+                                Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                    .show()
+                            } catch (e: Exception) {
+                            }
+
+                        } else {
+                            Toast.makeText(requireContext(), res!!.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+                Status.LOADING -> {
+                    AppUtils.showLoader(requireContext())
+                }
+                Status.ERROR -> {
+                    AppUtils.hideLoader()
+                }
+            }
+        })
+
+
+    }
+
+
+
     fun subscribe_upload_images() {
         (activity as Home?)?.homeviewmodel?.upload_images?.observe(viewLifecycleOwner, Observer {
             when (it.status) {
@@ -811,7 +846,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
 
     override fun onCategoryClick(position: Int, boolean: Boolean,flag: Boolean) {
         if(!flag){
-            setDefaultPhoto()
+            setDefaultPhoto(position)
         }
         else {
             if (boolean) {
@@ -823,9 +858,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 (activity as Home).homeviewmodel.User_delete_images(
                     (activity as Home).sharedPreferencesStorage.getString(
                         AppConstants.USER_ID
-                    ), dataList.get(position)
-
-                )
+                    ), dataList.get(position))
             }
         }
     }
@@ -1340,7 +1373,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
     }
 
 
-    fun setDefaultPhoto() {
+    private fun setDefaultPhoto(position: Int) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(R.string.app_name)
         builder.setIcon(R.mipmap.ic_launcher)
@@ -1349,7 +1382,13 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             Color.parseColor("#FFFFFF")
         )
         builder.setPositiveButton("Yes") { dialog, which ->
-
+            (activity as Home).homeviewmodel.default_images =
+                MutableLiveData<Resource<Loginmodel>>()
+            subscribe_default_images()
+            (activity as Home).homeviewmodel.changeDefaultPhoto(
+                (activity as Home).sharedPreferencesStorage.getString(
+                    AppConstants.USER_ID
+                ), dataList.get(position))
         }
         builder.setNegativeButton("No") { dialog, which ->
             dialog.dismiss()

@@ -40,6 +40,7 @@ class HomeViewModel @Inject constructor(
     val change_password: MutableLiveData<Resource<Loginmodel>>
     lateinit var upload_images: MutableLiveData<Resource<Loginmodel>>
     lateinit var delete_images: MutableLiveData<Resource<Loginmodel>>
+    lateinit var default_images: MutableLiveData<Resource<Loginmodel>>
     lateinit var school_dataResponse: MutableLiveData<Resource<SchoolCommunityResponse>>
     lateinit var update_profile: MutableLiveData<Resource<Loginmodel>>
     lateinit var create_post: MutableLiveData<Resource<Loginmodel>>
@@ -595,6 +596,25 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun changeDefaultPhoto(id: String, img: String) = viewModelScope.launch {
+        if (AppUtils.isNetworkAvailable()) {
+            default_images.postValue(Resource.loading(null))
+            val jsonObject = JsonObject()
+            Log.d("TAG@123", id)
+            jsonObject.addProperty("user_id", id)
+            jsonObject.addProperty("photo", img)
+            Log.d("TAG@123", "-- " + jsonObject.toString())
+            mainRepository.changeDefaultPhoto(jsonObject).let {
+                if (it.isSuccessful) {
+                    default_images.postValue(Resource.success(it.body()))
+                } else {
+                    default_images.postValue(Resource.error(it.errorBody().toString(), null))
+                }
+            }
+        }
+    }
+
 
 
     fun getSchoolingData() = viewModelScope.launch {

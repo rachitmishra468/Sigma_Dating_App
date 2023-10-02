@@ -44,6 +44,8 @@ interface ApiHelper {
 
     suspend fun upload_images(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun delete_images(jsonObject: JsonObject): Response<Loginmodel>
+    suspend fun changeDefaultPhoto(jsonObject: JsonObject): Response<Loginmodel>
+
     suspend fun Update_profile(jsonObject: JsonObject): Response<Loginmodel>
     suspend fun get_user_bids(jsonObject: String): Response<home_model>
     suspend fun create_post(

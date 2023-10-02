@@ -77,6 +77,11 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     private var name_text: TextView? = null
     lateinit var match_list: ImageView
     lateinit var sigma_list: ImageView
+    lateinit var idImgNext: ImageView
+    lateinit var idImgPrv: ImageView
+
+
+
     lateinit var tv_report_to_user: Button
     lateinit var tv_block: Button
     lateinit var first_view: View
@@ -125,6 +130,8 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
 
 
         edit_profile = _binding!!.root.findViewById(R.id.edit_profile)
+        idImgNext = _binding!!.root.findViewById(R.id.idImgNext)
+        idImgPrv = _binding!!.root.findViewById(R.id.idImgPrv)
         rootContainer = _binding?.root?.findViewById(R.id.rootContainer)!!
         tvCounter = _binding!!.root.findViewById(R.id.tvCounter)
         tv_report_to_user = _binding!!.root.findViewById(R.id.tv_report_to_user)
@@ -576,7 +583,7 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
         }.start()
     }
 
-    fun showZoomImage(url: String) {
+    private fun showZoomImage(url: String) {
         val dialog = Dialog(requireContext(), R.style.AppBaseTheme2)
         dialog.setContentView(R.layout.webview_dialog)
         dialog.setCancelable(true)
@@ -590,9 +597,7 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
     }
 
 
-    fun setProfileImagedata() {
-
-
+    private fun setProfileImagedata() {
         // on below line we are initializing our
         // slider adapter and adding our list to it.
         sliderAdapter = SliderAdapter(imageUrl)
@@ -606,15 +611,23 @@ class ReportUserFragment : Fragment(), Instagram_feed_Adapter.OnCategoryClickLis
 
         // on below line we are setting scroll time
         // in seconds for our slider view.
-        sliderView.scrollTimeInSec = 3
+        sliderView.scrollTimeInSec = 6
 
         // on below line we are setting auto cycle
         // to true to auto slide our items.
-        sliderView.isAutoCycle = true
+        sliderView.isAutoCycle = false
 
         // on below line we are calling start
         // auto cycle to start our cycle.
         sliderView.startAutoCycle()
+
+        idImgNext.setOnClickListener {
+            sliderView.slideToNextPosition()
+        }
+
+        idImgPrv.setOnClickListener {
+            sliderView.slideToPreviousPosition()
+        }
 
     }
 

@@ -9,6 +9,7 @@
         android:id="@+id/myimage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:src="@drawable/dummy_imf"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/app_name" />
 

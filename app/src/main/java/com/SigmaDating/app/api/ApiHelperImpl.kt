@@ -82,6 +82,9 @@ class ApiHelperImpl @Inject constructor(
     override suspend fun delete_images(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.delete_images(jsonObject)
 
+    override suspend fun changeDefaultPhoto(jsonObject: JsonObject): Response<Loginmodel> =
+        apiService.changeDefaultPhoto(jsonObject)
+
     override suspend fun Update_profile(jsonObject: JsonObject): Response<Loginmodel> =
         apiService.Update_profile(jsonObject)
 
