@@ -128,6 +128,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
                 false
             )
 
+            (activity as Home?)?.sharedPreferencesStorage?.setValue(
+                AppConstants.IS_AUTHENTICATED,
+                false
+            )
           //(activity as Home).onBackPressed()
             Toast.makeText(requireContext(), "You cannot continue until you agree to terms", Toast.LENGTH_LONG).show()
             startActivity(Intent(activity as Home, Login_Activity::class.java))
