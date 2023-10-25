@@ -1331,7 +1331,7 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                 (activity as Home).homeviewmodel.update_token(
                     (activity as Home).sharedPreferencesStorage.getString(
                         AppConstants.USER_ID
-                    ), mSession.getAccessToken(), mSession.id
+                    ), mSession.getAccessToken(), mSession.id, true
 
                 )
 
@@ -1358,10 +1358,16 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
             (activity as Home).homeviewmodel.update_token(
                 (activity as Home).sharedPreferencesStorage.getString(
                     AppConstants.USER_ID
-                ), "", ""
+                ), "", "",flag
             )
-            _binding?.instragramText?.text = "Connect Instagram"
-            ig_flag = false
+            if(flag){
+                _binding?.instragramText?.text = "Connect Instagram"
+                ig_flag = false
+            }else{
+                _binding?.fbText?.text = "Connect Facebook"
+                fb_flag = false
+            }
+
             dialog.dismiss()
         }
         builder.setNegativeButton("CANCEL") { dialog, which ->

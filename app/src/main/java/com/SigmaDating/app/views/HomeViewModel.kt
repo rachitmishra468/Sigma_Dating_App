@@ -785,7 +785,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun update_token(user_id: String, token :String ,id_userid :String ) = viewModelScope.launch {
+    fun update_token(user_id: String, token :String ,id_userid :String , flag :Boolean ) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
             get_user_edit_user.postValue(Resource.loading(null))
             val jsonObject = JsonObject()
@@ -793,18 +793,37 @@ class HomeViewModel @Inject constructor(
             Log.d("TAG@123", token)
             Log.d("TAG@123", id_userid)
             jsonObject.addProperty("user_id", user_id)
-            jsonObject.addProperty("ig_auth_token", token)
-            jsonObject.addProperty("ig_userid", id_userid)
+            if(flag){
+                jsonObject.addProperty("ig_auth_token", token)
+                jsonObject.addProperty("ig_userid", id_userid)
+            }else{
+                jsonObject.addProperty("fb_auth_token", token)
+                jsonObject.addProperty("fb_userid", id_userid)
+            }
             Log.d("TAG@123", "22 : -" + jsonObject.toString())
-            mainRepository.updateigauthtoken(jsonObject).let {
-                if (it.isSuccessful) {
-                    Log.d("TAG@123", Resource.success(it.body()).data.toString())
-                   // get_user_edit_user.postValue(Resource.success(it.body()))
-                } else {
-                    Log.d("TAG@123", Resource.error(it.errorBody().toString(),null).toString())
-                   // get_user_edit_user.postValue(Resource.error(it.errorBody().toString(), null))
+
+            if(flag){
+                mainRepository.updateigauthtoken(jsonObject).let {
+                    if (it.isSuccessful) {
+                        Log.d("TAG@123", Resource.success(it.body()).data.toString())
+                        // get_user_edit_user.postValue(Resource.success(it.body()))
+                    } else {
+                        Log.d("TAG@123", Resource.error(it.errorBody().toString(),null).toString())
+                        // get_user_edit_user.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
+                }
+            }else{
+                mainRepository.updatefbauthtoken(jsonObject).let {
+                    if (it.isSuccessful) {
+                        Log.d("TAG@123", Resource.success(it.body()).data.toString())
+                        // get_user_edit_user.postValue(Resource.success(it.body()))
+                    } else {
+                        Log.d("TAG@123", Resource.error(it.errorBody().toString(),null).toString())
+                        // get_user_edit_user.postValue(Resource.error(it.errorBody().toString(), null))
+                    }
                 }
             }
+
         }
     }
 

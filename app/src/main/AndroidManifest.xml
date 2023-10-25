@@ -136,7 +136,6 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.SigmaDating.app.video.VideoActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
