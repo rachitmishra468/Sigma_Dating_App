@@ -76,8 +76,8 @@ public class QuickstartConversationsManager {
         String name = DEFAULT_CONVERSATION_NAME;
         if (con.size() > 0) {
             name = con.get(0).getSid();
-            Log.d("TAG@123", "con " + con.get(0).getFriendlyName());
-            Log.d("TAG@123", "con " + con.get(0).getSid());
+            Log.d("TAG@123", "con 66 " + con.get(0).getFriendlyName());
+            Log.d("TAG@123", "con 122" + con.get(0).getSid());
         }
 
         conversationsClient.getConversation(name, new CallbackListener<Conversation>() {

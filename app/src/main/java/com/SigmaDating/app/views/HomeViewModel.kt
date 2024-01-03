@@ -700,7 +700,7 @@ class HomeViewModel @Inject constructor(
 
     fun sendChatNotification(id: JsonObject) = viewModelScope.launch {
         if (AppUtils.isNetworkAvailable()) {
-            Log.d("TAG@123", "Notification")
+            Log.d("TAG@123", "Notification--- "+id)
             mainRepository.sendNotification(id).let {
                 if (it.isSuccessful) {
                     Log.d("TAG@123", "send Chat Notification sent")

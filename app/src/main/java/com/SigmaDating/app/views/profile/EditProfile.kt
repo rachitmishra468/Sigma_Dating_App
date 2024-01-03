@@ -1016,12 +1016,14 @@ class EditProfile : Fragment(), Edit_Profile_Adapter.OnCategoryClickListener,
                             Glide.with(this)
                                 .asBitmap()
                                 .load(
-                                    File(
-                                        URIPathHelper().getPath(
-                                            requireContext(),
-                                            data!!.data!!
+                                    URIPathHelper().getPath(
+                                        requireContext(),
+                                        data.data!!
+                                    )?.let {
+                                        File(
+                                            it
                                         )
-                                    )
+                                    }
                                 )
                                 .into(object : CustomTarget<Bitmap>(300, 300) {
                                     override fun onResourceReady(

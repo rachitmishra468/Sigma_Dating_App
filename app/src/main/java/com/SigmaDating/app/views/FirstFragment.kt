@@ -1,6 +1,9 @@
 package com.SigmaDating.app.views
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -9,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -268,6 +274,10 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
             MutableLiveData<Resource<contactinfoModel>>()
         (activity as Home).homeviewmodel.get_contact_info()
         update_data()
+        if (Build.VERSION.SDK_INT > 32) {
+            checkNotificationPermission()
+        }
+
     }
 
 
@@ -713,6 +723,33 @@ class FirstFragment : Fragment(), ProfileMatch.OnCategoryClickListener {
 
     }
 
+
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun checkNotificationPermission() {
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        when {
+            ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED -> {
+                // make your action here
+            }
+            shouldShowRequestPermissionRationale(permission) -> {
+               // showPermissionRationaleDialog() // permission denied permanently
+            }
+            else -> {
+                requestNotificationPermission.launch(permission)
+            }
+        }
+    }
+
+
+    private val requestNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted->
+            if (isGranted) {
+
+            }
+
+        }
 
 }
 

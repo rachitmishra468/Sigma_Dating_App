@@ -355,6 +355,7 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
                         } else {
                             dataList = res.data.data as ArrayList<User_bids_list>
                             setAdapterListData(res.data.data as ArrayList<User_bids_list>)
+                            Log.d("TAG@123", "dataList " + dataList.toString())
                         }
 
                     }
