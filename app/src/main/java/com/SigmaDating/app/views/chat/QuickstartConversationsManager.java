@@ -63,6 +63,7 @@ public class QuickstartConversationsManager {
                     });
 
         } else {
+            loadChannels();
             Log.d("TAG@123", "conversation is null");
 
         }
@@ -91,6 +92,15 @@ public class QuickstartConversationsManager {
                         QuickstartConversationsManager.this.loadPreviousMessages(conversation);
                     } else {
                         Log.d("TAG@123", "loadChannels Joining Conversation : " + DEFAULT_CONVERSATION_NAME);
+                        conversation.setUniqueName(DEFAULT_CONVERSATION_NAME, (StatusListener) mConversationsClientListener);
+                       conversation.setUniqueName(DEFAULT_CONVERSATION_NAME, new StatusListener() {
+                           @Override
+                           public void onSuccess() {
+                               Log.d("TAG@123", "BBB Joining Conversation: " + conversation.getUniqueName());
+
+
+                           }
+                       });
                         joinConversation(conversation);
                     }
                 }
@@ -106,12 +116,26 @@ public class QuickstartConversationsManager {
     }
 
     private void createConversation() {
+
         conversationsClient.createConversation(DEFAULT_CONVERSATION_NAME,
                 new CallbackListener<Conversation>() {
                     @Override
                     public void onSuccess(Conversation conversation) {
                         if (conversation != null) {
+                            Log.d("TAG@123", "update conversation: " + conversation.getUniqueName());
+                            Log.d("TAG@123", "update Sid: " + conversation.getSid());
+                            Log.d("TAG@123", "update Friendly: " + conversation.getFriendlyName());
+
                             Log.d("TAG@123", "Joining Conversation: " + DEFAULT_CONVERSATION_NAME);
+
+                            conversation.setUniqueName(DEFAULT_CONVERSATION_NAME, new StatusListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Log.d("TAG@123", "AAA Joining Conversation: " + conversation.getUniqueName());
+
+
+                                }
+                            });
                             joinConversation(conversation);
                         }
                     }
@@ -127,12 +151,14 @@ public class QuickstartConversationsManager {
 
     private void joinConversation(final Conversation conversation) {
         Log.d("TAG@123", "Joining Conversation: " + conversation.getUniqueName());
+
         if (conversation.getStatus() == Conversation.ConversationStatus.JOINED) {
             QuickstartConversationsManager.this.mconversation = conversation;
             Log.d("TAG@123", "Already joined default conversation");
             QuickstartConversationsManager.this.mconversation.addListener(mDefaultConversationListener);
             return;
         }
+
         conversation.join(new StatusListener() {
             @Override
             public void onSuccess() {
