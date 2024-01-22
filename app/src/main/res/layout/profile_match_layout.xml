@@ -128,7 +128,7 @@
                     android:background="@drawable/signup_circle_bg"
                     android:clickable="true"
                     android:gravity="center"
-                    android:text="ATO"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold">
@@ -350,7 +350,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dummy_imf"
+                android:src="@drawable/app_logo"
                 android:visibility="visible">
 
             </ImageView>
