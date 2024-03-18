@@ -14,7 +14,7 @@ android {
         applicationId "com.SigmaDating.app"
         minSdk 21
         targetSdk 33
-        versionCode 1
+        versionCode 5
         versionName "1.0.0.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -24,11 +24,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [usesCleartextTraffic: "false"]
-        }
-        debug {
-            minifyEnabled false
-            manifestPlaceholders = [usesCleartextTraffic: "true"]
         }
     }
     compileOptions {

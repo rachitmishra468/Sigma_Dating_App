@@ -124,13 +124,14 @@ class ChatListFragment : Fragment(), ChatList_Adapter.OnCategoryClickListener {
         empty_item_layout.visibility = View.GONE
         tvCounter = binding.root.findViewById(R.id.tvCounter)
         movetonotification = binding.root.findViewById(R.id.movetonotification)
+        footer_transition()
         Home.notifications_count.let {
             _binding?.tvCounter?.setText(Home.notifications_count)
         }
         safety_icon = binding.root.findViewById(R.id.safety_icon)
 
         chatlistAdapter = ChatList_Adapter(requireContext(), this)
-        footer_transition()
+
         _binding!!.movetoedit.setOnClickListener {
             findNavController().navigate(R.id.action_chatListFragment_to_editprofile)
         }
